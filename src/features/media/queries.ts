@@ -2,7 +2,7 @@ import { and, asc, desc, eq, ilike, inArray, isNull, or } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { assetFolders, downloadFiles, mediaAssets, products } from "@/db/schema";
-import { collectAssetFolderIds } from "@/features/media/folders";
+import { collectAssetFolderIds, type AssetFolderRow } from "@/features/media/folders";
 
 export async function listMediaAssets(
   assetType?: "image" | "file",
@@ -11,6 +11,7 @@ export async function listMediaAssets(
     folderId?: number | null;
     includeDescendants?: boolean;
     rootOnlyWhenNoFolder?: boolean;
+    folderRows?: AssetFolderRow[];
   },
 ) {
   if (!process.env.DATABASE_URL) {
@@ -20,7 +21,14 @@ export async function listMediaAssets(
   try {
     const db = getDb();
     const conditions = [];
-    const allFolders = assetType ? await listAssetFolders(assetType) : [];
+    const shouldLoadFolders =
+      assetType &&
+      typeof filters?.folderId === "number" &&
+      Number.isInteger(filters.folderId) &&
+      filters.includeDescendants;
+    const allFolders = shouldLoadFolders
+      ? (filters?.folderRows ?? (await listAssetFolders(assetType)))
+      : [];
 
     if (assetType) {
       conditions.push(eq(mediaAssets.assetType, assetType));
@@ -88,6 +96,7 @@ export async function listDownloadFiles(filters?: {
   folderId?: number | null;
   includeDescendants?: boolean;
   rootOnlyWhenNoFolder?: boolean;
+  folderRows?: AssetFolderRow[];
 }) {
   if (!process.env.DATABASE_URL) {
     return [];
@@ -96,7 +105,13 @@ export async function listDownloadFiles(filters?: {
   try {
     const db = getDb();
     const conditions = [];
-    const allFolders = await listAssetFolders("file");
+    const shouldLoadFolders =
+      typeof filters?.folderId === "number" &&
+      Number.isInteger(filters.folderId) &&
+      filters.includeDescendants;
+    const allFolders = shouldLoadFolders
+      ? (filters?.folderRows ?? (await listAssetFolders("file")))
+      : [];
 
     if (filters?.query) {
       conditions.push(

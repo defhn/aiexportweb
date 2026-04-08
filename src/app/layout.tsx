@@ -1,18 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Export Growth Website System",
@@ -23,7 +10,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="en">
       <body className="antialiased font-sans">{children}</body>
     </html>
   );

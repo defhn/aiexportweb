@@ -4,6 +4,8 @@ import { AssetFolderSidebar } from "@/components/admin/asset-folder-sidebar";
 import { AssetUploadPanel } from "@/components/admin/asset-upload-panel";
 import { CopyLinkButton } from "@/components/admin/copy-link-button";
 import {
+  bulkDeleteMediaAssets,
+  bulkMoveMediaAssets,
   deleteAssetFolder,
   deleteDownloadFile,
   deleteMediaAsset,
@@ -64,13 +66,14 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
   const params = (await searchParams) ?? {};
   const parsedFolderId = Number.parseInt(params.folder ?? "", 10);
   const selectedFolderId = Number.isFinite(parsedFolderId) ? parsedFolderId : null;
-  const [folders, fileAssets, downloadFiles, products] = await Promise.all([
-    listAssetFolders("file").catch(() => []),
+  const folders = await listAssetFolders("file").catch(() => []);
+  const [fileAssets, downloadFiles, products] = await Promise.all([
     listMediaAssets("file", {
       query: params.q,
       folderId: selectedFolderId,
       includeDescendants: true,
       rootOnlyWhenNoFolder: true,
+      folderRows: folders,
     }),
     listDownloadFiles({
       query: params.q,
@@ -79,6 +82,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       folderId: selectedFolderId,
       includeDescendants: true,
       rootOnlyWhenNoFolder: true,
+      folderRows: folders,
     }),
     listAdminProducts(),
   ]);
@@ -86,6 +90,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
   const breadcrumbs = buildAssetFolderBreadcrumbs(folders, selectedFolderId);
   const folderOptions = buildAssetFolderOptions(folders);
   const returnTo = buildReturnPath(selectedFolderId, params.q, params.category, params.language);
+  const bulkFormId = "file-assets-bulk-form";
 
   return (
     <div className="space-y-6">
@@ -254,10 +259,57 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
               </div>
             </div>
 
+            {fileAssets.length ? (
+              <form
+                id={bulkFormId}
+                className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
+              >
+                <input name="returnTo" type="hidden" value={returnTo} />
+                <select
+                  className="rounded-xl border border-stone-300 px-3 py-2 text-sm"
+                  defaultValue={selectedFolderId ?? ""}
+                  name="targetFolderId"
+                >
+                  <option value="">移动到根目录</option>
+                  {folderOptions.map((folder) => (
+                    <option key={folder.id} value={folder.id}>
+                      {folder.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
+                  formAction={bulkMoveMediaAssets}
+                  type="submit"
+                >
+                  批量移动
+                </button>
+                <button
+                  className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
+                  formAction={bulkDeleteMediaAssets}
+                  type="submit"
+                >
+                  批量删除
+                </button>
+              </form>
+            ) : null}
+
             <div className="space-y-4">
               {fileAssets.length ? (
                 fileAssets.map((asset) => (
                   <article key={asset.id} className="rounded-2xl border border-stone-200 p-4">
+                    <div className="mb-3">
+                      <label className="flex items-center gap-2 text-xs font-medium text-stone-600">
+                        <input
+                          className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
+                          form={bulkFormId}
+                          name="selectedIds"
+                          type="checkbox"
+                          value={asset.id}
+                        />
+                        选择
+                      </label>
+                    </div>
                     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
                       <div className="space-y-3">
                         <div>

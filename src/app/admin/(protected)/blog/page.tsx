@@ -3,6 +3,8 @@ import { FolderTree, Plus, Search, Tag, Trash2 } from "lucide-react";
 
 import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
 import {
+  bulkDeleteBlogPosts,
+  bulkMoveBlogPostsToCategory,
   deleteBlogCategory,
   deleteBlogPost,
   deleteBlogTag,
@@ -27,6 +29,9 @@ type AdminBlogPageProps = {
     saved?: string;
     deleted?: string;
     taxonomy?: string;
+    error?: string;
+    newCategoryId?: string;
+    newTagName?: string;
   }>;
 };
 
@@ -43,7 +48,6 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
 
   const params = (await searchParams) ?? {};
   const categoryId = Number.parseInt(params.categoryId ?? "", 10);
-
   const [posts, categories, tags] = await Promise.all([
     listAdminBlogPosts("cnc", {
       query: params.q,
@@ -55,14 +59,16 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
     listAdminBlogTags(),
   ]);
 
+  const bulkFormId = "blog-post-bulk-form";
+
   return (
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-3xl font-semibold text-stone-950">博客管理</h2>
+            <h1 className="text-3xl font-semibold text-stone-950">博客管理</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-              在这里统一管理文章、分类和标签。文章编辑支持富文本、图库插图、本地上传和粘贴图片。
+              统一管理文章、分类和标签。支持筛选、批量移动分类、批量删除，以及在同一页维护博客分类和标签。
             </p>
           </div>
           <Link
@@ -70,42 +76,49 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             href="/admin/blog/new"
           >
             <Plus className="h-4 w-4" />
-            新增文章
+            新建文章
           </Link>
         </div>
 
-        {params.saved ? (
-          <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            文章已保存。
-          </p>
-        ) : null}
-        {params.deleted ? (
-          <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            文章已删除。
-          </p>
-        ) : null}
-        {params.taxonomy ? (
-          <p className="mt-4 rounded-2xl bg-blue-50 px-4 py-3 text-sm text-blue-700">
-            {params.taxonomy === "category-saved" && "博客分类已保存。"}
-            {params.taxonomy === "category-deleted" && "博客分类已删除。"}
-            {params.taxonomy === "tag-saved" && "博客标签已保存。"}
-            {params.taxonomy === "tag-deleted" && "博客标签已删除。"}
-          </p>
-        ) : null}
+        <div className="mt-4 flex flex-wrap gap-3 text-sm">
+          {params.saved === "bulk-moved" ? (
+            <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">批量移动分类已完成</p>
+          ) : null}
+          {params.deleted ? (
+            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">
+              已删除 {params.deleted} 篇文章
+            </p>
+          ) : null}
+          {params.error === "no-selection" ? (
+            <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">请先勾选文章</p>
+          ) : null}
+          {params.taxonomy === "category-saved" ? (
+            <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">博客分类已保存</p>
+          ) : null}
+          {params.taxonomy === "category-deleted" ? (
+            <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">博客分类已删除</p>
+          ) : null}
+          {params.taxonomy === "tag-saved" ? (
+            <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">博客标签已保存</p>
+          ) : null}
+          {params.taxonomy === "tag-deleted" ? (
+            <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">博客标签已删除</p>
+          ) : null}
+        </div>
       </section>
 
       <form className="grid gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm lg:grid-cols-[1.2fr_0.8fr_0.6fr_auto]">
         <label className="relative block">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
           <input
-            className="h-14 w-full rounded-2xl border border-stone-300 pl-12 pr-4 text-sm"
+            className="h-14 w-full rounded-2xl border border-stone-300 pl-12 pr-4 text-sm text-stone-950"
             defaultValue={params.q}
             name="q"
             placeholder="搜索标题、slug 或分类"
           />
         </label>
         <select
-          className="h-14 rounded-2xl border border-stone-300 px-4 text-sm"
+          className="h-14 rounded-2xl border border-stone-300 px-4 text-sm text-stone-950"
           defaultValue={params.categoryId ?? ""}
           name="categoryId"
         >
@@ -117,7 +130,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
           ))}
         </select>
         <select
-          className="h-14 rounded-2xl border border-stone-300 px-4 text-sm"
+          className="h-14 rounded-2xl border border-stone-300 px-4 text-sm text-stone-950"
           defaultValue={params.status ?? ""}
           name="status"
         >
@@ -132,6 +145,41 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
           筛选文章
         </button>
       </form>
+
+      {posts.length ? (
+        <form
+          id={bulkFormId}
+          className="flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-stone-200 bg-white px-5 py-4 shadow-sm"
+        >
+          <select
+            name="targetCategoryId"
+            defaultValue=""
+            className="rounded-xl border border-stone-300 px-3 py-2 text-sm text-stone-950"
+          >
+            <option value="">移动到未分类</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.nameZh} / {category.nameEn}
+              </option>
+            ))}
+          </select>
+          <button
+            type="submit"
+            formAction={bulkMoveBlogPostsToCategory}
+            className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
+          >
+            批量移动分类
+          </button>
+          <button
+            type="submit"
+            formAction={bulkDeleteBlogPosts}
+            className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
+          >
+            批量删除
+          </button>
+          <p className="text-xs text-stone-500">先勾选文章，再执行批量操作。</p>
+        </form>
+      ) : null}
 
       <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between gap-4">
@@ -150,6 +198,15 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
               >
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex gap-4">
+                    <div className="pt-1">
+                      <input
+                        form={bulkFormId}
+                        name="selectedIds"
+                        type="checkbox"
+                        value={post.id}
+                        className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
+                      />
+                    </div>
                     <div className="h-20 w-28 overflow-hidden rounded-2xl bg-stone-100">
                       {post.coverImageUrl ? (
                         <img
@@ -160,17 +217,19 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                         />
                       ) : null}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-stone-500">
                         <span>{formatStatus(post.status)}</span>
                         {post.publishedAt ? <span>{post.publishedAt.slice(0, 10)}</span> : null}
-                        {post.categoryNameZh ? (
-                          <span>{post.categoryNameZh}</span>
-                        ) : null}
+                        {post.categoryNameZh ? <span>{post.categoryNameZh}</span> : null}
                       </div>
-                      <h4 className="mt-3 text-xl font-semibold text-stone-950">{post.titleZh}</h4>
-                      <p className="mt-2 text-sm text-stone-600">{post.titleEn}</p>
-                      <p className="mt-3 text-sm leading-6 text-stone-600">{post.excerptEn}</p>
+                      <h4 className="mt-3 truncate text-xl font-semibold text-stone-950">
+                        {post.titleZh}
+                      </h4>
+                      <p className="mt-2 truncate text-sm text-stone-600">{post.titleEn}</p>
+                      <p className="mt-3 line-clamp-2 text-sm leading-6 text-stone-600">
+                        {post.excerptEn}
+                      </p>
                     </div>
                   </div>
 
@@ -283,14 +342,12 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                   </label>
                   <div className="flex items-center justify-between gap-4 md:col-span-2">
                     <p className="text-xs text-stone-500">已关联文章：{category.postCount}</p>
-                    <div className="flex gap-3">
-                      <button
-                        className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
-                        type="submit"
-                      >
-                        保存
-                      </button>
-                    </div>
+                    <button
+                      className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
+                      type="submit"
+                    >
+                      保存
+                    </button>
                   </div>
                 </form>
                 <form action={deleteBlogCategory} className="mt-3 flex justify-end">

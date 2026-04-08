@@ -6,6 +6,7 @@ import {
   buildProductDraft,
   buildProductMediaBindingDraft,
   buildProductPdfBinding,
+  parseProductBulkIds,
 } from "@/features/products/actions";
 import {
   buildProductDetailViewModel,
@@ -228,5 +229,14 @@ describe("R2 helpers and product management", () => {
     expect(onlyBracket).toHaveLength(1);
     expect(onlyBracket[0]?.slug).toBe("custom-aluminum-cnc-bracket");
     expect(onlyDrafts).toHaveLength(0);
+  });
+
+  it("parses unique product ids for bulk actions", () => {
+    const formData = new FormData();
+    formData.append("selectedIds", "3");
+    formData.append("selectedIds", "5");
+    formData.append("selectedIds", "3");
+
+    expect(parseProductBulkIds(formData)).toEqual([3, 5]);
   });
 });

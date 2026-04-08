@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import {
@@ -58,6 +58,19 @@ function readOptionalNumber(formData: FormData, key: string) {
 
 function toOptionalId(value?: number | null) {
   return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : null;
+}
+
+export function parseBlogBulkIds(formData: FormData, key = "selectedIds") {
+  return Array.from(
+    new Set(
+      formData
+        .getAll(key)
+        .map((value) =>
+          typeof value === "string" ? Number.parseInt(value.trim(), 10) : Number.NaN,
+        )
+        .filter((value) => Number.isInteger(value) && value > 0),
+    ),
+  );
 }
 
 function buildTagList(value?: string | null) {
@@ -263,6 +276,45 @@ export async function deleteBlogPost(formData: FormData) {
   revalidatePath(`/blog/${record.slug}`);
 
   redirect("/admin/blog?deleted=1");
+}
+
+export async function bulkDeleteBlogPosts(formData: FormData) {
+  "use server";
+
+  const ids = parseBlogBulkIds(formData);
+
+  if (!ids.length) {
+    redirect("/admin/blog?error=no-selection");
+  }
+
+  const db = getDb();
+  await db.delete(blogPosts).where(inArray(blogPosts.id, ids));
+
+  revalidateBlogAdminPaths();
+  redirect(`/admin/blog?deleted=${ids.length}`);
+}
+
+export async function bulkMoveBlogPostsToCategory(formData: FormData) {
+  "use server";
+
+  const ids = parseBlogBulkIds(formData);
+  const categoryId = readOptionalNumber(formData, "targetCategoryId");
+
+  if (!ids.length) {
+    redirect("/admin/blog?error=no-selection");
+  }
+
+  const db = getDb();
+  await db
+    .update(blogPosts)
+    .set({
+      categoryId: categoryId ?? null,
+      updatedAt: new Date(),
+    })
+    .where(inArray(blogPosts.id, ids));
+
+  revalidateBlogAdminPaths();
+  redirect("/admin/blog?saved=bulk-moved");
 }
 
 function readRequiredText(formData: FormData, key: string) {

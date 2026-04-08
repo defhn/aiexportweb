@@ -3,7 +3,11 @@ import { Trash2 } from "lucide-react";
 import { ImagePicker } from "@/components/admin/image-picker";
 import { buildAssetFolderOptions } from "@/features/media/folders";
 import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
-import { deleteCategory, saveCategory } from "@/features/products/actions";
+import {
+  bulkDeleteCategories,
+  deleteCategory,
+  saveCategory,
+} from "@/features/products/actions";
 import { listAdminCategories } from "@/features/products/queries";
 
 const inputClassName =
@@ -15,6 +19,7 @@ function CategoryCard({
   category,
   imageAssets,
   imageFolders,
+  bulkFormId,
 }: {
   category: {
     id?: number;
@@ -37,9 +42,27 @@ function CategoryCard({
     altTextEn?: string | null;
   }>;
   imageFolders: Array<{ id: number; label: string }>;
+  bulkFormId: string;
 }) {
   return (
     <div className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        {category.id ? (
+          <label className="inline-flex items-center gap-2 text-sm text-stone-600">
+            <input
+              form={bulkFormId}
+              name="selectedIds"
+              type="checkbox"
+              value={category.id}
+              className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
+            />
+            勾选分类
+          </label>
+        ) : (
+          <span className="text-sm font-medium text-stone-600">新建分类</span>
+        )}
+      </div>
+
       <form action={saveCategory} className="space-y-6">
         {category.id ? <input name="id" type="hidden" value={category.id} /> : null}
 
@@ -96,7 +119,10 @@ function CategoryCard({
       {category.id ? (
         <form action={deleteCategory} className="mt-4 flex justify-end">
           <input type="hidden" name="id" value={category.id} />
-          <button className="inline-flex items-center gap-2 rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50" type="submit">
+          <button
+            className="inline-flex items-center gap-2 rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+            type="submit"
+          >
             <Trash2 className="h-4 w-4" />
             删除分类
           </button>
@@ -122,15 +148,34 @@ export default async function AdminCategoriesPage() {
     altTextEn: asset.altTextEn,
   }));
   const mappedImageFolders = buildAssetFolderOptions(imageFolders);
+  const bulkFormId = "categories-bulk-form";
 
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">产品分类</h2>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          在这里新增、编辑、排序和推荐分类，并直接从图库选择分类封面图。
+        <h1 className="text-3xl font-semibold text-stone-950">产品分类</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
+          在这里统一维护产品分类、排序、推荐状态和分类图片。支持批量删除未被产品占用的分类。
         </p>
       </section>
+
+      {categories.length ? (
+        <form
+          id={bulkFormId}
+          className="flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-stone-200 bg-white px-5 py-4 shadow-sm"
+        >
+          <button
+            type="submit"
+            formAction={bulkDeleteCategories}
+            className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
+          >
+            批量删除
+          </button>
+          <p className="text-xs text-stone-500">
+            仅会删除未被产品占用的分类；仍有关联产品的分类会被自动跳过。
+          </p>
+        </form>
+      ) : null}
 
       <CategoryCard
         category={{
@@ -146,11 +191,18 @@ export default async function AdminCategoriesPage() {
         }}
         imageAssets={mappedImageAssets}
         imageFolders={mappedImageFolders}
+        bulkFormId={bulkFormId}
       />
 
       <div className="space-y-4">
         {categories.map((category) => (
-          <CategoryCard key={category.id} category={category} imageAssets={mappedImageAssets} imageFolders={mappedImageFolders} />
+          <CategoryCard
+            key={category.id}
+            category={category}
+            imageAssets={mappedImageAssets}
+            imageFolders={mappedImageFolders}
+            bulkFormId={bulkFormId}
+          />
         ))}
       </div>
     </div>

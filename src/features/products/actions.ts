@@ -104,6 +104,14 @@ function readIdList(formData: FormData, key: string) {
     .filter((value) => Number.isInteger(value) && value > 0);
 }
 
+export function parseProductBulkIds(formData: FormData, key = "selectedIds") {
+  return Array.from(new Set(readIdList(formData, key)));
+}
+
+export function parseCategoryBulkIds(formData: FormData, key = "selectedIds") {
+  return Array.from(new Set(readIdList(formData, key)));
+}
+
 async function ensureCategoryForImport(name: string) {
   const db = getDb();
   const trimmed = name.trim();
@@ -490,6 +498,49 @@ export async function deleteCategory(formData: FormData) {
   redirect(returnTo.includes("?") ? `${returnTo}&deleted=1` : `${returnTo}?deleted=1`);
 }
 
+export async function bulkDeleteCategories(formData: FormData) {
+  "use server";
+
+  const ids = parseCategoryBulkIds(formData);
+
+  if (!ids.length) {
+    redirect("/admin/categories?error=no-selection");
+  }
+
+  const db = getDb();
+  const linkedProducts = await db
+    .select({ categoryId: products.categoryId })
+    .from(products)
+    .where(inArray(products.categoryId, ids));
+
+  const blockedIds = new Set(
+    linkedProducts
+      .map((row) => row.categoryId)
+      .filter((value): value is number => typeof value === "number"),
+  );
+
+  const deletableIds = ids.filter((id) => !blockedIds.has(id));
+
+  if (deletableIds.length) {
+    await db.delete(productCategories).where(inArray(productCategories.id, deletableIds));
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/admin/categories");
+
+  const params = new URLSearchParams();
+  if (deletableIds.length) {
+    params.set("deleted", String(deletableIds.length));
+  }
+  if (blockedIds.size) {
+    params.set("error", "category-has-products");
+  }
+
+  const search = params.toString();
+  redirect(search ? `/admin/categories?${search}` : "/admin/categories");
+}
+
 export async function saveProduct(formData: FormData) {
   "use server";
 
@@ -669,6 +720,47 @@ export async function deleteProduct(formData: FormData) {
   }
 
   redirect("/admin/products?deleted=1");
+}
+
+export async function bulkDeleteProducts(formData: FormData) {
+  "use server";
+
+  const ids = parseProductBulkIds(formData);
+
+  if (!ids.length) {
+    redirect("/admin/products?error=no-selection");
+  }
+
+  const db = getDb();
+  await db.delete(products).where(inArray(products.id, ids));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/products");
+  redirect(`/admin/products?deleted=${ids.length}`);
+}
+
+export async function bulkMoveProductsToCategory(formData: FormData) {
+  "use server";
+
+  const ids = parseProductBulkIds(formData);
+  const categoryId = readOptionalNumber(formData, "targetCategoryId");
+
+  if (!ids.length) {
+    redirect("/admin/products?error=no-selection");
+  }
+
+  const db = getDb();
+  await db
+    .update(products)
+    .set({
+      categoryId: categoryId ?? null,
+      updatedAt: new Date(),
+    })
+    .where(inArray(products.id, ids));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/products");
+  redirect(`/admin/products?saved=bulk-moved`);
 }
 
 export async function importProductsFromCsv(formData: FormData) {

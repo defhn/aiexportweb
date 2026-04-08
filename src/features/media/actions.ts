@@ -1,18 +1,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq, or } from "drizzle-orm";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import {
   assetFolders,
-  blogPosts,
   downloadFiles,
-  inquiries,
   mediaAssets,
-  productCategories,
-  productMediaRelations,
-  products,
-  quoteRequests,
 } from "@/db/schema";
 import { buildAssetFolderDraft } from "@/features/media/folders";
 import { deleteFromR2, getAssetKindFromMimeType } from "@/lib/r2";
@@ -93,7 +88,7 @@ export async function saveAssetFolder(formData: FormData) {
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
-  redirect(`${returnTo}?folderSaved=1`);
+  redirect(appendRedirectFlag(returnTo, "folderSaved"));
 }
 
 export async function deleteAssetFolder(formData: FormData) {
@@ -120,14 +115,14 @@ export async function deleteAssetFolder(formData: FormData) {
     .limit(1);
 
   if (hasChild || hasAsset) {
-    redirect(`${returnTo}?folderError=not-empty`);
+    redirect(appendRedirectFlag(returnTo, "folderError", "not-empty"));
   }
 
   await db.delete(assetFolders).where(eq(assetFolders.id, id));
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
-  redirect(`${returnTo}?folderDeleted=1`);
+  redirect(appendRedirectFlag(returnTo, "folderDeleted"));
 }
 
 export async function createDownloadFileRecord(input: {
@@ -205,6 +200,27 @@ function toSafeId(value?: number | null) {
   return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : null;
 }
 
+export function appendRedirectFlag(returnTo: string, key: string, value = "1") {
+  const [pathname, search = ""] = returnTo.split("?");
+  const params = new URLSearchParams(search);
+  params.set(key, value);
+  const nextSearch = params.toString();
+  return nextSearch ? `${pathname}?${nextSearch}` : pathname;
+}
+
+export function parseSelectedIds(formData: FormData, key = "selectedIds") {
+  return Array.from(
+    new Set(
+      formData
+        .getAll(key)
+        .map((value) =>
+          typeof value === "string" ? Number.parseInt(value.trim(), 10) : Number.NaN,
+        )
+        .filter((value) => Number.isInteger(value) && value > 0),
+    ),
+  );
+}
+
 export function buildDownloadFileDraft(input: DownloadFileDraftInput) {
   return {
     id: typeof input.id === "number" && Number.isInteger(input.id) && input.id > 0 ? input.id : null,
@@ -267,7 +283,29 @@ export async function saveMediaAssetMeta(formData: FormData) {
   revalidatePath("/products");
   revalidatePath("/blog");
 
-  redirect(`${returnTo}?saved=1`);
+  redirect(appendRedirectFlag(returnTo, "saved"));
+}
+
+async function hasMediaAssetReferences(mediaAssetId: number) {
+  const db = getDb();
+  const result = await db.execute(sql`
+    select
+      exists(select 1 from product_categories where image_media_id = ${mediaAssetId}) as in_product_categories,
+      exists(select 1 from products where cover_media_id = ${mediaAssetId} or pdf_file_id = ${mediaAssetId}) as in_products,
+      exists(select 1 from product_media_relations where media_asset_id = ${mediaAssetId}) as in_product_gallery,
+      exists(select 1 from download_files where media_asset_id = ${mediaAssetId}) as in_download_files,
+      exists(select 1 from blog_posts where cover_media_id = ${mediaAssetId}) as in_blog_posts,
+      exists(select 1 from inquiries where attachment_media_id = ${mediaAssetId}) as in_inquiries,
+      exists(select 1 from quote_requests where attachment_media_id = ${mediaAssetId}) as in_quote_requests
+  `);
+
+  const row = Array.isArray(result) ? result[0] : result.rows?.[0];
+
+  if (!row) {
+    return false;
+  }
+
+  return Object.values(row).some(Boolean);
 }
 
 export async function deleteMediaAsset(formData: FormData) {
@@ -280,71 +318,111 @@ export async function deleteMediaAsset(formData: FormData) {
     redirect(returnTo);
   }
 
+  try {
+    const db = getDb();
+    const [asset] = await db
+      .select({
+        id: mediaAssets.id,
+        bucketKey: mediaAssets.bucketKey,
+      })
+      .from(mediaAssets)
+      .where(eq(mediaAssets.id, id))
+      .limit(1);
+
+    if (!asset) {
+      redirect(returnTo);
+    }
+
+    const inUse = await hasMediaAssetReferences(id);
+
+    if (inUse) {
+      redirect(appendRedirectFlag(returnTo, "error", "in-use"));
+    }
+
+    await deleteFromR2(asset.bucketKey);
+    await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
+
+    revalidatePath("/admin/media");
+    revalidatePath("/admin/files");
+
+    redirect(appendRedirectFlag(returnTo, "deleted"));
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    console.error("Failed to delete media asset.", error);
+    redirect(appendRedirectFlag(returnTo, "error", "delete-failed"));
+  }
+}
+
+export async function bulkMoveMediaAssets(formData: FormData) {
+  "use server";
+
+  const ids = parseSelectedIds(formData);
+  const folderId = readOptionalNumber(formData, "targetFolderId");
+  const returnTo = readText(formData, "returnTo") || "/admin/media";
+
+  if (!ids.length) {
+    redirect(appendRedirectFlag(returnTo, "error", "no-selection"));
+  }
+
   const db = getDb();
-  const [asset] = await db
-    .select({
-      id: mediaAssets.id,
-      bucketKey: mediaAssets.bucketKey,
-    })
+  await db
+    .update(mediaAssets)
+    .set({ folderId: toSafeId(folderId) })
+    .where(inArray(mediaAssets.id, ids));
+
+  revalidatePath("/admin/media");
+  revalidatePath("/admin/files");
+  redirect(appendRedirectFlag(returnTo, "saved", "bulk-moved"));
+}
+
+export async function bulkDeleteMediaAssets(formData: FormData) {
+  "use server";
+
+  const ids = parseSelectedIds(formData);
+  const returnTo = readText(formData, "returnTo") || "/admin/media";
+
+  if (!ids.length) {
+    redirect(appendRedirectFlag(returnTo, "error", "no-selection"));
+  }
+
+  const db = getDb();
+  const assets = await db
+    .select({ id: mediaAssets.id, bucketKey: mediaAssets.bucketKey })
     .from(mediaAssets)
-    .where(eq(mediaAssets.id, id))
-    .limit(1);
+    .where(inArray(mediaAssets.id, ids));
 
-  if (!asset) {
-    redirect(returnTo);
+  let deletedCount = 0;
+  let skippedCount = 0;
+
+  for (const asset of assets) {
+    try {
+      const inUse = await hasMediaAssetReferences(asset.id);
+
+      if (inUse) {
+        skippedCount += 1;
+        continue;
+      }
+
+      await deleteFromR2(asset.bucketKey);
+      await db.delete(mediaAssets).where(eq(mediaAssets.id, asset.id));
+      deletedCount += 1;
+    } catch (error) {
+      console.error("Failed to bulk delete media asset.", asset.id, error);
+      skippedCount += 1;
+    }
   }
-
-  const references = await Promise.all([
-    db
-      .select({ id: productCategories.id })
-      .from(productCategories)
-      .where(eq(productCategories.imageMediaId, id))
-      .limit(1),
-    db
-      .select({ id: products.id })
-      .from(products)
-      .where(or(eq(products.coverMediaId, id), eq(products.pdfFileId, id)))
-      .limit(1),
-    db
-      .select({ id: productMediaRelations.id })
-      .from(productMediaRelations)
-      .where(eq(productMediaRelations.mediaAssetId, id))
-      .limit(1),
-    db
-      .select({ id: downloadFiles.id })
-      .from(downloadFiles)
-      .where(eq(downloadFiles.mediaAssetId, id))
-      .limit(1),
-    db
-      .select({ id: blogPosts.id })
-      .from(blogPosts)
-      .where(eq(blogPosts.coverMediaId, id))
-      .limit(1),
-    db
-      .select({ id: inquiries.id })
-      .from(inquiries)
-      .where(eq(inquiries.attachmentMediaId, id))
-      .limit(1),
-    db
-      .select({ id: quoteRequests.id })
-      .from(quoteRequests)
-      .where(eq(quoteRequests.attachmentMediaId, id))
-      .limit(1),
-  ]);
-
-  const inUse = references.some((rows) => rows.length > 0);
-
-  if (inUse) {
-    redirect(`${returnTo}?error=in-use`);
-  }
-
-  await deleteFromR2(asset.bucketKey);
-  await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
 
-  redirect(`${returnTo}?deleted=1`);
+  let nextPath = appendRedirectFlag(returnTo, "deleted", String(deletedCount));
+  if (skippedCount > 0) {
+    nextPath = appendRedirectFlag(nextPath, "skipped", String(skippedCount));
+  }
+  redirect(nextPath);
 }
 
 export async function saveDownloadFile(formData: FormData) {
