@@ -17,6 +17,14 @@ const supportedMimeTypes = new Set([
 
 let r2Client: S3Client | null = null;
 
+function isDevPlaceholderConfig() {
+  return (
+    env.R2_ACCOUNT_ID === "local-account" ||
+    env.R2_ACCESS_KEY_ID === "local-access-key" ||
+    env.R2_SECRET_ACCESS_KEY === "local-secret-key"
+  );
+}
+
 function getR2Client() {
   if (!r2Client) {
     r2Client = new S3Client({
@@ -60,6 +68,17 @@ export async function uploadToR2(input: {
   body: Buffer;
 }) {
   const key = buildAssetKey(input.kind, input.fileName);
+
+  if (isDevPlaceholderConfig()) {
+    return {
+      assetType: input.kind,
+      bucketKey: key,
+      url: `${env.R2_PUBLIC_URL.replace(/\/$/, "")}/${key}`,
+      fileName: input.fileName,
+      mimeType: input.mimeType,
+      fileSize: input.body.byteLength,
+    };
+  }
 
   await getR2Client().send(
     new PutObjectCommand({

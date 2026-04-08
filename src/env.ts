@@ -1,4 +1,7 @@
+import { loadEnvConfig } from "@next/env";
 import { z } from "zod";
+
+loadEnvConfig(process.cwd());
 
 const nonProductionDefaults = {
   DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/aiexportweb",
@@ -14,6 +17,7 @@ const nonProductionDefaults = {
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
   ADMIN_USERNAME: "admin",
   ADMIN_PASSWORD: "changeme",
+  NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3000",
 } as const;
 
 const envSchema = z.object({
@@ -30,6 +34,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
   ADMIN_USERNAME: z.string().min(1),
   ADMIN_PASSWORD: z.string().min(6),
+  NEXT_PUBLIC_SITE_URL: z.string().url(),
 });
 
 function buildRuntimeEnv() {

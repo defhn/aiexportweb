@@ -1,3 +1,4 @@
+import { InquiryForm } from "@/components/public/inquiry-form";
 import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 
@@ -28,31 +29,35 @@ export default async function ContactPage() {
             "Send your RFQ, target material, and quantity requirements to start the conversation."}
         </p>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <article className="rounded-2xl bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-              Email
-            </p>
-            <p className="mt-3 text-sm font-medium text-stone-950">
-              {settings.email}
-            </p>
-          </article>
-          <article className="rounded-2xl bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-              Phone
-            </p>
-            <p className="mt-3 text-sm font-medium text-stone-950">
-              {settings.phone}
-            </p>
-          </article>
-          <article className="rounded-2xl bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-              WhatsApp
-            </p>
-            <p className="mt-3 text-sm font-medium text-stone-950">
-              {settings.whatsapp}
-            </p>
-          </article>
+        <div className="mt-8 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="grid gap-4">
+            <article className="rounded-2xl bg-stone-50 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                Email
+              </p>
+              <p className="mt-3 text-sm font-medium text-stone-950">
+                {settings.email}
+              </p>
+            </article>
+            <article className="rounded-2xl bg-stone-50 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                Phone
+              </p>
+              <p className="mt-3 text-sm font-medium text-stone-950">
+                {settings.phone}
+              </p>
+            </article>
+            <article className="rounded-2xl bg-stone-50 p-5">
+              <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                WhatsApp
+              </p>
+              <p className="mt-3 text-sm font-medium text-stone-950">
+                {settings.whatsapp}
+              </p>
+            </article>
+          </div>
+
+          <InquiryForm sourcePage="contact-page" sourceUrl="/contact" />
         </div>
       </div>
     </section>
