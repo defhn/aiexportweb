@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { FileDown, ChevronRight } from "lucide-react";
 
 import { InquiryForm } from "@/components/public/inquiry-form";
 import { JsonLdScript } from "@/components/public/json-ld-script";
@@ -11,6 +13,10 @@ import {
   buildVisibleSpecRows,
   getProductDetailBySlugs,
 } from "@/features/products/queries";
+import {
+  buildProductViewSessionId,
+  recordProductView,
+} from "@/features/products/views";
 import {
   buildBreadcrumbJsonLd,
   buildFaqJsonLd,
@@ -53,6 +59,25 @@ export default async function ProductDetailPage({
     notFound();
   }
 
+  const requestHeaders = await headers();
+  const fingerprint = [
+    requestHeaders.get("user-agent") ?? "unknown-agent",
+    requestHeaders.get("accept-language") ?? "unknown-language",
+    requestHeaders.get("x-forwarded-for") ?? "unknown-ip",
+  ].join("|");
+  const requestCountryCode =
+    requestHeaders.get("x-vercel-ip-country") ??
+    requestHeaders.get("cf-ipcountry");
+
+  if (product.product.id) {
+    await recordProductView({
+      productId: product.product.id,
+      sessionId: buildProductViewSessionId(fingerprint),
+      referer: requestHeaders.get("referer"),
+      countryCode: requestCountryCode,
+    });
+  }
+
   const rows = buildVisibleSpecRows({
     defaultFields: product.defaultFields,
     customFields: product.customFields,
@@ -60,7 +85,7 @@ export default async function ProductDetailPage({
   const productUrl = buildAbsoluteUrl(`/products/${categorySlug}/${productSlug}`);
 
   return (
-    <>
+    <main className="min-h-screen bg-white">
       <JsonLdScript
         value={buildProductJsonLd({
           name: product.product.nameEn,
@@ -84,64 +109,124 @@ export default async function ProductDetailPage({
       />
       <JsonLdScript value={buildFaqJsonLd(product.faqs)} />
 
-      <section className="mx-auto max-w-6xl space-y-10 px-6 py-20">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-8">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">
-                {categorySlug.replace(/-/g, " ")}
-              </p>
-              <h1 className="mt-3 text-4xl font-semibold text-slate-950">
+      {/* Breadcrumb Header */}
+      <div className="bg-stone-50 border-b border-stone-100 py-4">
+          <div className="mx-auto max-w-7xl px-6">
+              <nav className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-400">
+                  <Link href="/products" className="hover:text-blue-600 transition-colors">Catalog</Link>
+                  <ChevronRight className="h-3 w-3" />
+                  <Link href={`/products/${categorySlug}`} className="hover:text-blue-600 transition-colors capitalize">{categorySlug.replace(/-/g, " ")}</Link>
+                  <ChevronRight className="h-3 w-3" />
+                  <span className="text-stone-900">{product.product.nameEn}</span>
+              </nav>
+          </div>
+      </div>
+
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-16 lg:grid-cols-[1fr_400px]">
+          {/* Main Content: Showcase */}
+          <div className="space-y-16">
+            <header>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-stone-900 leading-[1.1]">
                 {product.product.nameEn}
               </h1>
-              <p className="mt-4 max-w-2xl text-slate-600">
+              <p className="mt-8 text-lg md:text-xl text-stone-500 max-w-3xl leading-relaxed">
                 {product.shortDescriptionEn}
               </p>
+            </header>
+
+            {/* Media Gallery */}
+            <div className="space-y-6">
+                {product.coverImage && (
+                    <div className="overflow-hidden rounded-[3rem] bg-stone-100 group">
+                        <img
+                            alt={product.coverImage.alt}
+                            className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            loading="eager"
+                            src={product.coverImage.url}
+                        />
+                    </div>
+                )}
+
+                {product.galleryImages.length > 0 && (
+                    <div className="grid grid-cols-2 gap-6">
+                        {product.galleryImages.map((image) => (
+                            <div key={image.id} className="overflow-hidden rounded-[2rem] bg-stone-50 group">
+                                <img
+                                    alt={image.alt}
+                                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    loading="lazy"
+                                    src={image.url}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            <SpecTable rows={rows} />
-
-            {product.showDownloadButton ? (
-              <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-                <h2 className="text-2xl font-semibold text-slate-950">
-                  Download
-                </h2>
-                <Link
-                  className="mt-4 inline-flex rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
-                  href={product.pdfUrl ?? "#"}
-                >
-                  Download PDF
-                </Link>
-              </section>
-            ) : null}
+            {/* Technical Hub */}
+            <div className="space-y-12">
+                <SpecTable rows={rows} />
+                
+                {product.showDownloadButton && product.pdfUrl && (
+                    <div className="flex items-center justify-between p-10 bg-stone-900 rounded-[2.5rem] shadow-2xl overflow-hidden relative group">
+                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                        <div className="relative z-10">
+                            <h3 className="text-xl font-bold text-white">Technical Datasheet</h3>
+                            <p className="mt-2 text-stone-400 text-sm">Download the full engineering specs in PDF format.</p>
+                        </div>
+                        <Link
+                            href={product.pdfUrl}
+                            aria-label="Download PDF"
+                            title="Download PDF"
+                            className="relative z-10 flex items-center justify-center h-14 w-14 rounded-full bg-blue-600 text-white transition-all group-hover:bg-blue-500 group-hover:scale-110"
+                        >
+                            <FileDown className="h-6 w-6" />
+                        </Link>
+                    </div>
+                )}
+            </div>
 
             <ProductFaq items={product.faqs} />
           </div>
 
-          <aside className="space-y-6">
-            <InquiryForm
-              defaultProductName={product.product.nameEn}
-              sourcePage="product-detail"
-              sourceUrl={`/products/${categorySlug}/${productSlug}`}
-            />
+          {/* Sticky Sidebar: Inquiry */}
+          <aside className="relative">
+            <div className="sticky top-24 space-y-12">
+              <div className="p-1 border border-stone-100 bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] rounded-[2.5rem]">
+                  <InquiryForm
+                      defaultProductName={product.product.nameEn}
+                      productId={product.product.id}
+                      sourcePage="product-detail"
+                      sourceUrl={`/products/${categorySlug}/${productSlug}`}
+                  />
+              </div>
 
-            <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-slate-950">
-                Related Products
-              </h2>
-              {product.relatedProducts.map((related) => (
-                <ProductCard
-                  key={related.slug ?? String(related.id)}
-                  categorySlug={related.categorySlug ?? categorySlug}
-                  nameEn={related.nameEn}
-                  shortDescriptionEn="Related item from the same demo industry pack."
-                  slug={related.slug ?? productSlug}
-                />
-              ))}
-            </section>
+              {/* Related Products: Compact Style */}
+              {product.relatedProducts.length > 0 && (
+                  <section>
+                      <h2 className="text-xs font-black uppercase tracking-[0.3em] text-stone-400 mb-8 px-4">Compare Similar</h2>
+                      <div className="space-y-4">
+                          {product.relatedProducts.slice(0, 3).map((related) => (
+                              <Link 
+                                key={related.id}
+                                href={`/products/${related.categorySlug || categorySlug}/${related.slug}`}
+                                className="flex items-center gap-4 p-4 rounded-3xl border border-transparent hover:border-stone-100 hover:bg-stone-50 transition-all group"
+                              >
+                                  <div className="h-16 w-16 rounded-2xl bg-stone-100 flex-shrink-0" />
+                                  <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-bold text-stone-900 truncate group-hover:text-blue-600 transition-colors">{related.nameEn}</p>
+                                      <p className="text-xs text-stone-400 font-medium">Precision Component</p>
+                                  </div>
+                              </Link>
+                          ))}
+                      </div>
+                  </section>
+              )}
+            </div>
           </aside>
         </div>
       </section>
-    </>
+    </main>
   );
 }

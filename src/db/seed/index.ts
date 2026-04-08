@@ -12,7 +12,11 @@ import {
   productCustomFields,
   productDefaultFieldDefinitions,
   productDefaultFieldValues,
+  productViews,
   products,
+  quoteRequestItems,
+  quoteRequests,
+  replyTemplates,
   seoAiSettings,
   siteSettings,
 } from "../schema";
@@ -60,13 +64,19 @@ export async function seedDatabase(key: SeedPackKey) {
 
   await db.execute(sql`
     truncate table
+      asset_folders,
       blog_post_tags,
       blog_posts,
       blog_tags,
       blog_categories,
       download_files,
       inquiries,
+      reply_templates,
+      product_views,
+      quote_request_items,
+      quote_requests,
       product_media_relations,
+      media_assets,
       product_custom_fields,
       product_default_field_values,
       product_default_field_definitions,
@@ -166,8 +176,8 @@ export async function seedDatabase(key: SeedPackKey) {
       valueEn: value?.valueEn ?? null,
       isVisible: value?.visible ?? true,
       sortOrder:
-        defaultFieldDefinitions.find((field) => field.fieldKey === fieldKey)
-          ?.sortOrder ?? 100,
+        defaultFieldDefinitions.find((field) => field.fieldKey === fieldKey)?.sortOrder ??
+        100,
     })),
   );
 
@@ -241,6 +251,33 @@ export async function seedDatabase(key: SeedPackKey) {
       })),
     );
   }
+
+  await db.insert(replyTemplates).values([
+    {
+      title: "报价回复模板",
+      category: "quotation",
+      contentZh: "您好，感谢您的询盘。以下是准备初步报价所需的信息。",
+      contentEn:
+        "Hello {{name}},\n\nThank you for your inquiry about {{product_name}}. Please share your target quantity, drawings, and destination so we can prepare an accurate quotation.\n\nBest regards,\nSales Team",
+      applicableScene: "quotation",
+    },
+    {
+      title: "打样回复模板",
+      category: "sample",
+      contentZh: "您好，我们可以支持打样，请提供图纸和数量。",
+      contentEn:
+        "Hello {{name}},\n\nThank you for your interest in {{product_name}}. We can support sample development. Please send your drawings, quantity, and required timeline for evaluation.\n\nBest regards,\nSales Team",
+      applicableScene: "sample",
+    },
+    {
+      title: "技术沟通模板",
+      category: "technical",
+      contentZh: "您好，我们已经收到技术问题，会安排工程团队确认。",
+      contentEn:
+        "Hello {{name}},\n\nThank you for your technical inquiry regarding {{product_name}}. Our engineering team will review the specifications and reply with a clear recommendation shortly.\n\nBest regards,\nSales Team",
+      applicableScene: "technical",
+    },
+  ]);
 
   return {
     key: pack.key,

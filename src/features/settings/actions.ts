@@ -1,3 +1,10 @@
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { desc, eq } from "drizzle-orm";
+
+import { getDb } from "@/db/client";
+import { siteSettings } from "@/db/schema";
+
 export type SiteSettingsDraft = {
   companyNameZh: string;
   companyNameEn: string;
@@ -25,4 +32,51 @@ export function buildSiteSettingsDraft(
     addressZh: input.addressZh ?? "中国制造业产业带",
     addressEn: input.addressEn ?? "Manufacturing Cluster, China",
   };
+}
+
+function readText(formData: FormData, key: keyof SiteSettingsDraft) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value.trim() : "";
+}
+
+export async function saveSiteSettings(formData: FormData) {
+  "use server";
+
+  const db = getDb();
+  const draft = buildSiteSettingsDraft({
+    companyNameZh: readText(formData, "companyNameZh"),
+    companyNameEn: readText(formData, "companyNameEn"),
+    taglineZh: readText(formData, "taglineZh"),
+    taglineEn: readText(formData, "taglineEn"),
+    email: readText(formData, "email"),
+    phone: readText(formData, "phone"),
+    whatsapp: readText(formData, "whatsapp"),
+    addressZh: readText(formData, "addressZh"),
+    addressEn: readText(formData, "addressEn"),
+  });
+
+  const [existing] = await db
+    .select({ id: siteSettings.id })
+    .from(siteSettings)
+    .orderBy(desc(siteSettings.updatedAt), desc(siteSettings.id))
+    .limit(1);
+
+  if (existing) {
+    await db
+      .update(siteSettings)
+      .set({
+        ...draft,
+        updatedAt: new Date(),
+      })
+      .where(eq(siteSettings.id, existing.id));
+  } else {
+    await db.insert(siteSettings).values(draft);
+  }
+
+  revalidatePath("/", "layout");
+  revalidatePath("/about");
+  revalidatePath("/contact");
+  revalidatePath("/admin/settings");
+
+  redirect("/admin/settings?saved=1");
 }

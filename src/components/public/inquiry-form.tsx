@@ -2,15 +2,21 @@
 
 import type { FormEvent } from "react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, CheckCircle2, AlertCircle, UploadCloud } from "lucide-react";
+
+import { TurnstileBox } from "@/components/public/turnstile-box";
 
 type InquiryFormProps = {
   defaultProductName?: string;
+  productId?: number | null;
   sourcePage: string;
   sourceUrl: string;
 };
 
 export function InquiryForm({
   defaultProductName,
+  productId,
   sourcePage,
   sourceUrl,
 }: InquiryFormProps) {
@@ -28,7 +34,6 @@ export function InquiryForm({
     const formData = new FormData(form);
     formData.set("sourcePage", sourcePage);
     formData.set("sourceUrl", sourceUrl);
-    formData.set("turnstileToken", "test-pass");
 
     try {
       const response = await fetch("/api/inquiries", {
@@ -43,91 +48,138 @@ export function InquiryForm({
         return;
       }
 
-      setMessage("Inquiry submitted successfully.");
+      setMessage("Thank you! Our engineering team will review your request and contact you within 24 hours.");
       form.reset();
+    } catch (e) {
+      setError("Network error. Please try again.");
     } finally {
       setPending(false);
     }
   }
 
+  if (message) {
+      return (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-12 text-center"
+          >
+              <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6 font-black uppercase tracking-widest text-[#10b981]">
+                <CheckCircle2 className="w-10 h-10" />
+              </div>
+              <h2 className="text-2xl font-bold text-stone-900 mb-4">Request Received</h2>
+              <p className="text-stone-500 leading-relaxed italic">{message}</p>
+          </motion.div>
+      );
+  }
+
   return (
-    <form
-      className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm"
-      onSubmit={handleSubmit}
-    >
-      <div>
-        <h2 className="text-xl font-semibold text-slate-950">Send Inquiry</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
-          Share your requirement and upload drawings or reference files if needed.
-        </p>
+    <form className="p-8 space-y-8" onSubmit={handleSubmit}>
+      <header>
+        <h2 className="text-sm font-black uppercase tracking-[0.4em] text-stone-400 mb-2">Request Consultation</h2>
+        <p className="text-2xl font-bold tracking-tight text-stone-900">Start Project Analysis</p>
+      </header>
+
+      <div className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="relative group">
+                <input
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                name="name"
+                placeholder="Full Name"
+                required
+                />
+            </div>
+            <div className="relative group">
+                <input
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                name="email"
+                placeholder="Business Email"
+                required
+                type="email"
+                />
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <input
+            className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            name="companyName"
+            placeholder="Company"
+            />
+            <input
+            className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            name="country"
+            placeholder="Country"
+            />
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <input
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                name="whatsapp"
+                placeholder="WhatsApp (Optional)"
+            />
+            <input
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                defaultValue={defaultProductName}
+                name="productName"
+                placeholder="Interested Product"
+            />
+          </div>
+
+          <textarea
+            className="min-h-[120px] w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300 resize-none"
+            name="message"
+            placeholder="Technical requirements & Project scope..."
+            required
+          />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="name"
-          placeholder="Your name"
-          required
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="email"
-          placeholder="Email"
-          required
-          type="email"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="companyName"
-          placeholder="Company"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="country"
-          placeholder="Country"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="whatsapp"
-          placeholder="WhatsApp"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          defaultValue={defaultProductName}
-          name="productName"
-          placeholder="Product"
-        />
+      <div className="space-y-6">
+          <div className="relative flex items-center justify-center p-6 border-2 border-dashed border-stone-100 rounded-2xl hover:bg-stone-50 transition-colors cursor-pointer group">
+              <input 
+                name="attachment" 
+                type="file" 
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <div className="text-center">
+                  <UploadCloud className="w-8 h-8 text-stone-300 mx-auto transition-colors group-hover:text-blue-500" />
+                  <p className="mt-2 text-xs font-bold text-stone-400 uppercase tracking-widest">Upload Drawings (PDF/STEP)</p>
+              </div>
+          </div>
+
+          <TurnstileBox inputId="inquiry-turnstile-token" widgetId="inquiry-turnstile-widget" />
       </div>
 
-      <textarea
-        className="min-h-36 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-        name="message"
-        placeholder="Tell us what you need"
-        required
-      />
-
-      <input name="attachment" type="file" />
-      <input name="sourcePage" type="hidden" value={sourcePage} />
-      <input name="sourceUrl" type="hidden" value={sourceUrl} />
-
-      {error ? (
-        <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600">
-          {error}
-        </p>
-      ) : null}
-
-      {message ? (
-        <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {message}
-        </p>
-      ) : null}
+      <AnimatePresence>
+        {error && (
+            <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex items-center gap-2 p-4 bg-red-50 rounded-2xl text-red-600 text-xs font-bold uppercase tracking-widest"
+            >
+                <AlertCircle className="w-4 h-4" />
+                {error}
+            </motion.div>
+        )}
+      </AnimatePresence>
 
       <button
-        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full group relative h-16 rounded-full bg-stone-900 text-white font-bold tracking-widest uppercase text-xs overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
         disabled={pending}
         type="submit"
       >
-        {pending ? "Submitting..." : "Submit Inquiry"}
+        <span className="relative z-10 flex items-center justify-center gap-3">
+            {pending ? "Transmitting..." : (
+                <>
+                    Submit For Review
+                    <Send className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </>
+            )}
+        </span>
+        <div className="absolute inset-x-0 bottom-0 h-1 bg-blue-600 w-0 group-hover:w-full transition-all duration-700" />
       </button>
     </form>
   );

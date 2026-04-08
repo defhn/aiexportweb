@@ -8,6 +8,11 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get("file");
+  const folderIdValue = formData.get("folderId");
+  const folderId =
+    typeof folderIdValue === "string" && folderIdValue.trim()
+      ? Number.parseInt(folderIdValue, 10)
+      : null;
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "缺少图片文件。" }, { status: 400 });
@@ -24,7 +29,10 @@ export async function POST(request: Request) {
     body: Buffer.from(await file.arrayBuffer()),
   });
 
-  const asset = await createMediaAsset(uploaded);
+  const savedAsset = await createMediaAsset({
+    ...uploaded,
+    folderId,
+  });
 
-  return NextResponse.json(asset, { status: 201 });
+  return NextResponse.json(savedAsset, { status: 201 });
 }

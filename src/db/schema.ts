@@ -19,6 +19,12 @@ export const inquiryStatusEnum = pgEnum("inquiry_status", [
   "processing",
   "done",
 ]);
+export const quoteStatusEnum = pgEnum("quote_status", [
+  "new",
+  "reviewing",
+  "quoted",
+  "closed",
+]);
 
 export const assetTypeEnum = pgEnum("asset_type", ["image", "file"]);
 export const pageKeyEnum = pgEnum("page_key", ["home", "about", "contact"]);
@@ -81,9 +87,21 @@ export const mediaAssets = pgTable("media_assets", {
   fileSize: integer("file_size").notNull(),
   width: integer("width"),
   height: integer("height"),
+  folderId: integer("folder_id"),
   altTextZh: text("alt_text_zh"),
   altTextEn: text("alt_text_en"),
   isPublic: boolean("is_public").default(true).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const assetFolders = pgTable("asset_folders", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  assetType: assetTypeEnum("asset_type").notNull(),
+  name: text("name").notNull(),
+  parentId: integer("parent_id"),
+  sortOrder: integer("sort_order").default(100).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -209,6 +227,9 @@ export const downloadFiles = pgTable("download_files", {
   }),
   displayNameZh: text("display_name_zh").notNull(),
   displayNameEn: text("display_name_en").notNull(),
+  category: varchar("category", { length: 80 }),
+  language: varchar("language", { length: 16 }),
+  description: text("description"),
   isVisible: boolean("is_visible").default(true).notNull(),
   sortOrder: integer("sort_order").default(100).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -272,6 +293,8 @@ export const inquiries = pgTable("inquiries", {
   email: text("email").notNull(),
   companyName: text("company_name"),
   country: text("country"),
+  countryCode: varchar("country_code", { length: 8 }),
+  countryGroup: varchar("country_group", { length: 40 }),
   whatsapp: text("whatsapp"),
   message: text("message").notNull(),
   productId: integer("product_id").references(() => products.id, {
@@ -279,6 +302,12 @@ export const inquiries = pgTable("inquiries", {
   }),
   sourcePage: text("source_page"),
   sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 40 }),
+  categoryTag: varchar("category_tag", { length: 160 }),
+  inquiryType: varchar("inquiry_type", { length: 40 }),
+  classificationMethod: varchar("classification_method", { length: 20 })
+    .default("rule")
+    .notNull(),
   attachmentMediaId: integer("attachment_media_id").references(
     () => mediaAssets.id,
     {
@@ -295,6 +324,72 @@ export const inquiries = pgTable("inquiries", {
     .notNull(),
 });
 
+export const replyTemplates = pgTable("reply_templates", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  title: text("title").notNull(),
+  category: varchar("category", { length: 80 }),
+  contentZh: text("content_zh"),
+  contentEn: text("content_en").notNull(),
+  applicableScene: varchar("applicable_scene", { length: 80 }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const productViews = pgTable("product_views", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  productId: integer("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  sessionId: varchar("session_id", { length: 64 }).notNull(),
+  countryCode: varchar("country_code", { length: 8 }),
+  referer: text("referer"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const quoteRequests = pgTable("quote_requests", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  companyName: text("company_name"),
+  country: text("country"),
+  countryCode: varchar("country_code", { length: 8 }),
+  whatsapp: text("whatsapp"),
+  message: text("message").notNull(),
+  status: quoteStatusEnum("status").default("new").notNull(),
+  attachmentMediaId: integer("attachment_media_id").references(
+    () => mediaAssets.id,
+    {
+      onDelete: "set null",
+    },
+  ),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const quoteRequestItems = pgTable("quote_request_items", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  quoteRequestId: integer("quote_request_id")
+    .notNull()
+    .references(() => quoteRequests.id, { onDelete: "cascade" }),
+  productId: integer("product_id").references(() => products.id, {
+    onDelete: "set null",
+  }),
+  productName: text("product_name").notNull(),
+  quantity: text("quantity"),
+  unit: varchar("unit", { length: 24 }),
+  notes: text("notes"),
+});
+
 export const seoAiSettings = pgTable("seo_ai_settings", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   allowGoogle: boolean("allow_google").default(true).notNull(),
@@ -307,6 +402,18 @@ export const seoAiSettings = pgTable("seo_ai_settings", {
   allowGptBot: boolean("allow_gpt_bot").default(false).notNull(),
   allowClaudeBot: boolean("allow_claude_bot").default(false).notNull(),
   extraRobotsTxt: text("extra_robots_txt"),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const featureUsageCounters = pgTable("feature_usage_counters", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  featureKey: varchar("feature_key", { length: 80 }).notNull().unique(),
+  usageCount: integer("usage_count").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

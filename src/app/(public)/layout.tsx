@@ -1,18 +1,23 @@
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
+import { getAllCategories } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 
 export default async function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const settings = await getSiteSettings();
+  const [settings, categories] = await Promise.all([getSiteSettings(), getAllCategories()]);
 
   return (
-    <div className="min-h-screen bg-stone-50 text-slate-950">
-      <SiteHeader companyName={settings.companyNameEn} />
-      <main>{children}</main>
+    <div className="min-h-screen bg-white text-slate-950 flex flex-col relative selection:bg-blue-500/30 selection:text-blue-900">
+      <SiteHeader />
+      <main className="flex-1">{children}</main>
       <SiteFooter
         address={settings.addressEn}
+        categories={categories.slice(0, 4).map((category) => ({
+          nameEn: category.nameEn,
+          slug: category.slug,
+        }))}
         companyName={settings.companyNameEn}
         email={settings.email}
         phone={settings.phone}

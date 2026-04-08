@@ -1,39 +1,78 @@
-import { RichTextEditor } from "@/components/admin/rich-text-editor";
-import { getBlogPosts } from "@/features/blog/queries";
+import { notFound } from "next/navigation";
+
+import { BlogEditorForm } from "@/components/admin/blog-editor-form";
+import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
+import { saveBlogCategory, saveBlogPost, saveBlogTag } from "@/features/blog/actions";
+import { getBlogCategoryOptions, getBlogPostById, listAdminBlogTags } from "@/features/blog/queries";
+import { buildAssetFolderOptions } from "@/features/media/folders";
+import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
+import { getFeatureGate } from "@/features/plans/access";
 
 type AdminBlogDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ newCategoryId?: string; newTagName?: string }>;
 };
 
-export default async function AdminBlogDetailPage({
-  params,
-}: AdminBlogDetailPageProps) {
+export default async function AdminBlogDetailPage({ params, searchParams }: AdminBlogDetailPageProps) {
+  const gate = await getFeatureGate("blog_management");
+
+  if (gate.status === "locked") {
+    return <LockedFeatureCard gate={gate} />;
+  }
+
   const { id } = await params;
-  const posts = await getBlogPosts();
-  const post = posts[Number(id) - 1] ?? posts[0];
+  const postId = Number.parseInt(id, 10);
+
+  if (!Number.isFinite(postId)) {
+    notFound();
+  }
+
+  const query = (await searchParams) ?? {};
+  const parsedCategoryId = Number.parseInt(query.newCategoryId ?? "", 10);
+  const injectedCategoryId = Number.isFinite(parsedCategoryId) ? parsedCategoryId : null;
+  const injectedTagName = query.newTagName?.trim() ?? "";
+  const [post, categories, imageAssets, existingTags, imageFolders] = await Promise.all([
+    getBlogPostById(postId),
+    getBlogCategoryOptions(),
+    listMediaAssets("image"),
+    listAdminBlogTags(),
+    listAssetFolders("image").catch(() => []),
+  ]);
+
+  if (!post) {
+    notFound();
+  }
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">编辑文章</h2>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          这里会逐步承接分类、标签、SEO 标题、封面图和发布状态。
-        </p>
-      </section>
-
-      <article className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-        <h3 className="text-xl font-semibold text-stone-950">{post.titleZh}</h3>
-        <p className="mt-2 text-sm text-stone-600">{post.titleEn}</p>
-      </article>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <RichTextEditor label="中文正文" defaultValue={post.contentZh} />
-        </div>
-        <div className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <RichTextEditor label="英文正文" defaultValue={post.contentEn} />
-        </div>
-      </div>
-    </div>
+    <BlogEditorForm
+      action={saveBlogPost}
+      categories={categories.map((category) => ({
+        id: category.id,
+        nameZh: category.nameZh,
+        nameEn: category.nameEn,
+        slug: category.slug,
+      }))}
+      description="保存后会同步更新公开博客列表、文章详情页、sitemap 和结构化数据。"
+      existingTags={existingTags}
+      heading="编辑文章"
+      imageAssets={imageAssets.map((asset) => ({
+        id: asset.id,
+        fileName: asset.fileName,
+        url: asset.url,
+        folderId: asset.folderId,
+        altTextZh: asset.altTextZh,
+        altTextEn: asset.altTextEn,
+      }))}
+      imageFolders={buildAssetFolderOptions(imageFolders)}
+      post={{
+        ...post,
+        categoryId: injectedCategoryId ?? post.categoryId,
+        tags: injectedTagName && !post.tags.includes(injectedTagName) ? [...post.tags, injectedTagName] : post.tags,
+      }}
+      returnTo={`/admin/blog/${postId}`}
+      saveCategoryAction={saveBlogCategory}
+      saveTagAction={saveBlogTag}
+      submitLabel="保存文章"
+    />
   );
 }

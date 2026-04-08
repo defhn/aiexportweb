@@ -47,4 +47,23 @@ describe("seed packs and schema coverage", () => {
     expect(building.products.length).toBeGreaterThan(0);
     expect(building.pages.home.length).toBeGreaterThan(0);
   });
+
+  it("ships the CNC demo pack with all configurable home modules", () => {
+    const cnc = getSeedPack("cnc");
+
+    expect(cnc.pages.home.map((module) => module.moduleKey)).toEqual(
+      expect.arrayContaining([
+        "hero",
+        "strengths",
+        "trust-signals",
+        "featured-categories",
+        "factory-capability",
+        "quality-certifications",
+        "featured-products",
+        "process-steps",
+        "latest-insights",
+        "final-cta",
+      ]),
+    );
+  });
 });

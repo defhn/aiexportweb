@@ -1,17 +1,28 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import {
+  buildCategoryDraft,
+  buildProductCustomFieldDrafts,
+  buildProductDraft,
+  buildProductMediaBindingDraft,
+  buildProductPdfBinding,
+} from "@/features/products/actions";
+import {
+  buildProductDetailViewModel,
+  buildVisibleSpecRows,
+  listAdminProducts,
+} from "@/features/products/queries";
 import {
   buildAssetKey,
   getAssetKindFromMimeType,
   isSupportedUploadMimeType,
 } from "@/lib/r2";
-import { buildProductPdfBinding } from "@/features/products/actions";
-import {
-  buildProductDetailViewModel,
-  buildVisibleSpecRows,
-} from "@/features/products/queries";
 
-describe("R2 helpers and product file bindings", () => {
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
+describe("R2 helpers and product management", () => {
   it("generates stable asset keys with folders", () => {
     expect(buildAssetKey("image", "hero.jpg")).toMatch(/^image\/\d{4}\/\d{2}\//);
   });
@@ -34,6 +45,102 @@ describe("R2 helpers and product file bindings", () => {
       pdfFileId: 12,
       showDownloadButton: true,
     });
+  });
+
+  it("normalizes product media bindings and keeps unique gallery assets", () => {
+    expect(
+      buildProductMediaBindingDraft({
+        coverMediaId: 7,
+        pdfFileId: 12,
+        galleryMediaIds: [9, 7, 9, 11, -1, Number.NaN],
+      }),
+    ).toEqual({
+      coverMediaId: 7,
+      pdfFileId: 12,
+      galleryMediaIds: [9, 7, 11],
+    });
+  });
+
+  it("normalizes category drafts with image selection", () => {
+    expect(
+      buildCategoryDraft({
+        nameZh: "铝件加工",
+        nameEn: " Aluminum Machining Parts ",
+        slug: "",
+        summaryZh: "轻量化结构件",
+        summaryEn: "Lightweight structural parts",
+        imageMediaId: 18,
+        sortOrder: 20,
+        isVisible: true,
+        isFeatured: false,
+      }),
+    ).toMatchObject({
+      nameEn: "Aluminum Machining Parts",
+      slug: "aluminum-machining-parts",
+      imageMediaId: 18,
+      sortOrder: 20,
+      isVisible: true,
+    });
+  });
+
+  it("normalizes product drafts and derives seo fallbacks", () => {
+    expect(
+      buildProductDraft({
+        categoryId: 2,
+        nameZh: "定制铝合金支架",
+        nameEn: " Custom Aluminum CNC Bracket ",
+        slug: "",
+        shortDescriptionZh: "轻量化支架",
+        shortDescriptionEn: "Export-ready bracket",
+        detailsZh: "支持图纸定制",
+        detailsEn: "Supports custom drawings.",
+        seoTitle: "",
+        seoDescription: "",
+        sortOrder: 10,
+        status: "published",
+        isFeatured: true,
+        showInquiryButton: true,
+        showWhatsappButton: false,
+        showPdfDownload: true,
+      }),
+    ).toMatchObject({
+      nameEn: "Custom Aluminum CNC Bracket",
+      slug: "custom-aluminum-cnc-bracket",
+      seoTitle: "Custom Aluminum CNC Bracket",
+      seoDescription: "Export-ready bracket",
+      showWhatsappButton: false,
+    });
+  });
+
+  it("filters empty custom field rows and keeps explicit visibility", () => {
+    expect(
+      buildProductCustomFieldDrafts([
+        {
+          labelZh: "硬度",
+          labelEn: "Hardness",
+          valueZh: "HB95",
+          valueEn: "HB95",
+          isVisible: true,
+        },
+        {
+          labelZh: "",
+          labelEn: "",
+          valueZh: "",
+          valueEn: "",
+          isVisible: false,
+        },
+      ]),
+    ).toEqual([
+      {
+        labelZh: "硬度",
+        labelEn: "Hardness",
+        valueZh: "HB95",
+        valueEn: "HB95",
+        inputType: "text",
+        isVisible: true,
+        sortOrder: 10,
+      },
+    ]);
   });
 
   it("builds visible spec rows with built-in and custom fields", () => {
@@ -105,5 +212,21 @@ describe("R2 helpers and product file bindings", () => {
     expect(viewModel.showDownloadButton).toBe(true);
     expect(viewModel.faqs[0]?.question).toContain("OEM");
     expect(viewModel.relatedProducts[0]?.nameEn).toBe("CNC Housing");
+  });
+
+  it("filters admin products by keyword and status in seed mode", async () => {
+    vi.stubEnv("DATABASE_URL", "");
+
+    const onlyBracket = await listAdminProducts("cnc", {
+      query: "Bracket",
+      status: "published",
+    });
+    const onlyDrafts = await listAdminProducts("cnc", {
+      status: "draft",
+    });
+
+    expect(onlyBracket).toHaveLength(1);
+    expect(onlyBracket[0]?.slug).toBe("custom-aluminum-cnc-bracket");
+    expect(onlyDrafts).toHaveLength(0);
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { buildSeoAiSettingsDraft } from "@/features/seo-ai/actions";
 import { buildRobotsPolicies } from "@/lib/ai-crawlers";
 import { buildProductJsonLd } from "@/lib/json-ld";
 
@@ -33,5 +34,29 @@ describe("seo and ai helpers", () => {
     expect(jsonLd["@type"]).toBe("Product");
     expect(jsonLd.name).toContain("Bracket");
     expect(jsonLd.additionalProperty).toHaveLength(1);
+  });
+
+  it("normalizes seo and ai crawler settings from partial input", () => {
+    expect(
+      buildSeoAiSettingsDraft({
+        allowGoogle: false,
+        allowBing: true,
+        allowOaiSearchBot: true,
+        allowClaudeSearchBot: true,
+        allowPerplexityBot: false,
+        allowGptBot: false,
+        allowClaudeBot: true,
+        extraRobotsTxt: "  Crawl-delay: 5  ",
+      }),
+    ).toEqual({
+      allowGoogle: false,
+      allowBing: true,
+      allowOaiSearchBot: true,
+      allowClaudeSearchBot: true,
+      allowPerplexityBot: false,
+      allowGptBot: false,
+      allowClaudeBot: true,
+      extraRobotsTxt: "Crawl-delay: 5",
+    });
   });
 });

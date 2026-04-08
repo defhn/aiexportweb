@@ -1,19 +1,111 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --radius-custom: var(--radius);
+  --font-sans: var(--font-outfit), var(--font-inter), ui-sans-serif, system-ui;
+  --font-display: var(--font-outfit), sans-serif;
+}
 
 :root {
+  --brand: #0f172a; /* Slate-900 - Industrial Dark */
+  --brand-foreground: #ffffff;
+  --background: #fcfbf9;
+  --foreground: #0f172a;
+  --radius: 2rem;
+  
   color-scheme: light;
 }
 
 body {
   margin: 0;
-  background: #f7f4ef;
-  color: #0f172a;
-  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Outfit", "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Glassmorphism utility */
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+.prose-export > * + * {
+  margin-top: 1.2rem;
+}
+
+.prose-export h1,
+.prose-export h2,
+.prose-export h3,
+.prose-export h4 {
+  color: #0f172a;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.prose-export h1 {
+  font-size: 2rem;
+}
+
+.prose-export h2 {
+  font-size: 1.5rem;
+}
+
+.prose-export h3 {
+  font-size: 1.25rem;
+}
+
+.prose-export p,
+.prose-export li,
+.prose-export blockquote {
+  color: #44403c;
+}
+
+.prose-export ul,
+.prose-export ol {
+  padding-left: 1.5rem;
+}
+
+.prose-export blockquote {
+  border-left: 4px solid #1d4ed8;
+  padding-left: 1rem;
+  font-style: italic;
+  background: #f8fafc;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 1rem;
+}
+
+.prose-export figure {
+  margin: 2rem 0;
+}
+
+.prose-export img {
+  width: 100%;
+  border-radius: 1.5rem;
+  border: 1px solid #e7e5e4;
+}
+
+.prose-export figcaption {
+  margin-top: 0.75rem;
+  color: #78716c;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.prose-export a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose-export hr {
+  border: none;
+  border-top: 1px solid #e7e5e4;
+  margin: 2rem 0;
 }

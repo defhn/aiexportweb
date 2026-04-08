@@ -5,5 +5,5 @@ export function createExcerptFallback(html: string, maxLength = 160) {
     return text;
   }
 
-  return `${text.slice(0, maxLength - 1).trim()}…`;
+  return `${text.slice(0, maxLength - 3).trim()}...`;
 }

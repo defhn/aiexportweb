@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import { env } from "@/env";
 
@@ -97,4 +97,17 @@ export async function uploadToR2(input: {
     mimeType: input.mimeType,
     fileSize: input.body.byteLength,
   };
+}
+
+export async function deleteFromR2(bucketKey: string) {
+  if (isDevPlaceholderConfig()) {
+    return;
+  }
+
+  await getR2Client().send(
+    new DeleteObjectCommand({
+      Bucket: env.R2_BUCKET_NAME,
+      Key: bucketKey,
+    }),
+  );
 }

@@ -1,25 +1,82 @@
-import { toSlug } from "@/lib/slug";
+import { ProductEditorForm } from "@/components/admin/product-editor-form";
+import { defaultFieldDefinitions } from "@/db/seed";
+import { buildAssetFolderOptions } from "@/features/media/folders";
+import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
+import { getFeatureGate } from "@/features/plans/access";
+import { saveCategory, saveProduct } from "@/features/products/actions";
+import { listAdminCategories } from "@/features/products/queries";
 
-export default function AdminNewProductPage() {
-  const demoName = "Custom Aluminum CNC Bracket";
+export default async function AdminNewProductPage() {
+  const [categories, imageAssets, fileAssets, imageFolders, productAiGate] = await Promise.all([
+    listAdminCategories(),
+    listMediaAssets("image"),
+    listMediaAssets("file"),
+    listAssetFolders("image").catch(() => []),
+    getFeatureGate("ai_product_copy"),
+  ]);
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">新增产品</h2>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          后续这里会接入完整产品表单。当前先把 slug 规则和默认字段思路以可见方式固定下来。
-        </p>
-      </section>
-
-      <article className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-        <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-          slug preview
-        </p>
-        <p className="mt-3 text-lg font-semibold text-stone-950">
-          {toSlug(demoName)}
-        </p>
-      </article>
-    </div>
+    <ProductEditorForm
+      action={saveProduct}
+      categories={categories.map((category) => ({
+        id: category.id,
+        nameZh: category.nameZh,
+        nameEn: category.nameEn,
+        slug: category.slug,
+      }))}
+      description="创建新的产品详情页，保存后会同步更新前台展示。"
+      fileAssets={fileAssets.map((asset) => ({
+        id: asset.id,
+        fileName: asset.fileName,
+        url: asset.url,
+        folderId: asset.folderId,
+        altTextZh: asset.altTextZh,
+        altTextEn: asset.altTextEn,
+      }))}
+      heading="新增产品"
+      imageAssets={imageAssets.map((asset) => ({
+        id: asset.id,
+        fileName: asset.fileName,
+        url: asset.url,
+        folderId: asset.folderId,
+        altTextZh: asset.altTextZh,
+        altTextEn: asset.altTextEn,
+      }))}
+      imageFolders={buildAssetFolderOptions(imageFolders)}
+      productAiGate={productAiGate}
+      product={{
+        categoryId: categories[0]?.id ?? null,
+        nameZh: "",
+        nameEn: "",
+        slug: "",
+        shortDescriptionZh: "",
+        shortDescriptionEn: "",
+        detailsZh: "",
+        detailsEn: "",
+        seoTitle: "",
+        seoDescription: "",
+        sortOrder: 100,
+        status: "draft",
+        isFeatured: false,
+        showInquiryButton: true,
+        showWhatsappButton: true,
+        showPdfDownload: false,
+        coverMediaId: null,
+        pdfFileId: null,
+        galleryMediaIds: [],
+        defaultFields: defaultFieldDefinitions.map((field) => ({
+          fieldKey: field.fieldKey,
+          labelZh: field.labelZh,
+          labelEn: field.labelEn,
+          valueZh: "",
+          valueEn: "",
+          isVisible: field.isVisibleByDefault,
+        })),
+        customFields: [],
+      }}
+      returnTo="/admin/products/new"
+      saveCategoryAction={saveCategory}
+      submitLabel="创建产品"
+    />
   );
 }

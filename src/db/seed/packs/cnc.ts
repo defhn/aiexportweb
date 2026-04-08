@@ -1,11 +1,27 @@
 import type { SeedPack } from "../types";
+import {
+  buildCncDemoCategories,
+  buildCncDemoProducts,
+} from "../../../features/demo-catalog/cnc-catalog";
+
+const featuredCategorySlugs = [
+  "aluminum-machining-parts",
+  "stainless-steel-components",
+  "precision-turning-parts",
+];
+
+const featuredProductSlugs = [
+  "custom-aluminum-cnc-bracket",
+  "precision-steel-drive-shaft",
+  "cnc-machined-housing",
+];
 
 export const cncSeedPack: SeedPack = {
   key: "cnc",
   site: {
     companyNameZh: "精密数控演示工厂",
     companyNameEn: "Precision CNC Components Co., Ltd.",
-    taglineZh: "面向海外买家的高精度 CNC 加工演示站",
+    taglineZh: "为海外买家提供高精度 CNC 加工与稳定交付。",
     taglineEn: "High-precision CNC machining for global OEM buyers.",
     email: "sales@precision-cnc-demo.com",
     phone: "+86 769 8888 1200",
@@ -44,6 +60,25 @@ export const cncSeedPack: SeedPack = {
             "ISO-ready quality control",
             "Rapid prototyping in 5-7 days",
             "Stable export packaging and documentation",
+            "Mixed production for aluminum, steel, brass, and engineering parts",
+          ],
+        },
+      },
+      {
+        moduleKey: "trust-signals",
+        moduleNameZh: "品牌背书",
+        moduleNameEn: "Trust Signals",
+        isEnabled: true,
+        sortOrder: 30,
+        payloadJson: {
+          title: "Trusted by global sourcing teams and engineering buyers",
+          items: [
+            "Siemens",
+            "Honeywell",
+            "Boeing",
+            "Tesla",
+            "Medtronic",
+            "General Electric",
           ],
         },
       },
@@ -52,9 +87,57 @@ export const cncSeedPack: SeedPack = {
         moduleNameZh: "推荐分类",
         moduleNameEn: "Featured Categories",
         isEnabled: true,
-        sortOrder: 30,
+        sortOrder: 40,
         payloadJson: {
-          slugs: ["aluminum-machining-parts", "stainless-steel-components"],
+          eyebrow: "Core Expertise",
+          title: "Industry-Leading Solutions",
+          description:
+            "Organized around the machining capabilities buyers search for most often.",
+          slugs: featuredCategorySlugs,
+        },
+      },
+      {
+        moduleKey: "factory-capability",
+        moduleNameZh: "工厂实力",
+        moduleNameEn: "Factory Capability",
+        isEnabled: true,
+        sortOrder: 50,
+        payloadJson: {
+          eyebrow: "World-Class Facility",
+          title: "Engineered for Scale. Built for Precision.",
+          description:
+            "Our workshop combines rapid prototyping, stable export production, and disciplined inspection control for long-term OEM programs.",
+          items: [
+            "5-Axis CNC Machining Centers",
+            "Automated Turning and Milling Cells",
+            "Hexagon CMM Inspection Systems",
+            "ERP-linked production scheduling",
+            "Dedicated export packing station",
+            "Batch traceability for every shipment",
+          ],
+          statOneValue: "100k+",
+          statOneLabel: "Sq Ft Facility",
+          statTwoValue: "150+",
+          statTwoLabel: "Advanced Machines",
+        },
+      },
+      {
+        moduleKey: "quality-certifications",
+        moduleNameZh: "质量认证",
+        moduleNameEn: "Quality Certifications",
+        isEnabled: true,
+        sortOrder: 60,
+        payloadJson: {
+          eyebrow: "Uncompromising Quality",
+          title: "Export-Ready Compliance",
+          description:
+            "Make inspection standards, audit readiness, and compliance visibility clear from the first RFQ.",
+          items: [
+            "ISO 9001:2015|Certified quality management system for consistent production quality.",
+            "AS9100D|Aerospace-grade process discipline for demanding applications.",
+            "SGS Verified|Factory and production workflow audited onsite by third-party inspectors.",
+            "RoHS Compliant|Material compliance prepared for export projects and regulated markets.",
+          ],
         },
       },
       {
@@ -62,9 +145,56 @@ export const cncSeedPack: SeedPack = {
         moduleNameZh: "推荐产品",
         moduleNameEn: "Featured Products",
         isEnabled: true,
-        sortOrder: 40,
+        sortOrder: 70,
         payloadJson: {
-          slugs: ["custom-aluminum-cnc-bracket", "precision-steel-drive-shaft"],
+          eyebrow: "Featured Portfolio",
+          title: "Precision Parts & Custom Components",
+          ctaLabel: "View All Products",
+          ctaHref: "/products",
+          slugs: featuredProductSlugs,
+        },
+      },
+      {
+        moduleKey: "process-steps",
+        moduleNameZh: "合作流程",
+        moduleNameEn: "Process Steps",
+        isEnabled: true,
+        sortOrder: 80,
+        payloadJson: {
+          eyebrow: "Streamlined Process",
+          title: "How We Work",
+          items: [
+            "1. Upload Drawings|Share drawings, target material, and annual volume for review.",
+            "2. DFM & Sampling|We confirm manufacturability and build a sample for approval.",
+            "3. Stable Production|Approved parts move into controlled batch production.",
+            "4. Export Delivery|Packing, labeling, and shipment documents are prepared for dispatch.",
+          ],
+        },
+      },
+      {
+        moduleKey: "latest-insights",
+        moduleNameZh: "博客入口",
+        moduleNameEn: "Latest Insights",
+        isEnabled: true,
+        sortOrder: 90,
+        payloadJson: {
+          eyebrow: "Engineering Insights",
+          title: "Industry Knowledge & News",
+        },
+      },
+      {
+        moduleKey: "final-cta",
+        moduleNameZh: "底部转化区",
+        moduleNameEn: "Final CTA",
+        isEnabled: true,
+        sortOrder: 100,
+        payloadJson: {
+          eyebrow: "Available for New Projects",
+          title: "Ready to manufacture with precision?",
+          description:
+            "Upload your 3D models or 2D drawings today for a professional quotation and DFM feedback.",
+          primaryCtaLabel: "Start Your Quote",
+          primaryCtaHref: "/request-quote",
         },
       },
     ],
@@ -92,127 +222,13 @@ export const cncSeedPack: SeedPack = {
         payloadJson: {
           title: "Send your RFQ today",
           description:
-            "Share drawings, target material, and quantity so our sales team can prepare a quote.",
+            "Share drawings, target material, quantity, and delivery market so our sales team can prepare a quote.",
         },
       },
     ],
   },
-  categories: [
-    {
-      nameZh: "铝件加工",
-      nameEn: "Aluminum Machining Parts",
-      slug: "aluminum-machining-parts",
-      summaryZh: "适合轻量化结构件、支架和外壳。",
-      summaryEn: "Ideal for lightweight brackets, housings, and structural parts.",
-      sortOrder: 10,
-      isFeatured: true,
-    },
-    {
-      nameZh: "不锈钢零件",
-      nameEn: "Stainless Steel Components",
-      slug: "stainless-steel-components",
-      summaryZh: "适合高强度、耐腐蚀工况。",
-      summaryEn: "Suitable for high-strength and corrosion-resistant applications.",
-      sortOrder: 20,
-      isFeatured: true,
-    },
-  ],
-  products: [
-    {
-      nameZh: "定制铝合金 CNC 支架",
-      nameEn: "Custom Aluminum CNC Bracket",
-      slug: "custom-aluminum-cnc-bracket",
-      categorySlug: "aluminum-machining-parts",
-      shortDescriptionZh: "面向机器人和自动化设备的轻量化精密支架。",
-      shortDescriptionEn:
-        "A lightweight precision bracket for robotics and automation assemblies.",
-      detailsZh:
-        "支持来图定制，适合小批量打样和批量交付，表面可阳极氧化处理。",
-      detailsEn:
-        "Built for custom drawings, this bracket supports prototyping and mass production with anodized surface options.",
-      seoTitle: "Custom Aluminum CNC Bracket Manufacturer in China",
-      seoDescription:
-        "Source custom aluminum CNC brackets with fast sampling, stable tolerances, and export-ready quality control.",
-      sortOrder: 10,
-      isFeatured: true,
-      defaultFields: {
-        model: { valueZh: "CNC-BR-001", valueEn: "CNC-BR-001", visible: true },
-        material: { valueZh: "6061 铝合金", valueEn: "Aluminum 6061", visible: true },
-        process: { valueZh: "CNC 铣削", valueEn: "CNC Milling", visible: true },
-        size: { valueZh: "按图纸定制", valueEn: "Custom per drawing", visible: true },
-        tolerance: { valueZh: "+/-0.01mm", valueEn: "+/-0.01 mm", visible: true },
-        surface_treatment: {
-          valueZh: "阳极氧化",
-          valueEn: "Anodizing",
-          visible: true,
-        },
-        application: {
-          valueZh: "机器人支架、自动化夹具",
-          valueEn: "Robot brackets and automation fixtures",
-          visible: true,
-        },
-        moq: { valueZh: "100 件", valueEn: "100 pcs", visible: true },
-        sample_lead_time: { valueZh: "5-7 天", valueEn: "5-7 days", visible: true },
-        lead_time: { valueZh: "15-20 天", valueEn: "15-20 days", visible: true },
-        packaging: {
-          valueZh: "防震袋 + 外箱",
-          valueEn: "Protective bag + export carton",
-          visible: true,
-        },
-        place_of_origin: { valueZh: "中国东莞", valueEn: "Dongguan, China", visible: true },
-        supply_ability: {
-          valueZh: "每月 50,000 件",
-          valueEn: "50,000 pcs per month",
-          visible: true,
-        },
-        certification: { valueZh: "ISO 9001", valueEn: "ISO 9001", visible: true },
-      },
-      customFields: [
-        {
-          labelZh: "硬度",
-          labelEn: "Hardness",
-          valueZh: "HB 95",
-          valueEn: "HB 95",
-          visible: true,
-          sortOrder: 10,
-        },
-      ],
-    },
-    {
-      nameZh: "精密不锈钢传动轴",
-      nameEn: "Precision Steel Drive Shaft",
-      slug: "precision-steel-drive-shaft",
-      categorySlug: "stainless-steel-components",
-      shortDescriptionZh: "适用于工业传动系统的高同轴度轴类零件。",
-      shortDescriptionEn:
-        "A high-concentricity shaft component for industrial transmission systems.",
-      detailsZh:
-        "采用车铣复合工艺，支持热处理和表面抛光，适合出口设备配套。",
-      detailsEn:
-        "Manufactured with turning and milling processes, this shaft supports heat treatment and polishing for export equipment assembly.",
-      seoTitle: "Precision Steel Drive Shaft Supplier",
-      seoDescription:
-        "Find a reliable supplier for precision steel drive shafts with stable concentricity and on-time delivery.",
-      sortOrder: 20,
-      isFeatured: true,
-      defaultFields: {
-        model: { valueZh: "SHAFT-018", valueEn: "SHAFT-018", visible: true },
-        material: { valueZh: "SUS 304", valueEn: "SUS 304", visible: true },
-        process: { valueZh: "车削 + 铣削", valueEn: "Turning + Milling", visible: true },
-        size: { valueZh: "直径 18mm", valueEn: "Diameter 18 mm", visible: true },
-        tolerance: { valueZh: "+/-0.005mm", valueEn: "+/-0.005 mm", visible: true },
-        application: {
-          valueZh: "工业驱动模组",
-          valueEn: "Industrial drive modules",
-          visible: true,
-        },
-        moq: { valueZh: "200 件", valueEn: "200 pcs", visible: true },
-        lead_time: { valueZh: "18 天", valueEn: "18 days", visible: true },
-        certification: { valueZh: "RoHS", valueEn: "RoHS", visible: true },
-      },
-      customFields: [],
-    },
-  ],
+  categories: buildCncDemoCategories(),
+  products: buildCncDemoProducts(),
   blogCategories: [
     {
       nameZh: "CNC 指南",
@@ -225,24 +241,18 @@ export const cncSeedPack: SeedPack = {
       titleZh: "如何选择中国 CNC 加工供应商",
       titleEn: "How to Choose a CNC Machining Supplier in China",
       slug: "how-to-choose-a-cnc-machining-supplier-in-china",
-      excerptZh: "采购团队在筛选供应商时最应该检查的 5 个点。",
+      excerptZh: "采购团队在筛选供应商时最应该检查的 5 个关键点。",
       excerptEn:
         "Five practical checks overseas buyers should make before choosing a CNC supplier.",
       contentZh:
-        "重点关注公差能力、打样速度、质量体系、沟通效率和稳定交期。",
+        "重点关注公差能力、打样速度、质量体系、沟通效率和稳定交期，避免只看价格而忽略长期合作成本。",
       contentEn:
-        "Focus on tolerance control, prototype speed, quality systems, communication, and delivery consistency.",
+        "Focus on tolerance control, prototype speed, quality systems, communication, and delivery consistency instead of choosing by price alone.",
       categorySlug: "cnc-guides",
       tags: ["cnc machining", "supplier"],
       publishedAt: "2026-04-01T09:00:00.000Z",
     },
   ],
-  featuredCategorySlugs: [
-    "aluminum-machining-parts",
-    "stainless-steel-components",
-  ],
-  featuredProductSlugs: [
-    "custom-aluminum-cnc-bracket",
-    "precision-steel-drive-shaft",
-  ],
+  featuredCategorySlugs,
+  featuredProductSlugs,
 };

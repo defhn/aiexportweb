@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { createMediaAsset } from "@/features/media/actions";
 import { createInquiry } from "@/features/inquiries/actions";
+import { validateInquiryAttachment } from "@/features/inquiries/validation";
 import { sendInquiryNotification } from "@/lib/brevo";
 import { uploadToR2 } from "@/lib/r2";
 import { verifyTurnstileToken } from "@/lib/turnstile";
@@ -22,6 +23,15 @@ export async function POST(request: Request) {
   const attachment = formData.get("attachment");
 
   if (attachment instanceof File && attachment.size > 0) {
+    const attachmentValidation = validateInquiryAttachment(attachment);
+
+    if (!attachmentValidation.ok) {
+      return NextResponse.json(
+        { error: attachmentValidation.error },
+        { status: 400 },
+      );
+    }
+
     const uploaded = await uploadToR2({
       kind: "file",
       fileName: attachment.name,
@@ -41,6 +51,7 @@ export async function POST(request: Request) {
     country: String(formData.get("country") ?? ""),
     whatsapp: String(formData.get("whatsapp") ?? ""),
     message: String(formData.get("message") ?? ""),
+    productId: Number.parseInt(String(formData.get("productId") ?? ""), 10) || null,
     sourcePage: String(formData.get("sourcePage") ?? ""),
     sourceUrl: String(formData.get("sourceUrl") ?? ""),
     attachmentMediaId,
