@@ -38,9 +38,9 @@ const envSchema = z.object({
   ADMIN_USERNAME: z.string().min(1),
   ADMIN_PASSWORD: z.string().min(6),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
-  SITE_PLAN: z.enum(["basic", "growth", "ai_sales"]),
-  ENABLE_PRICING_PAGE: z.enum(["true", "false", "1", "0"]),
-  SALES_CONTACT_URL: z.string().min(1),
+  SITE_PLAN: z.enum(["basic", "growth", "ai_sales"]).default("ai_sales"),
+  ENABLE_PRICING_PAGE: z.enum(["true", "false", "1", "0"]).default("true"),
+  SALES_CONTACT_URL: z.string().min(1).default("/contact"),
 });
 
 function buildRuntimeEnv() {
