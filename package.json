@@ -15,9 +15,11 @@
   "dependencies": {
     "@neondatabase/serverless": "latest",
     "drizzle-orm": "latest",
+    "jose": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "zod": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
