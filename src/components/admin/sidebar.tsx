@@ -8,6 +8,7 @@ const navItems = [
   { label: "首页管理", href: "/admin/pages/home" },
   { label: "关于我们", href: "/admin/pages/about" },
   { label: "联系我们", href: "/admin/pages/contact" },
+  { label: "站点设置", href: "/admin/settings" },
   { label: "产品分类", href: "/admin/categories" },
   { label: "产品管理", href: "/admin/products" },
   { label: "博客管理", href: "/admin/blog" },

@@ -7,7 +7,7 @@ describe("HomePage", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /high-quality manufacturing solutions for global buyers/i,
+        name: /custom cnc machining parts for global oem buyers/i,
       }),
     ).toBeInTheDocument();
 
@@ -15,5 +15,9 @@ describe("HomePage", () => {
       "href",
       "/contact",
     );
+
+    expect(
+      screen.getByRole("heading", { name: /aluminum machining parts/i }),
+    ).toBeInTheDocument();
   });
 });
