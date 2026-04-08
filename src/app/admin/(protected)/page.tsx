@@ -2,17 +2,22 @@ const cards = [
   {
     label: "本周询盘",
     value: "12",
-    description: "后续会接入 Neon 真实询盘数据。",
+    description: "后续会接入后台真实询盘统计和处理状态。",
+  },
+  {
+    label: "未处理询盘",
+    value: "5",
+    description: "帮助销售优先跟进高意向询盘。",
   },
   {
     label: "已发布产品",
-    value: "24",
-    description: "后续会接产品和分类管理模块。",
+    value: "38",
+    description: "支持产品分类、参数、PDF 和推荐展示。",
   },
   {
-    label: "博客文章",
-    value: "6",
-    description: "后续会接 SEO 博客编辑与发布。",
+    label: "已发布博客",
+    value: "16",
+    description: "持续做 SEO 内容更新，提升海外曝光。",
   },
 ];
 
@@ -20,13 +25,13 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-3xl font-semibold text-stone-950">统一后台</h2>
+        <h2 className="text-3xl font-semibold text-stone-950">仪表盘</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          这里会逐步汇总固定页面、产品、博客、图库、文件和询盘管理能力，保证中国客户用中文后台就能维护英文前台站点。
+          快速查看询盘、内容数量和最近的运营方向，方便老板和销售团队进入后台后先抓重点。
         </p>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <article
             key={card.label}

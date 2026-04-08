@@ -1,3 +1,4 @@
+import "../env";
 import { migrate } from "drizzle-orm/neon-http/migrator";
 
 import { getDb } from "./client";

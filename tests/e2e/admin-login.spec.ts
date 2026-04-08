@@ -15,7 +15,5 @@ test("redirects to the login page and completes the admin sign-in flow", async (
   await page.getByRole("button", { name: "登录" }).click();
 
   await expect(page).toHaveURL(/\/admin$/);
-  await expect(
-    page.getByRole("heading", { name: "统一后台" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "仪表盘" })).toBeVisible();
 });
