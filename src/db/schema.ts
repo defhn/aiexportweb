@@ -125,6 +125,9 @@ export const products = pgTable("products", {
   coverMediaId: integer("cover_media_id").references(() => mediaAssets.id, {
     onDelete: "set null",
   }),
+  pdfFileId: integer("pdf_file_id").references(() => mediaAssets.id, {
+    onDelete: "set null",
+  }),
   status: publishStatusEnum("status").default("draft").notNull(),
   isFeatured: boolean("is_featured").default(false).notNull(),
   showInquiryButton: boolean("show_inquiry_button").default(true).notNull(),

@@ -1,0 +1,2 @@
+ALTER TABLE "products" ADD COLUMN "pdf_file_id" integer;--> statement-breakpoint
+ALTER TABLE "products" ADD CONSTRAINT "products_pdf_file_id_media_assets_id_fk" FOREIGN KEY ("pdf_file_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;
