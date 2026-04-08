@@ -5,6 +5,7 @@ import { industrialEquipmentSeedPack } from "./packs/industrial-equipment";
 import type { SeedPack, SeedPackKey } from "./types";
 
 export { defaultFieldDefinitions };
+export type { DefaultFieldDefinition, DefaultFieldKey } from "./default-field-defs";
 export type {
   SeedBlogCategory,
   SeedBlogPost,
