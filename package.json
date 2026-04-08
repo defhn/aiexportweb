@@ -5,11 +5,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@neondatabase/serverless": "latest",
+    "drizzle-orm": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
@@ -24,9 +29,11 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
+    "drizzle-kit": "latest",
     "jsdom": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
+    "tsx": "latest",
     "typescript": "latest",
     "vitest": "latest"
   }
