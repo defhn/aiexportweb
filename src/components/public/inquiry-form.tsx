@@ -7,6 +7,7 @@ import { Send, CheckCircle2, AlertCircle, UploadCloud } from "lucide-react";
 
 import { TurnstileBox } from "@/components/public/turnstile-box";
 import { getSavedTrackingParams } from "@/lib/tracking";
+import { NdaTrustBadge } from "@/components/public/trust-compliance";
 
 type InquiryFormProps = {
   defaultProductName?: string;
@@ -175,7 +176,8 @@ export function InquiryForm({
         )}
       </AnimatePresence>
 
-      <button
+            <NdaTrustBadge className="mb-4" />
+<button
         className="w-full group relative h-16 rounded-full bg-stone-900 text-white font-bold tracking-widest uppercase text-xs overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
         disabled={pending}
         type="submit"

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { InquiryReplyAssistant } from "@/components/admin/inquiry-reply-assistant";
 import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
+import { SecureAttachmentButton } from "@/components/admin/secure-attachment-button";
 import { saveInquiryDetail } from "@/features/inquiries/actions";
 import { getInquiryById } from "@/features/inquiries/queries";
 import { getFeatureGate } from "@/features/plans/access";
@@ -108,16 +109,12 @@ export default async function AdminInquiryDetailPage({
                 {inquiry.inquiryType || "未分类"}
               </p>
               {inquiry.attachmentUrl ? (
-                <p>
+                <p className="flex items-center gap-2">
                   <span className="font-medium text-stone-950">附件：</span>
-                  <a
-                    className="text-amber-700 underline"
-                    href={inquiry.attachmentUrl}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {inquiry.attachmentName || "下载附件"}
-                  </a>
+                  <SecureAttachmentButton
+                    fileName={inquiry.attachmentName}
+                    inquiryId={inquiry.id}
+                  />
                 </p>
               ) : null}
             </div>
@@ -150,9 +147,12 @@ export default async function AdminInquiryDetailPage({
               <label className="block text-sm font-medium text-stone-700">
                 状态
                 <select className={inputClassName} defaultValue={inquiry.status} name="status">
-                  <option value="new">new</option>
-                  <option value="processing">processing</option>
-                  <option value="done">done</option>
+                  <option value="new">新线索 (new)</option>
+                  <option value="processing">跟进中 (processing)</option>
+                  <option value="contacted">已联系 (contacted)</option>
+                  <option value="quoted">已报价 (quoted)</option>
+                  <option value="won">赢单 (won)</option>
+                  <option value="done">已完成 (done)</option>
                 </select>
               </label>
               <label className="block text-sm font-medium text-stone-700">
