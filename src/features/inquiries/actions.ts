@@ -108,7 +108,7 @@ export async function createInquiry(input: InquiryInsertInput) {
   return record;
 }
 
-export async function updateInquiryStatus(id: number, status: "new" | "processing" | "done") {
+export async function updateInquiryStatus(id: number, status: "new" | "processing" | "contacted" | "quoted" | "won" | "done") {
   const db = getDb();
   const [record] = await db
     .update(inquiries)
@@ -124,7 +124,7 @@ export async function updateInquiryStatus(id: number, status: "new" | "processin
 
 export async function updateInquiryDetail(input: {
   id: number;
-  status: "new" | "processing" | "done";
+  status: "new" | "processing" | "contacted" | "quoted" | "won" | "done";
   inquiryType?: string | null;
   internalNote?: string | null;
   classificationMethod?: "rule" | "ai" | "manual";
@@ -162,8 +162,11 @@ export async function saveInquiryStatus(formData: FormData) {
     redirect("/admin/inquiries");
   }
 
-  const normalizedStatus =
-    status === "processing" || status === "done" ? status : "new";
+  const normalizedStatus = [
+    "new", "processing", "contacted", "quoted", "won", "done",
+  ].includes(status)
+    ? (status as "new" | "processing" | "contacted" | "quoted" | "won" | "done")
+    : ("new" as const);
 
   await updateInquiryStatus(inquiryId, normalizedStatus);
   revalidatePath("/admin/inquiries");

@@ -5,7 +5,7 @@ import { inquiries, mediaAssets, products } from "@/db/schema";
 
 export async function listInquiries(filters?: {
   query?: string;
-  status?: "new" | "processing" | "done" | "";
+  status?: "new" | "processing" | "contacted" | "quoted" | "won" | "done" | "";
   inquiryType?: string;
   countryGroup?: string;
 }) {
