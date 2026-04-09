@@ -698,6 +698,7 @@ export async function getProductById(id: number, seedPackKey: SeedPackKey = "cnc
         isVisible: field.isVisible,
         sortOrder: field.sortOrder,
       })),
+      faqsJson: Array.isArray(product.faqsJson) ? product.faqsJson : [],
     };
   }
 
@@ -792,6 +793,7 @@ export async function getProductDetailBySlugs(
         categorySlug: productCategories.slug,
         coverMediaId: products.coverMediaId,
         pdfFileId: products.pdfFileId,
+        faqsJson: products.faqsJson,
       })
       .from(products)
       .innerJoin(productCategories, eq(products.categoryId, productCategories.id))
@@ -940,7 +942,9 @@ export async function getProductDetailBySlugs(
           isVisible: row.isVisible,
           sortOrder: row.sortOrder,
         })),
-        faqs: buildProductFaqs(),
+        faqs: (Array.isArray(product.faqsJson) && product.faqsJson.length > 0)
+          ? product.faqsJson
+          : buildProductFaqs(),
         relatedProducts: relatedProducts.map((item) => ({
           id: item.id,
           nameEn: item.nameEn,

@@ -1,15 +1,21 @@
+"use client";
+
+import { useState } from "react";
 import {
   BarChart3,
   FileText,
   Globe2,
+  HelpCircle,
   Images,
   Package,
+  Plus,
   Save,
   Settings2,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 
-import { GalleryReplaceButton } from "@/components/admin/gallery-replace-button";
+import { GalleryPicker } from "@/components/admin/gallery-picker";
 import { ImagePicker } from "@/components/admin/image-picker";
 import { ProductAiTools } from "@/components/admin/product-ai-tools";
 import type { FeatureGate } from "@/features/plans/access";
@@ -75,6 +81,7 @@ type ProductEditorValue = {
   galleryMediaIds: number[];
   defaultFields: DefaultFieldRow[];
   customFields: CustomFieldRow[];
+  faqsJson?: Array<{ question: string; answer: string }>;
 };
 
 type ProductEditorFormProps = {
@@ -143,9 +150,25 @@ export function ProductEditorForm({
       isVisible: true,
     })),
   ];
-  const galleryIds = new Set(product.galleryMediaIds);
-  const coverAsset = imageAssets.find((asset) => asset.id === product.coverMediaId) ?? null;
-  const galleryAssets = imageAssets.filter((asset) => galleryIds.has(asset.id));
+
+  const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>(
+    product.faqsJson ?? []
+  );
+
+  const addFaq = () =>
+    setFaqs((prev) => [...prev, { question: "", answer: "" }]);
+
+  const removeFaq = (index: number) =>
+    setFaqs((prev) => prev.filter((_, i) => i !== index));
+
+  const updateFaq = (
+    index: number,
+    field: "question" | "answer",
+    value: string,
+  ) =>
+    setFaqs((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    );
 
   return (
     <div className="mx-auto max-w-[1440px] pb-40">
@@ -195,163 +218,53 @@ export function ProductEditorForm({
 
         <div className="space-y-8">
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-            <div className="mb-8 flex items-center gap-3">
+            <div className="mb-6 flex items-center gap-3">
               <Images className="h-5 w-5 text-stone-400" />
               <h3 className="text-xl font-bold text-stone-900">产品图片与资料</h3>
             </div>
 
-            <div className="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
-              <div className="space-y-5">
-                <div className="overflow-hidden rounded-[1.5rem] border border-stone-200 bg-stone-50">
-                  <div className="aspect-[4/3] bg-stone-100">
-                    {coverAsset ? (
-                      <img
-                        alt={coverAsset.altTextEn || coverAsset.fileName}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                        src={coverAsset.url}
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-sm text-stone-400">
-                        还没有设置产品主图
-                      </div>
-                    )}
-                  </div>
-                  <div className="border-t border-stone-200 px-5 py-4">
-                    <p className="truncate text-sm font-semibold text-stone-950">
-                      {coverAsset?.fileName || "未选择主图"}
-                    </p>
-                    <p className="mt-1 text-xs text-stone-500">
-                      主图会显示在产品列表页、详情页首屏和推荐产品卡片中。
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <h4 className="text-sm font-semibold text-stone-900">当前已选图库</h4>
-                    <span className="text-xs text-stone-500">{galleryAssets.length} 张</span>
-                  </div>
-                  {galleryAssets.length ? (
-                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-                      {galleryAssets.map((asset) => (
-                        <div
-                          key={asset.id}
-                          className="overflow-hidden rounded-2xl border border-stone-200 bg-white"
-                        >
-                          <div className="aspect-square bg-stone-100">
-                            <img
-                              alt={asset.altTextEn || asset.fileName}
-                              className="h-full w-full object-cover"
-                              loading="lazy"
-                              src={asset.url}
-                            />
-                          </div>
-                          <div className="space-y-2 p-3">
-                            <p className="truncate text-xs font-medium text-stone-900">
-                              {asset.fileName}
-                            </p>
-                            {product.id ? (
-                              <GalleryReplaceButton
-                                currentMediaId={asset.id}
-                                productId={product.id}
-                              />
-                            ) : null}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
-                      当前还没有选择产品图库图片。
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-6">
+            <div className="space-y-6">
+              {/* 产品主图 */}
+              <div>
+                <p className="mb-3 text-sm font-semibold text-stone-700">产品主图</p>
                 <ImagePicker
                   assets={imageAssets}
                   folders={imageFolders}
                   label="产品主图"
                   name="coverMediaId"
                   selectedAssetId={product.coverMediaId}
-                  description="主图放在最上方，和电商后台一样先确认封面，再继续编辑产品内容。"
                 />
-
-                <section className="rounded-[1.5rem] border border-stone-200 bg-stone-50/60 p-5">
-                  <h4 className="text-sm font-semibold text-stone-900">资料下载</h4>
-                  <label className="mt-4 block text-sm font-medium text-stone-700">
-                    关联 PDF 文件
-                    <select
-                      className={inputClassName}
-                      defaultValue={product.pdfFileId ?? ""}
-                      name="pdfFileId"
-                    >
-                      <option value="">不绑定 PDF 下载</option>
-                      {fileAssets.map((asset) => (
-                        <option key={asset.id} value={asset.id}>
-                          {asset.fileName}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </section>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <div className="mb-4 flex items-center justify-between gap-4">
-                <div>
-                  <h4 className="text-sm font-semibold text-stone-900">图库选择</h4>
-                  <p className="mt-1 text-xs text-stone-500">
-                    勾选后会成为产品详情页图库，支持多选。
-                  </p>
-                </div>
               </div>
 
-              {imageAssets.length ? (
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                  {imageAssets.map((asset) => (
-                    <label
-                      key={asset.id}
-                      className="overflow-hidden rounded-2xl border border-stone-200 bg-white"
-                    >
-                      <div className="aspect-[4/3] bg-stone-100">
-                        <img
-                          alt={asset.altTextEn || asset.fileName}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                          src={asset.url}
-                        />
-                      </div>
-                      <div className="space-y-3 p-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-stone-900">
-                              {asset.fileName}
-                            </p>
-                            <p className="mt-1 truncate text-xs text-stone-500">
-                              {asset.altTextZh || asset.altTextEn || "未填写 Alt"}
-                            </p>
-                          </div>
-                          <input
-                            defaultChecked={galleryIds.has(asset.id)}
-                            name="galleryMediaIds"
-                            type="checkbox"
-                            value={asset.id}
-                            className="mt-1 h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
-                          />
-                        </div>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
-                  暂无图片素材，请先到图库上传。
-                </div>
-              )}
+              {/* 产品图库 */}
+              <div>
+                <p className="mb-3 text-sm font-semibold text-stone-700">产品图库</p>
+                <GalleryPicker
+                  assets={imageAssets}
+                  folders={imageFolders}
+                  name="galleryMediaIds"
+                  selectedIds={product.galleryMediaIds}
+                />
+              </div>
+
+              {/* PDF 资料 */}
+              <div>
+                <label className="block text-sm font-semibold text-stone-700">
+                  关联 PDF 文件
+                  <select
+                    className={inputClassName}
+                    defaultValue={product.pdfFileId ?? ""}
+                    name="pdfFileId"
+                  >
+                    <option value="">不绑定 PDF 下载</option>
+                    {fileAssets.map((asset) => (
+                      <option key={asset.id} value={asset.id}>
+                        {asset.fileName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
           </section>
 
@@ -463,97 +376,164 @@ export function ProductEditorForm({
           </section>
 
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-            <div className="mb-8 flex items-center gap-3">
+            <div className="mb-6 flex items-center gap-3">
               <BarChart3 className="h-5 w-5 text-stone-400" />
               <h3 className="text-xl font-bold text-stone-900">技术参数</h3>
             </div>
 
-            <div className="space-y-4">
+            {/* 默认参数表 */}
+            <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
               {product.defaultFields.map((field) => (
                 <div
                   key={field.fieldKey}
-                  className="grid gap-4 rounded-3xl border border-stone-100 p-6 md:grid-cols-[1fr_1fr_auto]"
+                  className="grid items-center gap-2 px-3 py-2 md:grid-cols-[120px_1fr_1fr_80px]"
                 >
-                  <label className="block text-sm font-medium text-stone-700">
+                  {/* 属性名 */}
+                  <span className="text-xs font-semibold text-stone-500">
                     {field.labelZh}
-                    <input
-                      className={inputClassName}
-                      defaultValue={field.valueZh}
-                      name={`field-${field.fieldKey}__valueZh`}
-                    />
-                  </label>
-                  <label className="block text-sm font-medium text-stone-700">
-                    {field.labelEn}
-                    <input
-                      className={inputClassName}
-                      defaultValue={field.valueEn}
-                      name={`field-${field.fieldKey}__valueEn`}
-                    />
-                  </label>
-                  <label className="flex items-center gap-2 self-end pb-3 text-sm font-medium text-stone-700">
+                    <span className="block text-[10px] font-normal text-stone-400">{field.labelEn}</span>
+                  </span>
+                  {/* 中文值 */}
+                  <input
+                    className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                    defaultValue={field.valueZh}
+                    name={`field-${field.fieldKey}__valueZh`}
+                    placeholder="中文值"
+                  />
+                  {/* 英文值 */}
+                  <input
+                    className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                    defaultValue={field.valueEn}
+                    name={`field-${field.fieldKey}__valueEn`}
+                    placeholder="English value"
+                  />
+                  {/* 前台显示 */}
+                  <label className="flex items-center justify-end gap-1.5 text-xs text-stone-500">
                     <input
                       defaultChecked={field.isVisible}
                       name={`field-${field.fieldKey}__isVisible`}
                       type="checkbox"
+                      className="h-3.5 w-3.5"
                     />
-                    前台显示
+                    前台
                   </label>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10">
-              <h4 className="mb-4 text-sm font-semibold text-stone-900">自定义参数</h4>
-              <div className="space-y-4">
+            {/* 自定义参数 */}
+            <div className="mt-6">
+              <h4 className="mb-3 text-sm font-semibold text-stone-900">自定义参数</h4>
+              <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
                 {customFields.map((field, index) => (
                   <div
                     key={`custom-${index + 1}`}
-                    className="grid gap-4 rounded-3xl border border-stone-100 p-6 md:grid-cols-2"
+                    className="grid items-center gap-2 px-3 py-2 md:grid-cols-[1fr_1fr_1fr_1fr_60px]"
                   >
-                    <label className="block text-sm font-medium text-stone-700">
-                      字段名称（中文）
-                      <input
-                        className={inputClassName}
-                        defaultValue={field.labelZh}
-                        name={`custom-${index}__labelZh`}
-                      />
-                    </label>
-                    <label className="block text-sm font-medium text-stone-700">
-                      Label (EN)
-                      <input
-                        className={inputClassName}
-                        defaultValue={field.labelEn}
-                        name={`custom-${index}__labelEn`}
-                      />
-                    </label>
-                    <label className="block text-sm font-medium text-stone-700">
-                      字段值（中文）
-                      <input
-                        className={inputClassName}
-                        defaultValue={field.valueZh}
-                        name={`custom-${index}__valueZh`}
-                      />
-                    </label>
-                    <label className="block text-sm font-medium text-stone-700">
-                      Value (EN)
-                      <input
-                        className={inputClassName}
-                        defaultValue={field.valueEn}
-                        name={`custom-${index}__valueEn`}
-                      />
-                    </label>
-                    <label className="flex items-center gap-2 text-sm font-medium text-stone-700 md:col-span-2">
+                    {/* 字段名中文 */}
+                    <input
+                      className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                      defaultValue={field.labelZh}
+                      name={`custom-${index}__labelZh`}
+                      placeholder="字段名（中）"
+                    />
+                    {/* 字段名英文 */}
+                    <input
+                      className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                      defaultValue={field.labelEn}
+                      name={`custom-${index}__labelEn`}
+                      placeholder="Label (EN)"
+                    />
+                    {/* 值中文 */}
+                    <input
+                      className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                      defaultValue={field.valueZh}
+                      name={`custom-${index}__valueZh`}
+                      placeholder="值（中）"
+                    />
+                    {/* 值英文 */}
+                    <input
+                      className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
+                      defaultValue={field.valueEn}
+                      name={`custom-${index}__valueEn`}
+                      placeholder="Value (EN)"
+                    />
+                    {/* 前台显示 */}
+                    <label className="flex items-center justify-end gap-1.5 text-xs text-stone-500">
                       <input
                         defaultChecked={field.isVisible}
                         name={`custom-${index}__isVisible`}
                         type="checkbox"
+                        className="h-3.5 w-3.5"
                       />
-                      前台显示
+                      前台
                     </label>
                   </div>
                 ))}
               </div>
             </div>
+          </section>
+
+          {/* FAQ 管理 */}
+          <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <HelpCircle className="h-5 w-5 text-amber-500" />
+                <h3 className="text-xl font-bold text-stone-900">产品 FAQ</h3>
+              </div>
+              <button
+                type="button"
+                onClick={addFaq}
+                className="flex items-center gap-1.5 rounded-full bg-stone-900 px-4 py-2 text-xs font-bold text-white hover:bg-stone-800"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                添加问题
+              </button>
+            </div>
+
+            {/* hidden input 存储 JSON */}
+            <input type="hidden" name="faqsJson" value={JSON.stringify(faqs)} />
+
+            {faqs.length === 0 ? (
+              <p className="rounded-2xl border-2 border-dashed border-stone-200 py-8 text-center text-sm text-stone-400">
+                暂无 FAQ，点击「添加问题」开始添加
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <div
+                    key={index}
+                    className="group rounded-2xl border border-stone-200 bg-stone-50 p-4 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-widest text-stone-400">
+                        Q{index + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeFaq(index)}
+                        className="flex items-center gap-1 rounded-full px-3 py-1 text-xs text-red-500 hover:bg-red-50"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        删除
+                      </button>
+                    </div>
+                    <input
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-900 outline-none focus:border-stone-500"
+                      placeholder="Question (English)"
+                      value={faq.question}
+                      onChange={(e) => updateFaq(index, "question", e.target.value)}
+                    />
+                    <textarea
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-700 outline-none focus:border-stone-500 resize-none min-h-[80px]"
+                      placeholder="Answer (English)"
+                      value={faq.answer}
+                      onChange={(e) => updateFaq(index, "answer", e.target.value)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
 

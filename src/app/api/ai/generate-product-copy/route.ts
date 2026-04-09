@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     defaultFields?: Record<string, string>;
   };
 
-  const result = await generateProductCopy({
+  const { result, provider } = await generateProductCopy({
     industry: body.industry?.trim() || "industrial manufacturing",
     nameZh: body.nameZh?.trim() || "Custom Product",
     shortDescriptionZh: body.shortDescriptionZh?.trim() || "",
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ...result,
+    provider,
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
   });

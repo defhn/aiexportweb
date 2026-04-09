@@ -72,7 +72,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       query: params.q,
       folderId: selectedFolderId,
       includeDescendants: true,
-      rootOnlyWhenNoFolder: true,
+      // 不加 rootOnlyWhenNoFolder：全部素材时展示所有文件
       folderRows: folders,
     }),
     listDownloadFiles({
@@ -81,7 +81,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       language: params.language,
       folderId: selectedFolderId,
       includeDescendants: true,
-      rootOnlyWhenNoFolder: true,
+      // 不加 rootOnlyWhenNoFolder
       folderRows: folders,
     }),
     listAdminProducts(),
@@ -153,14 +153,23 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
         />
 
         <div className="space-y-6">
-          <AssetUploadPanel
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip"
-            buttonLabel="上传文件"
-            description="上传到当前文件夹。后续可以绑定产品，并创建前台下载记录。"
-            endpoint="/api/uploads/file"
-            folderId={selectedFolderId}
-            title="上传资料文件"
-          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="text-lg font-semibold text-stone-950">文件资产管理</h3>
+              <p className="mt-1 text-sm text-stone-500">
+                {selectedFolderId
+                  ? `当前目录与子目录共 ${fileAssets.length} 个文件`
+                  : `全部 ${fileAssets.length} 个文件`}
+              </p>
+            </div>
+            <AssetUploadPanel
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip"
+              buttonLabel="上传文件"
+              endpoint="/api/uploads/file"
+              folderId={selectedFolderId}
+              folderOptions={folderOptions}
+            />
+          </div>
 
           <form className="grid gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm md:grid-cols-4">
             <label className="relative block md:col-span-2">
@@ -252,13 +261,6 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
           </form>
 
           <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-stone-950">文件资产</h3>
-                <p className="mt-1 text-sm text-stone-500">当前目录与子目录共 {fileAssets.length} 个文件</p>
-              </div>
-            </div>
-
             {fileAssets.length ? (
               <form
                 id={bulkFormId}
@@ -294,80 +296,43 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
               </form>
             ) : null}
 
-            <div className="space-y-4">
+            <div className="divide-y divide-stone-100">
               {fileAssets.length ? (
                 fileAssets.map((asset) => (
-                  <article key={asset.id} className="rounded-2xl border border-stone-200 p-4">
-                    <div className="mb-3">
-                      <label className="flex items-center gap-2 text-xs font-medium text-stone-600">
-                        <input
-                          className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
-                          form={bulkFormId}
-                          name="selectedIds"
-                          type="checkbox"
-                          value={asset.id}
-                        />
-                        选择
-                      </label>
-                    </div>
-                    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm font-semibold text-stone-950">{asset.fileName}</p>
-                          <p className="mt-1 text-xs text-stone-500">
-                            {asset.mimeType} · {(asset.fileSize / 1024).toFixed(1)} KB
-                          </p>
-                        </div>
-                        <p className="break-all rounded-2xl bg-stone-50 px-3 py-2 text-xs leading-5 text-stone-500">
-                          {asset.url}
-                        </p>
-                      </div>
-                      <div className="flex items-start justify-end">
-                        <CopyLinkButton value={asset.url} />
-                      </div>
+                  <div key={asset.id} className="flex items-center gap-3 py-2.5 px-1">
+                    {/* 批量选择 */}
+                    <input
+                      className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20 shrink-0"
+                      form={bulkFormId}
+                      name="selectedIds"
+                      type="checkbox"
+                      value={asset.id}
+                    />
+
+                    {/* 文件信息 */}
+                    <div className="flex-1 min-w-0">
+                      <p className="truncate text-sm font-medium text-stone-900">{asset.fileName}</p>
+                      <p className="text-xs text-stone-400">
+                        {asset.mimeType} &middot; {(asset.fileSize / 1024).toFixed(1)} KB
+                      </p>
                     </div>
 
-                    <form action={saveMediaAssetMeta} className="mt-4 grid gap-4 md:grid-cols-2">
-                      <input name="id" type="hidden" value={asset.id} />
-                      <input name="returnTo" type="hidden" value={returnTo} />
-                      <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                        文件名
-                        <input className={inputClassName} defaultValue={asset.fileName} name="fileName" required />
-                      </label>
-                      <label className="block text-sm font-medium text-stone-700">
-                        Alt 文案（中文）
-                        <input className={inputClassName} defaultValue={asset.altTextZh ?? ""} name="altTextZh" />
-                      </label>
-                      <label className="block text-sm font-medium text-stone-700">
-                        Alt 文案（英文）
-                        <input className={inputClassName} defaultValue={asset.altTextEn ?? ""} name="altTextEn" />
-                      </label>
-                      <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                        所在文件夹
-                        <select className={inputClassName} defaultValue={asset.folderId ?? ""} name="folderId">
-                          <option value="">根目录</option>
-                          {folderOptions.map((folder) => (
-                            <option key={folder.id} value={folder.id}>
-                              {folder.label}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <div className="flex flex-wrap justify-end gap-3 md:col-span-2">
-                        <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700" type="submit">
-                          保存文件信息
+                    {/* 操作按鈕 */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <CopyLinkButton compact value={asset.url} />
+                      <form action={deleteMediaAsset} className="contents">
+                        <input name="id" type="hidden" value={asset.id} />
+                        <input name="returnTo" type="hidden" value={returnTo} />
+                        <button
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-200 text-red-500 transition-colors hover:bg-red-50"
+                          title="删除文件"
+                          type="submit"
+                        >
+                          <span className="text-xs">✕</span>
                         </button>
-                      </div>
-                    </form>
-
-                    <form action={deleteMediaAsset} className="mt-3 flex justify-end">
-                      <input name="id" type="hidden" value={asset.id} />
-                      <input name="returnTo" type="hidden" value={returnTo} />
-                      <button className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600" type="submit">
-                        删除文件资产
-                      </button>
-                    </form>
-                  </article>
+                      </form>
+                    </div>
+                  </div>
                 ))
               ) : (
                 <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">

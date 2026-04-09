@@ -104,10 +104,15 @@ export async function deleteFromR2(bucketKey: string) {
     return;
   }
 
-  await getR2Client().send(
-    new DeleteObjectCommand({
-      Bucket: env.R2_BUCKET_NAME,
-      Key: bucketKey,
-    }),
-  );
+  try {
+    await getR2Client().send(
+      new DeleteObjectCommand({
+        Bucket: env.R2_BUCKET_NAME,
+        Key: bucketKey,
+      }),
+    );
+  } catch (err) {
+    // R2 删除失败（文件不存在或网络问题）不应阻止数据库记录删除
+    console.warn("[R2] deleteFromR2 warning (non-fatal):", bucketKey, err);
+  }
 }

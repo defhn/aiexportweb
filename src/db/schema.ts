@@ -154,6 +154,10 @@ export const products = pgTable("products", {
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),
   sortOrder: integer("sort_order").default(100).notNull(),
+  faqsJson: jsonb("faqs_json")
+    .$type<Array<{ question: string; answer: string }>>()
+    .default([])
+    .notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

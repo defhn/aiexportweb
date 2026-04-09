@@ -7,6 +7,7 @@ import {
   bulkDeleteMediaAssets,
   bulkMoveMediaAssets,
   deleteAssetFolder,
+  purgeBrokenMediaAssets,
   saveAssetFolder,
 } from "@/features/media/actions";
 import {
@@ -57,7 +58,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
     query: params.q,
     folderId: selectedFolderId,
     includeDescendants: true,
-    rootOnlyWhenNoFolder: true,
+    // 不加 rootOnlyWhenNoFolder：全部素材时展示所有图片
     folderRows: folders,
   });
   const folderTree = buildAssetFolderTree(folders);
@@ -85,7 +86,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
           ) : null}
           {params.skipped ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              有 {params.skipped} 张图片仍被产品、博客、询盘或报价引用，已自动跳过
+              有 {params.skipped} 张图片删除时发生错误，请稍后重试。
             </p>
           ) : null}
           {params.folderSaved ? (
@@ -94,11 +95,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
           {params.folderDeleted ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">文件夹已删除</p>
           ) : null}
-          {params.error === "in-use" ? (
-            <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              当前图片仍在被产品、博客、询盘附件或报价附件引用，请先解绑再删除。
-            </p>
-          ) : null}
+
           {params.error === "delete-failed" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
               删除图片时网络连接失败，请重试一次。
@@ -155,14 +152,23 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
         />
 
         <div className="space-y-6">
-          <AssetUploadPanel
-            accept="image/*"
-            buttonLabel="上传图片"
-            description="上传到当前文件夹。产品主图、博客插图、分类封面都可以直接复用。"
-            endpoint="/api/uploads/image"
-            folderId={selectedFolderId}
-            title="上传图片素材"
-          />
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-stone-200 bg-white px-6 py-4 shadow-sm">
+            <div>
+              <p className="text-sm font-medium text-stone-900">图片素材</p>
+              <p className="text-xs text-stone-400 mt-0.5">
+                {selectedFolderId
+                  ? `当前目录共 ${images.length} 张`
+                  : `全部 ${images.length} 张`}
+              </p>
+            </div>
+            <AssetUploadPanel
+              accept="image/*"
+              buttonLabel="上传图片"
+              endpoint="/api/uploads/image"
+              folderId={selectedFolderId}
+              folderOptions={folderOptions}
+            />
+          </div>
 
           <form className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
             <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
@@ -190,7 +196,11 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
               <div>
                 <h3 className="text-lg font-semibold text-stone-950">图片素材</h3>
                 <p className="mt-1 text-sm text-stone-500">
-                  当前目录与子目录共 {images.length} 张图片
+                  {selectedFolderId
+                    ? `当前文件夹及子目录共 ${images.length} 张图片`
+                    : params.q
+                    ? `搜索结果共 ${images.length} 张图片`
+                    : `根目录共 ${images.length} 张图片（点击左侧文件夹查看子目录）`}
                 </p>
               </div>
             </div>
@@ -198,9 +208,11 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
             {images.length ? (
               <form
                 id={bulkFormId}
+                action={bulkMoveMediaAssets}
                 className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3"
               >
                 <input name="returnTo" type="hidden" value={returnTo} />
+                <span className="text-xs text-stone-500 font-medium">批量操作（勾选图片后）：</span>
                 <select
                   className="rounded-xl border border-stone-300 px-3 py-2 text-sm"
                   defaultValue={selectedFolderId ?? ""}
@@ -229,6 +241,22 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                 </button>
               </form>
             ) : null}
+
+            {/* 清理 404 破损图片 — 始终显示 */}
+            <form
+              action={async () => {
+                "use server";
+                await purgeBrokenMediaAssets();
+              }}
+              className="mb-4"
+            >
+              <button
+                className="rounded-full border border-orange-200 px-4 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50"
+                type="submit"
+              >
+                🧹 清理 404 图片
+              </button>
+            </form>
 
             {images.length ? (
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">

@@ -188,6 +188,7 @@ export default async function AdminInquiryDetailPage({
         <InquiryReplyAssistant
           companyName={inquiry.companyName}
           classifyGate={classifyGate}
+          customerEmail={inquiry.email}
           customerName={inquiry.name}
           initialInquiryType={inquiry.inquiryType}
           inquiryId={inquiry.id}

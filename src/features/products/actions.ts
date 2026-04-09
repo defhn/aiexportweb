@@ -1,3 +1,5 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { and, eq, inArray } from "drizzle-orm";
@@ -15,102 +17,23 @@ import {
   mapProductCsvRowToImportDraft,
   parseProductImportCsv,
 } from "@/features/products/import";
+import {
+  buildCategoryDraft,
+  buildProductCustomFieldDrafts,
+  buildProductDraft,
+  buildProductMediaBindingDraft,
+  buildProductPdfBinding,
+  parseCategoryBulkIds,
+  parseProductBulkIds,
+  readCheckbox,
+  readIdList,
+  readOptionalNumber,
+  readText,
+  toNullable,
+  toOptionalId,
+} from "@/features/products/product-utils";
 import { toSlug } from "@/lib/slug";
 
-type CategoryDraftInput = {
-  nameZh: string;
-  nameEn: string;
-  slug?: string;
-  summaryZh?: string;
-  summaryEn?: string;
-  imageMediaId?: number | null;
-  sortOrder?: number;
-  isVisible?: boolean;
-  isFeatured?: boolean;
-};
-
-type ProductDraftInput = {
-  categoryId?: number | null;
-  nameZh: string;
-  nameEn: string;
-  slug?: string;
-  shortDescriptionZh?: string;
-  shortDescriptionEn?: string;
-  detailsZh?: string;
-  detailsEn?: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  sortOrder?: number;
-  status?: "draft" | "published";
-  isFeatured?: boolean;
-  showInquiryButton?: boolean;
-  showWhatsappButton?: boolean;
-  showPdfDownload?: boolean;
-  coverMediaId?: number | null;
-  pdfFileId?: number | null;
-};
-
-type ProductCustomFieldDraftInput = {
-  labelZh?: string;
-  labelEn?: string;
-  valueZh?: string;
-  valueEn?: string;
-  isVisible?: boolean;
-};
-
-function trimValue(value?: string | null) {
-  return value?.trim() ?? "";
-}
-
-function toNullable(value?: string | null) {
-  const trimmed = trimValue(value);
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-function toSafeNumber(value?: number | null, fallback = 100) {
-  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
-}
-
-function toOptionalId(value?: number | null) {
-  return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : null;
-}
-
-function readText(formData: FormData, key: string) {
-  const value = formData.get(key);
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function readOptionalNumber(formData: FormData, key: string) {
-  const value = readText(formData, key);
-
-  if (!value) {
-    return null;
-  }
-
-  const parsed = Number.parseInt(value, 10);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function readCheckbox(formData: FormData, key: string) {
-  return formData.get(key) === "on";
-}
-
-function readIdList(formData: FormData, key: string) {
-  return formData
-    .getAll(key)
-    .map((value) =>
-      typeof value === "string" ? Number.parseInt(value.trim(), 10) : Number.NaN,
-    )
-    .filter((value) => Number.isInteger(value) && value > 0);
-}
-
-export function parseProductBulkIds(formData: FormData, key = "selectedIds") {
-  return Array.from(new Set(readIdList(formData, key)));
-}
-
-export function parseCategoryBulkIds(formData: FormData, key = "selectedIds") {
-  return Array.from(new Set(readIdList(formData, key)));
-}
 
 async function ensureCategoryForImport(name: string) {
   const db = getDb();
@@ -199,68 +122,8 @@ async function createImportedProduct(input: {
   return savedProduct;
 }
 
-export function buildCategoryDraft(input: CategoryDraftInput) {
-  const nameEn = trimValue(input.nameEn);
 
-  return {
-    nameZh: trimValue(input.nameZh),
-    nameEn,
-    slug: toSlug(trimValue(input.slug) || nameEn),
-    summaryZh: toNullable(input.summaryZh),
-    summaryEn: toNullable(input.summaryEn),
-    imageMediaId: toOptionalId(input.imageMediaId),
-    sortOrder: toSafeNumber(input.sortOrder, 100),
-    isVisible: input.isVisible ?? true,
-    isFeatured: input.isFeatured ?? false,
-  };
-}
-
-export function buildProductDraft(input: ProductDraftInput) {
-  const nameEn = trimValue(input.nameEn);
-  const shortDescriptionEn = toNullable(input.shortDescriptionEn);
-  const status: "draft" | "published" =
-    input.status === "published" ? "published" : "draft";
-
-  return {
-    categoryId: input.categoryId ?? null,
-    nameZh: trimValue(input.nameZh),
-    nameEn,
-    slug: toSlug(trimValue(input.slug) || nameEn),
-    shortDescriptionZh: toNullable(input.shortDescriptionZh),
-    shortDescriptionEn,
-    detailsZh: toNullable(input.detailsZh),
-    detailsEn: toNullable(input.detailsEn),
-    seoTitle: toNullable(input.seoTitle) ?? nameEn,
-    seoDescription: toNullable(input.seoDescription) ?? shortDescriptionEn ?? nameEn,
-    sortOrder: toSafeNumber(input.sortOrder, 100),
-    status,
-    isFeatured: input.isFeatured ?? false,
-    showInquiryButton: input.showInquiryButton ?? true,
-    showWhatsappButton: input.showWhatsappButton ?? true,
-    showPdfDownload: input.showPdfDownload ?? false,
-    coverMediaId: toOptionalId(input.coverMediaId),
-    pdfFileId: toOptionalId(input.pdfFileId),
-  };
-}
-
-export function buildProductCustomFieldDrafts(
-  rows: ProductCustomFieldDraftInput[],
-) {
-  return rows
-    .map((row, index) => ({
-      labelZh: trimValue(row.labelZh),
-      labelEn: trimValue(row.labelEn),
-      valueZh: toNullable(row.valueZh),
-      valueEn: toNullable(row.valueEn),
-      inputType: "text" as const,
-      isVisible: row.isVisible ?? true,
-      sortOrder: (index + 1) * 10,
-    }))
-    .filter(
-      (row) =>
-        (row.labelZh || row.labelEn) && (row.valueZh !== null || row.valueEn !== null),
-    );
-}
+// ─── 私有 FormData helper（仅供此文件内的 Server Actions 使用）────────────────
 
 function buildDefaultFieldValueDrafts(formData: FormData) {
   return defaultFieldDefinitions.map((field) => ({
@@ -291,47 +154,7 @@ function buildCustomFieldDraftsFromFormData(formData: FormData) {
       valueEn: readText(formData, `custom-${index}__valueEn`),
       isVisible: readCheckbox(formData, `custom-${index}__isVisible`),
     })),
-    );
-}
-
-export function buildProductMediaBindingDraft(input: {
-  coverMediaId?: number | null;
-  pdfFileId?: number | null;
-  galleryMediaIds?: number[];
-}) {
-  const galleryMediaIds: number[] = [];
-  const seen = new Set<number>();
-
-  for (const value of input.galleryMediaIds ?? []) {
-    if (!Number.isInteger(value) || value <= 0 || seen.has(value)) {
-      continue;
-    }
-
-    seen.add(value);
-    galleryMediaIds.push(value);
-  }
-
-  return {
-    coverMediaId: toOptionalId(input.coverMediaId),
-    pdfFileId: toOptionalId(input.pdfFileId),
-    galleryMediaIds,
-  };
-}
-
-export function buildProductPdfBinding(input: {
-  productId: number;
-  mediaId: number;
-  showDownloadButton: boolean;
-}) {
-  const binding = buildProductMediaBindingDraft({
-    pdfFileId: input.mediaId,
-  });
-
-  return {
-    productId: input.productId,
-    pdfFileId: binding.pdfFileId ?? input.mediaId,
-    showDownloadButton: input.showDownloadButton,
-  };
+  );
 }
 
 export async function bindProductPdfFile(input: {
@@ -418,7 +241,6 @@ export async function replaceProductAsset(input: {
 }
 
 export async function saveCategory(formData: FormData) {
-  "use server";
 
   const db = getDb();
   const categoryId = readOptionalNumber(formData, "id");
@@ -458,7 +280,6 @@ export async function saveCategory(formData: FormData) {
 }
 
 export async function deleteCategory(formData: FormData) {
-  "use server";
 
   const categoryId = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/categories";
@@ -499,7 +320,6 @@ export async function deleteCategory(formData: FormData) {
 }
 
 export async function bulkDeleteCategories(formData: FormData) {
-  "use server";
 
   const ids = parseCategoryBulkIds(formData);
 
@@ -542,7 +362,6 @@ export async function bulkDeleteCategories(formData: FormData) {
 }
 
 export async function saveProduct(formData: FormData) {
-  "use server";
 
   const db = getDb();
   const productId = readOptionalNumber(formData, "id");
@@ -552,6 +371,23 @@ export async function saveProduct(formData: FormData) {
     pdfFileId: readOptionalNumber(formData, "pdfFileId"),
     galleryMediaIds: readIdList(formData, "galleryMediaIds"),
   });
+  const faqsRaw = formData.get("faqsJson");
+  let faqsJson: Array<{ question: string; answer: string }> = [];
+  if (typeof faqsRaw === "string" && faqsRaw.trim()) {
+    try {
+      const parsed = JSON.parse(faqsRaw);
+      if (Array.isArray(parsed)) {
+        faqsJson = parsed.filter(
+          (item) =>
+            item &&
+            typeof item.question === "string" &&
+            typeof item.answer === "string",
+        );
+      }
+    } catch {
+      // 忽略解析错误，保留空数组
+    }
+  }
   const draft = buildProductDraft({
     categoryId: currentCategoryId,
     nameZh: readText(formData, "nameZh"),
@@ -571,6 +407,7 @@ export async function saveProduct(formData: FormData) {
     showPdfDownload: readCheckbox(formData, "showPdfDownload"),
     coverMediaId: mediaBinding.coverMediaId,
     pdfFileId: mediaBinding.pdfFileId,
+    faqsJson,
   });
 
   const [previousRecord] = productId
@@ -684,7 +521,6 @@ export async function saveProduct(formData: FormData) {
 }
 
 export async function deleteProduct(formData: FormData) {
-  "use server";
 
   const productId = readOptionalNumber(formData, "id");
 
@@ -723,7 +559,6 @@ export async function deleteProduct(formData: FormData) {
 }
 
 export async function bulkDeleteProducts(formData: FormData) {
-  "use server";
 
   const ids = parseProductBulkIds(formData);
 
@@ -740,7 +575,6 @@ export async function bulkDeleteProducts(formData: FormData) {
 }
 
 export async function bulkMoveProductsToCategory(formData: FormData) {
-  "use server";
 
   const ids = parseProductBulkIds(formData);
   const categoryId = readOptionalNumber(formData, "targetCategoryId");
@@ -764,7 +598,6 @@ export async function bulkMoveProductsToCategory(formData: FormData) {
 }
 
 export async function importProductsFromCsv(formData: FormData) {
-  "use server";
 
   const file = formData.get("file");
 

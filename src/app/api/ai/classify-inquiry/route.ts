@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 
 import { updateInquiryDetail } from "@/features/inquiries/actions";
 import { getInquiryById } from "@/features/inquiries/queries";
-import { classifyInquiryByAiFallback } from "@/features/inquiries/classification";
 import {
   buildLockedApiResponse,
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { classifyInquiry } from "@/lib/ai";
 
 export async function POST(request: Request) {
   const gate = await getFeatureGate("ai_inquiry_classification");
@@ -28,14 +28,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });
   }
 
-  const inquiryType = classifyInquiryByAiFallback(inquiry.message);
+  const { inquiryType, provider } = await classifyInquiry({
+    message: inquiry.message,
+    productName: inquiry.productName ?? undefined,
+  });
 
   await updateInquiryDetail({
     id: inquiry.id,
     status: inquiry.status,
     inquiryType,
     internalNote: inquiry.internalNote,
-    classificationMethod: "ai",
+    classificationMethod: provider === "fallback" ? "rule" : "ai",
   });
 
   if (gate.status === "trial") {
@@ -44,6 +47,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     inquiryType,
+    provider,
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
   });

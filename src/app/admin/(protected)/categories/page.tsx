@@ -1,136 +1,14 @@
-import { Trash2 } from "lucide-react";
+import { Layers } from "lucide-react";
 
-import { ImagePicker } from "@/components/admin/image-picker";
 import { buildAssetFolderOptions } from "@/features/media/folders";
 import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
-import {
-  bulkDeleteCategories,
-  deleteCategory,
-  saveCategory,
-} from "@/features/products/actions";
 import { listAdminCategories } from "@/features/products/queries";
 
-const inputClassName =
-  "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
-
-const textareaClassName = `${inputClassName} min-h-24`;
-
-function CategoryCard({
-  category,
-  imageAssets,
-  imageFolders,
-  bulkFormId,
-}: {
-  category: {
-    id?: number;
-    nameZh: string;
-    nameEn: string;
-    slug: string;
-    summaryZh: string;
-    summaryEn: string;
-    imageMediaId?: number | null;
-    sortOrder: number;
-    isVisible: boolean;
-    isFeatured: boolean;
-  };
-  imageAssets: Array<{
-    id: number;
-    fileName: string;
-    url: string;
-    folderId?: number | null;
-    altTextZh?: string | null;
-    altTextEn?: string | null;
-  }>;
-  imageFolders: Array<{ id: number; label: string }>;
-  bulkFormId: string;
-}) {
-  return (
-    <div className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-center justify-between gap-4">
-        {category.id ? (
-          <label className="inline-flex items-center gap-2 text-sm text-stone-600">
-            <input
-              form={bulkFormId}
-              name="selectedIds"
-              type="checkbox"
-              value={category.id}
-              className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
-            />
-            勾选分类
-          </label>
-        ) : (
-          <span className="text-sm font-medium text-stone-600">新建分类</span>
-        )}
-      </div>
-
-      <form action={saveCategory} className="space-y-6">
-        {category.id ? <input name="id" type="hidden" value={category.id} /> : null}
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block text-sm font-medium text-stone-700">
-            分类名称（中文）
-            <input className={inputClassName} defaultValue={category.nameZh} name="nameZh" required />
-          </label>
-          <label className="block text-sm font-medium text-stone-700">
-            Category Name (EN)
-            <input className={inputClassName} defaultValue={category.nameEn} name="nameEn" required />
-          </label>
-          <label className="block text-sm font-medium text-stone-700">
-            Slug
-            <input className={inputClassName} defaultValue={category.slug} name="slug" />
-          </label>
-          <label className="block text-sm font-medium text-stone-700">
-            排序
-            <input className={inputClassName} defaultValue={category.sortOrder} name="sortOrder" type="number" />
-          </label>
-          <label className="block text-sm font-medium text-stone-700">
-            分类简介（中文）
-            <textarea className={textareaClassName} defaultValue={category.summaryZh} name="summaryZh" />
-          </label>
-          <label className="block text-sm font-medium text-stone-700">
-            Summary (EN)
-            <textarea className={textareaClassName} defaultValue={category.summaryEn} name="summaryEn" />
-          </label>
-        </div>
-
-        <ImagePicker
-          assets={imageAssets}
-          folders={imageFolders}
-          label="分类图片"
-          name="imageMediaId"
-          selectedAssetId={category.imageMediaId}
-        />
-
-        <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-stone-700">
-          <label className="flex items-center gap-2">
-            <input defaultChecked={category.isVisible} name="isVisible" type="checkbox" />
-            前台显示
-          </label>
-          <label className="flex items-center gap-2">
-            <input defaultChecked={category.isFeatured} name="isFeatured" type="checkbox" />
-            设为推荐分类
-          </label>
-          <button className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white" type="submit">
-            {category.id ? "保存分类" : "创建分类"}
-          </button>
-        </div>
-      </form>
-
-      {category.id ? (
-        <form action={deleteCategory} className="mt-4 flex justify-end">
-          <input type="hidden" name="id" value={category.id} />
-          <button
-            className="inline-flex items-center gap-2 rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
-            type="submit"
-          >
-            <Trash2 className="h-4 w-4" />
-            删除分类
-          </button>
-        </form>
-      ) : null}
-    </div>
-  );
-}
+import {
+  BulkActionsBar,
+  CategoryRow,
+  NewCategoryPanel,
+} from "./_components";
 
 export default async function AdminCategoriesPage() {
   const [categories, imageAssets, imageFolders] = await Promise.all([
@@ -139,71 +17,95 @@ export default async function AdminCategoriesPage() {
     listAssetFolders("image").catch(() => []),
   ]);
 
-  const mappedImageAssets = imageAssets.map((asset) => ({
-    id: asset.id,
-    fileName: asset.fileName,
-    url: asset.url,
-    folderId: asset.folderId,
-    altTextZh: asset.altTextZh,
-    altTextEn: asset.altTextEn,
+  const mappedImageAssets = imageAssets.map((a) => ({
+    id: a.id,
+    fileName: a.fileName,
+    url: a.url,
+    folderId: a.folderId,
+    altTextZh: a.altTextZh,
+    altTextEn: a.altTextEn,
   }));
   const mappedImageFolders = buildAssetFolderOptions(imageFolders);
   const bulkFormId = "categories-bulk-form";
 
+  // mediaId → url 映射，用于缩略图展示
+  const assetUrlMap = new Map(mappedImageAssets.map((a) => [a.id, a.url]));
+  const nextSortOrder =
+    categories.length > 0
+      ? (categories[categories.length - 1]?.sortOrder ?? 0) + 10
+      : 10;
+
   return (
-    <div className="space-y-6">
-      <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-stone-950">产品分类</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-          在这里统一维护产品分类、排序、推荐状态和分类图片。支持批量删除未被产品占用的分类。
+    <div className="space-y-4">
+      {/* 页头 */}
+      <div>
+        <div className="mb-1 flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-stone-400">
+          <Layers className="h-3 w-3" />
+          Categories
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight text-stone-900">产品分类</h1>
+        <p className="mt-1 text-sm text-stone-500">
+          共 {categories.length} 个分类 · 鼠标悬停行尾点铅笔图标展开编辑
         </p>
-      </section>
+      </div>
 
-      {categories.length ? (
-        <form
-          id={bulkFormId}
-          className="flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-stone-200 bg-white px-5 py-4 shadow-sm"
-        >
-          <button
-            type="submit"
-            formAction={bulkDeleteCategories}
-            className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
-          >
-            批量删除
-          </button>
-          <p className="text-xs text-stone-500">
-            仅会删除未被产品占用的分类；仍有关联产品的分类会被自动跳过。
-          </p>
-        </form>
-      ) : null}
-
-      <CategoryCard
-        category={{
-          nameZh: "",
-          nameEn: "",
-          slug: "",
-          summaryZh: "",
-          summaryEn: "",
-          imageMediaId: null,
-          sortOrder: categories.length ? categories[categories.length - 1]!.sortOrder + 10 : 10,
-          isVisible: true,
-          isFeatured: false,
-        }}
+      {/* 新建分类（折叠面板） */}
+      <NewCategoryPanel
         imageAssets={mappedImageAssets}
         imageFolders={mappedImageFolders}
-        bulkFormId={bulkFormId}
+        nextSortOrder={nextSortOrder}
       />
 
-      <div className="space-y-4">
-        {categories.map((category) => (
-          <CategoryCard
-            key={category.id}
-            category={category}
-            imageAssets={mappedImageAssets}
-            imageFolders={mappedImageFolders}
-            bulkFormId={bulkFormId}
-          />
-        ))}
+      {/* 批量操作栏 */}
+      {categories.length > 0 ? <BulkActionsBar bulkFormId={bulkFormId} /> : null}
+
+      {/* 分类列表表格 */}
+      <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-stone-100 bg-stone-50/80">
+              <th className="w-8 px-3 py-2.5" />
+              <th className="w-10 px-2 py-2.5" />
+              <th className="px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                分类名称
+              </th>
+              <th className="hidden px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
+                Slug
+              </th>
+              <th className="hidden w-16 px-3 py-2.5 text-center text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
+                排序
+              </th>
+              <th className="hidden px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
+                状态
+              </th>
+              <th className="w-20 px-3 py-2.5" />
+            </tr>
+          </thead>
+          <tbody>
+            {categories.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-16 text-center text-sm text-stone-400">
+                  还没有分类，点击上方「新建分类」开始添加。
+                </td>
+              </tr>
+            ) : (
+              categories.map((category) => (
+                <CategoryRow
+                  key={category.id}
+                  bulkFormId={bulkFormId}
+                  category={category}
+                  coverUrl={
+                    category.imageMediaId
+                      ? assetUrlMap.get(category.imageMediaId)
+                      : undefined
+                  }
+                  imageAssets={mappedImageAssets}
+                  imageFolders={mappedImageFolders}
+                />
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -37,11 +37,15 @@ function getFeaturedCategories(
   const featuredSlugs = readStringArray(module.payloadJson ?? {}, "slugs");
 
   if (featuredSlugs.length > 0) {
-    return categories.filter((category) => featuredSlugs.includes(category.slug));
+    // 按管理员配置的 slug 顺序排列
+    return featuredSlugs
+      .map((slug) => categories.find((c) => c.slug === slug))
+      .filter((c): c is NonNullable<typeof c> => c !== undefined);
   }
 
   return categories.filter((category) => category.isFeatured);
 }
+
 
 function getFeaturedProducts(
   module: HomeModule,
@@ -50,7 +54,10 @@ function getFeaturedProducts(
   const featuredSlugs = readStringArray(module.payloadJson ?? {}, "slugs");
 
   if (featuredSlugs.length > 0) {
-    return products.filter((product) => featuredSlugs.includes(product.slug));
+    // 按管理员配置的 slug 顺序排列
+    return featuredSlugs
+      .map((slug) => products.find((p) => p.slug === slug))
+      .filter((p): p is NonNullable<typeof p> => p !== undefined);
   }
 
   return products.filter((product) => product.isFeatured);

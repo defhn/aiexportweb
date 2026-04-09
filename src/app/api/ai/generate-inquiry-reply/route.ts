@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     tone?: string;
   };
 
-  const reply = await generateInquiryReply({
+  const { reply, provider } = await generateInquiryReply({
     customerName: body.customerName?.trim() || "Customer",
     companyName: body.companyName?.trim() || "",
     message: body.message?.trim() || "",
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     reply,
+    provider,
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
   });

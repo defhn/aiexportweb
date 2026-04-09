@@ -1,47 +1,44 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
-import {
-  assetFolders,
-  downloadFiles,
-  mediaAssets,
-} from "@/db/schema";
+import { assetFolders, downloadFiles, mediaAssets } from "@/db/schema";
 import { buildAssetFolderDraft } from "@/features/media/folders";
-import { deleteFromR2, getAssetKindFromMimeType } from "@/lib/r2";
+import {
+  appendRedirectFlag,
+  buildDownloadFileDraft,
+  buildMediaAssetMetaDraft,
+  buildMediaAssetRecord,
+  parseSelectedIds,
+  type CreateMediaAssetInput,
+} from "@/features/media/media-utils";
+import { deleteFromR2 } from "@/lib/r2";
 
-export type CreateMediaAssetInput = {
-  bucketKey: string;
-  url: string;
-  fileName: string;
-  mimeType: string;
-  fileSize: number;
-  folderId?: number | null;
-  width?: number | null;
-  height?: number | null;
-  altTextZh?: string | null;
-  altTextEn?: string | null;
-  isPublic?: boolean;
-};
+// ─── Private form helpers ─────────────────────────────────────────────────────
 
-export function buildMediaAssetRecord(input: CreateMediaAssetInput) {
-  return {
-    assetType: getAssetKindFromMimeType(input.mimeType),
-    bucketKey: input.bucketKey,
-    url: input.url,
-    fileName: input.fileName,
-    mimeType: input.mimeType,
-    fileSize: input.fileSize,
-    folderId: toSafeId(input.folderId),
-    width: input.width ?? null,
-    height: input.height ?? null,
-    altTextZh: input.altTextZh ?? null,
-    altTextEn: input.altTextEn ?? null,
-    isPublic: input.isPublic ?? true,
-  } as const;
+function readText(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value.trim() : "";
 }
+
+function readOptionalNumber(formData: FormData, key: string) {
+  const value = readText(formData, key);
+  if (!value) return null;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toSafeId(value?: number | null) {
+  return typeof value === "number" && Number.isInteger(value) && value > 0
+    ? value
+    : null;
+}
+
+// ─── Server Actions ───────────────────────────────────────────────────────────
 
 export async function createMediaAsset(input: CreateMediaAssetInput) {
   const db = getDb();
@@ -54,10 +51,11 @@ export async function createMediaAsset(input: CreateMediaAssetInput) {
 }
 
 export async function saveAssetFolder(formData: FormData) {
-  "use server";
-
-  const assetType = readText(formData, "assetType") === "file" ? "file" : "image";
-  const returnTo = readText(formData, "returnTo") || `/admin/${assetType === "image" ? "media" : "files"}`;
+  const assetType =
+    readText(formData, "assetType") === "file" ? "file" : "image";
+  const returnTo =
+    readText(formData, "returnTo") ||
+    `/admin/${assetType === "image" ? "media" : "files"}`;
   const draft = buildAssetFolderDraft({
     id: readOptionalNumber(formData, "id"),
     assetType,
@@ -71,11 +69,7 @@ export async function saveAssetFolder(formData: FormData) {
   if (draft.id) {
     await db
       .update(assetFolders)
-      .set({
-        name: draft.name,
-        parentId: draft.parentId,
-        sortOrder: draft.sortOrder,
-      })
+      .set({ name: draft.name, parentId: draft.parentId, sortOrder: draft.sortOrder })
       .where(eq(assetFolders.id, draft.id));
   } else {
     await db.insert(assetFolders).values({
@@ -92,11 +86,12 @@ export async function saveAssetFolder(formData: FormData) {
 }
 
 export async function deleteAssetFolder(formData: FormData) {
-  "use server";
-
   const id = readOptionalNumber(formData, "id");
-  const assetType = readText(formData, "assetType") === "file" ? "file" : "image";
-  const returnTo = readText(formData, "returnTo") || `/admin/${assetType === "image" ? "media" : "files"}`;
+  const assetType =
+    readText(formData, "assetType") === "file" ? "file" : "image";
+  const returnTo =
+    readText(formData, "returnTo") ||
+    `/admin/${assetType === "image" ? "media" : "files"}`;
 
   if (!id) {
     redirect(returnTo);
@@ -155,103 +150,7 @@ export async function createDownloadFileRecord(input: {
   return record;
 }
 
-type DownloadFileDraftInput = {
-  id?: number | null;
-  mediaAssetId: number;
-  productId?: number | null;
-  displayNameZh: string;
-  displayNameEn: string;
-  category?: string | null;
-  language?: string | null;
-  description?: string | null;
-  isVisible?: boolean;
-  sortOrder?: number | null;
-};
-
-type MediaAssetMetaDraftInput = {
-  id?: number | null;
-  fileName: string;
-  folderId?: number | null;
-  altTextZh?: string | null;
-  altTextEn?: string | null;
-};
-
-function readText(formData: FormData, key: string) {
-  const value = formData.get(key);
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function readOptionalNumber(formData: FormData, key: string) {
-  const value = readText(formData, key);
-
-  if (!value) {
-    return null;
-  }
-
-  const parsed = Number.parseInt(value, 10);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function toSafeNumber(value?: number | null, fallback = 100) {
-  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
-}
-
-function toSafeId(value?: number | null) {
-  return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : null;
-}
-
-export function appendRedirectFlag(returnTo: string, key: string, value = "1") {
-  const [pathname, search = ""] = returnTo.split("?");
-  const params = new URLSearchParams(search);
-  params.set(key, value);
-  const nextSearch = params.toString();
-  return nextSearch ? `${pathname}?${nextSearch}` : pathname;
-}
-
-export function parseSelectedIds(formData: FormData, key = "selectedIds") {
-  return Array.from(
-    new Set(
-      formData
-        .getAll(key)
-        .map((value) =>
-          typeof value === "string" ? Number.parseInt(value.trim(), 10) : Number.NaN,
-        )
-        .filter((value) => Number.isInteger(value) && value > 0),
-    ),
-  );
-}
-
-export function buildDownloadFileDraft(input: DownloadFileDraftInput) {
-  return {
-    id: typeof input.id === "number" && Number.isInteger(input.id) && input.id > 0 ? input.id : null,
-    mediaAssetId: input.mediaAssetId,
-    productId:
-      typeof input.productId === "number" && Number.isInteger(input.productId) && input.productId > 0
-        ? input.productId
-        : null,
-    displayNameZh: input.displayNameZh.trim(),
-    displayNameEn: input.displayNameEn.trim(),
-    category: input.category?.trim() || null,
-    language: input.language?.trim() || null,
-    description: input.description?.trim() || null,
-    isVisible: input.isVisible ?? true,
-    sortOrder: toSafeNumber(input.sortOrder, 100),
-  };
-}
-
-export function buildMediaAssetMetaDraft(input: MediaAssetMetaDraftInput) {
-  return {
-    id: toSafeId(input.id),
-    fileName: input.fileName.trim(),
-    folderId: toSafeId(input.folderId),
-    altTextZh: input.altTextZh?.trim() || null,
-    altTextEn: input.altTextEn?.trim() || null,
-  };
-}
-
 export async function saveMediaAssetMeta(formData: FormData) {
-  "use server";
-
   const id = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -286,31 +185,37 @@ export async function saveMediaAssetMeta(formData: FormData) {
   redirect(appendRedirectFlag(returnTo, "saved"));
 }
 
-async function hasMediaAssetReferences(mediaAssetId: number) {
-  const db = getDb();
-  const result = await db.execute(sql`
-    select
-      exists(select 1 from product_categories where image_media_id = ${mediaAssetId}) as in_product_categories,
-      exists(select 1 from products where cover_media_id = ${mediaAssetId} or pdf_file_id = ${mediaAssetId}) as in_products,
-      exists(select 1 from product_media_relations where media_asset_id = ${mediaAssetId}) as in_product_gallery,
-      exists(select 1 from download_files where media_asset_id = ${mediaAssetId}) as in_download_files,
-      exists(select 1 from blog_posts where cover_media_id = ${mediaAssetId}) as in_blog_posts,
-      exists(select 1 from inquiries where attachment_media_id = ${mediaAssetId}) as in_inquiries,
-      exists(select 1 from quote_requests where attachment_media_id = ${mediaAssetId}) as in_quote_requests
-  `);
-
-  const row = Array.isArray(result) ? result[0] : result.rows?.[0];
-
-  if (!row) {
-    return false;
+/** 删除前先将所有引用该图片的外键字段设为 NULL（冗余保护，schema 已有 set null） */
+async function unlinkMediaAssetReferences(mediaAssetId: number) {
+  try {
+    const db = getDb();
+    // Neon 驱动不支持单次 execute 执行多条 SQL，必须分开调用
+    await db.execute(
+      sql`update product_categories set image_media_id = null where image_media_id = ${mediaAssetId}`,
+    );
+    await db.execute(
+      sql`update products set cover_media_id = null where cover_media_id = ${mediaAssetId}`,
+    );
+    await db.execute(
+      sql`update products set pdf_file_id = null where pdf_file_id = ${mediaAssetId}`,
+    );
+    await db.execute(
+      sql`update blog_posts set cover_media_id = null where cover_media_id = ${mediaAssetId}`,
+    );
+    await db.execute(
+      sql`update inquiries set attachment_media_id = null where attachment_media_id = ${mediaAssetId}`,
+    );
+    await db.execute(
+      sql`update quote_requests set attachment_media_id = null where attachment_media_id = ${mediaAssetId}`,
+    );
+  } catch (err) {
+    // schema 层已有 onDelete: "set null"，此处失败不阻断主删除流程
+    console.warn("[media] unlinkMediaAssetReferences warning:", mediaAssetId, err);
   }
-
-  return Object.values(row).some(Boolean);
 }
 
-export async function deleteMediaAsset(formData: FormData) {
-  "use server";
 
+export async function deleteMediaAsset(formData: FormData) {
   const id = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -321,10 +226,7 @@ export async function deleteMediaAsset(formData: FormData) {
   try {
     const db = getDb();
     const [asset] = await db
-      .select({
-        id: mediaAssets.id,
-        bucketKey: mediaAssets.bucketKey,
-      })
+      .select({ id: mediaAssets.id, bucketKey: mediaAssets.bucketKey })
       .from(mediaAssets)
       .where(eq(mediaAssets.id, id))
       .limit(1);
@@ -333,32 +235,26 @@ export async function deleteMediaAsset(formData: FormData) {
       redirect(returnTo);
     }
 
-    const inUse = await hasMediaAssetReferences(id);
-
-    if (inUse) {
-      redirect(appendRedirectFlag(returnTo, "error", "in-use"));
-    }
-
+    // 先解绑所有引用，再删除
+    await unlinkMediaAssetReferences(id);
     await deleteFromR2(asset.bucketKey);
     await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
 
     revalidatePath("/admin/media");
     revalidatePath("/admin/files");
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/blog");
 
     redirect(appendRedirectFlag(returnTo, "deleted"));
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
-
+    if (isRedirectError(error)) throw error;
     console.error("Failed to delete media asset.", error);
     redirect(appendRedirectFlag(returnTo, "error", "delete-failed"));
   }
 }
 
 export async function bulkMoveMediaAssets(formData: FormData) {
-  "use server";
-
   const ids = parseSelectedIds(formData);
   const folderId = readOptionalNumber(formData, "targetFolderId");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
@@ -379,8 +275,6 @@ export async function bulkMoveMediaAssets(formData: FormData) {
 }
 
 export async function bulkDeleteMediaAssets(formData: FormData) {
-  "use server";
-
   const ids = parseSelectedIds(formData);
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -395,39 +289,35 @@ export async function bulkDeleteMediaAssets(formData: FormData) {
     .where(inArray(mediaAssets.id, ids));
 
   let deletedCount = 0;
-  let skippedCount = 0;
+  let failedCount = 0;
 
   for (const asset of assets) {
     try {
-      const inUse = await hasMediaAssetReferences(asset.id);
-
-      if (inUse) {
-        skippedCount += 1;
-        continue;
-      }
-
+      // 先解绑引用，再删除
+      await unlinkMediaAssetReferences(asset.id);
       await deleteFromR2(asset.bucketKey);
       await db.delete(mediaAssets).where(eq(mediaAssets.id, asset.id));
       deletedCount += 1;
     } catch (error) {
       console.error("Failed to bulk delete media asset.", asset.id, error);
-      skippedCount += 1;
+      failedCount += 1;
     }
   }
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/blog");
 
   let nextPath = appendRedirectFlag(returnTo, "deleted", String(deletedCount));
-  if (skippedCount > 0) {
-    nextPath = appendRedirectFlag(nextPath, "skipped", String(skippedCount));
+  if (failedCount > 0) {
+    nextPath = appendRedirectFlag(nextPath, "skipped", String(failedCount));
   }
   redirect(nextPath);
 }
 
 export async function saveDownloadFile(formData: FormData) {
-  "use server";
-
   const mediaAssetId = readOptionalNumber(formData, "mediaAssetId");
   const id = readOptionalNumber(formData, "id");
 
@@ -484,8 +374,6 @@ export async function saveDownloadFile(formData: FormData) {
 }
 
 export async function deleteDownloadFile(formData: FormData) {
-  "use server";
-
   const id = readOptionalNumber(formData, "id");
 
   if (!id) {
@@ -497,4 +385,52 @@ export async function deleteDownloadFile(formData: FormData) {
 
   revalidatePath("/admin/files");
   redirect("/admin/files?deleted=1");
+}
+
+/**
+ * 扫描所有图片资产 URL，找出 404（实际未上传到 R2）的记录批量删除。
+ * 返回 { purged, total }。
+ */
+export async function purgeBrokenMediaAssets(): Promise<{
+  purged: number;
+  total: number;
+}> {
+  const db = getDb();
+  const assets = await db
+    .select({ id: mediaAssets.id, url: mediaAssets.url })
+    .from(mediaAssets);
+
+  if (assets.length === 0) return { purged: 0, total: 0 };
+
+  const BATCH = 20;
+  const brokenIds: number[] = [];
+
+  for (let i = 0; i < assets.length; i += BATCH) {
+    const batch = assets.slice(i, i + BATCH);
+    const results = await Promise.all(
+      batch.map(async (asset) => {
+        try {
+          const res = await fetch(asset.url, {
+            method: "HEAD",
+            signal: AbortSignal.timeout(8000),
+          });
+          return { id: asset.id, ok: res.ok };
+        } catch {
+          return { id: asset.id, ok: false };
+        }
+      }),
+    );
+    for (const r of results) {
+      if (!r.ok) brokenIds.push(r.id);
+    }
+  }
+
+  if (brokenIds.length > 0) {
+    await db.delete(mediaAssets).where(inArray(mediaAssets.id, brokenIds));
+  }
+
+  revalidatePath("/admin/media");
+  revalidatePath("/admin/files");
+
+  return { purged: brokenIds.length, total: assets.length };
 }

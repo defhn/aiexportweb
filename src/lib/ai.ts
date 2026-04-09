@@ -1,5 +1,9 @@
 import { env } from "@/env";
 
+// ─────────────────────────────────────────────────────────────
+//  Types
+// ─────────────────────────────────────────────────────────────
+
 type ProductCopyInput = {
   industry: string;
   nameZh: string;
@@ -16,9 +20,9 @@ type InquiryReplyInput = {
   tone?: string;
 };
 
-type AiPrompt = {
-  system: string;
-  user: string;
+type InquiryClassifyInput = {
+  message: string;
+  productName?: string;
 };
 
 export type ProductCopyResult = {
@@ -29,28 +33,44 @@ export type ProductCopyResult = {
   seoDescription: string;
 };
 
-function getDefaultModel() {
-  return process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
+/** 哪个 AI 提供商实际执行了请求 */
+export type AiProvider = "gemini" | "deepseek" | "fallback";
+
+// ─────────────────────────────────────────────────────────────
+//  Provider Detection
+// ─────────────────────────────────────────────────────────────
+
+export function hasGemini(): boolean {
+  return Boolean(process.env.GEMINI_API_KEY?.trim());
 }
 
-function getChatCompletionsUrl() {
-  return process.env.OPENAI_BASE_URL?.trim() || "https://api.openai.com/v1/chat/completions";
+export function hasDeepSeek(): boolean {
+  return Boolean(process.env.DEEPSEEK_API_KEY?.trim());
 }
 
-export function hasAiConfig() {
-  return Boolean(process.env.OPENAI_API_KEY?.trim());
+export function getActiveProvider(): AiProvider {
+  if (hasGemini()) return "gemini";
+  if (hasDeepSeek()) return "deepseek";
+  return "fallback";
 }
+
+export function hasAiConfig(): boolean {
+  return hasGemini() || hasDeepSeek();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Prompt Builders
+// ─────────────────────────────────────────────────────────────
 
 function extractMeaningfulTerms(defaultFields?: Record<string, string>) {
   return Object.values(defaultFields ?? {})
-    .map((value) => value.trim())
+    .map((v) => v.trim())
     .filter(Boolean)
     .slice(0, 4);
 }
 
-export function buildProductCopyPrompt(input: ProductCopyInput): AiPrompt {
+export function buildProductCopyPrompt(input: ProductCopyInput) {
   const terms = extractMeaningfulTerms(input.defaultFields);
-
   return {
     system:
       "You write concise, conversion-oriented English copy for industrial manufacturing websites. Keep wording factual, export-ready, and SEO-aware.",
@@ -59,25 +79,54 @@ export function buildProductCopyPrompt(input: ProductCopyInput): AiPrompt {
       `Chinese product name: ${input.nameZh}`,
       `Chinese short description: ${input.shortDescriptionZh?.trim() || "N/A"}`,
       `Known specs: ${terms.join("; ") || "N/A"}`,
-      "Return JSON with keys nameEn, shortDescriptionEn, detailsEn, seoTitle, seoDescription.",
+      "Return JSON with exactly these keys: nameEn, shortDescriptionEn, detailsEn, seoTitle, seoDescription.",
     ].join("\n"),
   };
 }
 
+export function buildInquiryReplyPrompt(input: InquiryReplyInput) {
+  return {
+    system:
+      "You draft professional English sales replies for manufacturing inquiries. Keep them concise, clear, and safe for human review before sending.",
+    user: [
+      `Customer name: ${input.customerName}`,
+      `Company: ${input.companyName || "N/A"}`,
+      `Inquiry: ${input.message}`,
+      `Product: ${input.productName || "N/A"}`,
+      `Specs: ${(input.specs ?? []).join("; ") || "N/A"}`,
+      `Tone: ${input.tone || "professional"}`,
+      "Return plain English email text only. Do not add JSON or markdown.",
+    ].join("\n"),
+  };
+}
+
+export function buildClassifyInquiryPrompt(input: InquiryClassifyInput) {
+  return {
+    system:
+      "Classify manufacturing inquiry emails into one of: quotation, technical, sample, complaint, partnership, other. Reply with a single word only.",
+    user: [
+      `Product: ${input.productName || "N/A"}`,
+      `Message: ${input.message}`,
+    ].join("\n"),
+  };
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Local Fallbacks
+// ─────────────────────────────────────────────────────────────
+
 function inferEnglishName(input: ProductCopyInput) {
   const terms = extractMeaningfulTerms(input.defaultFields);
-  const materialTerm = terms.find((term) => /aluminum|steel|stainless|metal|plastic/i.test(term));
-  const processTerm = terms.find((term) => /cnc|machining|milling|turning|casting|fabrication/i.test(term));
+  const materialTerm = terms.find((t) =>
+    /aluminum|steel|stainless|metal|plastic/i.test(t),
+  );
+  const processTerm = terms.find((t) =>
+    /cnc|machining|milling|turning|casting|fabrication/i.test(t),
+  );
   const base = input.nameZh.trim() || "Custom Product";
 
-  if (materialTerm && processTerm) {
-    return `${materialTerm} ${processTerm} Part`;
-  }
-
-  if (materialTerm) {
-    return `${materialTerm} OEM Component`;
-  }
-
+  if (materialTerm && processTerm) return `${materialTerm} ${processTerm} Part`;
+  if (materialTerm) return `${materialTerm} OEM Component`;
   return base === "Custom Product" ? "Custom Industrial Component" : `Custom ${base}`;
 }
 
@@ -95,112 +144,290 @@ export function buildFallbackProductCopy(input: ProductCopyInput): ProductCopyRe
   };
 }
 
-export function buildInquiryReplyPrompt(input: InquiryReplyInput): AiPrompt {
-  return {
-    system:
-      "You draft professional English sales replies for manufacturing inquiries. Keep them concise, clear, and safe for human review before sending.",
-    user: [
-      `Customer name: ${input.customerName}`,
-      `Company: ${input.companyName || "N/A"}`,
-      `Inquiry: ${input.message}`,
-      `Product: ${input.productName || "N/A"}`,
-      `Specs: ${(input.specs ?? []).join("; ") || "N/A"}`,
-      `Tone: ${input.tone || "professional"}`,
-      "Return plain English email text only.",
-    ].join("\n"),
-  };
-}
-
 export function buildFallbackInquiryReply(input: InquiryReplyInput) {
+  const senderName = env.BREVO_TO_EMAIL.split("@")[0] || "Sales Team";
   const lines = [
     `Dear ${input.customerName},`,
     "",
     `Thank you for your inquiry${input.productName ? ` about ${input.productName}` : ""}.`,
     input.companyName ? `We appreciate the opportunity to support ${input.companyName}.` : "",
-    `We have reviewed your message: "${input.message.trim()}".`,
-    input.specs?.length ? `Based on the current information, here are the available details: ${input.specs.join("; ")}.` : "",
+    `We have reviewed your message and will prepare a tailored response.`,
+    input.specs?.length
+      ? `Based on the specifications: ${input.specs.join("; ")}.`
+      : "",
     "Please share your target quantity, drawings, and delivery destination so we can prepare an accurate quotation.",
     "",
     "Best regards,",
-    env.BREVO_TO_EMAIL.split("@")[0] || "Sales Team",
+    senderName,
   ].filter(Boolean);
 
   return lines.join("\n");
 }
 
-async function requestJsonFromAi<T>(prompt: AiPrompt, fallback: T): Promise<T> {
-  if (!hasAiConfig()) {
-    return fallback;
-  }
+// ─────────────────────────────────────────────────────────────
+//  Gemini 2.5 Flash
+// ─────────────────────────────────────────────────────────────
 
-  const response = await fetch(getChatCompletionsUrl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: getDefaultModel(),
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: prompt.system },
-        { role: "user", content: prompt.user },
-      ],
-    }),
-  });
+const GEMINI_MODEL = "gemini-2.5-flash-preview-04-17";
 
-  if (!response.ok) {
-    return fallback;
-  }
+async function callGeminiText(prompt: {
+  system: string;
+  user: string;
+}): Promise<string | null> {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) return null;
 
-  const json = (await response.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  const content = json.choices?.[0]?.message?.content;
-
-  if (!content) {
-    return fallback;
-  }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
   try {
-    return JSON.parse(content) as T;
-  } catch {
-    return fallback;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: prompt.system }] },
+        contents: [{ role: "user", parts: [{ text: prompt.user }] }],
+        generationConfig: { temperature: 0.4 },
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("[ai] Gemini error:", response.status, await response.text());
+      return null;
+    }
+
+    const json = (await response.json()) as {
+      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    };
+
+    return json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? null;
+  } catch (error) {
+    console.warn("[ai] Gemini fetch failed:", error);
+    return null;
   }
 }
 
-export async function generateProductCopy(input: ProductCopyInput) {
-  const fallback = buildFallbackProductCopy(input);
-  return requestJsonFromAi<ProductCopyResult>(buildProductCopyPrompt(input), fallback);
+async function callGeminiJson<T>(
+  prompt: { system: string; user: string },
+  fallback: T,
+): Promise<{ result: T; provider: AiProvider }> {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) return { result: fallback, provider: "fallback" };
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: prompt.system }] },
+        contents: [{ role: "user", parts: [{ text: prompt.user }] }],
+        generationConfig: {
+          temperature: 0.3,
+          responseMimeType: "application/json",
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("[ai] Gemini JSON error:", response.status);
+      return { result: fallback, provider: "fallback" };
+    }
+
+    const json = (await response.json()) as {
+      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    };
+    const text = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+
+    if (!text) return { result: fallback, provider: "fallback" };
+
+    try {
+      return { result: JSON.parse(text) as T, provider: "gemini" };
+    } catch {
+      return { result: fallback, provider: "fallback" };
+    }
+  } catch (error) {
+    console.warn("[ai] Gemini JSON fetch failed:", error);
+    return { result: fallback, provider: "fallback" };
+  }
 }
 
-export async function generateInquiryReply(input: InquiryReplyInput) {
-  if (!hasAiConfig()) {
-    return buildFallbackInquiryReply(input);
+// ─────────────────────────────────────────────────────────────
+//  DeepSeek (OpenAI compatible)
+// ─────────────────────────────────────────────────────────────
+
+const DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1/chat/completions";
+const DEEPSEEK_MODEL = "deepseek-chat";
+
+async function callDeepSeekText(prompt: {
+  system: string;
+  user: string;
+}): Promise<string | null> {
+  const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
+  if (!apiKey) return null;
+
+  try {
+    const response = await fetch(DEEPSEEK_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_MODEL,
+        messages: [
+          { role: "system", content: prompt.system },
+          { role: "user", content: prompt.user },
+        ],
+        temperature: 0.4,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("[ai] DeepSeek error:", response.status);
+      return null;
+    }
+
+    const json = (await response.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+    return json.choices?.[0]?.message?.content?.trim() ?? null;
+  } catch (error) {
+    console.warn("[ai] DeepSeek fetch failed:", error);
+    return null;
+  }
+}
+
+async function callDeepSeekJson<T>(
+  prompt: { system: string; user: string },
+  fallback: T,
+): Promise<{ result: T; provider: AiProvider }> {
+  const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
+  if (!apiKey) return { result: fallback, provider: "fallback" };
+
+  try {
+    const response = await fetch(DEEPSEEK_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_MODEL,
+        messages: [
+          { role: "system", content: prompt.system },
+          {
+            role: "user",
+            content:
+              prompt.user + "\n\nRespond with valid JSON only, no markdown fences.",
+          },
+        ],
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("[ai] DeepSeek JSON error:", response.status);
+      return { result: fallback, provider: "fallback" };
+    }
+
+    const json = (await response.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+    const text = json.choices?.[0]?.message?.content?.trim();
+
+    if (!text) return { result: fallback, provider: "fallback" };
+
+    try {
+      return { result: JSON.parse(text) as T, provider: "deepseek" };
+    } catch {
+      return { result: fallback, provider: "fallback" };
+    }
+  } catch (error) {
+    console.warn("[ai] DeepSeek JSON fetch failed:", error);
+    return { result: fallback, provider: "fallback" };
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Unified Callers (Gemini → DeepSeek → Fallback)
+// ─────────────────────────────────────────────────────────────
+
+async function callAiText(prompt: {
+  system: string;
+  user: string;
+}): Promise<{ text: string; provider: AiProvider }> {
+  // 1. Gemini
+  if (hasGemini()) {
+    const text = await callGeminiText(prompt);
+    if (text) return { text, provider: "gemini" };
   }
 
-  const response = await fetch(getChatCompletionsUrl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: getDefaultModel(),
-      messages: [
-        { role: "system", content: buildInquiryReplyPrompt(input).system },
-        { role: "user", content: buildInquiryReplyPrompt(input).user },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    return buildFallbackInquiryReply(input);
+  // 2. DeepSeek
+  if (hasDeepSeek()) {
+    const text = await callDeepSeekText(prompt);
+    if (text) return { text, provider: "deepseek" };
   }
 
-  const json = (await response.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
+  return { text: "", provider: "fallback" };
+}
+
+async function callAiJson<T>(
+  prompt: { system: string; user: string },
+  fallback: T,
+): Promise<{ result: T; provider: AiProvider }> {
+  // 1. Gemini
+  if (hasGemini()) {
+    const { result, provider } = await callGeminiJson(prompt, fallback);
+    if (provider !== "fallback") return { result, provider };
+  }
+
+  // 2. DeepSeek
+  if (hasDeepSeek()) {
+    const { result, provider } = await callDeepSeekJson(prompt, fallback);
+    if (provider !== "fallback") return { result, provider };
+  }
+
+  return { result: fallback, provider: "fallback" };
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Public API
+// ─────────────────────────────────────────────────────────────
+
+export async function generateProductCopy(input: ProductCopyInput): Promise<{
+  result: ProductCopyResult;
+  provider: AiProvider;
+}> {
+  return callAiJson(buildProductCopyPrompt(input), buildFallbackProductCopy(input));
+}
+
+export async function generateInquiryReply(input: InquiryReplyInput): Promise<{
+  reply: string;
+  provider: AiProvider;
+}> {
+  const { text, provider } = await callAiText(buildInquiryReplyPrompt(input));
+
+  if (provider !== "fallback" && text) {
+    return { reply: text, provider };
+  }
+
+  return { reply: buildFallbackInquiryReply(input), provider: "fallback" };
+}
+
+export async function classifyInquiry(input: InquiryClassifyInput): Promise<{
+  inquiryType: string;
+  provider: AiProvider;
+}> {
+  const { text, provider } = await callAiText(buildClassifyInquiryPrompt(input));
+
+  const validTypes = ["quotation", "technical", "sample", "complaint", "partnership", "other"];
+  const cleaned = text.toLowerCase().trim().replace(/[^a-z]/g, "");
+  const matched = validTypes.find((t) => t === cleaned);
+
+  return {
+    inquiryType: matched ?? "other",
+    provider: matched ? provider : "fallback",
   };
-
-  return json.choices?.[0]?.message?.content?.trim() || buildFallbackInquiryReply(input);
 }

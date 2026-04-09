@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { productViews, products } from "@/db/schema";
@@ -22,6 +22,10 @@ export function buildProductViewInsertPayload(input: {
   };
 }
 
+/**
+ * 记录产品浏览量，带 24h 内同一 session 去重。
+ * 同一 sessionId + productId 在 24 小时内只会计入一次。
+ */
 export async function recordProductView(input: {
   productId: number;
   sessionId: string;
@@ -29,6 +33,26 @@ export async function recordProductView(input: {
   countryCode?: string | null;
 }) {
   const db = getDb();
+  const dedupeWindow = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  // 检查 24h 内是否已有同一 session 的浏览记录
+  const [existing] = await db
+    .select({ id: productViews.id })
+    .from(productViews)
+    .where(
+      and(
+        eq(productViews.productId, input.productId),
+        eq(productViews.sessionId, input.sessionId.trim()),
+        gte(productViews.createdAt, dedupeWindow),
+      ),
+    )
+    .limit(1);
+
+  if (existing) {
+    // 24h 内已记录，跳过
+    return null;
+  }
+
   const [record] = await db
     .insert(productViews)
     .values(buildProductViewInsertPayload(input))
@@ -51,5 +75,23 @@ export async function listRecentProductViews(limit = 200) {
     .from(productViews)
     .leftJoin(products, eq(productViews.productId, products.id))
     .orderBy(desc(productViews.createdAt))
+    .limit(limit);
+}
+
+/**
+ * 按产品聚合唯一浏览次数（基于 sessionId）
+ */
+export async function getProductViewRankings(limit = 10) {
+  const db = getDb();
+  return db
+    .select({
+      productId: productViews.productId,
+      productName: products.nameEn,
+      uniqueViews: sql<number>`count(distinct ${productViews.sessionId})`,
+    })
+    .from(productViews)
+    .leftJoin(products, eq(productViews.productId, products.id))
+    .groupBy(productViews.productId, products.nameEn)
+    .orderBy(desc(sql`count(distinct ${productViews.sessionId})`))
     .limit(limit);
 }
