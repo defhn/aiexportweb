@@ -16,7 +16,7 @@ export default async function PublicLayout({
   return (
     <div className="min-h-screen bg-white text-slate-950 flex flex-col relative selection:bg-blue-500/30 selection:text-blue-900">
       <TrackingProvider />
-      <SiteHeader />
+      <SiteHeader companyName={settings.companyNameEn} />
       <main className="flex-1">{children}</main>
       <SiteFooter
         address={settings.addressEn}

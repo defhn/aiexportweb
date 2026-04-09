@@ -49,7 +49,7 @@ export function HeroSection({
           alt="Industrial Precision Background"
           fill
           sizes="100vw"
-          className="object-cover opacity-30 mix-blend-luminosity scale-105"
+          className="object-cover opacity-55 scale-105"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/20" />
@@ -82,7 +82,6 @@ export function HeroSection({
             className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-2 pr-5 backdrop-blur-md mb-8"
           >
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-30"></span>
               NEW
             </span>
             <span className="text-sm font-semibold tracking-wide text-white/90">
@@ -97,11 +96,19 @@ export function HeroSection({
             aria-label={title}
             className="max-w-5xl text-5xl font-extrabold tracking-tighter text-white sm:text-6xl md:text-8xl leading-[1.05]"
           >
-            {title.split(' ').map((word, i) => (
-              <span key={i} className={i > 0 && i % 2 !== 0 ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300" : ""}>
-                {word}{' '}
-              </span>
-            ))}
+            {(() => {
+              const t = title || "Precision Parts, Built for Global Buyers";
+              const words = t.split(" ");
+              const half = Math.ceil(words.length / 2);
+              return (
+                <>
+                  <span>{words.slice(0, half).join(" ")} </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
+                    {words.slice(half).join(" ")}
+                  </span>
+                </>
+              );
+            })()}
           </motion.h1>
 
           <motion.p 

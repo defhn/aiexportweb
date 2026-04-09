@@ -1,60 +1,101 @@
-import Link from "next/link";
-import { MoveRight } from "lucide-react";
+"use client";
 
-import { getSiteSettings } from "@/features/settings/queries";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Menu, X, MoveRight } from "lucide-react";
 
 import { BrandLogo } from "./brand-logo";
 
 const navItems = [
-  ["Products", "/products"],
-  ["Capabilities", "/capabilities"],
-  ["About Us", "/about"],
-  ["Blog", "/blog"],
-  ["Contact", "/contact"],
-] as const;
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products" },
+  { label: "Capabilities", href: "/capabilities" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
-export async function SiteHeader() {
-  const settings = await getSiteSettings();
+export function SiteHeader({ companyName }: { companyName?: string }) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-stone-200/80 bg-white/95 py-4 shadow-sm backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Link className="flex items-center gap-3 transition-transform duration-300 active:scale-95" href="/">
-          <BrandLogo isDark={false} />
-          <div className="hidden sm:block">
-            <p className="text-[11px] font-black uppercase tracking-[0.35em] text-blue-600">
-              Factory Site
-            </p>
-            <p className="mt-1 text-sm font-semibold text-stone-900">
-              {settings.companyNameEn}
-            </p>
-          </div>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+        {/* Logo */}
+        <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
+          <BrandLogo isDark />
         </Link>
 
-        <nav className="hidden items-center md:flex">
-          <div className="mr-6 flex items-center gap-1">
-            {navItems.map(([label, href]) => (
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                pathname === item.href
+                  ? "bg-white/10 text-white"
+                  : "text-white/60 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Desktop CTA */}
+        <Link
+          href="/request-quote"
+          className="hidden md:flex group items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/25 active:scale-95"
+        >
+          Get a Quote
+          <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+
+        {/* Mobile hamburger */}
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          className="flex md:hidden items-center justify-center rounded-lg p-2 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Drawer */}
+      {open && (
+        <div className="md:hidden border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl">
+          <nav className="flex flex-col px-4 py-4 gap-1">
+            {navItems.map((item) => (
               <Link
-                key={href}
-                className="rounded-full px-5 py-2.5 text-sm font-bold text-stone-600 transition-all duration-300 hover:bg-stone-100 hover:text-stone-900"
-                href={href}
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={`rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                  pathname === item.href
+                    ? "bg-white/10 text-white"
+                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                }`}
               >
-                {label}
+                {item.label}
               </Link>
             ))}
-          </div>
-
-          <div className="mx-2 h-8 w-px bg-stone-200" />
-
-          <Link
-            className="group ml-6 flex items-center gap-2 rounded-full bg-blue-600 px-7 py-3 text-sm font-bold text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-blue-500 hover:shadow-blue-500/25 active:scale-95"
-            href="/request-quote"
-          >
-            Get a Quote
-            <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </nav>
-      </div>
+            <div className="mt-4 pt-4 border-t border-white/10">
+              <Link
+                href="/request-quote"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-base font-semibold text-white hover:bg-blue-500 transition-colors active:scale-95"
+              >
+                Get a Quote
+                <MoveRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
