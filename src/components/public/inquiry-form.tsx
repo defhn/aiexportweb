@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle, UploadCloud } from "lucide-react";
 
 import { TurnstileBox } from "@/components/public/turnstile-box";
+import { getSavedTrackingParams } from "@/lib/tracking";
 
 type InquiryFormProps = {
   defaultProductName?: string;
@@ -33,6 +34,14 @@ export function InquiryForm({
     const form = event.currentTarget;
     const formData = new FormData(form);
     formData.set("sourcePage", sourcePage);
+    // Inject UTM tracking params from localStorage
+    const trackingParams = getSavedTrackingParams();
+    if (trackingParams.utm_source) formData.append("utmSource", trackingParams.utm_source);
+    if (trackingParams.utm_medium) formData.append("utmMedium", trackingParams.utm_medium);
+    if (trackingParams.utm_campaign) formData.append("utmCampaign", trackingParams.utm_campaign);
+    if (trackingParams.utm_term) formData.append("utmTerm", trackingParams.utm_term);
+    if (trackingParams.utm_content) formData.append("utmContent", trackingParams.utm_content);
+    if (trackingParams.gclid) formData.append("gclid", trackingParams.gclid);
     formData.set("sourceUrl", sourceUrl);
 
     try {

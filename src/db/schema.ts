@@ -17,6 +17,9 @@ export const publishStatusEnum = pgEnum("publish_status", [
 export const inquiryStatusEnum = pgEnum("inquiry_status", [
   "new",
   "processing",
+  "contacted",
+  "quoted",
+  "won",
   "done",
 ]);
 export const quoteStatusEnum = pgEnum("quote_status", [
@@ -55,9 +58,9 @@ export const siteSettings = pgTable("site_settings", {
   themeFontFamily: varchar("theme_font_family", { length: 100 }).default('Inter, sans-serif').notNull(),
   formFieldsJson: jsonb("form_fields_json").$type<Array<{ name: string; label: string; type: 'text'|'textarea'|'file'; required: boolean; placeholder?: string }>>().default([]).notNull(),
   // SEO 全局配置
-  siteUrl: text("site_url"),                          // 例如 https://acme.com（无尾斜杠），用�?metadataBase + canonical
+  siteUrl: text("site_url"),                          // 例如 https://acme.com（无尾斜杠），用�?metadataBase + canonical
   seoTitleTemplate: text("seo_title_template"),        // 例如 "%s | Acme CNC Machining"
-  seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 社交分享�?  webhookUrl: text("webhook_url"),
+  seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 社交分享�?  webhookUrl: text("webhook_url"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -338,6 +341,14 @@ export const inquiries = pgTable("inquiries", {
   classificationMethod: varchar("classification_method", { length: 20 })
     .default("rule")
     .notNull(),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
+  utmTerm: text("utm_term"),
+  utmContent: text("utm_content"),
+  gclid: text("gclid"),
+  annualVolume: text("annual_volume"),
+  companyWebsite: text("company_website"),
   customFieldsJson: jsonb("custom_fields_json").$type<Record<string, unknown>>().default({}).notNull(),
   attachmentMediaId: integer("attachment_media_id").references(
     () => mediaAssets.id,
@@ -353,6 +364,12 @@ export const inquiries = pgTable("inquiries", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+  // Pipeline CRM
+  pipelineStage: text("pipeline_stage").default("new"),
+  expectedValue: numeric("expected_value", { precision: 12, scale: 2 }),
+  lastContactAt: timestamp("last_contact_at", { withTimezone: true }),
+  nextFollowUpAt: timestamp("next_follow_up_at", { withTimezone: true }),
+  wonAt: timestamp("won_at", { withTimezone: true }),
 });
 
 export const replyTemplates = pgTable("reply_templates", {
@@ -393,6 +410,14 @@ export const quoteRequests = pgTable("quote_requests", {
   whatsapp: text("whatsapp"),
   message: text("message").notNull(),
   status: quoteStatusEnum("status").default("new").notNull(),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
+  utmTerm: text("utm_term"),
+  utmContent: text("utm_content"),
+  gclid: text("gclid"),
+  annualVolume: text("annual_volume"),
+  companyWebsite: text("company_website"),
   customFieldsJson: jsonb("custom_fields_json").$type<Record<string, unknown>>().default({}).notNull(),
   attachmentMediaId: integer("attachment_media_id").references(
     () => mediaAssets.id,

@@ -71,6 +71,15 @@ export async function POST(request: Request) {
     message: String(formData.get("message") ?? ""),
     attachmentMediaId,
     customFieldsJson,
+    // UTM tracking params
+    utmSource: String(formData.get("utmSource") ?? "") || null,
+    utmMedium: String(formData.get("utmMedium") ?? "") || null,
+    utmCampaign: String(formData.get("utmCampaign") ?? "") || null,
+    utmTerm: String(formData.get("utmTerm") ?? "") || null,
+    utmContent: String(formData.get("utmContent") ?? "") || null,
+    gclid: String(formData.get("gclid") ?? "") || null,
+    annualVolume: String(formData.get("annualVolume") ?? "") || null,
+    companyWebsite: String(formData.get("companyWebsite") ?? "") || null,
     items: [
       {
         productId: Number.parseInt(String(formData.get("productId") ?? ""), 10) || null,

@@ -1,6 +1,7 @@
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
 import { getAllCategories } from "@/features/products/queries";
+import { TrackingProvider } from "@/components/tracking-provider";
 import { getSiteSettings } from "@/features/settings/queries";
 
 export default async function PublicLayout({
@@ -10,6 +11,7 @@ export default async function PublicLayout({
 
   return (
     <div className="min-h-screen bg-white text-slate-950 flex flex-col relative selection:bg-blue-500/30 selection:text-blue-900">
+      <TrackingProvider />
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter

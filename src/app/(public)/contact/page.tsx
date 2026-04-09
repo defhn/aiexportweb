@@ -4,6 +4,8 @@ import { InquiryForm } from "@/components/public/inquiry-form";
 import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 import { Mail, Phone, MessageCircle, MapPin, CheckCircle2, ShieldCheck } from "lucide-react";
+import { JsonLdScript } from "@/components/public/json-ld-script";
+import { buildAbsoluteUrl } from "@/lib/seo";
 
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
@@ -16,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoTitle = readString(payload, "seoTitle");
   const seoDescription = readString(payload, "seoDescription");
   return {
-    title: seoTitle || "Contact Us â€?Get a Quote",
+    title: seoTitle || "Contact Us ï¿½?Get a Quote",
     description: seoDescription || "Send your RFQ to our engineering team and get a response within 24 hours.",
   };
 }
@@ -31,6 +33,22 @@ export default async function ContactPage() {
   const contactModule = modules[0];
 
   return (
+    <>
+      <JsonLdScript
+        value={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact " + (settings.companyNameEn ?? ""),
+          "url": buildAbsoluteUrl("/contact"),
+          "description": "Send your RFQ or inquiries to our engineering team.",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": settings.companyNameEn,
+            ...(settings.email ? { "email": settings.email } : {}),
+            ...(settings.phone ? { "telephone": settings.phone } : {}),
+          },
+        }}
+      />
     <main className="min-h-screen bg-stone-50 pt-24 pb-32">
       <div className="mx-auto max-w-7xl px-6">
         
@@ -136,5 +154,6 @@ export default async function ContactPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

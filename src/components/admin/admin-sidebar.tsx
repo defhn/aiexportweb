@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   BarChart3,
+  TrendingUp,
+  Radar,
   BookText,
   Box,
   FileArchive,
@@ -54,6 +56,9 @@ const navigation: NavItem[] = [
   { name: "联系我们", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
   { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
   { name: "SEO �?AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
+  { name: "质量归因", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
+  { name: "Pipeline", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
+  { name: "RAG 知识工厂", href: "/admin/rag", icon: Radar, group: "site" },
   { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
 ];
 

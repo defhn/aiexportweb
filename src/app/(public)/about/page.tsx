@@ -4,6 +4,8 @@ import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 import Image from "next/image";
 import { Activity, Target, Zap, Globe2, Building2, MapPin } from "lucide-react";
+import { JsonLdScript } from "@/components/public/json-ld-script";
+import { buildAbsoluteUrl } from "@/lib/seo";
 
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
@@ -29,6 +31,19 @@ export default async function AboutPage() {
   const aboutModule = modules[0];
 
   return (
+    <>
+      <JsonLdScript
+        value={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": settings.companyNameEn,
+          "url": buildAbsoluteUrl("/about"),
+          "description": settings.taglineEn ?? "",
+          ...(settings.email ? { "email": settings.email } : {}),
+          ...(settings.phone ? { "telephone": settings.phone } : {}),
+          ...(settings.addressEn ? { "address": { "@type": "PostalAddress", "streetAddress": settings.addressEn } } : {}),
+        }}
+      />
     <main className="min-h-screen bg-white">
       {/* 1. Epic Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
@@ -170,5 +185,6 @@ export default async function AboutPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }
