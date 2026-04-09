@@ -46,7 +46,7 @@ async function uploadProductSvgAsset(input: {
       folderId: input.folderId ?? null,
       width: IMAGE_WIDTH,
       height: IMAGE_HEIGHT,
-      altTextZh: `${input.productNameZh}${input.variant === "catalog" ? "白底目录图" : "工业场景图"}`,
+      altTextZh: `${input.productNameZh}${input.variant === "catalog" ? "白底目录�? : "工业场景�?}`,
       altTextEn: `${input.productNameEn}${input.variant === "catalog" ? " catalog render" : " industrial scene"}`,
       isPublic: true,
     })
@@ -152,7 +152,7 @@ export async function seedCncCompleteDemo() {
     },
     {
       assetType: "file",
-      name: "CNC 规格书",
+      name: "CNC 规格�?,
       parentId: null,
       sortOrder: 20,
     },

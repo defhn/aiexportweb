@@ -21,7 +21,7 @@ type AdminProductsPageProps = {
 };
 
 function formatStatus(status: "draft" | "published") {
-  return status === "published" ? "已发布" : "草稿";
+  return status === "published" ? "已发�? : "草稿";
 }
 
 function formatDate(value?: string | null) {
@@ -60,8 +60,7 @@ export default async function AdminProductsPage({
             </p>
             <h1 className="text-3xl font-semibold text-stone-950">产品管理</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-              统一管理产品、封面图、分类、发布状态和资料下载。支持筛选、批量移动分类、批量删除和单个编辑。
-            </p>
+              统一管理产品、封面图、分类、发布状态和资料下载。支持筛选、批量移动分类、批量删除和单个编辑�?            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -84,23 +83,19 @@ export default async function AdminProductsPage({
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           {params.deleted ? (
             <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">
-              已删除 {params.deleted} 个产品
-            </p>
+              已删�?{params.deleted} 个产�?            </p>
           ) : null}
           {params.imported ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">
-              已导入 {params.imported} 个产品
-            </p>
+              已导�?{params.imported} 个产�?            </p>
           ) : null}
           {params.saved === "bulk-moved" ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">
-              批量移动分类已完成
-            </p>
+              批量移动分类已完�?            </p>
           ) : null}
           {params.error === "no-selection" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              请先勾选要操作的产品
-            </p>
+              请先勾选要操作的产�?            </p>
           ) : null}
         </div>
       </section>
@@ -111,7 +106,7 @@ export default async function AdminProductsPage({
           <input
             name="q"
             defaultValue={params.q}
-            placeholder="搜索产品名、英文名或 slug"
+            placeholder="搜索产品名、英文名�?slug"
             className="h-14 w-full rounded-2xl border border-stone-300 pl-12 pr-4 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950"
             type="text"
           />
@@ -135,8 +130,8 @@ export default async function AdminProductsPage({
           defaultValue={params.status ?? ""}
           className="h-14 rounded-2xl border border-stone-300 px-4 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950"
         >
-          <option value="">全部状态</option>
-          <option value="published">已发布</option>
+          <option value="">全部状�?/option>
+          <option value="published">已发�?/option>
           <option value="draft">草稿</option>
         </select>
 
@@ -145,8 +140,7 @@ export default async function AdminProductsPage({
           className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-stone-950 px-6 text-sm font-medium text-white"
         >
           <Filter className="h-4 w-4" />
-          筛选
-        </button>
+          筛�?        </button>
       </form>
 
       {products.length ? (
@@ -180,7 +174,7 @@ export default async function AdminProductsPage({
           >
             批量删除
           </button>
-          <p className="text-xs text-stone-500">先勾选产品，再执行批量操作。</p>
+          <p className="text-xs text-stone-500">先勾选产品，再执行批量操作�?/p>
         </form>
       ) : null}
 
@@ -189,8 +183,7 @@ export default async function AdminProductsPage({
           <thead>
             <tr className="border-b border-stone-200 bg-stone-50/70">
               <th className="w-16 px-4 py-4 text-center text-[11px] font-semibold text-stone-500">
-                勾选
-              </th>
+                勾�?              </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
                 产品
               </th>
@@ -198,8 +191,7 @@ export default async function AdminProductsPage({
                 分类
               </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
-                状态
-              </th>
+                状�?              </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
                 更新时间
               </th>
@@ -247,7 +239,7 @@ export default async function AdminProductsPage({
                 </td>
                 <td className="px-6 py-5">
                   <span className="inline-flex rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600">
-                    {product.categoryNameZh || product.categorySlug || "未分类"}
+                    {product.categoryNameZh || product.categorySlug || "未分�?}
                   </span>
                 </td>
                 <td className="px-6 py-5">
@@ -293,8 +285,7 @@ export default async function AdminProductsPage({
 
         {products.length === 0 ? (
           <div className="px-6 py-20 text-center text-sm text-stone-500">
-            当前筛选条件下没有产品。
-          </div>
+            当前筛选条件下没有产品�?          </div>
         ) : null}
       </section>
     </div>

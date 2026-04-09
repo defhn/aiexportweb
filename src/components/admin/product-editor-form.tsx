@@ -183,8 +183,7 @@ export function ProductEditorForm({
 
       <details className="mb-8 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
         <summary className="cursor-pointer list-none text-sm font-semibold text-stone-950">
-          当前页就地新建分类
-        </summary>
+          当前页就地新建分�?        </summary>
         <form action={saveCategoryAction} className="mt-4 grid gap-4 md:grid-cols-3">
           <input name="returnTo" type="hidden" value={returnTo} />
           <label className="block text-sm font-medium text-stone-700">
@@ -220,7 +219,7 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
               <Images className="h-5 w-5 text-stone-400" />
-              <h3 className="text-xl font-bold text-stone-900">产品图片与资料</h3>
+              <h3 className="text-xl font-bold text-stone-900">产品图片与资�?/h3>
             </div>
 
             <div className="space-y-6">
@@ -256,7 +255,7 @@ export function ProductEditorForm({
                     defaultValue={product.pdfFileId ?? ""}
                     name="pdfFileId"
                   >
-                    <option value="">不绑定 PDF 下载</option>
+                    <option value="">不绑�?PDF 下载</option>
                     {fileAssets.map((asset) => (
                       <option key={asset.id} value={asset.id}>
                         {asset.fileName}
@@ -292,8 +291,7 @@ export function ProductEditorForm({
                   </select>
                 </label>
                 <label className="block text-sm font-medium text-stone-700">
-                  排序值
-                  <input
+                  排序�?                  <input
                     className={inputClassName}
                     defaultValue={product.sortOrder}
                     name="sortOrder"
@@ -325,8 +323,7 @@ export function ProductEditorForm({
 
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="block text-sm font-medium text-stone-700">
-                  中文短描述
-                  <textarea
+                  中文短描�?                  <textarea
                     className={textareaClassName}
                     defaultValue={product.shortDescriptionZh}
                     name="shortDescriptionZh"
@@ -378,10 +375,10 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
               <BarChart3 className="h-5 w-5 text-stone-400" />
-              <h3 className="text-xl font-bold text-stone-900">技术参数</h3>
+              <h3 className="text-xl font-bold text-stone-900">技术参�?/h3>
             </div>
 
-            {/* 默认参数表 */}
+            {/* 默认参数�?*/}
             <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
               {product.defaultFields.map((field) => (
                 <div
@@ -393,14 +390,14 @@ export function ProductEditorForm({
                     {field.labelZh}
                     <span className="block text-[10px] font-normal text-stone-400">{field.labelEn}</span>
                   </span>
-                  {/* 中文值 */}
+                  {/* 中文�?*/}
                   <input
                     className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                     defaultValue={field.valueZh}
                     name={`field-${field.fieldKey}__valueZh`}
-                    placeholder="中文值"
+                    placeholder="中文�?
                   />
-                  {/* 英文值 */}
+                  {/* 英文�?*/}
                   <input
                     className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                     defaultValue={field.valueEn}
@@ -421,37 +418,37 @@ export function ProductEditorForm({
               ))}
             </div>
 
-            {/* 自定义参数 */}
+            {/* 自定义参�?*/}
             <div className="mt-6">
-              <h4 className="mb-3 text-sm font-semibold text-stone-900">自定义参数</h4>
+              <h4 className="mb-3 text-sm font-semibold text-stone-900">自定义参�?/h4>
               <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
                 {customFields.map((field, index) => (
                   <div
                     key={`custom-${index + 1}`}
                     className="grid items-center gap-2 px-3 py-2 md:grid-cols-[1fr_1fr_1fr_1fr_60px]"
                   >
-                    {/* 字段名中文 */}
+                    {/* 字段名中�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.labelZh}
                       name={`custom-${index}__labelZh`}
                       placeholder="字段名（中）"
                     />
-                    {/* 字段名英文 */}
+                    {/* 字段名英�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.labelEn}
                       name={`custom-${index}__labelEn`}
                       placeholder="Label (EN)"
                     />
-                    {/* 值中文 */}
+                    {/* 值中�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.valueZh}
                       name={`custom-${index}__valueZh`}
                       placeholder="值（中）"
                     />
-                    {/* 值英文 */}
+                    {/* 值英�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.valueEn}
@@ -496,8 +493,7 @@ export function ProductEditorForm({
 
             {faqs.length === 0 ? (
               <p className="rounded-2xl border-2 border-dashed border-stone-200 py-8 text-center text-sm text-stone-400">
-                暂无 FAQ，点击「添加问题」开始添加
-              </p>
+                暂无 FAQ，点击「添加问题」开始添�?              </p>
             ) : (
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
@@ -546,7 +542,7 @@ export function ProductEditorForm({
 
             <div className="space-y-6">
               <label className="block">
-                <span className="text-xs font-bold text-white/60">当前状态</span>
+                <span className="text-xs font-bold text-white/60">当前状�?/span>
                 <select
                   className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-bold text-white outline-none transition-colors focus:bg-white/10"
                   defaultValue={product.status}
@@ -556,8 +552,7 @@ export function ProductEditorForm({
                     Draft / 草稿
                   </option>
                   <option value="published" className="bg-slate-950">
-                    Published / 已发布
-                  </option>
+                    Published / 已发�?                  </option>
                 </select>
               </label>
 

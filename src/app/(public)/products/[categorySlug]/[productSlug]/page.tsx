@@ -170,7 +170,7 @@ export default async function ProductDetailPage({
                 
                 {product.showDownloadButton && product.pdfUrl && (
                     <div className="flex items-center justify-between p-10 bg-stone-900 rounded-[2.5rem] shadow-2xl overflow-hidden relative group">
-                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                        <div className="absolute inset-0 opacity-10 texture-carbon" />
                         <div className="relative z-10">
                             <h3 className="text-xl font-bold text-white">Technical Datasheet</h3>
                             <p className="mt-2 text-stone-400 text-sm">Download the full engineering specs in PDF format.</p>

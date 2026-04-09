@@ -1,8 +1,29 @@
+CREATE TYPE "public"."admin_roles" AS ENUM('client_admin', 'employee');--> statement-breakpoint
 CREATE TYPE "public"."asset_type" AS ENUM('image', 'file');--> statement-breakpoint
 CREATE TYPE "public"."field_input_type" AS ENUM('text', 'textarea', 'number', 'select');--> statement-breakpoint
 CREATE TYPE "public"."inquiry_status" AS ENUM('new', 'processing', 'done');--> statement-breakpoint
 CREATE TYPE "public"."page_key" AS ENUM('home', 'about', 'contact');--> statement-breakpoint
 CREATE TYPE "public"."publish_status" AS ENUM('draft', 'published');--> statement-breakpoint
+CREATE TYPE "public"."quote_status" AS ENUM('new', 'reviewing', 'quoted', 'closed');--> statement-breakpoint
+CREATE TABLE "admin_users" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "admin_users_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"username" text NOT NULL,
+	"password_hash" text NOT NULL,
+	"role" "admin_roles" DEFAULT 'employee' NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "admin_users_username_unique" UNIQUE("username")
+);
+--> statement-breakpoint
+CREATE TABLE "asset_folders" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "asset_folders_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"asset_type" "asset_type" NOT NULL,
+	"name" text NOT NULL,
+	"parent_id" integer,
+	"sort_order" integer DEFAULT 100 NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "blog_categories" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "blog_categories_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"name_zh" text NOT NULL,
@@ -52,9 +73,21 @@ CREATE TABLE "download_files" (
 	"product_id" integer,
 	"display_name_zh" text NOT NULL,
 	"display_name_en" text NOT NULL,
+	"category" varchar(80),
+	"language" varchar(16),
+	"description" text,
 	"is_visible" boolean DEFAULT true NOT NULL,
 	"sort_order" integer DEFAULT 100 NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "feature_usage_counters" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "feature_usage_counters_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"feature_key" varchar(80) NOT NULL,
+	"usage_count" integer DEFAULT 0 NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "feature_usage_counters_feature_key_unique" UNIQUE("feature_key")
 );
 --> statement-breakpoint
 CREATE TABLE "inquiries" (
@@ -63,11 +96,18 @@ CREATE TABLE "inquiries" (
 	"email" text NOT NULL,
 	"company_name" text,
 	"country" text,
+	"country_code" varchar(8),
+	"country_group" varchar(40),
 	"whatsapp" text,
 	"message" text NOT NULL,
 	"product_id" integer,
 	"source_page" text,
 	"source_url" text,
+	"source_type" varchar(40),
+	"category_tag" varchar(160),
+	"inquiry_type" varchar(40),
+	"classification_method" varchar(20) DEFAULT 'rule' NOT NULL,
+	"custom_fields_json" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	"attachment_media_id" integer,
 	"status" "inquiry_status" DEFAULT 'new' NOT NULL,
 	"internal_note" text,
@@ -85,6 +125,7 @@ CREATE TABLE "media_assets" (
 	"file_size" integer NOT NULL,
 	"width" integer,
 	"height" integer,
+	"folder_id" integer,
 	"alt_text_zh" text,
 	"alt_text_en" text,
 	"is_public" boolean DEFAULT true NOT NULL,
@@ -162,6 +203,15 @@ CREATE TABLE "product_media_relations" (
 	"sort_order" integer DEFAULT 100 NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "product_views" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "product_views_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"product_id" integer NOT NULL,
+	"session_id" varchar(64) NOT NULL,
+	"country_code" varchar(8),
+	"referer" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "products" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "products_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"category_id" integer,
@@ -173,6 +223,7 @@ CREATE TABLE "products" (
 	"details_zh" text,
 	"details_en" text,
 	"cover_media_id" integer,
+	"pdf_file_id" integer,
 	"status" "publish_status" DEFAULT 'draft' NOT NULL,
 	"is_featured" boolean DEFAULT false NOT NULL,
 	"show_inquiry_button" boolean DEFAULT true NOT NULL,
@@ -181,9 +232,47 @@ CREATE TABLE "products" (
 	"seo_title" text,
 	"seo_description" text,
 	"sort_order" integer DEFAULT 100 NOT NULL,
+	"faqs_json" jsonb DEFAULT '[]'::jsonb NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "products_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+CREATE TABLE "quote_request_items" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "quote_request_items_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"quote_request_id" integer NOT NULL,
+	"product_id" integer,
+	"product_name" text NOT NULL,
+	"quantity" text,
+	"unit" varchar(24),
+	"notes" text
+);
+--> statement-breakpoint
+CREATE TABLE "quote_requests" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "quote_requests_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"company_name" text,
+	"country" text,
+	"country_code" varchar(8),
+	"whatsapp" text,
+	"message" text NOT NULL,
+	"status" "quote_status" DEFAULT 'new' NOT NULL,
+	"custom_fields_json" jsonb DEFAULT '{}'::jsonb NOT NULL,
+	"attachment_media_id" integer,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "reply_templates" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "reply_templates_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"title" text NOT NULL,
+	"category" varchar(80),
+	"content_zh" text,
+	"content_en" text NOT NULL,
+	"applicable_scene" varchar(80),
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "seo_ai_settings" (
@@ -212,6 +301,11 @@ CREATE TABLE "site_settings" (
 	"address_en" text,
 	"logo_media_id" integer,
 	"default_public_locale" varchar(8) DEFAULT 'en' NOT NULL,
+	"theme_primary_color" varchar(50) DEFAULT '#0f172a' NOT NULL,
+	"theme_border_radius" varchar(20) DEFAULT '0.5rem' NOT NULL,
+	"theme_font_family" varchar(100) DEFAULT 'Inter, sans-serif' NOT NULL,
+	"form_fields_json" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"webhook_url" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -230,5 +324,10 @@ ALTER TABLE "product_default_field_values" ADD CONSTRAINT "product_default_field
 ALTER TABLE "product_default_field_values" ADD CONSTRAINT "product_default_field_values_field_key_product_default_field_definitions_field_key_fk" FOREIGN KEY ("field_key") REFERENCES "public"."product_default_field_definitions"("field_key") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "product_media_relations" ADD CONSTRAINT "product_media_relations_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "product_media_relations" ADD CONSTRAINT "product_media_relations_media_asset_id_media_assets_id_fk" FOREIGN KEY ("media_asset_id") REFERENCES "public"."media_assets"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "product_views" ADD CONSTRAINT "product_views_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "products" ADD CONSTRAINT "products_category_id_product_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."product_categories"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "products" ADD CONSTRAINT "products_cover_media_id_media_assets_id_fk" FOREIGN KEY ("cover_media_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "products" ADD CONSTRAINT "products_cover_media_id_media_assets_id_fk" FOREIGN KEY ("cover_media_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "products" ADD CONSTRAINT "products_pdf_file_id_media_assets_id_fk" FOREIGN KEY ("pdf_file_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quote_request_items" ADD CONSTRAINT "quote_request_items_quote_request_id_quote_requests_id_fk" FOREIGN KEY ("quote_request_id") REFERENCES "public"."quote_requests"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quote_request_items" ADD CONSTRAINT "quote_request_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "quote_requests" ADD CONSTRAINT "quote_requests_attachment_media_id_media_assets_id_fk" FOREIGN KEY ("attachment_media_id") REFERENCES "public"."media_assets"("id") ON DELETE set null ON UPDATE no action;

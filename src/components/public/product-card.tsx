@@ -26,7 +26,7 @@ export function ProductCard({
   return (
     <motion.article whileHover={{ y: -6 }} className="group">
       <Link href={href} className="block h-full" aria-label={`View ${nameEn}`}>
-        {/* Image â€” full-bleed, fixed aspect ratio */}
+        {/* Image â€?full-bleed, fixed aspect ratio */}
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-stone-100">
           {imageUrl ? (
             <img

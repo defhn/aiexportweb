@@ -78,7 +78,7 @@ export function GalleryReplaceButton({
         onClick={() => inputRef.current?.click()}
         type="button"
       >
-        {pending ? "替换中..." : "替换图片"}
+        {pending ? "替换�?.." : "替换图片"}
       </button>
     </div>
   );

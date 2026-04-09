@@ -18,6 +18,10 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
       whatsapp: pack.site.whatsapp,
       addressZh: pack.site.addressZh,
       addressEn: pack.site.addressEn,
+      // SEO defaults
+      siteUrl: "",
+      seoTitleTemplate: "%s",
+      seoOgImageUrl: "",
     };
   }
 
@@ -30,6 +34,18 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
       .limit(1);
 
     if (record) {
+      // 如果绑定�?OG 图，查出 URL；否则留�?      let seoOgImageUrl = "";
+      if (record.seoOgImageMediaId) {
+        const { mediaAssets } = await import("@/db/schema");
+        const { eq } = await import("drizzle-orm");
+        const [ogAsset] = await db
+          .select({ url: mediaAssets.url })
+          .from(mediaAssets)
+          .where(eq(mediaAssets.id, record.seoOgImageMediaId))
+          .limit(1);
+        seoOgImageUrl = ogAsset?.url ?? "";
+      }
+
       return {
         companyNameZh: record.companyNameZh,
         companyNameEn: record.companyNameEn,
@@ -40,6 +56,14 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
         whatsapp: record.whatsapp ?? "",
         addressZh: record.addressZh ?? "",
         addressEn: record.addressEn ?? "",
+        themePrimaryColor: record.themePrimaryColor,
+        themeBorderRadius: record.themeBorderRadius,
+        themeFontFamily: record.themeFontFamily,
+        formFieldsJson: record.formFieldsJson,
+        // SEO
+        siteUrl: record.siteUrl ?? "",
+        seoTitleTemplate: record.seoTitleTemplate ?? "%s",
+        seoOgImageUrl,
       };
     }
   } catch (error) {
@@ -56,5 +80,14 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
     whatsapp: pack.site.whatsapp,
     addressZh: pack.site.addressZh,
     addressEn: pack.site.addressEn,
+    // Add default fallbacks for seed mode
+    themePrimaryColor: '#0f172a',
+    themeBorderRadius: '0.5rem',
+    themeFontFamily: 'Inter, sans-serif',
+    formFieldsJson: [],
+    // SEO defaults
+    siteUrl: "",
+    seoTitleTemplate: "%s",
+    seoOgImageUrl: "",
   };
 }

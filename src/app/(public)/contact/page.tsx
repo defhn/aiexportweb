@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { InquiryForm } from "@/components/public/inquiry-form";
 import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
@@ -7,6 +9,19 @@ function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
   return typeof value === "string" ? value : "";
 }
+
+export async function generateMetadata(): Promise<Metadata> {
+  const modules = await getPageModules("contact");
+  const payload = modules[0]?.payloadJson ?? {};
+  const seoTitle = readString(payload, "seoTitle");
+  const seoDescription = readString(payload, "seoDescription");
+  return {
+    title: seoTitle || "Contact Us â€?Get a Quote",
+    description: seoDescription || "Send your RFQ to our engineering team and get a response within 24 hours.",
+  };
+}
+
+
 
 export default async function ContactPage() {
   const [settings, modules] = await Promise.all([
@@ -37,7 +52,7 @@ export default async function ContactPage() {
             
             {/* Left Rail: Dark Trust Panel */}
             <div className="w-full lg:w-2/5 bg-stone-950 p-10 md:p-16 relative overflow-hidden flex flex-col justify-between">
-                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                <div className="absolute inset-0 opacity-10 texture-carbon" />
                 <div className="relative z-10">
                     <h3 className="text-2xl font-bold text-white mb-8">Talk to a Lead Engineer.</h3>
                     

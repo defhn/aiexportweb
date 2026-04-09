@@ -18,7 +18,7 @@ export function SiteFooter({
 }) {
   return (
     <footer className="bg-[#050505] border-t border-stone-800 text-stone-400 overflow-hidden relative">
-      <div className="absolute inset-0 opacity-10 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      <div className="absolute inset-0 opacity-10 mix-blend-overlay texture-carbon" />
       
       {/* Trust Badges Strip */}
       <div className="relative z-10 border-b border-stone-800 bg-[#0a0a0a]">

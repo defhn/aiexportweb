@@ -19,11 +19,11 @@ export async function POST(request: Request) {
       : null;
 
   if (!(file instanceof File)) {
-    return NextResponse.json({ error: "缺少文件。" }, { status: 400 });
+    return NextResponse.json({ error: "缺少文件�? }, { status: 400 });
   }
 
   if (!isSupportedUploadMimeType(file.type)) {
-    return NextResponse.json({ error: "不支持的文件格式。" }, { status: 400 });
+    return NextResponse.json({ error: "不支持的文件格式�? }, { status: 400 });
   }
 
   const uploaded = await uploadToR2({

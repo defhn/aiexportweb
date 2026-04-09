@@ -1,4 +1,4 @@
-// 纯工具函数，无副作用，可被 Server & Client 双向导入
+// 纯工具函数，无副作用，可�?Server & Client 双向导入
 
 import { getAssetKindFromMimeType } from "@/lib/r2";
 

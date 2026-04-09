@@ -48,15 +48,29 @@ export async function POST(request: Request) {
     attachmentMediaId = asset.id;
   }
 
+  const nativeKeys = new Set([
+    "turnstileToken", "country", "attachment", "name", "email", 
+    "companyName", "whatsapp", "message", "productId", "productName", 
+    "quantity", "unit", "itemNotes"
+  ]);
+
+  const customFieldsJson: Record<string, string> = {};
+  for (const [key, value] of formData.entries()) {
+    if (!nativeKeys.has(key) && typeof value === 'string') {
+      customFieldsJson[key] = value;
+    }
+  }
+
   const record = await createQuoteRequest({
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
     companyName: String(formData.get("companyName") ?? ""),
-    country: country.normalizedName ?? String(formData.get("country") ?? ""),
+    country: country.normalizedName ?? (typeof formData.get("country") === 'string' ? String(formData.get("country")) : ""),
     countryCode: country.countryCode,
     whatsapp: String(formData.get("whatsapp") ?? ""),
     message: String(formData.get("message") ?? ""),
     attachmentMediaId,
+    customFieldsJson,
     items: [
       {
         productId: Number.parseInt(String(formData.get("productId") ?? ""), 10) || null,

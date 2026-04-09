@@ -26,15 +26,14 @@ export function LockedFeatureCard({
 
       <div className="mt-5 rounded-2xl bg-white/80 p-4 text-sm text-stone-700">
         <p>
-          当前套餐：<span className="font-semibold text-stone-950">{gate.currentPlanNameZh}</span>
+          当前套餐�?span className="font-semibold text-stone-950">{gate.currentPlanNameZh}</span>
         </p>
         <p className="mt-2">
           推荐升级到：<span className="font-semibold text-stone-950">{upgradePlanName}</span>
         </p>
         {gate.limit !== null ? (
           <p className="mt-2">
-            已用试用次数：
-            <span className="font-semibold text-stone-950">
+            已用试用次数�?            <span className="font-semibold text-stone-950">
               {gate.usageCount}/{gate.limit}
             </span>
           </p>
@@ -57,7 +56,7 @@ export function LockedFeatureCard({
           className="rounded-full bg-stone-950 px-5 py-2 text-sm font-medium text-white"
           href={gate.salesContactHref}
         >
-          联系我开通 {upgradePlanName}
+          联系我开�?{upgradePlanName}
         </Link>
         {gate.pricingHref ? (
           <Link

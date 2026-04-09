@@ -41,8 +41,7 @@ export default async function AdminInquiriesPage({
             <h2 className="text-2xl font-semibold text-stone-950">询盘管理</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
               统一查看询盘来源、国家、类型、附件和处理状态，并进入详情页用模板或 AI
-              生成英文回复草稿。
-            </p>
+              生成英文回复草稿�?            </p>
           </div>
           <Link
             className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
@@ -65,7 +64,7 @@ export default async function AdminInquiriesPage({
           defaultValue={params.status ?? ""}
           name="status"
         >
-          <option value="">全部状态</option>
+          <option value="">全部状�?/option>
           <option value="new">new</option>
           <option value="processing">processing</option>
           <option value="done">done</option>
@@ -98,8 +97,7 @@ export default async function AdminInquiriesPage({
           className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
           type="submit"
         >
-          筛选
-        </button>
+          筛�?        </button>
       </form>
 
       <div className="space-y-4">
@@ -120,10 +118,10 @@ export default async function AdminInquiriesPage({
                   <h3 className="text-xl font-semibold text-stone-950">{record.name}</h3>
                   <p className="text-sm text-stone-600">{record.email}</p>
                   <p className="text-sm text-stone-600">
-                    {record.companyName || "未填写公司"}
+                    {record.companyName || "未填写公�?}
                   </p>
                   <p className="text-sm text-stone-600">
-                    {record.productName || "未关联产品"}
+                    {record.productName || "未关联产�?}
                   </p>
                 </div>
 
@@ -145,8 +143,7 @@ export default async function AdminInquiriesPage({
                       className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
                       type="submit"
                     >
-                      更新状态
-                    </button>
+                      更新状�?                    </button>
                   </form>
                   <Link
                     className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
@@ -175,8 +172,7 @@ export default async function AdminInquiriesPage({
           ))
         ) : (
           <div className="rounded-[1.5rem] border border-dashed border-stone-300 bg-white p-8 text-sm text-stone-500">
-            当前还没有询盘记录。
-          </div>
+            当前还没有询盘记录�?          </div>
         )}
       </div>
     </div>

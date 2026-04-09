@@ -21,6 +21,7 @@ import {
   Settings,
   ShieldCheck,
   Tags,
+  Users,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -51,15 +52,16 @@ const navigation: NavItem[] = [
   { name: "首页模块", href: "/admin/pages/home", icon: Layers3, group: "site" },
   { name: "关于我们", href: "/admin/pages/about", icon: Globe, group: "site" },
   { name: "联系我们", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
-  { name: "SEO 与 AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
+  { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
+  { name: "SEO �?AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
   { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
 ];
 
 const groupLabels: Record<string, string> = {
   overview: "总览",
   content: "内容管理",
-  sales: "销售协同",
-  site: "站点与系统",
+  sales: "销售协�?,
+  site: "站点与系�?,
 };
 
 function isActivePath(pathname: string, href: string) {
@@ -81,7 +83,7 @@ function PlanTag({
   const availability = getFeatureAvailability({ currentPlan, featureKey });
   if (availability.status === "included") return null;
 
-  const label = availability.requiredPlan === "growth" ? "获客版" : "AI版";
+  const label = availability.requiredPlan === "growth" ? "获客�? : "AI�?;
 
   return (
     <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-stone-400">
@@ -116,7 +118,7 @@ export function AdminSidebar({
 
   return (
     <div className="flex h-full flex-col bg-stone-950 text-stone-400">
-      {/* 桌面端才显示顶部 Logo（移动端 drawer 自带 header） */}
+      {/* 桌面端才显示顶部 Logo（移动端 drawer 自带 header�?*/}
       <div className="hidden border-b border-white/5 px-5 py-5 md:block">
         <Link className="flex items-center gap-3" href="/admin">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25">
@@ -198,7 +200,7 @@ export function AdminSidebar({
           type="button"
         >
           <LogOut className="h-4 w-4" />
-          {loggingOut ? "退出中..." : "退出后台"}
+          {loggingOut ? "退出中..." : "退出后�?}
         </button>
       </div>
     </div>

@@ -1,15 +1,23 @@
 "use client";
 
-import type { FormEvent } from "react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { TurnstileBox } from "@/components/public/turnstile-box";
 
-type RequestQuoteFormProps = {
-  productOptions: Array<{ id: number; nameEn: string }>;
+type FormField = {
+  name: string;
+  label: string;
+  type: "text" | "textarea" | "file";
+  required: boolean;
+  placeholder?: string;
 };
 
-export function RequestQuoteForm({ productOptions }: RequestQuoteFormProps) {
+type RequestQuoteFormProps = {
+  productOptions: Array<{ id: number; nameEn: string }>;
+  formFields: FormField[];
+};
+
+export function RequestQuoteForm({ productOptions, formFields }: RequestQuoteFormProps) {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -39,103 +47,136 @@ export function RequestQuoteForm({ productOptions }: RequestQuoteFormProps) {
     }
   }
 
+  // Pre-filter so we can layout nice grids
+  const genericInputFields = formFields.filter((f) => f.type !== "textarea" && f.type !== "file");
+  const complexInputFields = formFields.filter((f) => f.type === "textarea" || f.type === "file");
+
   return (
     <form
-      className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm"
+      className="space-y-4 rounded-[var(--radius,1rem)] border border-stone-200 bg-white p-6 shadow-sm"
       onSubmit={handleSubmit}
     >
+      {/* We always keep the basic Name/Email hardcoded because the backend requires them */}
       <div className="grid gap-4 md:grid-cols-2">
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="name"
-          placeholder="Your name"
-          required
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="email"
-          placeholder="Email"
-          required
-          type="email"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="companyName"
-          placeholder="Company"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="country"
-          placeholder="Country"
-        />
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="whatsapp"
-          placeholder="WhatsApp"
-        />
-        <select
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          defaultValue=""
-          name="productId"
-        >
-          <option value="">Select product</option>
-          {productOptions.map((product) => (
-            <option key={product.id} value={product.id}>
-              {product.nameEn}
-            </option>
-          ))}
-        </select>
-        <input
-          className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-          name="productName"
-          placeholder="Or type a custom product name"
-        />
-        <div className="grid grid-cols-[1fr_120px] gap-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-stone-700">
+            Full Name <span className="text-red-500">*</span>
+          </span>
           <input
-            className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-            name="quantity"
-            placeholder="Quantity"
+            className="rounded-[calc(var(--radius,1rem)-4px)] border border-stone-300 px-4 py-3 text-sm focus:border-[var(--brand,#000)] outline-none transition-all"
+            name="name"
+            placeholder="John Doe"
+            required
           />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-stone-700">
+            Email Address <span className="text-red-500">*</span>
+          </span>
           <input
-            className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-            defaultValue="pcs"
-            name="unit"
-            placeholder="Unit"
+            className="rounded-[calc(var(--radius,1rem)-4px)] border border-stone-300 px-4 py-3 text-sm focus:border-[var(--brand,#000)] outline-none transition-all"
+            name="email"
+            type="email"
+            placeholder="john@example.com"
+            required
           />
-        </div>
+        </label>
+
+        {/* Dynamically generated simple text fields from backend settings */}
+        {genericInputFields.map((field) => (
+          <label key={field.name} className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-stone-700">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </span>
+            <input
+              className="rounded-[calc(var(--radius,1rem)-4px)] border border-stone-300 px-4 py-3 text-sm focus:border-[var(--brand,#000)] outline-none transition-all"
+              name={field.name}
+              type={field.type}
+              placeholder={field.placeholder}
+              required={field.required}
+            />
+          </label>
+        ))}
+
+        <label className="flex flex-col gap-1.5 md:col-span-2 mt-2">
+          <span className="text-sm font-medium text-stone-700">Select specific product (Optional)</span>
+          <select
+            className="rounded-[calc(var(--radius,1rem)-4px)] border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[var(--brand,#000)]"
+            defaultValue=""
+            name="productId"
+          >
+            <option value="">-- General Inquiry --</option>
+            {productOptions.map((product) => (
+              <option key={product.id} value={product.id}>
+                {product.nameEn}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
-      <textarea
-        className="min-h-36 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-        name="message"
-        placeholder="Share target specifications, trade terms, and delivery destination"
-        required
-      />
-      <textarea
-        className="min-h-24 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-        name="itemNotes"
-        placeholder="Optional: special requirements for this item"
-      />
+      {complexInputFields.map((field) => {
+        if (field.type === "textarea") {
+          return (
+            <label key={field.name} className="mt-4 flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-stone-700">
+                {field.label} {field.required && <span className="text-red-500">*</span>}
+              </span>
+              <textarea
+                className="min-h-32 w-full rounded-[calc(var(--radius,1rem)-4px)] border border-stone-300 px-4 py-3 text-sm focus:border-[var(--brand,#000)] outline-none transition-all"
+                name={field.name}
+                placeholder={field.placeholder}
+                required={field.required}
+              />
+            </label>
+          );
+        }
+        if (field.type === "file") {
+          return (
+            <label key={field.name} className="mt-4 flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-stone-700">
+                {field.label} {field.required && <span className="text-red-500">*</span>}
+              </span>
+              <input
+                className="text-sm text-stone-600 outline-none file:mr-4 file:rounded-full file:border-0 file:bg-stone-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[var(--brand,#000)] hover:file:bg-stone-100"
+                name={field.name}
+                required={field.required}
+                type="file"
+              />
+            </label>
+          );
+        }
+        return null;
+      })}
+      
+      {/* Fallback required backend fields explicitly mapped if missing in dynamic fields */}
+      <input type="hidden" name="message" value="Mapped dynamically via JSON" />
 
-      <input name="attachment" type="file" />
-      <TurnstileBox inputId="quote-turnstile-token" widgetId="quote-turnstile-widget" />
+
+      <div className="mt-6">
+        <TurnstileBox inputId="quote-turnstile-token" widgetId="quote-turnstile-widget" />
+      </div>
 
       {error ? (
-        <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>
+        <p className="mt-4 rounded-[calc(var(--radius,1rem)-4px)] bg-red-50 px-4 py-3 text-sm text-red-600">
+          {error}
+        </p>
       ) : null}
       {message ? (
-        <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <p className="mt-4 rounded-[calc(var(--radius,1rem)-4px)] bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
           {message}
         </p>
       ) : null}
 
-      <button
-        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white disabled:opacity-60"
-        disabled={pending}
-        type="submit"
-      >
-        {pending ? "Submitting..." : "Submit Quote Request"}
-      </button>
+      <div className="pt-4">
+        <button
+          className="rounded-[calc(var(--radius,1rem)-4px)] bg-[var(--brand,#000)] px-6 py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          disabled={pending}
+          type="submit"
+        >
+          {pending ? "Submitting..." : "Submit Quote Request"}
+        </button>
+      </div>
     </form>
   );
 }

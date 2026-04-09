@@ -19,7 +19,7 @@ export async function sendInquiryReply(input: SendReplyInput) {
   const { toEmail, toName, subject, bodyText, inquiryId } = input;
 
   if (!toEmail || !subject || !bodyText) {
-    return { ok: false, error: "收件人、主题和正文均必填。" };
+    return { ok: false, error: "收件人、主题和正文均必填�? };
   }
 
   const htmlContent = bodyText
@@ -28,7 +28,7 @@ export async function sendInquiryReply(input: SendReplyInput) {
     .join("");
 
   if (isDevBrevo()) {
-    console.log("[brevo/dev] 模拟发送邮件:", { toEmail, subject });
+    console.log("[brevo/dev] 模拟发送邮�?", { toEmail, subject });
     revalidatePath(`/admin/inquiries/${inquiryId}`);
     return { ok: true, simulated: true };
   }
@@ -51,14 +51,14 @@ export async function sendInquiryReply(input: SendReplyInput) {
 
     if (!response.ok) {
       const text = await response.text();
-      console.error("[brevo] 发送失败:", text);
+      console.error("[brevo] 发送失�?", text);
       return { ok: false, error: `邮件发送失败：${response.status}` };
     }
 
     revalidatePath(`/admin/inquiries/${inquiryId}`);
     return { ok: true };
   } catch (error) {
-    console.error("[brevo] 发送异常:", error);
-    return { ok: false, error: "邮件服务暂时不可用，请稍后重试。" };
+    console.error("[brevo] 发送异�?", error);
+    return { ok: false, error: "邮件服务暂时不可用，请稍后重试�? };
   }
 }

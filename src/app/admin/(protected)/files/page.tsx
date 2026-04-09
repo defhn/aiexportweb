@@ -72,8 +72,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       query: params.q,
       folderId: selectedFolderId,
       includeDescendants: true,
-      // 不加 rootOnlyWhenNoFolder：全部素材时展示所有文件
-      folderRows: folders,
+      // 不加 rootOnlyWhenNoFolder：全部素材时展示所有文�?      folderRows: folders,
     }),
     listDownloadFiles({
       query: params.q,
@@ -97,14 +96,13 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <h2 className="text-2xl font-semibold text-stone-950">文件管理</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-          统一管理 PDF、Word、Excel、ZIP 等技术资料，支持无限级文件夹、就地新建目录，以及创建前台可展示的下载记录。
-        </p>
+          统一管理 PDF、Word、Excel、ZIP 等技术资料，支持无限级文件夹、就地新建目录，以及创建前台可展示的下载记录�?        </p>
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           {params.saved ? (
-            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">内容已保存</p>
+            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">内容已保�?/p>
           ) : null}
           {params.deleted ? (
-            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">记录已删除</p>
+            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">记录已删�?/p>
           ) : null}
           {params.folderSaved ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">文件夹已保存</p>
@@ -133,10 +131,9 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                 <input name="assetType" type="hidden" value="file" />
                 <input name="parentId" type="hidden" value={selectedFolderId ?? ""} />
                 <input name="returnTo" type="hidden" value={returnTo} />
-                <input className={inputClassName} name="name" placeholder="新建文件夹名称" required />
+                <input className={inputClassName} name="name" placeholder="新建文件夹名�? required />
                 <button className="w-full rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white" type="submit">
-                  在当前目录新建
-                </button>
+                  在当前目录新�?                </button>
               </form>
               {selectedFolderId ? (
                 <form action={deleteAssetFolder}>
@@ -144,8 +141,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                   <input name="id" type="hidden" value={selectedFolderId} />
                   <input name="returnTo" type="hidden" value="/admin/files" />
                   <button className="w-full rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600" type="submit">
-                    删除当前文件夹
-                  </button>
+                    删除当前文件�?                  </button>
                 </form>
               ) : null}
             </div>
@@ -158,7 +154,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
               <h3 className="text-lg font-semibold text-stone-950">文件资产管理</h3>
               <p className="mt-1 text-sm text-stone-500">
                 {selectedFolderId
-                  ? `当前目录与子目录共 ${fileAssets.length} 个文件`
+                  ? `当前目录与子目录�?${fileAssets.length} 个文件`
                   : `全部 ${fileAssets.length} 个文件`}
               </p>
             </div>
@@ -195,8 +191,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
             />
             {selectedFolderId ? <input name="folder" type="hidden" value={selectedFolderId} /> : null}
             <button className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white md:col-span-4" type="submit">
-              筛选文件
-            </button>
+              筛选文�?            </button>
           </form>
 
           <form action={saveDownloadFile} className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm" data-testid="create-download-form">
@@ -216,7 +211,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
               <label className="block text-sm font-medium text-stone-700">
                 关联产品
                 <select className={inputClassName} defaultValue="" name="productId">
-                  <option value="">不关联产品</option>
+                  <option value="">不关联产�?/option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.nameZh} / {product.nameEn}
@@ -328,7 +323,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                           title="删除文件"
                           type="submit"
                         >
-                          <span className="text-xs">✕</span>
+                          <span className="text-xs">�?/span>
                         </button>
                       </form>
                     </div>
@@ -336,8 +331,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                 ))
               ) : (
                 <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
-                  当前目录下还没有文件资产。
-                </div>
+                  当前目录下还没有文件资产�?                </div>
               )}
             </div>
           </section>
@@ -354,11 +348,10 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                         <p className="mt-1 text-sm text-stone-600">{record.displayNameZh}</p>
                         <p className="mt-2 text-xs leading-5 text-stone-500">文件资产：{record.fileName}</p>
                         <p className="mt-1 text-xs leading-5 text-stone-500">
-                          关联产品：
-                          {record.productNameZh ? ` ${record.productNameZh} / ${record.productNameEn}` : " 不关联产品"}
+                          关联产品�?                          {record.productNameZh ? ` ${record.productNameZh} / ${record.productNameEn}` : " 不关联产�?}
                         </p>
                         <p className="mt-1 text-xs leading-5 text-stone-500">
-                          分类：{record.category || "未填写"} / 语言：{record.language || "未填写"}
+                          分类：{record.category || "未填�?} / 语言：{record.language || "未填�?}
                         </p>
                       </div>
                       <a
@@ -386,7 +379,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                       <label className="block text-sm font-medium text-stone-700">
                         关联产品
                         <select className={inputClassName} defaultValue={record.productId ?? ""} name="productId">
-                          <option value="">不关联产品</option>
+                          <option value="">不关联产�?/option>
                           {products.map((product) => (
                             <option key={product.id} value={product.id}>
                               {product.nameZh} / {product.nameEn}
@@ -439,8 +432,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
                 ))
               ) : (
                 <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
-                  当前筛选条件下还没有下载记录。
-                </div>
+                  当前筛选条件下还没有下载记录�?                </div>
               )}
             </div>
           </section>

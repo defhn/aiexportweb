@@ -10,7 +10,7 @@ export default async function ProductsPage() {
     <main className="min-h-screen bg-white">
       {/* Sub-Hero Header */}
       <section className="relative bg-stone-900 py-32 overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div className="absolute inset-0 opacity-20 texture-carbon" />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 to-transparent" />
         
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">

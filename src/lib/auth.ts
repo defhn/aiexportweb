@@ -14,14 +14,15 @@ export const sessionCookieOptions = {
 
 export type SessionPayload = {
   adminUserId: number;
+  role: "super_admin" | "client_admin" | "employee";
 };
 
 function getSessionSecret() {
   return new TextEncoder().encode(env.SESSION_SECRET);
 }
 
-export function buildSessionPayload(adminUserId: number): SessionPayload {
-  return { adminUserId };
+export function buildSessionPayload(adminUserId: number, role: "super_admin" | "client_admin" | "employee"): SessionPayload {
+  return { adminUserId, role };
 }
 
 export function normalizeLoginInput(input: {
@@ -35,30 +36,37 @@ export function normalizeLoginInput(input: {
 }
 
 export function isProtectedAdminPath(pathname: string) {
-  return pathname.startsWith("/admin") && pathname !== "/admin/login";
+  return pathname.startsWith("/admin") && !pathname.startsWith("/admin/login");
 }
+
+type AuthResult = { isValid: false } | { isValid: true; role: "super_admin" | "client_admin" };
 
 export function isValidAdminCredentials(input: {
   username: string;
   password: string;
-}) {
+}): AuthResult {
   const normalized = normalizeLoginInput(input);
 
-  return (
-    normalized.username === env.ADMIN_USERNAME &&
-    normalized.password === env.ADMIN_PASSWORD
-  );
+  // Check Super Admin Credentials (from Env)
+  const superUser = process.env.SUPER_ADMIN_USERNAME ?? "superadmin";
+  const superPass = process.env.SUPER_ADMIN_PASSWORD ?? env.ADMIN_PASSWORD;
+
+  if (normalized.username === superUser && normalized.password === superPass) {
+    return { isValid: true, role: "super_admin" };
+  }
+
+  // Check Client Admin Credentials (from Env)
+  if (normalized.username === env.ADMIN_USERNAME && normalized.password === env.ADMIN_PASSWORD) {
+    return { isValid: true, role: "client_admin" };
+  }
+
+  return { isValid: false };
 }
 
 export function getSafeAdminRedirectPath(nextPath?: string | null) {
-  if (!nextPath) {
+  if (!nextPath || !nextPath.startsWith("/admin") || nextPath.startsWith("//") || nextPath.startsWith("/admin/login")) {
     return "/admin";
   }
-
-  if (!nextPath.startsWith("/admin") || nextPath.startsWith("//")) {
-    return "/admin";
-  }
-
   return nextPath;
 }
 
@@ -78,3 +86,4 @@ export async function verifySessionToken(token: string) {
     return null;
   }
 }
+

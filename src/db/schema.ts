@@ -50,6 +50,32 @@ export const siteSettings = pgTable("site_settings", {
   defaultPublicLocale: varchar("default_public_locale", { length: 8 })
     .default("en")
     .notNull(),
+  themePrimaryColor: varchar("theme_primary_color", { length: 50 }).default('#0f172a').notNull(),
+  themeBorderRadius: varchar("theme_border_radius", { length: 20 }).default('0.5rem').notNull(),
+  themeFontFamily: varchar("theme_font_family", { length: 100 }).default('Inter, sans-serif').notNull(),
+  formFieldsJson: jsonb("form_fields_json").$type<Array<{ name: string; label: string; type: 'text'|'textarea'|'file'; required: boolean; placeholder?: string }>>().default([]).notNull(),
+  // SEO 全局配置
+  siteUrl: text("site_url"),                          // 例如 https://acme.com（无尾斜杠），用�?metadataBase + canonical
+  seoTitleTemplate: text("seo_title_template"),        // 例如 "%s | Acme CNC Machining"
+  seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 社交分享�?  webhookUrl: text("webhook_url"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const adminRolesEnum = pgEnum("admin_roles", [
+  "client_admin", // Not used locally if managed by ENV, but good for future
+  "employee", // Client's employee
+]);
+
+export const adminUsers = pgTable("admin_users", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  username: text("username").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  role: adminRolesEnum("role").default("employee").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -312,6 +338,7 @@ export const inquiries = pgTable("inquiries", {
   classificationMethod: varchar("classification_method", { length: 20 })
     .default("rule")
     .notNull(),
+  customFieldsJson: jsonb("custom_fields_json").$type<Record<string, unknown>>().default({}).notNull(),
   attachmentMediaId: integer("attachment_media_id").references(
     () => mediaAssets.id,
     {
@@ -366,6 +393,7 @@ export const quoteRequests = pgTable("quote_requests", {
   whatsapp: text("whatsapp"),
   message: text("message").notNull(),
   status: quoteStatusEnum("status").default("new").notNull(),
+  customFieldsJson: jsonb("custom_fields_json").$type<Record<string, unknown>>().default({}).notNull(),
   attachmentMediaId: integer("attachment_media_id").references(
     () => mediaAssets.id,
     {

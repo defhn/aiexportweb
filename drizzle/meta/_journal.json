@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1775614880731,
-      "tag": "0000_striped_silver_sable",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1775615719295,
-      "tag": "0001_first_mariko_yashida",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1775640000000,
-      "tag": "0002_export_growth_v2",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1775644500000,
-      "tag": "0003_plan_feature_usage",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1775660000000,
-      "tag": "0004_asset_folders",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1775696465308,
-      "tag": "0005_add_products_faqs_json",
+      "when": 1775704633858,
+      "tag": "0000_empty_shotgun",
       "breakpoints": true
     }
   ]

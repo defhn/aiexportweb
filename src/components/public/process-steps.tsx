@@ -52,7 +52,7 @@ export function ProcessSteps({
 
   return (
     <section className="relative overflow-hidden border-t border-stone-800 bg-stone-900 py-24">
-      <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      <div className="absolute inset-0 opacity-10 texture-carbon" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">

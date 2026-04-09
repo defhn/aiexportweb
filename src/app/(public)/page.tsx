@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 
@@ -13,6 +14,25 @@ import { TrustedBrands } from "@/components/public/trusted-brands";
 import { getBlogPosts } from "@/features/blog/queries";
 import { getPageModules } from "@/features/pages/queries";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
+import { getSiteSettings } from "@/features/settings/queries";
+
+// 首页 generateMetadata：读�?hero 模块�?seoTitle/seoDescription（管理员在后台填写）
+export async function generateMetadata(): Promise<Metadata> {
+  const [modules, settings] = await Promise.all([
+    getPageModules("home"),
+    getSiteSettings(),
+  ]);
+  const heroModule = modules.find((m) => m.moduleKey === "hero");
+  const payload = heroModule?.payloadJson ?? {};
+  const seoTitle = typeof payload["seoTitle"] === "string" ? payload["seoTitle"] : "";
+  const seoDescription = typeof payload["seoDescription"] === "string" ? payload["seoDescription"] : "";
+  return {
+    title: seoTitle || settings.companyNameEn,
+    description: seoDescription || settings.taglineEn || "B2B CNC machining and industrial export.",
+    alternates: settings.siteUrl ? { canonical: settings.siteUrl } : undefined,
+  };
+}
+
 
 type HomeModule = Awaited<ReturnType<typeof getPageModules>>[number];
 
@@ -37,7 +57,7 @@ function getFeaturedCategories(
   const featuredSlugs = readStringArray(module.payloadJson ?? {}, "slugs");
 
   if (featuredSlugs.length > 0) {
-    // 按管理员配置的 slug 顺序排列
+    // 按管理员配置�?slug 顺序排列
     return featuredSlugs
       .map((slug) => categories.find((c) => c.slug === slug))
       .filter((c): c is NonNullable<typeof c> => c !== undefined);
@@ -54,7 +74,7 @@ function getFeaturedProducts(
   const featuredSlugs = readStringArray(module.payloadJson ?? {}, "slugs");
 
   if (featuredSlugs.length > 0) {
-    // 按管理员配置的 slug 顺序排列
+    // 按管理员配置�?slug 顺序排列
     return featuredSlugs
       .map((slug) => products.find((p) => p.slug === slug))
       .filter((p): p is NonNullable<typeof p> => p !== undefined);
@@ -79,7 +99,7 @@ function FinalCtaSection({
   return (
     <section className="relative overflow-hidden bg-[#0a0a0a] py-32">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      <div className="absolute inset-0 opacity-20 mix-blend-overlay texture-carbon" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/20 blur-[150px] mix-blend-screen" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">

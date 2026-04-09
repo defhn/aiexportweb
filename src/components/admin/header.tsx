@@ -41,7 +41,7 @@ export function Header({ currentPlan }: { currentPlan: SitePlan }) {
         onClick={handleLogout}
         type="button"
       >
-        {pending ? "退出中..." : "退出登录"}
+        {pending ? "退出中..." : "退出登�?}
       </button>
     </header>
   );

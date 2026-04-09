@@ -68,7 +68,7 @@ export function HeroSection({
           className="absolute top-[20%] -right-[15%] w-[800px] h-[800px] rounded-full bg-indigo-500/20 blur-[150px] mix-blend-screen"
         />
         
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
+        <div className="absolute inset-0 texture-carbon opacity-10 mix-blend-overlay" />
       </motion.div>
 
       {/* Hero Content Container */}

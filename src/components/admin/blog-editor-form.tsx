@@ -64,13 +64,12 @@ type BlogEditorFormProps = {
   returnTo: string;
 };
 
-// 紧凑输入框样式
-const input =
+// 紧凑输入框样�?const input =
   "mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2 text-sm text-stone-950 outline-none transition-colors focus:border-stone-500 focus:ring-1 focus:ring-stone-500/20 bg-white";
 
 const textarea = `${input} min-h-20 resize-none`;
 
-// 侧边栏 label 标题
+// 侧边�?label 标题
 const sideLabel = "block text-xs font-semibold text-stone-500 uppercase tracking-wide";
 
 export function BlogEditorForm({
@@ -90,7 +89,7 @@ export function BlogEditorForm({
   return (
     <div className="mx-auto max-w-[1440px] pb-32">
 
-      {/* Header — 紧凑 */}
+      {/* Header �?紧凑 */}
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-400">
@@ -102,7 +101,7 @@ export function BlogEditorForm({
         </div>
       </div>
 
-      {/* 主体：左栏内容 + 右栏设置 */}
+      {/* 主体：左栏内�?+ 右栏设置 */}
       <form action={action} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         {post.id ? <input name="id" type="hidden" value={post.id} /> : null}
 
@@ -143,7 +142,7 @@ export function BlogEditorForm({
             </div>
           </section>
 
-          {/* 正文编辑器 ZH */}
+          {/* 正文编辑�?ZH */}
           <RichTextEditor
             assets={imageAssets}
             defaultValue={post.contentZh}
@@ -151,10 +150,10 @@ export function BlogEditorForm({
             label="正文（中文）"
             locale="zh"
             name="contentZh"
-            placeholder="支持长文章编辑、插图、本地上传和粘贴图片。"
+            placeholder="支持长文章编辑、插图、本地上传和粘贴图片�?
           />
 
-          {/* 正文编辑器 EN */}
+          {/* 正文编辑�?EN */}
           <RichTextEditor
             assets={imageAssets}
             defaultValue={post.contentEn}
@@ -169,7 +168,7 @@ export function BlogEditorForm({
         {/* ===== 右侧：设置栏 ===== */}
         <div className="space-y-4">
 
-          {/* 保存按钮 — 顶部置顶 */}
+          {/* 保存按钮 �?顶部置顶 */}
           <button
             type="submit"
             className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-blue-600 text-sm font-bold text-white shadow-sm hover:bg-blue-500 transition-colors"
@@ -178,13 +177,13 @@ export function BlogEditorForm({
             {submitLabel}
           </button>
 
-          {/* 封面图 */}
+          {/* 封面�?*/}
           <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
-            <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-500">封面图</h3>
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-500">封面�?/h3>
             <ImagePicker
               assets={imageAssets}
               folders={imageFolders}
-              label="封面图"
+              label="封面�?
               name="coverMediaId"
               selectedAssetId={post.coverMediaId}
             />
@@ -197,7 +196,7 @@ export function BlogEditorForm({
             <label className="block">
               <span className={sideLabel}>文章分类</span>
               <select className={input} defaultValue={post.categoryId ?? ""} name="categoryId">
-                <option value="">未分类</option>
+                <option value="">未分�?/option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.nameZh} / {c.nameEn}
@@ -207,10 +206,10 @@ export function BlogEditorForm({
             </label>
 
             <label className="block">
-              <span className={sideLabel}>发布状态</span>
+              <span className={sideLabel}>发布状�?/span>
               <select className={input} defaultValue={post.status} name="status">
                 <option value="draft">草稿</option>
-                <option value="published">已发布</option>
+                <option value="published">已发�?/option>
               </select>
             </label>
 
@@ -266,13 +265,12 @@ export function BlogEditorForm({
           <details className="rounded-2xl border border-stone-200 bg-white shadow-sm">
             <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-xs font-semibold text-stone-600 hover:bg-stone-50 rounded-2xl">
               <FolderPlus className="h-3.5 w-3.5 text-stone-400" />
-              写作中就地新建分类
-            </summary>
+              写作中就地新建分�?            </summary>
             <div className="border-t border-stone-100 px-4 pb-4 pt-3">
               <form action={saveCategoryAction} className="space-y-2.5">
                 <input name="returnTo" type="hidden" value={returnTo} />
                 <label className="block">
-                  <span className={sideLabel}>分类名（中文）</span>
+                  <span className={sideLabel}>分类名（中文�?/span>
                   <input className={input} name="inlineCategoryNameZh" required />
                 </label>
                 <label className="block">
@@ -309,13 +307,12 @@ export function BlogEditorForm({
           <details className="rounded-2xl border border-stone-200 bg-white shadow-sm">
             <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-xs font-semibold text-stone-600 hover:bg-stone-50 rounded-2xl">
               <Tag className="h-3.5 w-3.5 text-stone-400" />
-              写作中就地新建标签
-            </summary>
+              写作中就地新建标�?            </summary>
             <div className="border-t border-stone-100 px-4 pb-4 pt-3">
               <form action={saveTagAction} className="space-y-2.5">
                 <input name="returnTo" type="hidden" value={returnTo} />
                 <label className="block">
-                  <span className={sideLabel}>标签名（中文）</span>
+                  <span className={sideLabel}>标签名（中文�?/span>
                   <input className={input} name="inlineTagNameZh" required />
                 </label>
                 <label className="block">
@@ -340,10 +337,10 @@ export function BlogEditorForm({
 
           {/* 发布提示 */}
           <section className="rounded-2xl border border-stone-100 bg-stone-50 p-4 text-xs leading-5 text-stone-500 space-y-1.5">
-            <p>💡 中文后台编辑，前台统一输出英文内容。</p>
-            <p>💡 正文图片会先进入图库，再插入文章。</p>
-            <p>💡 长文章编辑时工具栏会固定在顶部。</p>
-            <p>💡 新建分类/标签不会跳离当前编辑页。</p>
+            <p>💡 中文后台编辑，前台统一输出英文内容�?/p>
+            <p>💡 正文图片会先进入图库，再插入文章�?/p>
+            <p>💡 长文章编辑时工具栏会固定在顶部�?/p>
+            <p>💡 新建分类/标签不会跳离当前编辑页�?/p>
           </section>
         </div>
       </form>

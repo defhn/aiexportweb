@@ -126,14 +126,42 @@ export default async function AdminHomeModulesPage() {
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <h2 className="text-2xl font-semibold text-stone-950">首页管理</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          在这里统一维护首页模块的开关、排序、文案和推荐内容。前台会按照这里的顺序直接渲染。
-        </p>
+          在这里统一维护首页模块的开关、排序、文案和推荐内容。前台会按照这里的顺序直接渲染�?        </p>
       </section>
 
       <form action={action} className="space-y-6">
+
+        {/* ——�?首页 SEO ——�?*/}
+        <section className="rounded-[1.5rem] border border-blue-100 bg-blue-50/40 p-6 shadow-sm">
+          <div className="mb-1 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-stone-950">首页 SEO</h3>
+            <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Google 搜索结果</span>
+          </div>
+          <p className="mb-5 text-sm leading-6 text-stone-500">
+            这里填写的内容会直接出现�?Google 搜索结果里。留空则使用站点全局默认值�?          </p>
+          <div className="grid gap-4">
+            <label className="block text-sm font-medium text-stone-700">
+              首页 SEO 标题�?5�?0 字符�?              <input
+                className={inputClassName}
+                defaultValue={readString(heroModule?.payloadJson ?? {}, "seoTitle")}
+                name="hero__seoTitle"
+                placeholder="例：CNC Precision Machining | Acme Manufacturing"
+              />
+            </label>
+            <label className="block text-sm font-medium text-stone-700">
+              首页 SEO 描述�?50�?60 字符�?              <textarea
+                className={textareaClassName}
+                defaultValue={readString(heroModule?.payloadJson ?? {}, "seoDescription")}
+                name="hero__seoDescription"
+                placeholder="例：Custom CNC machined parts with tolerances to ±0.005mm. ISO 9001. DDP shipping to 40+ countries."
+              />
+            </label>
+          </div>
+        </section>
+
         <ModuleCard
           title="Hero 首屏"
-          description="控制首页第一屏标题、说明和两个按钮。"
+          description="控制首页第一屏标题、说明和两个按钮�?
           moduleKey="hero"
           enabled={heroModule?.isEnabled ?? true}
         >
@@ -172,8 +200,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              主按钮文案
-              <input
+              主按钮文�?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -183,8 +210,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              主按钮链接
-              <input
+              主按钮链�?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -194,8 +220,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              次按钮文案
-              <input
+              次按钮文�?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -205,8 +230,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              次按钮链接
-              <input
+              次按钮链�?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -220,7 +244,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="核心优势"
-          description="每行一条，前台会自动排成列表。"
+          description="每行一条，前台会自动排成列表�?
           moduleKey="strengths"
           enabled={strengthsModule?.isEnabled ?? true}
         >
@@ -250,7 +274,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="品牌背书"
-          description="用于滚动展示合作品牌、客户品牌或行业关键词。"
+          description="用于滚动展示合作品牌、客户品牌或行业关键词�?
           moduleKey="trust-signals"
           enabled={trustSignalsModule?.isEnabled ?? true}
         >
@@ -288,7 +312,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="推荐分类"
-          description="控制首页分类模块的文案和要展示的分类。"
+          description="控制首页分类模块的文案和要展示的分类�?
           moduleKey="featured-categories"
           enabled={featuredCategoryModule?.isEnabled ?? true}
         >
@@ -351,7 +375,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="工厂实力"
-          description="控制工厂实力模块的标题、说明、卖点和两组统计数字。"
+          description="控制工厂实力模块的标题、说明、卖点和两组统计数字�?
           moduleKey="factory-capability"
           enabled={factoryCapabilityModule?.isEnabled ?? true}
         >
@@ -443,8 +467,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              统计说明二
-              <input
+              统计说明�?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   factoryCapabilityModule?.payloadJson ?? {},
@@ -458,7 +481,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="质量认证"
-          description="每行格式为 标题|描述，用于展示认证、审核和合规能力。"
+          description="每行格式�?标题|描述，用于展示认证、审核和合规能力�?
           moduleKey="quality-certifications"
           enabled={qualityModule?.isEnabled ?? true}
         >
@@ -515,7 +538,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="推荐产品"
-          description="控制首页推荐产品模块的标题、按钮和产品选择。"
+          description="控制首页推荐产品模块的标题、按钮和产品选择�?
           moduleKey="featured-products"
           enabled={featuredProductModule?.isEnabled ?? true}
         >
@@ -589,7 +612,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="合作流程"
-          description="每行格式为 标题|描述，用于展示询盘到出货的步骤。"
+          description="每行格式�?标题|描述，用于展示询盘到出货的步骤�?
           moduleKey="process-steps"
           enabled={processModule?.isEnabled ?? true}
         >
@@ -635,7 +658,7 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="博客入口"
-          description="控制首页博客模块标题，文章会自动读取最新已发布内容。"
+          description="控制首页博客模块标题，文章会自动读取最新已发布内容�?
           moduleKey="latest-insights"
           enabled={latestInsightsModule?.isEnabled ?? true}
         >
@@ -672,8 +695,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title="底部转化区"
-          description="控制首页底部 CTA 区域的文案和按钮。"
+          title="底部转化�?
+          description="控制首页底部 CTA 区域的文案和按钮�?
           moduleKey="final-cta"
           enabled={finalCtaModule?.isEnabled ?? true}
         >

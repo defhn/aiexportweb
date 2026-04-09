@@ -14,6 +14,7 @@ export type QuoteRequestInsertInput = {
   whatsapp?: string;
   message: string;
   attachmentMediaId?: number | null;
+  customFieldsJson?: Record<string, string>;
 };
 
 export type QuoteItemDraftInput = {
@@ -34,6 +35,7 @@ export function buildQuoteRequestInsertPayload(input: QuoteRequestInsertInput) {
     whatsapp: input.whatsapp?.trim() ?? null,
     message: input.message.trim(),
     attachmentMediaId: input.attachmentMediaId ?? null,
+    customFieldsJson: input.customFieldsJson ?? {},
     status: "new" as const,
   };
 }

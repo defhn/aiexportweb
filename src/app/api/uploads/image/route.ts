@@ -15,11 +15,11 @@ export async function POST(request: Request) {
       : null;
 
   if (!(file instanceof File)) {
-    return NextResponse.json({ error: "缺少图片文件。" }, { status: 400 });
+    return NextResponse.json({ error: "缺少图片文件�? }, { status: 400 });
   }
 
   if (!file.type.startsWith("image/") || !isSupportedUploadMimeType(file.type)) {
-    return NextResponse.json({ error: "不支持的图片格式。" }, { status: 400 });
+    return NextResponse.json({ error: "不支持的图片格式�? }, { status: 400 });
   }
 
   const uploaded = await uploadToR2({

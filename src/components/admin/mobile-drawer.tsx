@@ -37,7 +37,7 @@ export function MobileDrawer() {
 
   return (
     <>
-      {/* 汉堡按钮 — 仅移动端显示 */}
+      {/* 汉堡按钮 �?仅移动端显示 */}
       <button
         className="mr-2 flex h-9 w-9 items-center justify-center rounded-xl text-stone-500 hover:bg-stone-100 hover:text-stone-900 md:hidden"
         onClick={() => setOpen(true)}
@@ -47,7 +47,7 @@ export function MobileDrawer() {
         <Menu className="h-5 w-5" />
       </button>
 
-      {/* 移动端抽屉 */}
+      {/* 移动端抽�?*/}
       <dialog
         ref={dialogRef}
         className="m-0 h-full max-h-full w-72 max-w-full overflow-hidden rounded-none bg-transparent p-0 backdrop:bg-black/50 open:flex"

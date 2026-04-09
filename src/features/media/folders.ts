@@ -107,7 +107,7 @@ export function buildAssetFolderOptions(rows: AssetFolderRow[]) {
       options.push({
         id: node.id,
         depth,
-        label: `${"　".repeat(depth)}${depth > 0 ? "└ " : ""}${node.name}`,
+        label: `${"　".repeat(depth)}${depth > 0 ? "�?" : ""}${node.name}`,
       });
       visit(node.children, depth + 1);
     }

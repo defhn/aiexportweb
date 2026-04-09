@@ -32,7 +32,7 @@ type InquiryReplyAssistantProps = {
 const PROVIDER_LABELS: Record<AiProvider, string> = {
   gemini: "Gemini 2.5 Flash",
   deepseek: "DeepSeek",
-  fallback: "本地模板（未配置 AI）",
+  fallback: "本地模板（未配置 AI�?,
 };
 
 const PROVIDER_COLORS: Record<AiProvider, string> = {
@@ -125,7 +125,7 @@ export function InquiryReplyAssistant({
       if (typeof result.remaining === "number") setReplyRemaining(result.remaining);
 
       if (!response.ok) {
-        setError(result.error ?? "AI 回复生成失败。");
+        setError(result.error ?? "AI 回复生成失败�?);
         return;
       }
 
@@ -158,7 +158,7 @@ export function InquiryReplyAssistant({
       if (typeof result.remaining === "number") setClassifyRemaining(result.remaining);
 
       if (!response.ok) {
-        setError(result.error ?? "AI 分类失败。");
+        setError(result.error ?? "AI 分类失败�?);
         return;
       }
 
@@ -217,7 +217,7 @@ export function InquiryReplyAssistant({
         ok: result.ok,
         message: result.ok
           ? `邮件已发送至 ${customerEmail}${"simulated" in result && result.simulated ? "（开发模式模拟）" : ""}`
-          : (result.error ?? "发送失败"),
+          : (result.error ?? "发送失�?),
       });
     } finally {
       setSending(false);
@@ -229,8 +229,7 @@ export function InquiryReplyAssistant({
       <div>
         <h3 className="text-lg font-semibold text-stone-950">回复助手</h3>
         <p className="mt-2 text-sm leading-6 text-stone-600">
-          套用模板或用 AI 生成英文草稿，人工确认后直接发送至客户邮箱。
-        </p>
+          套用模板或用 AI 生成英文草稿，人工确认后直接发送至客户邮箱�?        </p>
       </div>
 
       {/* 额度徽章 */}
@@ -273,7 +272,7 @@ export function InquiryReplyAssistant({
           onClick={handleGenerateAiReply}
           type="button"
         >
-          {pending ? "AI 生成中..." : "AI 生成英文回复"}
+          {pending ? "AI 生成�?.." : "AI 生成英文回复"}
         </button>
         <button
           className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 disabled:opacity-60"
@@ -281,7 +280,7 @@ export function InquiryReplyAssistant({
           onClick={handleClassify}
           type="button"
         >
-          {classifying ? "AI 分类中..." : "AI 判断询盘类型"}
+          {classifying ? "AI 分类�?.." : "AI 判断询盘类型"}
         </button>
       </div>
 
@@ -310,14 +309,13 @@ export function InquiryReplyAssistant({
       {/* 功能锁定提示 */}
       {replyLocked || classifyLocked ? (
         <div className="rounded-2xl bg-amber-50 px-4 py-4 text-sm text-amber-900">
-          <p className="font-medium">当前套餐的 AI 额度已用完或暂未开通。</p>
+          <p className="font-medium">当前套餐�?AI 额度已用完或暂未开通�?/p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               className="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white"
               href={replyGate.salesContactHref}
             >
-              联系我升级
-            </Link>
+              联系我升�?            </Link>
             {replyGate.pricingHref ? (
               <Link
                 className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
@@ -365,12 +363,12 @@ export function InquiryReplyAssistant({
         <textarea
           className="mt-2 min-h-64 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm outline-none focus:border-stone-950"
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="这里会显示模板内容或 AI 生成的英文回复草稿，可手动编辑。"
+          placeholder="这里会显示模板内容或 AI 生成的英文回复草稿，可手动编辑�?
           value={draft}
         />
       </label>
 
-      {/* 发送/复制操作 */}
+      {/* 发�?复制操作 */}
       <div className="flex flex-wrap items-center gap-3 border-t border-stone-100 pt-4">
         <button
           className="rounded-full bg-blue-600 px-5 py-2 text-sm font-medium text-white disabled:opacity-60 hover:bg-blue-700"
@@ -386,16 +384,16 @@ export function InquiryReplyAssistant({
           onClick={copyDraft}
           type="button"
         >
-          {copied ? "✓ 已复制" : "复制草稿"}
+          {copied ? "�?已复�? : "复制草稿"}
         </button>
       </div>
 
-      {/* 发送结果 */}
+      {/* 发送结�?*/}
       {sendResult !== null ? (
         <p
           className={`rounded-2xl px-4 py-3 text-sm ${sendResult.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-600"}`}
         >
-          {sendResult.ok ? "✓ " : "✕ "}
+          {sendResult.ok ? "�?" : "�?"}
           {sendResult.message}
         </p>
       ) : null}

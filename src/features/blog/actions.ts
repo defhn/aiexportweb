@@ -392,11 +392,25 @@ export async function deleteBlogCategory(formData: FormData) {
   }
 
   const db = getDb();
+
+  // 检查该分类下是否还有文章，有则拒绝删除
+  const linkedPosts = await db
+    .select({ id: blogPosts.id })
+    .from(blogPosts)
+    .where(eq(blogPosts.categoryId, categoryId))
+    .limit(1);
+
+  if (linkedPosts.length > 0) {
+    // 重定向并携带错误原因，让 UI 展示友好提示
+    redirect(withQuery(returnTo, "taxonomy", "category-delete-blocked"));
+  }
+
   await db.delete(blogCategories).where(eq(blogCategories.id, categoryId));
 
   revalidateBlogAdminPaths();
   redirect(withQuery(returnTo, "taxonomy", "category-deleted"));
 }
+
 
 export async function saveBlogTag(formData: FormData) {
   "use server";

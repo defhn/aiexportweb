@@ -4,6 +4,7 @@ import { desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { siteSettings } from "@/db/schema";
+import { assertSameOrigin } from "@/lib/csrf";
 
 export type SiteSettingsDraft = {
   companyNameZh: string;
@@ -15,6 +16,10 @@ export type SiteSettingsDraft = {
   whatsapp: string;
   addressZh: string;
   addressEn: string;
+  // SEO
+  siteUrl: string;
+  seoTitleTemplate: string;
+  seoOgImageMediaId: number | null;
 };
 
 export function buildSiteSettingsDraft(
@@ -29,18 +34,30 @@ export function buildSiteSettingsDraft(
     email: input.email ?? "sales@example.com",
     phone: input.phone ?? "+86 000 0000 0000",
     whatsapp: input.whatsapp ?? "+86 13800000000",
-    addressZh: input.addressZh ?? "中国制造业产业带",
+    addressZh: input.addressZh ?? "中国制造业产业�?,
     addressEn: input.addressEn ?? "Manufacturing Cluster, China",
+    siteUrl: input.siteUrl ?? "",
+    seoTitleTemplate: input.seoTitleTemplate ?? "%s",
+    seoOgImageMediaId: input.seoOgImageMediaId ?? null,
   };
 }
 
-function readText(formData: FormData, key: keyof SiteSettingsDraft) {
+function readText(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
 }
 
+function readOptionalNumber(formData: FormData, key: string) {
+  const value = readText(formData, key);
+  if (!value) return null;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 export async function saveSiteSettings(formData: FormData) {
   "use server";
+
+  await assertSameOrigin();
 
   const db = getDb();
   const draft = buildSiteSettingsDraft({
@@ -53,6 +70,10 @@ export async function saveSiteSettings(formData: FormData) {
     whatsapp: readText(formData, "whatsapp"),
     addressZh: readText(formData, "addressZh"),
     addressEn: readText(formData, "addressEn"),
+    // SEO
+    siteUrl: readText(formData, "siteUrl").replace(/\/$/, ""), // 去掉尾部斜杠
+    seoTitleTemplate: readText(formData, "seoTitleTemplate"),
+    seoOgImageMediaId: readOptionalNumber(formData, "seoOgImageMediaId"),
   });
 
   const [existing] = await db
@@ -76,7 +97,10 @@ export async function saveSiteSettings(formData: FormData) {
   revalidatePath("/", "layout");
   revalidatePath("/about");
   revalidatePath("/contact");
+  revalidatePath("/products");
+  revalidatePath("/blog");
   revalidatePath("/admin/settings");
 
   redirect("/admin/settings?saved=1");
 }
+

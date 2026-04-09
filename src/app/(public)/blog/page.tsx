@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,16 @@ import { BlogCard } from "@/components/public/blog-card";
 import { buildBlogCategoryFilters, filterBlogPosts } from "@/features/blog/filter";
 import { getBlogPosts } from "@/features/blog/queries";
 import { getFeatureGate } from "@/features/plans/access";
+import { getSiteSettings } from "@/features/settings/queries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: "Blog",
+    description: settings.taglineEn || "Technical articles, DFM guides, and manufacturing strategies for global procurement.",
+    alternates: settings.siteUrl ? { canonical: `${settings.siteUrl}/blog` } : undefined,
+  };
+}
 
 type BlogListPageProps = {
   searchParams?: Promise<{
@@ -35,7 +46,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
   return (
     <main className="min-h-screen bg-white">
       <section className="relative pt-32 pb-24 bg-stone-950 border-b border-stone-800 overflow-hidden">
-        <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div className="absolute inset-0 opacity-20 mix-blend-overlay texture-carbon" />
         <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between md:items-end gap-12">

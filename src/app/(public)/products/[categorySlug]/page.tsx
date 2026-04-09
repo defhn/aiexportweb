@@ -54,7 +54,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       {/* Support Box */}
       <section className="py-20 bg-stone-900 mx-6 mb-12 rounded-[3.5rem] overflow-hidden relative">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+          <div className="absolute inset-0 opacity-10 texture-carbon" />
           <div className="relative z-10 max-w-2xl mx-auto px-6 text-center text-white">
               <h2 className="text-2xl font-bold">Need a Custom Quote?</h2>
               <p className="mt-4 text-stone-400 text-sm">Send us your technical specifications and our team will get back to you with a detailed manufacturing feasibility report within 24 hours.</p>

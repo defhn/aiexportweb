@@ -28,7 +28,7 @@ export default async function AdminCategoriesPage() {
   const mappedImageFolders = buildAssetFolderOptions(imageFolders);
   const bulkFormId = "categories-bulk-form";
 
-  // mediaId → url 映射，用于缩略图展示
+  // mediaId �?url 映射，用于缩略图展示
   const assetUrlMap = new Map(mappedImageAssets.map((a) => [a.id, a.url]));
   const nextSortOrder =
     categories.length > 0
@@ -45,7 +45,7 @@ export default async function AdminCategoriesPage() {
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-stone-900">产品分类</h1>
         <p className="mt-1 text-sm text-stone-500">
-          共 {categories.length} 个分类 · 鼠标悬停行尾点铅笔图标展开编辑
+          �?{categories.length} 个分�?· 鼠标悬停行尾点铅笔图标展开编辑
         </p>
       </div>
 
@@ -56,7 +56,7 @@ export default async function AdminCategoriesPage() {
         nextSortOrder={nextSortOrder}
       />
 
-      {/* 批量操作栏 */}
+      {/* 批量操作�?*/}
       {categories.length > 0 ? <BulkActionsBar bulkFormId={bulkFormId} /> : null}
 
       {/* 分类列表表格 */}
@@ -76,8 +76,7 @@ export default async function AdminCategoriesPage() {
                 排序
               </th>
               <th className="hidden px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
-                状态
-              </th>
+                状�?              </th>
               <th className="w-20 px-3 py-2.5" />
             </tr>
           </thead>
@@ -85,8 +84,7 @@ export default async function AdminCategoriesPage() {
             {categories.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-16 text-center text-sm text-stone-400">
-                  还没有分类，点击上方「新建分类」开始添加。
-                </td>
+                  还没有分类，点击上方「新建分类」开始添加�?                </td>
               </tr>
             ) : (
               categories.map((category) => (

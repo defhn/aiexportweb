@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 import Image from "next/image";
@@ -6,6 +8,17 @@ import { Activity, Target, Zap, Globe2, Building2, MapPin } from "lucide-react";
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
   return typeof value === "string" ? value : "";
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const modules = await getPageModules("about");
+  const payload = modules[0]?.payloadJson ?? {};
+  const seoTitle = readString(payload, "seoTitle");
+  const seoDescription = readString(payload, "seoDescription");
+  return {
+    title: seoTitle || "About Us",
+    description: seoDescription || "Learn about our manufacturing capabilities, history, and global reach.",
+  };
 }
 
 export default async function AboutPage() {

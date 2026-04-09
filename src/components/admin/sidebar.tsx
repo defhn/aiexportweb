@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { getFeatureAvailability, type FeatureKey, type SitePlan } from "@/lib/plans";
 
 const navItems = [
-  { label: "仪表盘", href: "/admin", featureKey: "dashboard_analytics" as const },
+  { label: "仪表�?, href: "/admin", featureKey: "dashboard_analytics" as const },
   { label: "首页管理", href: "/admin/pages/home" },
   { label: "关于我们", href: "/admin/pages/about" },
   { label: "联系我们", href: "/admin/pages/contact" },
@@ -50,7 +50,7 @@ function FeatureTag({
     return null;
   }
 
-  const label = availability.requiredPlan === "growth" ? "获客版" : "AI版";
+  const label = availability.requiredPlan === "growth" ? "获客�? : "AI�?;
 
   return (
     <span className="rounded-full bg-stone-200 px-2 py-1 text-[11px] font-semibold text-stone-600">
