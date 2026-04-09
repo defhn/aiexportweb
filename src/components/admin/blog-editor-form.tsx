@@ -1,4 +1,4 @@
-import { BookText, FolderPlus, Save, Tag } from "lucide-react";
+import { BookText, FolderPlus, Globe2, Save, Tag } from "lucide-react";
 
 import { ImagePicker } from "@/components/admin/image-picker";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
@@ -64,10 +64,14 @@ type BlogEditorFormProps = {
   returnTo: string;
 };
 
-const inputClassName =
-  "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
+// 紧凑输入框样式
+const input =
+  "mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2 text-sm text-stone-950 outline-none transition-colors focus:border-stone-500 focus:ring-1 focus:ring-stone-500/20 bg-white";
 
-const textareaClassName = `${inputClassName} min-h-28`;
+const textarea = `${input} min-h-20 resize-none`;
+
+// 侧边栏 label 标题
+const sideLabel = "block text-xs font-semibold text-stone-500 uppercase tracking-wide";
 
 export function BlogEditorForm({
   action,
@@ -84,153 +88,62 @@ export function BlogEditorForm({
   returnTo,
 }: BlogEditorFormProps) {
   return (
-    <div className="mx-auto max-w-[1400px] space-y-8 pb-32">
-      <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.35em] text-stone-400">
-          <BookText className="h-4 w-4" />
-          Blog Editor
+    <div className="mx-auto max-w-[1440px] pb-32">
+
+      {/* Header — 紧凑 */}
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-400">
+            <BookText className="h-3.5 w-3.5" />
+            Blog Editor
+          </div>
+          <h1 className="mt-1.5 text-2xl font-bold text-stone-950">{heading}</h1>
+          <p className="mt-1 text-sm text-stone-500">{description}</p>
         </div>
-        <h2 className="mt-4 text-3xl font-semibold text-stone-950">{heading}</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">{description}</p>
-      </section>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <details className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-stone-950">
-            <FolderPlus className="h-4 w-4" />
-            写作中就地新建分类
-          </summary>
-          <form action={saveCategoryAction} className="mt-4 grid gap-4">
-            <input name="returnTo" type="hidden" value={returnTo} />
-            <label className="block text-sm font-medium text-stone-700">
-              分类名称（中文）
-              <input className={inputClassName} name="inlineCategoryNameZh" required />
-            </label>
-            <label className="block text-sm font-medium text-stone-700">
-              Category Name (EN)
-              <input className={inputClassName} name="inlineCategoryNameEn" required />
-            </label>
-            <label className="block text-sm font-medium text-stone-700">
-              Slug
-              <input className={inputClassName} name="inlineCategorySlug" />
-            </label>
-            <label className="block text-sm font-medium text-stone-700">
-              排序
-              <input className={inputClassName} defaultValue={100} name="sortOrder" type="number" />
-            </label>
-            <label className="flex items-center gap-2 text-sm font-medium text-stone-700">
-              <input defaultChecked name="isVisible" type="checkbox" />
-              前台显示
-            </label>
-            <input
-              className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
-              type="submit"
-              value="保存分类并留在当前页"
-            />
-          </form>
-        </details>
-
-        <details className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-stone-950">
-            <Tag className="h-4 w-4" />
-            写作中就地新建标签
-          </summary>
-          <form action={saveTagAction} className="mt-4 grid gap-4">
-            <input name="returnTo" type="hidden" value={returnTo} />
-            <label className="block text-sm font-medium text-stone-700">
-              标签名称（中文）
-              <input className={inputClassName} name="inlineTagNameZh" required />
-            </label>
-            <label className="block text-sm font-medium text-stone-700">
-              Tag Name (EN)
-              <input className={inputClassName} name="inlineTagNameEn" required />
-            </label>
-            <label className="block text-sm font-medium text-stone-700">
-              Slug
-              <input className={inputClassName} name="inlineTagSlug" />
-            </label>
-            <input
-              className="rounded-full border border-stone-300 px-5 py-3 text-sm font-medium text-stone-700"
-              type="submit"
-              value="保存标签并留在当前页"
-            />
-          </form>
-        </details>
       </div>
 
-      <form action={action} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+      {/* 主体：左栏内容 + 右栏设置 */}
+      <form action={action} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         {post.id ? <input name="id" type="hidden" value={post.id} /> : null}
 
-        <div className="space-y-8">
-          <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-stone-950">基础信息</h3>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <label className="block text-sm font-medium text-stone-700">
-                文章分类
-                <select className={inputClassName} defaultValue={post.categoryId ?? ""} name="categoryId">
-                  <option value="">请选择分类</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.nameZh} / {category.nameEn}
-                    </option>
-                  ))}
-                </select>
+        {/* ===== 左侧：内容区 ===== */}
+        <div className="space-y-5">
+
+          {/* 标题 + slug */}
+          <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-stone-900">文章标题 &amp; Slug</h3>
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <label className="block">
+                <span className={sideLabel}>标题（中文）</span>
+                <input className={input} defaultValue={post.titleZh} name="titleZh" required />
               </label>
-              <label className="block text-sm font-medium text-stone-700">
-                发布状态
-                <select className={inputClassName} defaultValue={post.status} name="status">
-                  <option value="draft">草稿</option>
-                  <option value="published">已发布</option>
-                </select>
+              <label className="block">
+                <span className={sideLabel}>Title (EN)</span>
+                <input className={input} defaultValue={post.titleEn} name="titleEn" required />
               </label>
-              <label className="block text-sm font-medium text-stone-700">
-                标题（中文）
-                <input className={inputClassName} defaultValue={post.titleZh} name="titleZh" required />
-              </label>
-              <label className="block text-sm font-medium text-stone-700">
-                Title (EN)
-                <input className={inputClassName} defaultValue={post.titleEn} name="titleEn" required />
-              </label>
-              <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                Slug
-                <input className={inputClassName} defaultValue={post.slug} name="slug" />
-              </label>
-              <label className="block text-sm font-medium text-stone-700">
-                发布时间
-                <input className={inputClassName} defaultValue={post.publishedAt} name="publishedAt" type="datetime-local" />
-              </label>
-              <label className="block text-sm font-medium text-stone-700">
-                标签
-                <input
-                  className={inputClassName}
-                  defaultValue={post.tags.join(", ")}
-                  list="blog-tag-suggestions"
-                  name="tags"
-                  placeholder="如：cnc machining, supplier"
-                />
-                <datalist id="blog-tag-suggestions">
-                  {existingTags.map((tag) => (
-                    <option key={tag.id} value={tag.nameEn} />
-                  ))}
-                </datalist>
+              <label className="block md:col-span-2">
+                <span className={sideLabel}>Slug</span>
+                <input className={input} defaultValue={post.slug} name="slug" placeholder="留空自动生成" />
               </label>
             </div>
           </section>
 
-          <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-stone-950">摘要</h3>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <label className="block text-sm font-medium text-stone-700">
-                摘要（中文）
-                <textarea className={textareaClassName} defaultValue={post.excerptZh} name="excerptZh" />
+          {/* 摘要 */}
+          <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-stone-900">摘要 Excerpt</h3>
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <label className="block">
+                <span className={sideLabel}>摘要（中文）</span>
+                <textarea className={textarea} defaultValue={post.excerptZh} name="excerptZh" />
               </label>
-              <label className="block text-sm font-medium text-stone-700">
-                Excerpt (EN)
-                <textarea className={textareaClassName} defaultValue={post.excerptEn} name="excerptEn" />
+              <label className="block">
+                <span className={sideLabel}>Excerpt (EN)</span>
+                <textarea className={textarea} defaultValue={post.excerptEn} name="excerptEn" />
               </label>
             </div>
           </section>
 
+          {/* 正文编辑器 ZH */}
           <RichTextEditor
             assets={imageAssets}
             defaultValue={post.contentZh}
@@ -241,6 +154,7 @@ export function BlogEditorForm({
             placeholder="支持长文章编辑、插图、本地上传和粘贴图片。"
           />
 
+          {/* 正文编辑器 EN */}
           <RichTextEditor
             assets={imageAssets}
             defaultValue={post.contentEn}
@@ -250,43 +164,186 @@ export function BlogEditorForm({
             name="contentEn"
             placeholder="Use this editor for the English article shown on the public website."
           />
-
-          <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-stone-950">SEO</h3>
-            <div className="mt-5 grid gap-4">
-              <label className="block text-sm font-medium text-stone-700">
-                SEO Title
-                <input className={inputClassName} defaultValue={post.seoTitle} name="seoTitle" />
-              </label>
-              <label className="block text-sm font-medium text-stone-700">
-                SEO Description
-                <textarea className={textareaClassName} defaultValue={post.seoDescription} name="seoDescription" />
-              </label>
-            </div>
-          </section>
         </div>
 
-        <div className="space-y-8">
-          <ImagePicker
-            assets={imageAssets}
-            folders={imageFolders}
-            label="封面图"
-            name="coverMediaId"
-            selectedAssetId={post.coverMediaId}
-          />
+        {/* ===== 右侧：设置栏 ===== */}
+        <div className="space-y-4">
 
-          <section className="rounded-[1.5rem] border border-slate-900 bg-slate-950 p-6 text-white shadow-sm">
-            <h3 className="text-lg font-semibold">发布提醒</h3>
-            <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-200">
-              <li>1. 中文后台编辑，前台统一输出英文内容。</li>
-              <li>2. 正文图片会先进入图库，再插入文章。</li>
-              <li>3. 长文章下拉时，工具栏会固定在顶部。</li>
-              <li>4. 新建分类和标签时不会跳离当前编辑页。</li>
-            </ul>
-            <button className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-medium text-white" type="submit">
-              <Save className="h-4 w-4" />
-              {submitLabel}
-            </button>
+          {/* 保存按钮 — 顶部置顶 */}
+          <button
+            type="submit"
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-blue-600 text-sm font-bold text-white shadow-sm hover:bg-blue-500 transition-colors"
+          >
+            <Save className="h-4 w-4" />
+            {submitLabel}
+          </button>
+
+          {/* 封面图 */}
+          <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-500">封面图</h3>
+            <ImagePicker
+              assets={imageAssets}
+              folders={imageFolders}
+              label="封面图"
+              name="coverMediaId"
+              selectedAssetId={post.coverMediaId}
+            />
+          </section>
+
+          {/* 发布设置 */}
+          <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wide text-stone-500">发布设置</h3>
+
+            <label className="block">
+              <span className={sideLabel}>文章分类</span>
+              <select className={input} defaultValue={post.categoryId ?? ""} name="categoryId">
+                <option value="">未分类</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nameZh} / {c.nameEn}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block">
+              <span className={sideLabel}>发布状态</span>
+              <select className={input} defaultValue={post.status} name="status">
+                <option value="draft">草稿</option>
+                <option value="published">已发布</option>
+              </select>
+            </label>
+
+            <label className="block">
+              <span className={sideLabel}>发布时间</span>
+              <input
+                className={input}
+                defaultValue={post.publishedAt}
+                name="publishedAt"
+                type="datetime-local"
+              />
+            </label>
+
+            <label className="block">
+              <span className={sideLabel}>标签 Tags</span>
+              <input
+                className={input}
+                defaultValue={post.tags.join(", ")}
+                list="blog-tag-suggestions"
+                name="tags"
+                placeholder="如：cnc machining, supplier"
+              />
+              <datalist id="blog-tag-suggestions">
+                {existingTags.map((tag) => (
+                  <option key={tag.id} value={tag.nameEn} />
+                ))}
+              </datalist>
+            </label>
+          </section>
+
+          {/* SEO */}
+          <section className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm space-y-3">
+            <div className="flex items-center gap-2">
+              <Globe2 className="h-3.5 w-3.5 text-emerald-500" />
+              <h3 className="text-xs font-bold uppercase tracking-wide text-stone-500">SEO</h3>
+            </div>
+            <label className="block">
+              <span className={sideLabel}>Meta Title</span>
+              <input className={input} defaultValue={post.seoTitle} name="seoTitle" placeholder="55-60字符" />
+            </label>
+            <label className="block">
+              <span className={sideLabel}>Meta Description</span>
+              <textarea
+                className={textarea}
+                defaultValue={post.seoDescription}
+                name="seoDescription"
+                placeholder="150-160字符"
+              />
+            </label>
+          </section>
+
+          {/* 就地新建分类 */}
+          <details className="rounded-2xl border border-stone-200 bg-white shadow-sm">
+            <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-xs font-semibold text-stone-600 hover:bg-stone-50 rounded-2xl">
+              <FolderPlus className="h-3.5 w-3.5 text-stone-400" />
+              写作中就地新建分类
+            </summary>
+            <div className="border-t border-stone-100 px-4 pb-4 pt-3">
+              <form action={saveCategoryAction} className="space-y-2.5">
+                <input name="returnTo" type="hidden" value={returnTo} />
+                <label className="block">
+                  <span className={sideLabel}>分类名（中文）</span>
+                  <input className={input} name="inlineCategoryNameZh" required />
+                </label>
+                <label className="block">
+                  <span className={sideLabel}>Name (EN)</span>
+                  <input className={input} name="inlineCategoryNameEn" required />
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="block">
+                    <span className={sideLabel}>Slug</span>
+                    <input className={input} name="inlineCategorySlug" placeholder="自动生成" />
+                  </label>
+                  <label className="block">
+                    <span className={sideLabel}>排序</span>
+                    <input className={input} defaultValue={100} name="sortOrder" type="number" />
+                  </label>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-1.5 text-xs text-stone-500">
+                    <input defaultChecked name="isVisible" type="checkbox" className="h-3.5 w-3.5" />
+                    前台显示
+                  </label>
+                  <button
+                    className="rounded-lg bg-stone-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-stone-800"
+                    type="submit"
+                  >
+                    新建并留在当前页
+                  </button>
+                </div>
+              </form>
+            </div>
+          </details>
+
+          {/* 就地新建标签 */}
+          <details className="rounded-2xl border border-stone-200 bg-white shadow-sm">
+            <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-xs font-semibold text-stone-600 hover:bg-stone-50 rounded-2xl">
+              <Tag className="h-3.5 w-3.5 text-stone-400" />
+              写作中就地新建标签
+            </summary>
+            <div className="border-t border-stone-100 px-4 pb-4 pt-3">
+              <form action={saveTagAction} className="space-y-2.5">
+                <input name="returnTo" type="hidden" value={returnTo} />
+                <label className="block">
+                  <span className={sideLabel}>标签名（中文）</span>
+                  <input className={input} name="inlineTagNameZh" required />
+                </label>
+                <label className="block">
+                  <span className={sideLabel}>Tag Name (EN)</span>
+                  <input className={input} name="inlineTagNameEn" required />
+                </label>
+                <label className="block">
+                  <span className={sideLabel}>Slug</span>
+                  <input className={input} name="inlineTagSlug" placeholder="自动生成" />
+                </label>
+                <div className="flex justify-end">
+                  <button
+                    className="rounded-lg bg-stone-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-stone-800"
+                    type="submit"
+                  >
+                    新建并留在当前页
+                  </button>
+                </div>
+              </form>
+            </div>
+          </details>
+
+          {/* 发布提示 */}
+          <section className="rounded-2xl border border-stone-100 bg-stone-50 p-4 text-xs leading-5 text-stone-500 space-y-1.5">
+            <p>💡 中文后台编辑，前台统一输出英文内容。</p>
+            <p>💡 正文图片会先进入图库，再插入文章。</p>
+            <p>💡 长文章编辑时工具栏会固定在顶部。</p>
+            <p>💡 新建分类/标签不会跳离当前编辑页。</p>
           </section>
         </div>
       </form>

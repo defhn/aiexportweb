@@ -47,12 +47,96 @@ type UploadedAsset = RichTextAsset & {
   mimeType?: string;
 };
 
-const toolbarButtonClassName =
-  "inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-stone-200 bg-white px-3 text-sm font-medium text-stone-700 transition-colors hover:border-stone-950 hover:text-stone-950";
+// 轻量 Markdown → HTML 转换（无需外部库）
+function markdownToHtml(md: string): string {
+  const lines = md.split("\n");
+  const result: string[] = [];
+  let inList = false;
+  let listType = "";
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // 标题
+    if (/^### (.+)/.test(line)) {
+      if (inList) { result.push(`</${listType}>`); inList = false; }
+      result.push(`<h3>${line.replace(/^### /, "")}</h3>`);
+      continue;
+    }
+    if (/^## (.+)/.test(line)) {
+      if (inList) { result.push(`</${listType}>`); inList = false; }
+      result.push(`<h2>${line.replace(/^## /, "")}</h2>`);
+      continue;
+    }
+    if (/^# (.+)/.test(line)) {
+      if (inList) { result.push(`</${listType}>`); inList = false; }
+      result.push(`<h1>${line.replace(/^# /, "")}</h1>`);
+      continue;
+    }
+
+    // 引用
+    if (/^> (.+)/.test(line)) {
+      if (inList) { result.push(`</${listType}>`); inList = false; }
+      result.push(`<blockquote>${line.replace(/^> /, "")}</blockquote>`);
+      continue;
+    }
+
+    // 无序列表
+    if (/^- (.+)/.test(line) || /^\* (.+)/.test(line)) {
+      if (!inList || listType !== "ul") {
+        if (inList) result.push(`</${listType}>`);
+        result.push("<ul>");
+        inList = true; listType = "ul";
+      }
+      result.push(`<li>${line.replace(/^[-*] /, "")}</li>`);
+      continue;
+    }
+
+    // 有序列表
+    if (/^\d+\. (.+)/.test(line)) {
+      if (!inList || listType !== "ol") {
+        if (inList) result.push(`</${listType}>`);
+        result.push("<ol>");
+        inList = true; listType = "ol";
+      }
+      result.push(`<li>${line.replace(/^\d+\. /, "")}</li>`);
+      continue;
+    }
+
+    // 空行
+    if (line.trim() === "") {
+      if (inList) { result.push(`</${listType}>`); inList = false; }
+      continue;
+    }
+
+    // 普通段落
+    if (inList) { result.push(`</${listType}>`); inList = false; }
+    // 行内 markdown
+    const inline = line
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/`(.+?)`/g, "<code>$1</code>")
+      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+    result.push(`<p>${inline}</p>`);
+  }
+
+  if (inList) result.push(`</${listType}>`);
+  return result.join("\n");
+}
+
+function looksLikeMarkdown(text: string): boolean {
+  return /^#{1,6} |^\*\*|^- |^\* |^\d+\. |^> /m.test(text);
+}
 
 function isImageClipboardItem(item: DataTransferItem) {
   return item.kind === "file" && item.type.startsWith("image/");
 }
+
+// 工具栏按钮样式
+const btnCls =
+  "inline-flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 border border-transparent hover:border-stone-200";
+
+const sectionBtnCls = "flex h-8 items-center gap-1 rounded-lg bg-stone-100/60 px-2.5 text-xs font-semibold text-stone-500";
 
 export function RichTextEditor({
   label,
@@ -107,22 +191,14 @@ export function RichTextEditor({
 
   function rememberSelection() {
     const selection = window.getSelection();
-
-    if (!selection || selection.rangeCount === 0) {
-      return;
-    }
-
+    if (!selection || selection.rangeCount === 0) return;
     selectionRangeRef.current = selection.getRangeAt(0).cloneRange();
   }
 
   function restoreSelection() {
     const selection = window.getSelection();
     const range = selectionRangeRef.current;
-
-    if (!selection || !range) {
-      return false;
-    }
-
+    if (!selection || !range) return false;
     selection.removeAllRanges();
     selection.addRange(range);
     return true;
@@ -152,7 +228,7 @@ export function RichTextEditor({
     rememberSelection();
   }
 
-  async function uploadImage(file: File) {
+  async function uploadImage(file: File): Promise<RichTextAsset | null> {
     setUploading(true);
     setMessage("");
     setError("");
@@ -160,10 +236,7 @@ export function RichTextEditor({
     try {
       const formData = new FormData();
       formData.append("file", file);
-
-      if (activeFolderId) {
-        formData.append("folderId", activeFolderId);
-      }
+      if (activeFolderId) formData.append("folderId", activeFolderId);
 
       const response = await fetch("/api/uploads/image", {
         method: "POST",
@@ -187,11 +260,10 @@ export function RichTextEditor({
       };
 
       setAssetLibrary((current) => [nextAsset, ...current]);
-      setMessage(`${payload.fileName} 上传成功，可直接插入正文。`);
-
+      setMessage(`✅ ${payload.fileName} 上传成功，可直接插入正文。`);
       return nextAsset;
     } catch {
-      setError("图片上传失败，请检查网络或 R2 配置。");
+      setError("❌ 图片上传失败，请检查网络或 R2 配置。");
       return null;
     } finally {
       setUploading(false);
@@ -199,15 +271,9 @@ export function RichTextEditor({
   }
 
   async function handleLocalFile(file?: File | null) {
-    if (!file) {
-      return;
-    }
-
+    if (!file) return;
     const asset = await uploadImage(file);
-
-    if (!asset) {
-      return;
-    }
+    if (!asset) return;
 
     insertHtmlFragment(
       buildEditorFigureHtml({
@@ -220,110 +286,176 @@ export function RichTextEditor({
 
   async function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
     const items = Array.from(event.clipboardData.items);
-    const imageItem = items.find(isImageClipboardItem);
 
-    if (!imageItem) {
+    // 1. 图片粘贴
+    const imageItem = items.find(isImageClipboardItem);
+    if (imageItem) {
+      event.preventDefault();
+      setMessage("⏳ 正在上传粘贴图片...");
+      const file = imageItem.getAsFile();
+      await handleLocalFile(file);
       return;
     }
 
-    event.preventDefault();
-    const file = imageItem.getAsFile();
-    await handleLocalFile(file);
+    // 2. Markdown 文本粘贴
+    const textItem = items.find((i) => i.kind === "string" && i.type === "text/plain");
+    if (textItem) {
+      textItem.getAsString((text) => {
+        if (looksLikeMarkdown(text)) {
+          event.preventDefault();
+          const converted = markdownToHtml(text);
+          insertHtmlFragment(converted);
+          setMessage("✅ 已自动将 Markdown 转换为富文本格式。");
+        }
+        // 非 MD 文本正常粘贴，让浏览器默认处理
+      });
+    }
   }
 
+  // 语言标识
+  const localeBadge =
+    locale === "zh" ? (
+      <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">
+        🇨🇳 中文
+      </span>
+    ) : (
+      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">
+        🇬🇧 English
+      </span>
+    );
+
   return (
-    <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-stone-950">{label}</h3>
-          <p className="mt-2 text-sm text-stone-500">
-            支持标题、列表、引用、链接、插图，本地上传和粘贴图片也会自动入库。
-          </p>
+    <section className="rounded-2xl border border-stone-200 bg-white shadow-sm">
+      {/* 区域标题 */}
+      <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-5 py-3.5">
+        <h3 className="text-sm font-bold text-stone-900">{label}</h3>
+        <div className="flex items-center gap-2">
+          {localeBadge}
+          <span className="text-xs text-stone-400">
+            {locale === "zh"
+              ? "支持粘贴图片/Markdown自动转换"
+              : "Paste images or Markdown — auto-converted"}
+          </span>
         </div>
-        <div className="text-xs text-stone-400">{locale === "zh" ? "中文编辑区" : "英文编辑区"}</div>
       </div>
 
+      {/* 工具栏 — sticky 到 main 的 top-0 */}
       <div
         data-testid="rich-text-toolbar"
-        className="sticky top-4 z-20 mt-5 rounded-2xl border border-stone-200 bg-stone-50/95 p-3 backdrop-blur"
+        className="sticky top-0 z-20 border-b border-stone-100 bg-white/98 backdrop-blur-sm px-4 py-2.5 shadow-sm"
       >
-        <div className="flex flex-wrap gap-2">
-          <button className={toolbarButtonClassName} onClick={() => applyHeading("H1")} type="button">
-            <Heading1 className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => applyHeading("H2")} type="button">
-            <Heading2 className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => applyHeading("P")} type="button">
-            段落
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("bold")} type="button">
-            <Bold className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("italic")} type="button">
-            <Italic className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("insertUnorderedList")} type="button">
-            <List className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("insertOrderedList")} type="button">
-            <ListOrdered className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("formatBlock", "BLOCKQUOTE")} type="button">
-            <Quote className="h-4 w-4" />
-          </button>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {/* 标题格式 */}
+          <div className="flex items-center gap-0.5">
+            <button className={btnCls} onClick={() => applyHeading("H1")} type="button" title="H1标题">
+              <Heading1 className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => applyHeading("H2")} type="button" title="H2标题">
+              <Heading2 className="h-3.5 w-3.5" />
+            </button>
+            <button className={`${btnCls} px-3`} onClick={() => applyHeading("P")} type="button" title="正文段落">
+              P
+            </button>
+          </div>
+
+          <div className="h-5 w-px bg-stone-200" />
+
+          {/* 格式 */}
+          <div className="flex items-center gap-0.5">
+            <button className={btnCls} onClick={() => exec("bold")} type="button" title="加粗">
+              <Bold className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => exec("italic")} type="button" title="斜体">
+              <Italic className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => exec("formatBlock", "BLOCKQUOTE")} type="button" title="引用">
+              <Quote className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="h-5 w-px bg-stone-200" />
+
+          {/* 列表 */}
+          <div className="flex items-center gap-0.5">
+            <button className={btnCls} onClick={() => exec("insertUnorderedList")} type="button" title="无序列表">
+              <List className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => exec("insertOrderedList")} type="button" title="有序列表">
+              <ListOrdered className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="h-5 w-px bg-stone-200" />
+
+          {/* 链接 */}
           <button
-            className={toolbarButtonClassName}
+            className={btnCls}
             onClick={() => {
-              const link = window.prompt("请输入要插入的链接地址");
-              if (link) {
-                exec("createLink", link.trim());
-              }
+              const link = window.prompt("请输入链接地址");
+              if (link) exec("createLink", link.trim());
             }}
             type="button"
+            title="插入链接"
           >
-            <Link2 className="h-4 w-4" />
+            <Link2 className="h-3.5 w-3.5" />
           </button>
+
+          <div className="h-5 w-px bg-stone-200" />
+
+          {/* 图片 */}
           <button
-            aria-label="插入图片"
-            className={toolbarButtonClassName}
-            onClick={() => {
-              rememberSelection();
-              setShowLibrary(true);
-            }}
+            className={`${btnCls} gap-1.5`}
+            onClick={() => { rememberSelection(); setShowLibrary(true); }}
             type="button"
+            title="从图库插入图片"
           >
-            <ImagePlus className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">插入图片</span>
+            <ImagePlus className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline text-xs">{locale === "zh" ? "插图" : "Insert"}</span>
           </button>
           <button
-            aria-label="上传图片"
-            className={toolbarButtonClassName}
+            className={`${btnCls} gap-1.5`}
             onClick={() => fileInputRef.current?.click()}
             type="button"
+            title="上传图片"
+            disabled={uploading}
           >
-            <Upload className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">上传图片</span>
+            <Upload className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline text-xs">
+              {uploading ? (locale === "zh" ? "上传中..." : "Uploading...") : (locale === "zh" ? "上传" : "Upload")}
+            </span>
           </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("removeFormat")} type="button">
-            <RemoveFormatting className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("undo")} type="button">
-            <Undo2 className="h-4 w-4" />
-          </button>
-          <button className={toolbarButtonClassName} onClick={() => exec("redo")} type="button">
-            <Redo2 className="h-4 w-4" />
-          </button>
+
+          <div className="h-5 w-px bg-stone-200" />
+
+          {/* 撤销/格式清除 */}
+          <div className="flex items-center gap-0.5">
+            <button className={btnCls} onClick={() => exec("undo")} type="button" title="撤销">
+              <Undo2 className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => exec("redo")} type="button" title="重做">
+              <Redo2 className="h-3.5 w-3.5" />
+            </button>
+            <button className={btnCls} onClick={() => exec("removeFormat")} type="button" title="清除格式">
+              <RemoveFormatting className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
-        {message ? <p className="mt-3 text-xs text-emerald-700">{message}</p> : null}
-        {error ? <p className="mt-3 text-xs text-red-600">{error}</p> : null}
+
+        {/* 消息/错误提示 */}
+        {message ? (
+          <p className="mt-2 text-[11px] text-emerald-700">{message}</p>
+        ) : null}
+        {error ? (
+          <p className="mt-2 text-[11px] text-red-600">{error}</p>
+        ) : null}
       </div>
 
-      <div className="relative mt-5">
+      {/* 编辑区 */}
+      <div className="relative">
         <div
           data-testid={`rich-text-editor-surface-${name}`}
           ref={editorRef}
-          className="min-h-[420px] rounded-[1.5rem] border border-stone-300 px-5 py-4 text-sm leading-7 text-stone-900 outline-none transition-colors focus:border-stone-950"
+          className="min-h-[400px] px-5 py-4 text-sm leading-7 text-stone-900 outline-none"
           contentEditable
           onInput={syncFromEditor}
           onKeyUp={rememberSelection}
@@ -332,7 +464,9 @@ export function RichTextEditor({
           suppressContentEditableWarning
         />
         {!html || html === "<p></p>" ? (
-          <div className="pointer-events-none absolute left-5 top-4 text-sm text-stone-400">{placeholder}</div>
+          <div className="pointer-events-none absolute left-5 top-4 text-sm text-stone-400">
+            {placeholder}
+          </div>
         ) : null}
       </div>
 
@@ -349,35 +483,36 @@ export function RichTextEditor({
         type="file"
       />
 
+      {/* 图库弹窗 */}
       {showLibrary ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/50 p-6">
-          <div className="max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-stone-200 px-6 py-5">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-stone-950/50 p-0 sm:p-6">
+          <div className="max-h-[92vh] sm:max-h-[90vh] w-full sm:max-w-5xl overflow-hidden rounded-t-3xl sm:rounded-3xl bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4">
               <div>
-                <h4 className="text-lg font-semibold text-stone-950">从图库插入图片</h4>
-                <p className="mt-1 text-sm text-stone-500">
-                  可搜索已有素材，也可以先本地上传再插入正文。
+                <h4 className="text-base font-bold text-stone-950">从图库插入图片</h4>
+                <p className="mt-0.5 text-xs text-stone-500">
+                  点击图片插入正文 · 或先上传新图
                 </p>
               </div>
               <button
-                className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 text-stone-500 hover:bg-stone-100"
                 onClick={() => setShowLibrary(false)}
                 type="button"
               >
-                关闭
+                ✕
               </button>
             </div>
-            <div className="border-b border-stone-200 px-6 py-4">
-              <div className="flex flex-col gap-3 md:flex-row">
+            <div className="border-b border-stone-200 px-5 py-3">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
-                  className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-                  onChange={(event) => setMediaQuery(event.target.value)}
+                  className="flex-1 rounded-xl border border-stone-200 px-3 py-2 text-sm outline-none focus:border-stone-500"
+                  onChange={(e) => setMediaQuery(e.target.value)}
                   placeholder="搜索文件名或 Alt 文案"
                   value={mediaQuery}
                 />
                 <select
-                  className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
-                  onChange={(event) => setActiveFolderId(event.target.value)}
+                  className="rounded-xl border border-stone-200 px-3 py-2 text-sm outline-none"
+                  onChange={(e) => setActiveFolderId(e.target.value)}
                   value={activeFolderId}
                 >
                   <option value="">全部文件夹</option>
@@ -388,20 +523,21 @@ export function RichTextEditor({
                   ))}
                 </select>
                 <button
-                  className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
+                  className="rounded-xl bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 disabled:opacity-60"
                   onClick={() => fileInputRef.current?.click()}
                   type="button"
+                  disabled={uploading}
                 >
                   {uploading ? "上传中..." : "本地上传"}
                 </button>
               </div>
             </div>
-            <div className="grid max-h-[60vh] gap-4 overflow-y-auto p-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid max-h-[56vh] gap-3 overflow-y-auto p-5 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
               {filteredAssets.length ? (
                 filteredAssets.map((asset) => (
                   <button
                     key={asset.id}
-                    className="overflow-hidden rounded-2xl border border-stone-200 bg-white text-left transition-colors hover:border-blue-500"
+                    className="overflow-hidden rounded-2xl border border-stone-200 bg-white text-left transition-all hover:border-blue-400 hover:shadow-md"
                     onClick={() => {
                       insertHtmlFragment(
                         buildEditorFigureHtml({
@@ -422,16 +558,16 @@ export function RichTextEditor({
                         src={asset.url}
                       />
                     </div>
-                    <div className="space-y-2 p-3">
-                      <p className="text-sm font-medium text-stone-900">{asset.fileName}</p>
-                      <p className="line-clamp-2 text-xs text-stone-500">
+                    <div className="p-2.5">
+                      <p className="truncate text-xs font-medium text-stone-900">{asset.fileName}</p>
+                      <p className="mt-0.5 line-clamp-1 text-[10px] text-stone-500">
                         {(locale === "zh" ? asset.altTextZh : asset.altTextEn) || "未设置 Alt 文案"}
                       </p>
                     </div>
                   </button>
                 ))
               ) : (
-                <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
+                <div className="col-span-full rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-center text-sm text-stone-500">
                   当前没有匹配的图片素材。
                 </div>
               )}

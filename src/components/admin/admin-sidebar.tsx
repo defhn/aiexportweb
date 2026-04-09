@@ -90,7 +90,13 @@ function PlanTag({
   );
 }
 
-export function AdminSidebar({ currentPlan = "ai_sales" }: { currentPlan?: SitePlan }) {
+export function AdminSidebar({
+  currentPlan = "ai_sales",
+  onClose,
+}: {
+  currentPlan?: SitePlan;
+  onClose?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
@@ -110,7 +116,8 @@ export function AdminSidebar({ currentPlan = "ai_sales" }: { currentPlan?: SiteP
 
   return (
     <div className="flex h-full flex-col bg-stone-950 text-stone-400">
-      <div className="border-b border-white/5 px-5 py-5">
+      {/* 桌面端才显示顶部 Logo（移动端 drawer 自带 header） */}
+      <div className="hidden border-b border-white/5 px-5 py-5 md:block">
         <Link className="flex items-center gap-3" href="/admin">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25">
             <Box className="h-4 w-4" />
@@ -141,6 +148,7 @@ export function AdminSidebar({ currentPlan = "ai_sales" }: { currentPlan?: SiteP
                     <Link
                       key={item.href}
                       href={item.href}
+                      onClick={onClose}
                       className={cn(
                         "group flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-all",
                         active
