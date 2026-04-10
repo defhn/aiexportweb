@@ -19,42 +19,42 @@ export const PIPELINE_STAGES: {
 }[] = [
   {
     key: "new",
-    label: "閺傛壆鍤庣槐锟�",
+    label: "新到询盘",
     color: "text-blue-700",
     bgColor: "bg-blue-50",
     borderColor: "border-blue-200",
   },
   {
     key: "processing",
-    label: "鐠虹喕绻樻稉锟�",
+    label: "处理中",
     color: "text-amber-700",
     bgColor: "bg-amber-50",
     borderColor: "border-amber-200",
   },
   {
     key: "contacted",
-    label: "瀹歌尪浠堢化锟�",
+    label: "已联系",
     color: "text-violet-700",
     bgColor: "bg-violet-50",
     borderColor: "border-violet-200",
   },
   {
     key: "quoted",
-    label: "瀹稿弶濮ゆ禒锟�",
+    label: "已报价",
     color: "text-orange-700",
     bgColor: "bg-orange-50",
     borderColor: "border-orange-200",
   },
   {
     key: "won",
-    label: "鐠с垹宕� 棣冨竴",
+    label: "已成交 ★",
     color: "text-emerald-700",
     bgColor: "bg-emerald-50",
     borderColor: "border-emerald-200",
   },
   {
     key: "done",
-    label: "瀹告彃鐣幋锟�",
+    label: "已完结",
     color: "text-stone-600",
     bgColor: "bg-stone-100",
     borderColor: "border-stone-200",
@@ -63,7 +63,7 @@ export const PIPELINE_STAGES: {
 
 export async function getPipelineData() {
   const db = getDb();
-  const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000); // 閺堚偓鏉╋拷 90 婢讹拷
+  const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000); // 最近 90 天内的活跃询盘
 
   const rows = await db
     .select({
@@ -87,7 +87,7 @@ export async function getPipelineData() {
     .orderBy(desc(inquiries.updatedAt))
     .limit(200);
 
-  // 閹革拷 status 閸掑棛绮嶉敍鍧皌atus 鐎涙顔岄崥灞炬閸忓懎缍� pipelineStage閿涳拷
+  // 按 status 分组，将询盘分配到对应的 pipelineStage 分组
   const grouped = new Map<PipelineStage, typeof rows>();
   for (const stage of PIPELINE_STAGES) {
     grouped.set(stage.key, []);
@@ -99,7 +99,7 @@ export async function getPipelineData() {
     bucket.push(row);
   }
 
-  // 缂佺喕顓搁幗妯款洣
+  // 查询汇总数据
   const stageSummary = PIPELINE_STAGES.map((stage) => ({
     ...stage,
     count: grouped.get(stage.key)?.length ?? 0,
@@ -114,14 +114,14 @@ export async function getPipelineData() {
   return { stageSummary, totalActive, wonCount, convRate, total: rows.length };
 }
 
-/** Server Action閿涙碍娲块弬锟� inquiry 閻拷 pipeline stage */
+/** 更新 inquiry 的 pipeline 阶段 */
 export async function updatePipelineStage(
   inquiryId: number,
   stage: PipelineStage
 ) {
   const db = getDb();
   const validStages = PIPELINE_STAGES.map((s) => s.key);
-  if (!validStages.includes(stage)) throw new Error("閺冪姵鏅ラ惃鍕▉濞堬拷");
+  if (!validStages.includes(stage)) throw new Error("无效的看板阶段，请检查传入参数");
 
   await db
     .update(inquiries)

@@ -1,4 +1,4 @@
-﻿import { Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 import { AssetFolderSidebar } from "@/components/admin/asset-folder-sidebar";
 import { AssetUploadPanel } from "@/components/admin/asset-upload-panel";
@@ -72,7 +72,8 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       query: params.q,
       folderId: selectedFolderId,
       includeDescendants: true,
-      // 娑撳秴濮?rootOnlyWhenNoFolder閿涙艾鍙忛柈銊х閺夋劖妞傜仦鏇犮仛閹碘偓閺堝鏋冩禒?      folderRows: folders,
+      // rootOnlyWhenNoFolder: 无文件夹参数时仅显示根目录文件
+      folderRows: folders,
     }),
     listDownloadFiles({
       query: params.q,
@@ -80,7 +81,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       language: params.language,
       folderId: selectedFolderId,
       includeDescendants: true,
-      // 娑撳秴濮?rootOnlyWhenNoFolder
+      // rootOnlyWhenNoFolder: 无文件夹参数时仅显示根目录文件
       folderRows: folders,
     }),
     listAdminProducts(),
@@ -295,7 +296,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
               {fileAssets.length ? (
                 fileAssets.map((asset) => (
                   <div key={asset.id} className="flex items-center gap-3 py-2.5 px-1">
-                    {/* 閹靛綊鍣洪柅澶嬪 */}
+                    {/* 批量操作复选框 */}
                     <input
                       className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-600/20 shrink-0"
                       form={bulkFormId}

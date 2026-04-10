@@ -57,60 +57,60 @@ export default async function AdminInquiryDetailPage({
     <div className="space-y-6">
       <section className="flex items-start justify-between gap-4 rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <div>
-          <h2 className="text-2xl font-semibold text-stone-950">鐠囥垻娲忕拠锔藉剰</h2>
+          <h2 className="text-2xl font-semibold text-stone-950">询盘详情</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-            閸︺劏绻栭柌灞剧叀閻顓归幋铚備繆閹垬鈧線妾禒韬测偓浣稿瀻缁崵绮ㄩ弸婊愮礉楠炴湹濞囬悽銊δ侀弶鎸庡灗 AI 閻㈢喐鍨氶懟杈ㄦ瀮閸ョ偛顦查懡澶屒归妴锟�
+            查看客户完整询盘信息，更新跟进状态与内部备注，并使用 AI 辅助生成专业回复草稿
           </p>
         </div>
         <Link
           className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
           href="/admin/inquiries"
         >
-          鏉╂柨娲栭崚妤勩€�
+          返回列表
         </Link>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <div className="space-y-6">
           <article className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-stone-950">鐎广垺鍩涙穱鈩冧紖</h3>
+            <h3 className="text-lg font-semibold text-stone-950">客户基本信息</h3>
             <div className="mt-5 space-y-3 text-sm text-stone-700">
               <p>
-                <span className="font-medium text-stone-950">婵挸鎮曢敍锟�</span>
+                <span className="font-medium text-stone-950">姓名：</span>
                 {inquiry.name}
               </p>
               <p>
-                <span className="font-medium text-stone-950">闁喚顔堥敍锟�</span>
+                <span className="font-medium text-stone-950">邮箱：</span>
                 {inquiry.email}
               </p>
               <p>
-                <span className="font-medium text-stone-950">閸忣剙寰冮敍锟�</span>
-                {inquiry.companyName || "閺堫亜锝為崘锟�"}
+                <span className="font-medium text-stone-950">公司：</span>
+                {inquiry.companyName || "未填写"}
               </p>
               <p>
-                <span className="font-medium text-stone-950">閸ヨ棄顔嶉敍锟�</span>
-                {inquiry.country || "閺堫亜锝為崘锟�"}{" "}
+                <span className="font-medium text-stone-950">国家：</span>
+                {inquiry.country || "未填写"}{" "}
                 {inquiry.countryCode ? `(${inquiry.countryCode})` : ""}
               </p>
               <p>
-                <span className="font-medium text-stone-950">WhatsApp閿涳拷</span>
-                {inquiry.whatsapp || "閺堫亜锝為崘锟�"}
+                <span className="font-medium text-stone-950">WhatsApp：</span>
+                {inquiry.whatsapp || "未填写"}
               </p>
               <p>
-                <span className="font-medium text-stone-950">閺夈儲绨敍锟�</span>
+                <span className="font-medium text-stone-950">来源：</span>
                 {inquiry.sourceType || inquiry.sourcePage || "unknown"}
               </p>
               <p>
-                <span className="font-medium text-stone-950">娴溠冩惂閿涳拷</span>
-                {inquiry.productName || "閺堫亜鍙ч懕鏂鹃獓閸濓拷"}
+                <span className="font-medium text-stone-950">产品：</span>
+                {inquiry.productName || "未关联产品"}
               </p>
               <p>
-                <span className="font-medium text-stone-950">瑜版挸澧犵猾璇茬€烽敍锟�</span>
-                {inquiry.inquiryType || "閺堫亜鍨庣猾锟�"}
+                <span className="font-medium text-stone-950">询盘类型：</span>
+                {inquiry.inquiryType || "未分类"}
               </p>
               {inquiry.attachmentUrl ? (
                 <p className="flex items-center gap-2">
-                  <span className="font-medium text-stone-950">闂勫嫪娆㈤敍锟�</span>
+                  <span className="font-medium text-stone-950">附件：</span>
                   <SecureAttachmentButton
                     fileName={inquiry.attachmentName}
                     inquiryId={inquiry.id}
@@ -121,13 +121,13 @@ export default async function AdminInquiryDetailPage({
           </article>
 
           <article className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-stone-950">鐠囥垻娲忛崘鍛啇</h3>
+            <h3 className="text-lg font-semibold text-stone-950">询盘内容</h3>
             <p className="mt-5 whitespace-pre-wrap text-sm leading-7 text-stone-700">
               {inquiry.message}
             </p>
             {product ? (
               <div className="mt-5 rounded-2xl bg-stone-50 p-4">
-                <p className="text-sm font-medium text-stone-950">閸忓疇浠堟禍褍鎼х憴鍕壐</p>
+                <p className="text-sm font-medium text-stone-950">关联产品规格</p>
                 <ul className="mt-3 space-y-2 text-sm text-stone-700">
                   {specs.map((item) => (
                     <li key={item}>{item}</li>
@@ -142,21 +142,21 @@ export default async function AdminInquiryDetailPage({
             className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm"
           >
             <input name="id" type="hidden" value={inquiry.id} />
-            <h3 className="text-lg font-semibold text-stone-950">鐠虹喕绻樼拋鍓х枂</h3>
+            <h3 className="text-lg font-semibold text-stone-950">跟进管理</h3>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-medium text-stone-700">
-                閻樿埖鈧拷
+                状态
                 <select className={inputClassName} defaultValue={inquiry.status} name="status">
-                  <option value="new">閺傛壆鍤庣槐锟� (new)</option>
-                  <option value="processing">鐠虹喕绻樻稉锟� (processing)</option>
-                  <option value="contacted">瀹歌尪浠堢化锟� (contacted)</option>
-                  <option value="quoted">瀹稿弶濮ゆ禒锟� (quoted)</option>
-                  <option value="won">鐠с垹宕� (won)</option>
-                  <option value="done">瀹告彃鐣幋锟� (done)</option>
+                  <option value="new">待处理 (new)</option>
+                  <option value="processing">跟进中 (processing)</option>
+                  <option value="contacted">已联系 (contacted)</option>
+                  <option value="quoted">已报价 (quoted)</option>
+                  <option value="won">已成交 (won)</option>
+                  <option value="done">已完成 (done)</option>
                 </select>
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                鐠囥垻娲忕猾璇茬€�
+                询盘类型
                 <input
                   className={inputClassName}
                   defaultValue={inquiry.inquiryType ?? ""}
@@ -165,7 +165,7 @@ export default async function AdminInquiryDetailPage({
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                閸愬懘鍎存径鍥ㄦ暈
+                内部备注
                 <textarea
                   className={`${inputClassName} min-h-32`}
                   defaultValue={inquiry.internalNote ?? ""}
@@ -179,7 +179,7 @@ export default async function AdminInquiryDetailPage({
                 className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
                 type="submit"
               >
-                娣囨繂鐡ㄧ捄鐔荤箻娣団剝浼�
+                保存更新
               </button>
             </div>
           </form>

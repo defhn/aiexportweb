@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-// 鏉╂瑤閲� Hook 閻€劋绨崷銊ョ安閻€劎娈戦弽纭呭Ν閻愯濮勯崣锟� UTM 閸滃矁鎷烽煪顏勫棘閺佸府绱濋獮璺虹摠閸屻劌鍩� localStorage
+// 客户端 Hook，捕获并持久化 UTM / GCLID 追踪参数到 localStorage
 export function useTracking() {
   const searchParams = useSearchParams();
 
@@ -27,8 +27,8 @@ export function useTracking() {
     if (gclid) trackData.gclid = gclid;
 
     if (Object.keys(trackData).length > 0) {
-      // 娣囨繆鐦夐張鈧弬鎵畱閸欏倹鏆熺憰鍡欐磰閺冄呮畱閿涘矂鈧艾鐖堕崣顖欎簰鐠佹儳鐣炬稉鈧稉顏呮箒閺佸牊婀�
-      // 鏉╂瑩鍣风粻鈧弰鎾崇摠閸忥拷 localStorage
+      // 新参数覆盖旧参数（同一会话内最新一次点击广告的参数生效）
+      // 首次访问则直接写入 localStorage
       try {
         const existingString = localStorage.getItem("tracking_params");
         const existingData = existingString ? JSON.parse(existingString) : {};
@@ -41,7 +41,7 @@ export function useTracking() {
   }, [searchParams]);
 }
 
-// 鏉堝懎濮弬瑙勭《閿涙俺骞忛崣鏍х秼閸撳秶娈戠紓鎾崇摠鏉╁€熼嚋閸欏倹鏆�
+// 提交询盘时调用此函数读取缓存的追踪参数并附加到表单数据
 export function getSavedTrackingParams() {
   if (typeof window === "undefined") return {};
   try {

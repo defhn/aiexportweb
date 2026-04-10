@@ -61,7 +61,7 @@ function LeadCard({ lead }: { lead: LeadCardProps }) {
 
       {lead.annualVolume && (
         <p className="mt-1.5 text-xs font-medium text-emerald-600">
-          闁插洩鍠橀柌锟�: {lead.annualVolume}
+          年采购量: {lead.annualVolume}
         </p>
       )}
 
@@ -77,42 +77,42 @@ export default async function AdminPipelinePage() {
 
   return (
     <div className="space-y-6">
-      {/* 閳光偓閳光偓 閺嶅洭顣� 閳光偓閳光偓 */}
+      {/* 页面标题 */}
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">缁捐法鍌� Pipeline</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">管理 Pipeline</h2>
         <p className="mt-2 text-sm leading-6 text-stone-500">
-          閸欘垵顫嬮崠鏍嫹闊亝澧嶉張澶屽殠缁鳖澀绮犻妴灞炬煀缁捐法鍌ㄩ妴宥呭煂閵嗗矁鑰介崡鏇樷偓宥囨畱閺冨懐鈻奸敍宀冪箮 90 婢垛晜鏆熼幑顔衡偓锟�
-          閻愮懓鍤崡锛勫鏉╂稑鍙嗙拠锔藉剰閹广垻濮搁幀浣碘偓锟�
+          可视化管理所有销售线索，从首次接触到成交，每个环节一目了然，仅保留最近 90 天询盘，
+          已成交客户请及时归档
         </p>
       </section>
 
-      {/* 閳光偓閳光偓 閺嶇ǹ绺鹃弫鏉跨摟 閳光偓閳光偓 */}
+      {/* 核心统计 */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
           {
             icon: Users,
-            label: "濞叉槒绌痪璺ㄥ偍",
+            label: "活跃线索",
             value: data.totalActive,
             color: "text-blue-600",
             bg: "bg-blue-50",
           },
           {
             icon: Trophy,
-            label: "鐠с垹宕�",
+            label: "已成交",
             value: data.wonCount,
             color: "text-emerald-600",
             bg: "bg-emerald-50",
           },
           {
             icon: TrendingUp,
-            label: "鏉烆剙瀵查悳锟�",
+            label: "成交转化率",
             value: `${data.convRate}%`,
             color: "text-amber-600",
             bg: "bg-amber-50",
           },
           {
             icon: BarChart2,
-            label: "閹崵鍤庣槐锟� (90婢讹拷)",
+            label: "总询盘 (90天)",
             value: data.total,
             color: "text-stone-600",
             bg: "bg-stone-100",
@@ -139,14 +139,14 @@ export default async function AdminPipelinePage() {
         ))}
       </div>
 
-      {/* 閳光偓閳光偓 Kanban 閻婢� 閳光偓閳光偓 */}
+      {/* Kanban 看板 */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {data.stageSummary.map((stage) => (
           <section
             key={stage.key}
             className={`flex flex-col rounded-[1.5rem] border ${stage.borderColor} ${stage.bgColor} p-4`}
           >
-            {/* 閸掓鐖ｆ０锟� */}
+            {/* 阶段标题 */}
             <div className="mb-3 flex items-center justify-between">
               <h3 className={`text-xs font-black uppercase tracking-widest ${stage.color}`}>
                 {stage.label}
@@ -158,11 +158,11 @@ export default async function AdminPipelinePage() {
               </span>
             </div>
 
-            {/* 缁捐法鍌ㄩ崡锛勫閸掓銆� */}
+            {/* 线索卡片列表 */}
             <div className="flex flex-col gap-2 overflow-y-auto max-h-[520px]">
               {stage.leads.length === 0 ? (
                 <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-stone-200 bg-white/50 p-6">
-                  <p className="text-xs text-stone-300">閺嗗倹妫ょ痪璺ㄥ偍</p>
+                  <p className="text-xs text-stone-300">暂无线索</p>
                 </div>
               ) : (
                 stage.leads.map((lead) => (
@@ -174,11 +174,11 @@ export default async function AdminPipelinePage() {
         ))}
       </div>
 
-      {/* 閳光偓閳光偓 閻樿埖鈧礁褰夐弴纾嬵嚛閺勶拷 閳光偓閳光偓 */}
+      {/* 使用说明 */}
       <section className="rounded-[1.5rem] border border-stone-100 bg-stone-50 p-5">
         <p className="text-xs text-stone-400">
-          棣冩寱 <strong>婵″倷缍嶉幒銊ㄧ箻缁捐法鍌ㄩ梼鑸殿唽閿涳拷</strong> 閻愮懓鍤崡锛勫鏉╂稑鍙嗙拠銏㈡磸鐠囷附鍎忔い锟� 閳拷
-          閸欏厖鏅堕悩鑸碘偓浣风瑓閹峰顢嬮柅澶嬪閺備即妯佸▓锟� 閳拷 娣囨繂鐡ㄩ崡鍐插讲閿涘苯褰夐弴缈犵窗鐎圭偞妞傞崣宥嗘Ё閸掔増顒濋惇瀣緲閵嗭拷
+          点击 <strong>任意线索卡片进入询盘详情页</strong>，在详情页修改 Pipeline 阶段即可移动卡片 →
+          新询盘自动进入「新询盘」列 → 按阶段跟进直至成交，每步变更均有时间戳记录
         </p>
       </section>
     </div>

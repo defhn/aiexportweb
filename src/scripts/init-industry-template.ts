@@ -47,8 +47,8 @@ const TEMPLATES: Record<string, TemplatePreset> = {
     ]
   },
   beauty_fmcg: {
-    themePrimaryColor: "#e11d48", // Rose-600 閼绢偄鍙炴潻顏堢彯婵傘垽顥?
-    themeBorderRadius: "2rem",    // 閺嬩浇鍤ч崷鍡橀紟
+    themePrimaryColor: "#e11d48", // Rose-600，适合美妆品牌风格
+    themeBorderRadius: "2rem",    // 大圆角，柔和感
     themeFontFamily: "Playfair Display, serif",
     formFields: [
       { name: "target_sku", label: "Interested SKUs / Niche", type: "text", required: true, placeholder: "e.g., Lip Gloss, Eye Shadow" },
@@ -69,13 +69,13 @@ async function main() {
   }
 
   const db = getDb();
-  console.log(`[棣冩畬] Initializing Database with Template: ${templateId}...`);
+  console.log(`[初始化] Initializing Database with Template: ${templateId}...`);
 
-  // 閸欐牕鍩岃ぐ鎾冲閻?settings
+  // 查询现有 settings
   const currentSettings = await db.select().from(siteSettings).limit(1);
 
   if (currentSettings.length === 0) {
-    // 鏉╂ɑ鐥呴崚婵嗩潗閸栨牞绻冮敍灞藉帥閹绘帊绔撮弶鈥充海閻ㄥ嫬鍘规惔?    console.log("No existing settings found. Inserting default settings row then updating...");
+    // 无现有设置，先插入默认行再更新    console.log("No existing settings found. Inserting default settings row then updating...");
     await db.insert(siteSettings).values({
       companyNameZh: "姒涙顓荤粔鎴炲Η",
       companyNameEn: "Default Tech",
@@ -90,7 +90,7 @@ async function main() {
     formFieldsJson: preset.formFields,
   });
 
-  console.log(`[閴佸尳 Successfully applied preset "${templateId}" to settings!`);
+  console.log(`[✓] Successfully applied preset "${templateId}" to settings!`);
   process.exit(0);
 }
 

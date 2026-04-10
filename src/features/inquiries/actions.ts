@@ -23,14 +23,14 @@ export type InquiryInsertInput = {
   inquiryType?: string | null;
   classificationMethod?: "rule" | "ai" | "manual";
   attachmentMediaId?: number | null;
-  // UTM 鏉╁€熼嚋鐎涙顔�
+  // UTM 追踪参数字段
   utmSource?: string | null;
   utmMedium?: string | null;
   utmCampaign?: string | null;
   utmTerm?: string | null;
   utmContent?: string | null;
   gclid?: string | null;
-  // 妤傛ǹ宸濋柌蹇擃吂閹寸柉绻冨⿰锟�
+  // 高价值字段（企业客户）
   annualVolume?: string | null;
   companyWebsite?: string | null;
 };
@@ -54,14 +54,14 @@ export function buildInquiryInsertPayload(input: InquiryInsertInput) {
     classificationMethod: input.classificationMethod ?? "rule",
     attachmentMediaId: input.attachmentMediaId ?? null,
     status: "new" as const,
-    // UTM 鏉╁€熼嚋
+    // UTM 追踪参数
     utmSource: input.utmSource?.trim() ?? null,
     utmMedium: input.utmMedium?.trim() ?? null,
     utmCampaign: input.utmCampaign?.trim() ?? null,
     utmTerm: input.utmTerm?.trim() ?? null,
     utmContent: input.utmContent?.trim() ?? null,
     gclid: input.gclid?.trim() ?? null,
-    // 妤傛ǹ宸濋柌蹇曞殠缁便垹鐡у▓锟�
+    // 高价值企业客户字段
     annualVolume: input.annualVolume?.trim() ?? null,
     companyWebsite: input.companyWebsite?.trim() ?? null,
   };

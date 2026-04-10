@@ -18,7 +18,7 @@ import {
 } from "@/features/media/media-utils";
 import { deleteFromR2 } from "@/lib/r2";
 
-// 閳光偓閳光偓閳光偓 Private form helpers 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
+// ─── Private form helpers ────────────────────────────────────────
 
 function readText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -38,7 +38,7 @@ function toSafeId(value?: number | null) {
     : null;
 }
 
-// 閳光偓閳光偓閳光偓 Server Actions 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
+// ─── Server Actions ──────────────────────────────────────────
 
 export async function createMediaAsset(input: CreateMediaAssetInput) {
   const db = getDb();
@@ -185,11 +185,10 @@ export async function saveMediaAssetMeta(formData: FormData) {
   redirect(appendRedirectFlag(returnTo, "saved"));
 }
 
-/** 閸掔娀娅庨崜宥呭帥鐏忓棙澧嶉張澶婄穿閻€劏顕氶崶鍓у閻ㄥ嫬顦婚柨顔肩摟濞堜絻顔曟稉?NULL閿涘牆鍟戞担娆庣箽閹躲倧绱漵chema 瀹稿弶婀� set null閿�?*/
+/** 解除媒体资产的所有外键引用，防止删除时触发外键约束错误 */
 async function unlinkMediaAssetReferences(mediaAssetId: number) {
   try {
     const db = getDb();
-    // Neon 妞瑰崬濮╂稉宥嗘暜閹镐礁宕熷▎?execute 閹笛嗩攽婢舵碍娼� SQL閿涘苯绻€妞よ鍨庡鈧拫鍐暏
     await db.execute(
       sql`update product_categories set image_media_id = null where image_media_id = ${mediaAssetId}`,
     );
@@ -209,7 +208,7 @@ async function unlinkMediaAssetReferences(mediaAssetId: number) {
       sql`update quote_requests set attachment_media_id = null where attachment_media_id = ${mediaAssetId}`,
     );
   } catch (err) {
-    // schema 鐏炲倸鍑￠張?onDelete: "set null"閿涘本顒濇径鍕亼鐠愩儰绗夐梼缁樻焽娑撹鍨归梽銈嗙ウ缁�?    console.warn("[media] unlinkMediaAssetReferences warning:", mediaAssetId, err);
+    console.warn("[media] unlinkMediaAssetReferences warning:", mediaAssetId, err);
   }
 }
 
@@ -234,7 +233,7 @@ export async function deleteMediaAsset(formData: FormData) {
       redirect(returnTo);
     }
 
-    // 閸忓牐袙缂佹垶澧嶉張澶婄穿閻㈩煉绱濋崘宥呭灩闂�?    await unlinkMediaAssetReferences(id);
+    await unlinkMediaAssetReferences(id);
     await deleteFromR2(asset.bucketKey);
     await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
 
@@ -291,7 +290,7 @@ export async function bulkDeleteMediaAssets(formData: FormData) {
 
   for (const asset of assets) {
     try {
-      // 閸忓牐袙缂佹垵绱╅悽顭掔礉閸愬秴鍨归梽?      await unlinkMediaAssetReferences(asset.id);
+      await unlinkMediaAssetReferences(asset.id);
       await deleteFromR2(asset.bucketKey);
       await db.delete(mediaAssets).where(eq(mediaAssets.id, asset.id));
       deletedCount += 1;
@@ -385,7 +384,9 @@ export async function deleteDownloadFile(formData: FormData) {
 }
 
 /**
- * 閹殿偅寮块幍鈧張澶婃禈閻楀洩绁禍?URL閿涘本澹橀崙?404閿涘牆鐤勯梽鍛弓娑撳﹣绱堕崚?R2閿涘娈戠拋鏉跨秿閹靛綊鍣洪崚鐘绘珟閵�? * 鏉╂柨娲� { purged, total }閵�? */
+ * 清理失效的媒体资产，检查 URL 是否返回 404，并从数据库中移除记录
+ * 返回 { purged, total }
+ */
 export async function purgeBrokenMediaAssets(): Promise<{
   purged: number;
   total: number;

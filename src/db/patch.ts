@@ -1,5 +1,7 @@
-﻿/**
- * 濠⒀呭仱閸ｈ櫣鎮伴妷銈囶伈闁煎瓨纰嶅﹢浼存晬濮橆剛鏆旈柛蹇嬪妼濠€鎾箮婵犲啯鐓€濠⒀呭仜閻⊙冣枔?閻炴稏鍔嶆晶锕傚礂閵壯冪疀闁哄牆顦伴弳鐔煎箲椤旇偐姘ㄩ柨锟? * 濞达綀娉曢弫锟?IF NOT EXISTS / DO NOTHING 濞ｅ洦绻嗛惁澶愮嵁閸屾粎鎼奸柟顑秶绀夊☉鎾崇С缁变即鎯嶉弶鎴炵稁闁绘粎澧楀﹢渚€寮悧鍫濈ウ闁碉拷? */
+/**
+ * 数据库补丁脚本：幂等运行，安全支持重复执行。
+ * 所有操作均使用 IF NOT EXISTS / DO NOTHING 保障幂等性，不会因重复执行而报错。
+ */
 import "../env";
 import { neon } from "@neondatabase/serverless";
 
@@ -20,7 +22,7 @@ async function patch() {
   `;
   console.log("admin_roles 枚举已确认存在");
 
-  // 2. 闁告帗绋戠紓锟?admin_users 閻炴侗鐓夌槐娆愪繆閸屾稓浜☉鎾崇Т閻°劑宕烽…鎺旂
+  // 2. 创建 admin_users 表（如果不存在）
   await sql`
     CREATE TABLE IF NOT EXISTS "admin_users" (
       "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -81,6 +83,6 @@ async function patch() {
 }
 
 patch().catch((error) => {
-  console.error("闁达拷?闁轰胶澧楀畵浣规償閹鹃【澶嬬▔娴ｇ懓鈷旈悶娑樿嫰閵囨垹鎷归妷顖滅獥", error);
+  console.error("数据库补丁执行失败：", error);
   process.exitCode = 1;
 });

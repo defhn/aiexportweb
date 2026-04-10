@@ -1,4 +1,4 @@
-﻿import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { desc, eq } from "drizzle-orm";
 
@@ -27,7 +27,7 @@ export function buildSiteSettingsDraft(
   return {
     companyNameZh: input.companyNameZh ?? "示例工厂有限公司",
     companyNameEn: input.companyNameEn ?? "Demo Factory Co., Ltd.",
-    taglineZh: input.taglineZh ?? "闁告瑯鍨辩€垫梻绱掗锛勭闁解偓閵壯勭暠濠㈣埖鐗為柨銈夋嚔瀹勯偊鍚傜紓鍐╁灩閻濐垳鍖栭懡銈囧煚",
+    taglineZh: input.taglineZh ?? "专注精密加工，为出口企业提供高质量零部件与外贸增长系统",
     taglineEn:
       input.taglineEn ?? "A lead generation website system for export growth.",
     email: input.email ?? "sales@example.com",

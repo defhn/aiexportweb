@@ -2,12 +2,12 @@ import { desc, gte, isNotNull, sql } from "drizzle-orm";
 import { getDb } from "@/db/client";
 import { inquiries } from "@/db/schema";
 
-/** 閼惧嘲褰� UTM 閺夈儲绨ぐ鎺戞礈閹芥ǹ顩﹂敍鍫熸付鏉╋拷 30 婢垛晪绱� */
+/** 获取 UTM 流量归因统计数据，默认分析最近 30 天数据 */
 export async function getUtmAttributionSummary() {
   const db = getDb();
   const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-  // 閹革拷 utm_source 閸掑棛绮嶇紒鐔活吀
+  // 按 utm_source 聚合排序
   const bySource = await db
     .select({
       utmSource: inquiries.utmSource,
@@ -19,7 +19,7 @@ export async function getUtmAttributionSummary() {
     .orderBy(desc(sql`count(*)`))
     .limit(10);
 
-  // 閹革拷 utm_campaign 閸掑棛绮嶇紒鐔活吀
+  // 按 utm_campaign 聚合排序
   const byCampaign = await db
     .select({
       utmCampaign: inquiries.utmCampaign,
@@ -32,7 +32,7 @@ export async function getUtmAttributionSummary() {
     .orderBy(desc(sql`count(*)`))
     .limit(10);
 
-  // GCLID 閸涙垝鑵戦柌蹇ョ礄Google Ads 娑撴挸鐫樻潻鍊熼嚋閿涳拷
+  // GCLID 统计：来自 Google Ads 点击的询盘数量
   const gclidRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
@@ -40,7 +40,7 @@ export async function getUtmAttributionSummary() {
 
   const gclidCount = gclidRows[0]?.count ?? 0;
 
-  // 閺堝妫� UTM / GCLID 鐎佃鐦敍鍫熸箒閺夈儲绨� vs 閻╁瓨甯寸拋鍧楁６閿涳拷
+  // 统计有 UTM / GCLID 的已归因询盘 vs 无追踪参数的直接访问
   const trackedRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
@@ -52,14 +52,14 @@ export async function getUtmAttributionSummary() {
     .from(inquiries);
   const totalCount = totalRows[0]?.count ?? 0;
 
-  // 妤傛ǹ宸濋柌蹇曞殠缁鳖澁绱欐导浣风瑹缂冩垵娼冮幋鏍у嬀闁插洩鍠橀柌蹇撳嚒婵夘偄鍟撻敍锟�
+  // 高价值询盘：含公司网站的询盘通常来自企业买家，转化价值更高
   const highValueRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
     .where(isNotNull(inquiries.companyWebsite));
   const highValueCount = highValueRows[0]?.count ?? 0;
 
-  // 閺堚偓鏉╋拷 20 閺夆剝婀� UTM 閻ㄥ嫰鐝拹銊╁櫤鐠囥垻娲�
+  // 最近 20 条含 UTM 参数的询盘明细
   const recentTracked = await db
     .select({
       id: inquiries.id,

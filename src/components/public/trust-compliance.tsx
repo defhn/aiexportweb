@@ -89,7 +89,7 @@ export function CookieConsentBanner() {
   );
 }
 
-/** NDA 娣団€叉崲瀵扮晫鐝� 閳ワ拷 閻€劋绨拠銏㈡磸鐞涖劌宕熼梽鍕箮 */
+/** NDA 信任徽章组件 — 显示在询盘表单底部，强化保密承诺 */
 export function NdaTrustBadge({ className = "" }: { className?: string }) {
   return (
     <div
@@ -97,7 +97,7 @@ export function NdaTrustBadge({ className = "" }: { className?: string }) {
     >
       <Shield className="h-4 w-4 shrink-0 text-emerald-500" />
       <span>
-        <strong>Strict NDA Guaranteed</strong> 閳ワ拷 Your drawings, specs and
+        <strong>Strict NDA Guaranteed</strong> &mdash; Your drawings, specs and
         business information are kept 100% confidential and never shared with
         third parties.
       </span>

@@ -105,7 +105,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
   return (
     <div className="space-y-5">
 
-      {/* 閳?妞ゅ爼鍎?Header 閳?缁毖冨櫨娑撯偓鐞?*/}
+      {/* ... */}
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-stone-950">博客管理</h1>
@@ -129,10 +129,10 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
         </p>
       ) : null}
 
-      {/* 閳?缁涙盯鈧?+ 閹靛綊鍣洪幙宥勭稊 閳?閸氬牆鑻熸稉鈧悰?*/}
+      {/* 筛选栏：搜索框 + 批量操作区 */}
       <div className="rounded-2xl border border-stone-200 bg-white px-5 py-3.5 shadow-sm">
         <form className="flex flex-wrap items-center gap-3">
-          {/* 閹兼粎鍌?*/}
+          {/* ... */}
           <label className="relative flex-1 min-w-[160px]">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-400" />
             <input
@@ -143,7 +143,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             />
           </label>
 
-          {/* 閸掑棛琚?*/}
+          {/* ... */}
           <div className="relative">
             <select
               className="h-9 appearance-none rounded-xl border border-stone-200 bg-stone-50 pl-3 pr-8 text-sm text-stone-700 outline-none focus:border-stone-400"
@@ -181,12 +181,12 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             筛选
           </button>
 
-          {/* 閸掑棝娈?*/}
+          {/* ... */}
           {posts.length ? (
             <>
               <span className="hidden h-5 w-px bg-stone-200 sm:block" />
 
-              {/* 閹靛綊鍣洪幙宥勭稊 閳?閸氬矁顢?*/}
+              {/* 筛选栏：搜索框 + 批量操作区 */}
               <form id={bulkFormId} className="flex items-center gap-2">
                 <div className="relative">
                   <select
@@ -223,7 +223,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
         </form>
       </div>
 
-      {/* 閳?閺傚洨鐝烽崚妤勩€?閳?娑撱儲鐗搁梽鎰扮彯閿涘本鏋冪€涙ぞ绗夊┃銏犲毉 */}
+      {/* ... */}
       <section className="rounded-2xl border border-stone-200 bg-white shadow-sm">
         {/* 鐞涖劌銇?*/}
         <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3">
@@ -234,7 +234,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
           </p>
         </div>
 
-        {/* 閸掓銆?*/}
+        {/* ... */}
         <div className="divide-y divide-stone-100">
           {posts.length ? (
             posts.map((post) => (
@@ -251,7 +251,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                   className="h-4 w-4 flex-none rounded border-stone-300 text-blue-600 focus:ring-blue-600/20"
                 />
 
-                {/* 鐏忎線娼伴崶?閳?閸ュ搫鐣剧亸鍝勵嚟閿涘奔绗夐幘鎴︾彯鐞?*/}
+                {/* ... */}
                 <div className="h-14 w-20 flex-none overflow-hidden rounded-lg bg-stone-100">
                   {post.coverImageUrl ? (
                     <img
@@ -267,7 +267,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                   )}
                 </div>
 
-                {/* 閺傚洤鐡ф穱鈩冧紖 閳?flex-1閿涘苯鍞撮柈銊ュ弿闁?truncate/clamp閿涘奔绗夐崗浣筋啅閹炬垿鐝?*/}
+                {/* ... */}
                 <div className="flex min-w-0 flex-1 flex-col gap-1 overflow-hidden">
                   {/* 閺嶅洭顣芥稉顓熸瀮 */}
                   <p className="truncate text-sm font-semibold text-stone-900">
@@ -281,7 +281,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                   ) : null}
                 </div>
 
-                {/* 閸忓啯鏆熼幑?badges 閳?flex-none閿涘苯娴愮€规艾顔?*/}
+                {/* ... */}
                 <div className="flex flex-none flex-col items-end gap-1.5 w-36 shrink-0">
                   <StatusBadge status={post.status} />
                   <div className="flex gap-1.5 flex-wrap justify-end">
@@ -327,12 +327,12 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
         </div>
       </section>
 
-      {/* 閳?閸掑棛琚?+ 閺嶅洨顒?閳?缁毖冨櫨閸愬懓浠堢悰?*/}
+      {/* ... */}
       <div className="grid gap-5 xl:grid-cols-2">
 
-        {/* 閸楁艾顓归崚鍡欒 */}
+        {/* ... */}
         <section className="rounded-2xl border border-stone-200 bg-white shadow-sm">
-          {/* 閺嶅洭顣?+ 閺傛澘缂撻幐澶愭尦 */}
+          {/* 分类表头 + 新建按钮 */}
           <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3.5">
             <div className="flex items-center gap-2">
               <FolderTree className="h-4 w-4 text-stone-400" />
@@ -341,7 +341,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             </div>
           </div>
 
-          {/* 閺傛澘缂撻崚鍡欒鐞涖劌宕?閳?閸愬懓浠堢槐褍鍣?*/}
+          {/* 新建分类表单：inline 快速创建 */}
           <form action={saveBlogCategory} className="border-b border-stone-100 bg-stone-50/60 px-5 py-3">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">+ 新建分类</p>
             <div className="grid grid-cols-[1fr_1fr_80px_50px] gap-2 items-center">
@@ -364,7 +364,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             </div>
           </form>
 
-          {/* 閸掑棛琚崚妤勩€?閳?濮ｅ繋閲滄稉鈧悰?*/}
+          {/* ... */}
           <div className="divide-y divide-stone-100">
             {categories.length ? (
               categories.map((category) => (
@@ -437,7 +437,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
           </div>
         </section>
 
-        {/* 閸楁艾顓归弽鍥╊劮 */}
+        {/* ... */}
         <section className="rounded-2xl border border-stone-200 bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3.5">
             <div className="flex items-center gap-2">
@@ -447,7 +447,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             </div>
           </div>
 
-          {/* 閺傛澘缂撻弽鍥╊劮鐞涖劌宕?*/}
+          {/* 标签区块 */}
           <form action={saveBlogTag} className="border-b border-stone-100 bg-stone-50/60 px-5 py-3">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">+ 新建标签</p>
             <div className="grid grid-cols-[1fr_1fr_1fr] gap-2 items-center">
@@ -465,7 +465,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             </div>
           </form>
 
-          {/* 閺嶅洨顒烽崚妤勩€?閳?濮ｅ繋閲滄稉鈧悰?*/}
+          {/* 标签编辑：内联排列 */}
           <div className="divide-y divide-stone-100">
             {tags.length ? (
               tags.map((tag) => (

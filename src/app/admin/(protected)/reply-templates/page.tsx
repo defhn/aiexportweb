@@ -30,16 +30,19 @@ export default async function AdminReplyTemplatesPage({
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">閸ョ偛顦插Ο鈩冩緲</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">回复模板</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          缂佺喍绔寸粻锛勬倞閹躲儰鐜妴浣瑰ⅵ閺嶆灚鈧焦濡ч張顖涚煛闁氨鐡戦懟杈ㄦ瀮閸ョ偛顦插Ο鈩冩緲閿涘本鏌熸笟鍨И閻炲棗鎷版稉姘閸涙ê鎻╅柅鐔奉槻閸掓湹濞囬悽銊ｂ偓?        </p>
+          在此管理邮件回复模板，可在询盘页面快速引用，提升响应效率。支持中英文双语模板，英文模板为必填项。
+        </p>
         {params.saved ? (
           <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            濡剝婢樺韫箽鐎涙ǜ鈧�?          </p>
+            模板已保存。
+          </p>
         ) : null}
         {params.deleted ? (
           <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            濡剝婢樺鎻掑灩闂勩們鈧�?          </p>
+            模板已删除。
+          </p>
         ) : null}
       </section>
 
@@ -47,14 +50,14 @@ export default async function AdminReplyTemplatesPage({
         action={saveReplyTemplate}
         className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm"
       >
-        <h3 className="text-lg font-semibold text-stone-950">閺傛澘缂撳Ο鈩冩緲</h3>
+        <h3 className="text-lg font-semibold text-stone-950">新建模板</h3>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           <label className="block text-sm font-medium text-stone-700">
-            濡剝婢橀弽鍥暯
+            模板标题
             <input className={inputClassName} name="title" required />
           </label>
           <label className="block text-sm font-medium text-stone-700">
-            閸掑棛琚�
+            分类
             <input
               className={inputClassName}
               name="category"
@@ -62,11 +65,11 @@ export default async function AdminReplyTemplatesPage({
             />
           </label>
           <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-            娑擃厽鏋冪拠瀛樻
+            中文内容
             <textarea className={`${inputClassName} min-h-24`} name="contentZh" />
           </label>
           <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-            閼昏鲸鏋冨Ο鈩冩緲濮濓絾鏋�
+            英文内容（必填）
             <textarea
               className={`${inputClassName} min-h-40`}
               name="contentEn"
@@ -75,7 +78,7 @@ export default async function AdminReplyTemplatesPage({
             />
           </label>
           <label className="block text-sm font-medium text-stone-700">
-            闁倻鏁ら崷鐑樻珯
+            适用场景
             <input className={inputClassName} name="applicableScene" placeholder="quotation" />
           </label>
         </div>
@@ -84,7 +87,7 @@ export default async function AdminReplyTemplatesPage({
             className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
             type="submit"
           >
-            娣囨繂鐡ㄥΟ鈩冩緲
+            保存模板
           </button>
         </div>
       </form>
@@ -98,7 +101,7 @@ export default async function AdminReplyTemplatesPage({
             <form action={saveReplyTemplate} className="grid gap-4 md:grid-cols-2">
               <input name="id" type="hidden" value={template.id} />
               <label className="block text-sm font-medium text-stone-700">
-                濡剝婢橀弽鍥暯
+                模板标题
                 <input
                   className={inputClassName}
                   defaultValue={template.title}
@@ -107,7 +110,7 @@ export default async function AdminReplyTemplatesPage({
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                閸掑棛琚�
+                分类
                 <input
                   className={inputClassName}
                   defaultValue={template.category ?? ""}
@@ -115,7 +118,7 @@ export default async function AdminReplyTemplatesPage({
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                娑擃厽鏋冪拠瀛樻
+                中文内容
                 <textarea
                   className={`${inputClassName} min-h-24`}
                   defaultValue={template.contentZh ?? ""}
@@ -123,7 +126,7 @@ export default async function AdminReplyTemplatesPage({
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                閼昏鲸鏋冨Ο鈩冩緲濮濓絾鏋�
+                英文内容（必填）
                 <textarea
                   className={`${inputClassName} min-h-40`}
                   defaultValue={template.contentEn}
@@ -132,7 +135,7 @@ export default async function AdminReplyTemplatesPage({
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                闁倻鏁ら崷鐑樻珯
+                适用场景
                 <input
                   className={inputClassName}
                   defaultValue={template.applicableScene ?? ""}
@@ -144,7 +147,7 @@ export default async function AdminReplyTemplatesPage({
                   className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
                   type="submit"
                 >
-                  娣囨繂鐡ㄦ穱顔芥暭
+                  保存更改
                 </button>
               </div>
             </form>
@@ -155,7 +158,7 @@ export default async function AdminReplyTemplatesPage({
                 className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
                 type="submit"
               >
-                閸掔娀娅庡Ο鈩冩緲
+                删除模板
               </button>
             </form>
           </article>

@@ -37,14 +37,14 @@ export async function POST(request: Request) {
   const password = body.password;
 
   if (!username || !password || password.length < 6) {
-    return NextResponse.json({ error: "閻€劍鍩涢崥宥嗗灗鐎靛棛鐖滄稉宥呮値濞夋洩绱欑€靛棛鐖滈懛鍐茬毌6娴ｅ稄绱�" }, { status: 400 });
+    return NextResponse.json({ error: "用户名不能为空，密码长度不能少于6位" }, { status: 400 });
   }
 
   try {
     const user = await createAdminUser({ username, password });
     return NextResponse.json({ user }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: "閻€劍鍩涢崥宥呭嚒鐎涙ê婀�" }, { status: 409 });
+    return NextResponse.json({ error: "用户名已存在" }, { status: 409 });
   }
 }
 
@@ -55,7 +55,7 @@ export async function DELETE(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const id = Number(searchParams.get("id"));
-  if (!id) return NextResponse.json({ error: "缂傚搫鐨� id" }, { status: 400 });
+  if (!id) return NextResponse.json({ error: "缺少 id 参数" }, { status: 400 });
 
   await deleteAdminUser(id);
   return NextResponse.json({ success: true });
@@ -68,7 +68,7 @@ export async function PATCH(request: Request) {
 
   const body = (await request.json()) as { id?: number; newPassword?: string };
   if (!body.id || !body.newPassword || body.newPassword.length < 6) {
-    return NextResponse.json({ error: "閸欏倹鏆熸稉宥呮値濞夛拷" }, { status: 400 });
+    return NextResponse.json({ error: "新密码长度不能少于6位" }, { status: 400 });
   }
 
   await resetAdminUserPassword(body.id, body.newPassword);

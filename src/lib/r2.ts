@@ -112,6 +112,7 @@ export async function deleteFromR2(bucketKey: string) {
       }),
     );
   } catch (err) {
-    // R2 閸掔娀娅庢径杈Е閿涘牊鏋冩禒鏈电瑝鐎涙ê婀幋鏍秹缂佹粓妫舵０姗堢礆娑撳秴绨查梼缁橆剾閺佺増宓佹惔鎾诡唶瑜版洖鍨归梽?    console.warn("[R2] deleteFromR2 warning (non-fatal):", bucketKey, err);
+    // R2 删除非致命错误：对象不存在时忽略，不阻断主流程
+    console.warn("[R2] deleteFromR2 warning (non-fatal):", bucketKey, err);
   }
 }
