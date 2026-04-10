@@ -1,7 +1,4 @@
-import { loadEnvConfig } from "@next/env";
 import { z } from "zod";
-
-loadEnvConfig(process.cwd());
 
 const nonProductionDefaults = {
   DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/aiexportweb",

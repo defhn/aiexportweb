@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+﻿import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { desc, eq } from "drizzle-orm";
 
@@ -16,7 +16,6 @@ export type SiteSettingsDraft = {
   whatsapp: string;
   addressZh: string;
   addressEn: string;
-  // SEO
   siteUrl: string;
   seoTitleTemplate: string;
   seoOgImageMediaId: number | null;
@@ -34,7 +33,7 @@ export function buildSiteSettingsDraft(
     email: input.email ?? "sales@example.com",
     phone: input.phone ?? "+86 000 0000 0000",
     whatsapp: input.whatsapp ?? "+86 13800000000",
-    addressZh: input.addressZh ?? "中国制造业产业�?,
+    addressZh: input.addressZh ?? "中国制造业产业带",
     addressEn: input.addressEn ?? "Manufacturing Cluster, China",
     siteUrl: input.siteUrl ?? "",
     seoTitleTemplate: input.seoTitleTemplate ?? "%s",
@@ -70,8 +69,7 @@ export async function saveSiteSettings(formData: FormData) {
     whatsapp: readText(formData, "whatsapp"),
     addressZh: readText(formData, "addressZh"),
     addressEn: readText(formData, "addressEn"),
-    // SEO
-    siteUrl: readText(formData, "siteUrl").replace(/\/$/, ""), // 去掉尾部斜杠
+    siteUrl: readText(formData, "siteUrl").replace(/\/$/, ""),
     seoTitleTemplate: readText(formData, "seoTitleTemplate"),
     seoOgImageMediaId: readOptionalNumber(formData, "seoOgImageMediaId"),
   });
@@ -99,8 +97,8 @@ export async function saveSiteSettings(formData: FormData) {
   revalidatePath("/contact");
   revalidatePath("/products");
   revalidatePath("/blog");
+  revalidatePath("/request-quote");
   revalidatePath("/admin/settings");
 
   redirect("/admin/settings?saved=1");
 }
-
