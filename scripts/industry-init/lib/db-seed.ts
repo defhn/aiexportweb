@@ -140,7 +140,6 @@ export async function seedProducts(
         seoDescription: prod.seoDescription,
         sortOrder: prod.sortOrder,
         isFeatured: prod.isFeatured,
-        isVisible: true,
       })
       .returning({ id: schema.products.id });
 
@@ -156,7 +155,7 @@ export async function seedProducts(
           labelEn: spec.labelEn,
           valueZh: spec.valueEn,
           valueEn: spec.valueEn,
-          visible: true,
+          isVisible: true,
           sortOrder: (i + 1) * 10,
         });
       }
@@ -198,9 +197,8 @@ export async function seedBlogPosts(
         excerptEn: post.excerptEn,
         contentZh: post.contentCn,
         contentEn: post.contentEn,
-        tags: post.tags,
-        publishedAt: new Date(post.publishedAt),
-        isPublished: true,
+        publishedAt: new Date(),
+        status: "published",
       })
       .returning({ id: schema.blogPosts.id });
 
@@ -234,8 +232,9 @@ export async function seedPageModules(
 ): Promise<Record<string, number>> {
   const db = getDb();
   const keyToId: Record<string, number> = {};
+  type PageKey = "home" | "about" | "contact";
 
-  const pageKeyMap: Array<[keyof typeof modules, schema.pageKeyEnum]> = [
+  const pageKeyMap: Array<[keyof typeof modules, PageKey]> = [
     ["home", "home"],
     ["about", "about"],
     ["contact", "contact"],
@@ -247,7 +246,7 @@ export async function seedPageModules(
       const [inserted] = await db
         .insert(schema.pageModules)
         .values({
-          pageKey: dbKey as "home" | "about" | "contact",
+          pageKey: dbKey,
           moduleKey: mod.moduleKey,
           moduleNameZh: mod.moduleNameZh,
           moduleNameEn: mod.moduleNameEn,

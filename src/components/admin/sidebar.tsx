@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,15 +6,15 @@ import { usePathname } from "next/navigation";
 import { getFeatureAvailability, type FeatureKey, type SitePlan } from "@/lib/plans";
 
 const navItems = [
-  { label: "仪表�?, href: "/admin", featureKey: "dashboard_analytics" as const },
+  { label: "仪表盘", href: "/admin", featureKey: "dashboard_analytics" as const },
   { label: "首页管理", href: "/admin/pages/home" },
   { label: "关于我们", href: "/admin/pages/about" },
   { label: "联系我们", href: "/admin/pages/contact" },
-  { label: "站点设置", href: "/admin/settings" },
+  { label: "网站设置", href: "/admin/settings" },
   { label: "产品分类", href: "/admin/categories" },
   { label: "产品管理", href: "/admin/products" },
   { label: "博客管理", href: "/admin/blog", featureKey: "blog_management" as const },
-  { label: "图库管理", href: "/admin/media" },
+  { label: "媒体管理", href: "/admin/media" },
   { label: "文件管理", href: "/admin/files" },
   { label: "询盘管理", href: "/admin/inquiries" },
   {
@@ -22,7 +22,7 @@ const navItems = [
     href: "/admin/reply-templates",
     featureKey: "reply_templates" as const,
   },
-  { label: "报价申请", href: "/admin/quotes", featureKey: "quotes" as const },
+  { label: "报价请求", href: "/admin/quotes", featureKey: "quotes" as const },
   { label: "SEO / AI", href: "/admin/seo-ai" },
 ] satisfies ReadonlyArray<{
   label: string;
@@ -50,7 +50,7 @@ function FeatureTag({
     return null;
   }
 
-  const label = availability.requiredPlan === "growth" ? "获客�? : "AI�?;
+  const label = availability.requiredPlan === "growth" ? "增长版" : "AI版";
 
   return (
     <span className="rounded-full bg-stone-200 px-2 py-1 text-[11px] font-semibold text-stone-600">
@@ -67,7 +67,7 @@ export function Sidebar({ currentPlan }: { currentPlan: SitePlan }) {
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">
         Unified Admin
       </p>
-      <p className="mt-3 text-2xl font-semibold text-stone-950">管理中心</p>
+      <p className="mt-3 text-2xl font-semibold text-stone-950">后台管理</p>
       <nav className="mt-8 flex flex-col gap-2">
         {navItems.map((item) => {
           const isActive =

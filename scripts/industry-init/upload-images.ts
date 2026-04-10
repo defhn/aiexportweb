@@ -11,10 +11,8 @@
  * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
-import { config as loadDotenv } from "dotenv";
-import { resolve } from "path";
-loadDotenv({ path: resolve(process.cwd(), ".env.local") });
-loadDotenv({ path: resolve(process.cwd(), ".env") });
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
 
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join, basename } from "path";

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState, useTransition } from "react";
 import {
@@ -45,7 +45,7 @@ export type CategoryItem = {
   isFeatured: boolean;
 };
 
-/* ─────── 内联编辑�?─────── */
+/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸愬懓浠堢紓鏍帆鐞?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function CategoryRow({
   category,
   imageAssets,
@@ -64,7 +64,7 @@ export function CategoryRow({
 
   return (
     <>
-      {/* 主行 */}
+      {/* 娑撴槒顢?*/}
       <tr className="group border-b border-stone-100 hover:bg-stone-50/60">
         {/* checkbox */}
         <td className="w-8 px-3 py-2.5">
@@ -79,7 +79,7 @@ export function CategoryRow({
           ) : null}
         </td>
 
-        {/* 缩略�?*/}
+        {/* 缂傗晝鏆愰崶?*/}
         <td className="w-10 px-2 py-2">
           <div className="h-9 w-9 overflow-hidden rounded-lg border border-stone-200 bg-stone-100">
             {coverUrl ? (
@@ -92,10 +92,10 @@ export function CategoryRow({
           </div>
         </td>
 
-        {/* 名称 */}
+        {/* 閸氬秶袨 */}
         <td className="px-3 py-2.5">
           <p className="text-sm font-semibold text-stone-900">
-            {category.nameZh || <span className="text-stone-400">�?/span>}
+            {category.nameZh || <span className="text-stone-400">--</span>}
           </p>
           <p className="text-xs text-stone-400">{category.nameEn}</p>
         </td>
@@ -103,21 +103,21 @@ export function CategoryRow({
         {/* slug */}
         <td className="hidden px-3 py-2.5 md:table-cell">
           <code className="rounded bg-stone-100 px-2 py-0.5 text-xs text-stone-600">
-            {category.slug || "�?}
+            {category.slug || "--"}
           </code>
         </td>
 
-        {/* 排序 */}
+        {/* 閹烘帒绨?*/}
         <td className="hidden w-16 px-3 py-2.5 text-center text-sm text-stone-500 md:table-cell">
           {category.sortOrder}
         </td>
 
-        {/* 状�?*/}
+        {/* 閻樿埖鈧?*/}
         <td className="hidden px-3 py-2.5 md:table-cell">
           <div className="flex gap-2">
             {category.isVisible ? (
               <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-                <Globe className="h-2.5 w-2.5" /> 显示
+                <Globe className="h-2.5 w-2.5" /> 可见
               </span>
             ) : (
               <span className="rounded-full bg-stone-100 px-2 py-0.5 text-[10px] text-stone-500">
@@ -132,13 +132,13 @@ export function CategoryRow({
           </div>
         </td>
 
-        {/* 操作 */}
+        {/* 閹垮秳缍?*/}
         <td className="px-3 py-2.5">
           <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
             <button
               className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-800"
               onClick={() => setExpanded((v) => !v)}
-              title="编辑"
+              title="编辑分类"
               type="button"
             >
               <PenLine className="h-4 w-4" />
@@ -148,7 +148,7 @@ export function CategoryRow({
                 <input type="hidden" name="id" value={category.id} />
                 <button
                   className="rounded-lg p-1.5 text-stone-400 hover:bg-red-50 hover:text-red-600"
-                  title="删除"
+                  title="删除分类"
                   type="submit"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -159,7 +159,7 @@ export function CategoryRow({
         </td>
       </tr>
 
-      {/* 展开编辑�?*/}
+      {/* 鐏炴洖绱戠紓鏍帆鐞?*/}
       {expanded ? (
         <tr className="bg-stone-50/80">
           <td colSpan={7} className="px-4 pb-4 pt-3">
@@ -179,7 +179,7 @@ export function CategoryRow({
                   className={inputCls}
                   defaultValue={category.nameZh}
                   name="nameZh"
-                  placeholder="分类名称（中�?
+                  placeholder="分类名称（中文）"
                   required
                 />
                 <input
@@ -208,7 +208,7 @@ export function CategoryRow({
                   className={`${inputCls} min-h-16 resize-none`}
                   defaultValue={category.summaryZh}
                   name="summaryZh"
-                  placeholder="分类简介（中文�?
+                  placeholder="中文简介"
                 />
                 <textarea
                   className={`${inputCls} min-h-16 resize-none`}
@@ -223,7 +223,7 @@ export function CategoryRow({
                   <ImagePicker
                     assets={imageAssets}
                     folders={imageFolders}
-                    label="分类图片"
+                    label="分类封面"
                     name="imageMediaId"
                     selectedAssetId={category.imageMediaId}
                   />
@@ -235,7 +235,7 @@ export function CategoryRow({
                     type="checkbox"
                     className="h-3.5 w-3.5"
                   />
-                  前台显示
+                  公开显示
                 </label>
                 <label className="flex items-center gap-1.5 text-sm text-stone-700">
                   <input
@@ -244,7 +244,7 @@ export function CategoryRow({
                     type="checkbox"
                     className="h-3.5 w-3.5"
                   />
-                  推荐
+                  推荐分类
                 </label>
                 <button
                   className="flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
@@ -270,7 +270,7 @@ export function CategoryRow({
   );
 }
 
-/* ─────── 新建分类折叠面板 ─────── */
+/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閺傛澘缂撻崚鍡欒閹舵ê褰旈棃銏℃緲 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function NewCategoryPanel({
   imageAssets,
   imageFolders,
@@ -291,7 +291,7 @@ export function NewCategoryPanel({
         type="button"
       >
         <Plus className="h-4 w-4 text-stone-400" />
-        新建分类
+        新增分类
         {open ? (
           <ChevronUp className="ml-auto h-4 w-4 text-stone-400" />
         ) : (
@@ -311,9 +311,9 @@ export function NewCategoryPanel({
             className="grid gap-3"
           >
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <input className={inputCls} name="nameZh" placeholder="分类名称（中�? required />
+              <input className={inputCls} name="nameZh" placeholder="分类名称（中文）" required />
               <input className={inputCls} name="nameEn" placeholder="Category Name (EN)" required />
-              <input className={inputCls} name="slug" placeholder="slug（不填自动生成）" />
+              <input className={inputCls} name="slug" placeholder="slug（留空自动生成）" />
               <input
                 className={inputCls}
                 defaultValue={nextSortOrder}
@@ -327,7 +327,7 @@ export function NewCategoryPanel({
               <textarea
                 className={`${inputCls} min-h-16 resize-none`}
                 name="summaryZh"
-                placeholder="分类简介（中文�?
+                placeholder="中文简介"
               />
               <textarea
                 className={`${inputCls} min-h-16 resize-none`}
@@ -341,18 +341,18 @@ export function NewCategoryPanel({
                 <ImagePicker
                   assets={imageAssets}
                   folders={imageFolders}
-                  label="分类图片"
+                  label="分类封面"
                   name="imageMediaId"
                   selectedAssetId={null}
                 />
               </div>
               <label className="flex items-center gap-1.5 text-sm text-stone-700">
                 <input defaultChecked name="isVisible" type="checkbox" className="h-3.5 w-3.5" />
-                前台显示
+                公开显示
               </label>
               <label className="flex items-center gap-1.5 text-sm text-stone-700">
                 <input name="isFeatured" type="checkbox" className="h-3.5 w-3.5" />
-                推荐
+                推荐分类
               </label>
               <button
                 className="flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:opacity-90"
@@ -376,7 +376,7 @@ export function NewCategoryPanel({
   );
 }
 
-/* ─────── 批量操作�?─────── */
+/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閹靛綊鍣洪幙宥勭稊閺?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function BulkActionsBar({ bulkFormId }: { bulkFormId: string }) {
   return (
     <form
@@ -389,8 +389,8 @@ export function BulkActionsBar({ bulkFormId }: { bulkFormId: string }) {
         className="flex items-center gap-2 rounded-full border border-red-200 px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
       >
         <Trash2 className="h-3.5 w-3.5" />
-        批量删除勾�?      </button>
-      <p className="text-xs text-stone-400">仅删除未被产品占用的分类</p>
+        批量删除所选      </button>
+      <p className="text-xs text-stone-400">娴犲懎鍨归梽銈嗘弓鐞氼偂楠囬崫浣稿窗閻劎娈戦崚鍡欒</p>
     </form>
   );
 }

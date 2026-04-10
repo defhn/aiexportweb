@@ -4,25 +4,20 @@ import { Bell } from "lucide-react";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { MobileDrawer } from "@/components/admin/mobile-drawer";
 
-// (protected) group layout：挂载侧边栏和顶�?// 只有通过认证的路由才会进入这�?group，login 页不受影�?export default function ProtectedAdminLayout({
+export default function ProtectedAdminLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
     <div className="flex h-screen bg-stone-50">
-      {/* 桌面侧边�?*/}
       <aside className="hidden w-64 shrink-0 border-r border-white/5 md:block">
         <AdminSidebar />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        {/* 顶栏 */}
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-stone-200 bg-white px-4 md:px-6">
           <div className="flex flex-1 items-center gap-2">
-            {/* 移动端汉堡菜�?*/}
             <MobileDrawer />
-
-            {/* 移动端显示站点名，桌面端搜索�?*/}
-            <p className="text-sm font-semibold text-stone-700 md:hidden">外贸获客后台</p>
+            <p className="text-sm font-semibold text-stone-700 md:hidden">Admin Console</p>
             <div className="relative hidden w-full max-w-sm md:block">
               <svg
                 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
@@ -36,7 +31,7 @@ import { MobileDrawer } from "@/components/admin/mobile-drawer";
               </svg>
               <input
                 className="w-full rounded-full border border-stone-200 bg-stone-50 py-1.5 pl-10 pr-4 text-sm text-stone-700 outline-none transition-colors focus:border-blue-500 focus:bg-white"
-                placeholder="搜索产品、询盘、文章或设置"
+                placeholder="Search products, inquiries, posts, or settings"
                 type="text"
               />
             </div>
@@ -55,7 +50,7 @@ import { MobileDrawer } from "@/components/admin/mobile-drawer";
               <p className="text-[10px] font-black uppercase tracking-[0.35em] text-stone-400">
                 Admin Account
               </p>
-              <p className="text-xs font-semibold text-stone-900">单管理员模式</p>
+              <p className="text-xs font-semibold text-stone-900">Single Admin Mode</p>
             </div>
           </div>
         </header>

@@ -1,7 +1,7 @@
 export const defaultFieldDefinitions = [
   {
     fieldKey: "model",
-    labelZh: "型号",
+    labelZh: "鍨嬪彿",
     labelEn: "Model",
     inputType: "text",
     sortOrder: 10,
@@ -9,7 +9,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "material",
-    labelZh: "材料",
+    labelZh: "鏉愭枡",
     labelEn: "Material",
     inputType: "text",
     sortOrder: 20,
@@ -17,7 +17,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "process",
-    labelZh: "工艺",
+    labelZh: "宸ヨ壓",
     labelEn: "Process",
     inputType: "text",
     sortOrder: 30,
@@ -25,7 +25,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "size",
-    labelZh: "尺寸",
+    labelZh: "灏哄",
     labelEn: "Size",
     inputType: "text",
     sortOrder: 40,
@@ -33,7 +33,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "tolerance",
-    labelZh: "公差",
+    labelZh: "鍏樊",
     labelEn: "Tolerance",
     inputType: "text",
     sortOrder: 50,
@@ -41,7 +41,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "surface_treatment",
-    labelZh: "表面处理",
+    labelZh: "琛ㄩ潰澶勭悊",
     labelEn: "Surface Treatment",
     inputType: "text",
     sortOrder: 60,
@@ -49,7 +49,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "color",
-    labelZh: "颜色",
+    labelZh: "棰滆壊",
     labelEn: "Color",
     inputType: "text",
     sortOrder: 70,
@@ -57,7 +57,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "application",
-    labelZh: "应用",
+    labelZh: "搴旂敤",
     labelEn: "Application",
     inputType: "textarea",
     sortOrder: 80,
@@ -65,7 +65,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "moq",
-    labelZh: "最小起订量",
+    labelZh: "鏈€灏忚捣璁㈤噺",
     labelEn: "MOQ",
     inputType: "text",
     sortOrder: 90,
@@ -73,7 +73,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "sample_lead_time",
-    labelZh: "打样时间",
+    labelZh: "鎵撴牱鏃堕棿",
     labelEn: "Sample Lead Time",
     inputType: "text",
     sortOrder: 100,
@@ -81,7 +81,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "lead_time",
-    labelZh: "交货周期",
+    labelZh: "浜よ揣鍛ㄦ湡",
     labelEn: "Lead Time",
     inputType: "text",
     sortOrder: 110,
@@ -89,7 +89,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "packaging",
-    labelZh: "包装方式",
+    labelZh: "鍖呰鏂瑰紡",
     labelEn: "Packaging",
     inputType: "text",
     sortOrder: 120,
@@ -97,7 +97,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "place_of_origin",
-    labelZh: "产地",
+    labelZh: "浜у湴",
     labelEn: "Place of Origin",
     inputType: "text",
     sortOrder: 130,
@@ -105,7 +105,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "supply_ability",
-    labelZh: "供货能力",
+    labelZh: "渚涜揣鑳藉姏",
     labelEn: "Supply Ability",
     inputType: "text",
     sortOrder: 140,
@@ -113,7 +113,7 @@ export const defaultFieldDefinitions = [
   },
   {
     fieldKey: "certification",
-    labelZh: "认证",
+    labelZh: "璁よ瘉",
     labelEn: "Certification",
     inputType: "text",
     sortOrder: 150,

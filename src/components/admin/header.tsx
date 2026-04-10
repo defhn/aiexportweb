@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,9 +29,9 @@ export function Header({ currentPlan }: { currentPlan: SitePlan }) {
   return (
     <header className="flex items-center justify-between rounded-[2rem] border border-stone-200 bg-white px-6 py-5 shadow-sm">
       <div className="space-y-2">
-        <p className="text-sm font-medium text-stone-500">后台总览</p>
+        <p className="text-sm font-medium text-stone-500">控制台</p>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold text-stone-950">管理中心</h1>
+          <h1 className="text-2xl font-semibold text-stone-950">后台管理</h1>
           <PlanBadge plan={currentPlan} />
         </div>
       </div>
@@ -41,7 +41,7 @@ export function Header({ currentPlan }: { currentPlan: SitePlan }) {
         onClick={handleLogout}
         type="button"
       >
-        {pending ? "退出中..." : "退出登�?}
+        {pending ? "退出中..." : "退出登录"}
       </button>
     </header>
   );

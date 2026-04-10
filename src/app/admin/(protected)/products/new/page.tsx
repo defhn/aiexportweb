@@ -24,7 +24,7 @@ export default async function AdminNewProductPage() {
         nameEn: category.nameEn,
         slug: category.slug,
       }))}
-      description="创建新的产品详情页，保存后会同步更新前台展示�?
+      description="Create a new product record, manage media, and connect downloadable files."
       fileAssets={fileAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -33,7 +33,7 @@ export default async function AdminNewProductPage() {
         altTextZh: asset.altTextZh,
         altTextEn: asset.altTextEn,
       }))}
-      heading="新增产品"
+      heading="New Product"
       imageAssets={imageAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -76,7 +76,7 @@ export default async function AdminNewProductPage() {
       }}
       returnTo="/admin/products/new"
       saveCategoryAction={saveCategory}
-      submitLabel="创建产品"
+      submitLabel="Create Product"
     />
   );
 }

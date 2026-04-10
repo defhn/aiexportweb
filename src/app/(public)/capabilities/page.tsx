@@ -30,7 +30,7 @@ export default function CapabilitiesPage() {
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
                         <CheckCircle2 className="text-blue-500 w-5 h-5 shrink-0" />
-                        <span className="font-medium text-stone-700">Tolerances up to ±0.005mm</span>
+                        <span className="font-medium text-stone-700">Tolerances up to 卤0.005mm</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <CheckCircle2 className="text-blue-500 w-5 h-5 shrink-0" />

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-// 这个 Hook 用于在应用的根节点抓取 UTM 和追踪参数，并存储到 localStorage
+// 鏉╂瑤閲� Hook 閻€劋绨崷銊ョ安閻€劎娈戦弽纭呭Ν閻愯濮勯崣锟� UTM 閸滃矁鎷烽煪顏勫棘閺佸府绱濋獮璺虹摠閸屻劌鍩� localStorage
 export function useTracking() {
   const searchParams = useSearchParams();
 
@@ -27,8 +27,8 @@ export function useTracking() {
     if (gclid) trackData.gclid = gclid;
 
     if (Object.keys(trackData).length > 0) {
-      // 保证最新的参数覆盖旧的，通常可以设定一个有效期
-      // 这里简易存入 localStorage
+      // 娣囨繆鐦夐張鈧弬鎵畱閸欏倹鏆熺憰鍡欐磰閺冄呮畱閿涘矂鈧艾鐖堕崣顖欎簰鐠佹儳鐣炬稉鈧稉顏呮箒閺佸牊婀�
+      // 鏉╂瑩鍣风粻鈧弰鎾崇摠閸忥拷 localStorage
       try {
         const existingString = localStorage.getItem("tracking_params");
         const existingData = existingString ? JSON.parse(existingString) : {};
@@ -41,7 +41,7 @@ export function useTracking() {
   }, [searchParams]);
 }
 
-// 辅助方法：获取当前的缓存追踪参数
+// 鏉堝懎濮弬瑙勭《閿涙俺骞忛崣鏍х秼閸撳秶娈戠紓鎾崇摠鏉╁€熼嚋閸欏倹鏆�
 export function getSavedTrackingParams() {
   if (typeof window === "undefined") return {};
   try {

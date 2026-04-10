@@ -393,7 +393,7 @@ export async function deleteBlogCategory(formData: FormData) {
 
   const db = getDb();
 
-  // 检查该分类下是否还有文章，有则拒绝删除
+  // 濡偓閺屻儴顕氶崚鍡欒娑撳妲搁崥锕佺箷閺堝鏋冪粩鐙呯礉閺堝鍨幏鎺旂卜閸掔娀娅�
   const linkedPosts = await db
     .select({ id: blogPosts.id })
     .from(blogPosts)
@@ -401,7 +401,7 @@ export async function deleteBlogCategory(formData: FormData) {
     .limit(1);
 
   if (linkedPosts.length > 0) {
-    // 重定向并携带错误原因，让 UI 展示友好提示
+    // 闁插秴鐣鹃崥鎴濊嫙閹煎搫鐢柨娆掝嚖閸樼喎娲滈敍宀冾唨 UI 鐏炴洜銇氶崣瀣偨閹绘劗銇�
     redirect(withQuery(returnTo, "taxonomy", "category-delete-blocked"));
   }
 

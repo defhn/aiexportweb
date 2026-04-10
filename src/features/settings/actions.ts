@@ -25,15 +25,15 @@ export function buildSiteSettingsDraft(
   input: Partial<SiteSettingsDraft>,
 ): SiteSettingsDraft {
   return {
-    companyNameZh: input.companyNameZh ?? "演示工厂",
+    companyNameZh: input.companyNameZh ?? "示例工厂有限公司",
     companyNameEn: input.companyNameEn ?? "Demo Factory Co., Ltd.",
-    taglineZh: input.taglineZh ?? "可持续运营的外贸获客网站系统",
+    taglineZh: input.taglineZh ?? "闁告瑯鍨辩€垫梻绱掗锛勭闁解偓閵壯勭暠濠㈣埖鐗為柨銈夋嚔瀹勯偊鍚傜紓鍐╁灩閻濐垳鍖栭懡銈囧煚",
     taglineEn:
       input.taglineEn ?? "A lead generation website system for export growth.",
     email: input.email ?? "sales@example.com",
     phone: input.phone ?? "+86 000 0000 0000",
     whatsapp: input.whatsapp ?? "+86 13800000000",
-    addressZh: input.addressZh ?? "中国制造业产业带",
+    addressZh: input.addressZh ?? "中国制造产业集群示范园区",
     addressEn: input.addressEn ?? "Manufacturing Cluster, China",
     siteUrl: input.siteUrl ?? "",
     seoTitleTemplate: input.seoTitleTemplate ?? "%s",

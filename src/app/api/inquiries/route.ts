@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 import { createMediaAsset } from "@/features/media/actions";
 import { createInquiry } from "@/features/inquiries/actions";
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   const token = String(formData.get("turnstileToken") ?? "");
 
   if (!(await verifyTurnstileToken(token))) {
-    return NextResponse.json({ error: "验证失败，请重试�? }, { status: 400 });
+    return NextResponse.json({ error: "验证失败，请重试。" }, { status: 400 });
   }
 
   let attachmentMediaId: number | null = null;

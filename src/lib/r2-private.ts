@@ -3,14 +3,14 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "@/env";
 
 /**
- * 生成 R2 私有文件的临时预签名下载 URL（默认 15 分钟有效）
- * 用于安全分发询盘附件，避免公开泄露文件 URL
+ * 閻㈢喐鍨� R2 缁変焦婀侀弬鍥︽閻ㄥ嫪澶嶉弮鍫曨暕缁涙儳鎮曟稉瀣祰 URL閿涘牓绮拋锟� 15 閸掑棝鎸撻張澶嬫櫏閿涳拷
+ * 閻€劋绨€瑰鍙忛崚鍡楀絺鐠囥垻娲忛梽鍕閿涘矂浼╅崗宥呭彆瀵偓濞夊嫰婀堕弬鍥︽ URL
  */
 export async function getPresignedDownloadUrl(
   bucketKey: string,
   expiresInSeconds = 900
 ): Promise<string> {
-  // 开发占位符模式 - 返回假 URL
+  // 瀵偓閸欐垵宕版担宥囶儊濡€崇础 - 鏉╂柨娲栭崑锟� URL
   if (
     env.R2_ACCOUNT_ID === "local-account" ||
     env.R2_ACCESS_KEY_ID === "local-access-key"

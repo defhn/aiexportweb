@@ -13,7 +13,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-// ─── 类型定义 ────────────────────────────────────────────────
+// 閳光偓閳光偓閳光偓 缁鐎风€规矮绠� 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 type RagIssue = {
   severity: "high" | "medium" | "low";
   quote: string;
@@ -44,7 +44,7 @@ type RagResponse = {
   error?: string;
 };
 
-// ─── 辅助组件 ───────────────────────────────────────────────
+// 閳光偓閳光偓閳光偓 鏉堝懎濮紒鍕 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 
 function SeverityBadge({ severity }: { severity: RagIssue["severity"] }) {
   const map = {
@@ -52,7 +52,7 @@ function SeverityBadge({ severity }: { severity: RagIssue["severity"] }) {
     medium: "bg-amber-50 text-amber-700 border border-amber-200",
     low: "bg-blue-50 text-blue-700 border border-blue-200",
   };
-  const label = { high: "严重", medium: "中度", low: "轻微" };
+  const label = { high: "娑撱儵鍣�", medium: "娑擃厼瀹�", low: "鏉炶浜�" };
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold ${map[severity]}`}>
       {severity === "high" && <AlertTriangle className="h-3 w-3" />}
@@ -92,7 +92,7 @@ function ScoreMeter({ score }: { score: number }) {
   );
 }
 
-// ─── 主组件 ─────────────────────────────────────────────────
+// 閳光偓閳光偓閳光偓 娑撹崵绮嶆禒锟� 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 export function RagWorkbench() {
   const [mode, setMode] = useState<"generate" | "factcheck">("generate");
   const [query, setQuery] = useState("");
@@ -117,7 +117,7 @@ export function RagWorkbench() {
       if (data.error) throw new Error(data.error);
       setResult(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "请求失败");
+      setError(err instanceof Error ? err.message : "鐠囬攱鐪版径杈Е");
     } finally {
       setLoading(false);
     }
@@ -128,7 +128,7 @@ export function RagWorkbench() {
 
   return (
     <div className="space-y-6">
-      {/* ── 模式切换 ── */}
+      {/* 閳光偓閳光偓 濡€崇础閸掑洦宕� 閳光偓閳光偓 */}
       <div className="flex gap-2 rounded-2xl bg-stone-100 p-1 w-fit">
         <button
           className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${
@@ -140,7 +140,7 @@ export function RagWorkbench() {
           type="button"
         >
           <Sparkles className="h-4 w-4" />
-          RAG 内容生成
+          RAG 閸愬懎顔愰悽鐔稿灇
         </button>
         <button
           className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${
@@ -152,31 +152,31 @@ export function RagWorkbench() {
           type="button"
         >
           <ShieldCheck className="h-4 w-4" />
-          AI 事实核查
+          AI 娴滃鐤勯弽鍛婄叀
         </button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* ── 输入区 ── */}
+        {/* 閳光偓閳光偓 鏉堟挸鍙嗛崠锟� 閳光偓閳光偓 */}
         <div className="space-y-4">
           <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
             <h3 className="flex items-center gap-2 text-base font-bold text-stone-900">
               <Database className="h-4 w-4 text-blue-500" />
-              {mode === "generate" ? "生成需求描述" : "待核查内容"}
+              {mode === "generate" ? "閻㈢喐鍨氶棁鈧Ч鍌涘伎鏉╋拷" : "瀵板懏鐗抽弻銉ュ敶鐎癸拷"}
             </h3>
 
             <div className="mt-4 space-y-3">
               <div>
                 <label className="text-xs font-black uppercase tracking-widest text-stone-400">
-                  {mode === "generate" ? "内容需求 / 关键词" : "检索关键词（用于匹配知识库）"}
+                  {mode === "generate" ? "閸愬懎顔愰棁鈧Ч锟� / 閸忔娊鏁拠锟�" : "濡偓缁便垹鍙ч柨顔跨槤閿涘牏鏁ゆ禍搴″爱闁板秶鐓＄拠鍡楃氨閿涳拷"}
                 </label>
                 <input
                   className="mt-1 w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm text-stone-900 outline-none focus:border-blue-500 transition-colors"
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={
                     mode === "generate"
-                      ? "例：CNC titanium grade 5 machining capabilities"
-                      : "例：titanium alloy, CNC machining"
+                      ? "娓氬绱癈NC titanium grade 5 machining capabilities"
+                      : "娓氬绱皌itanium alloy, CNC machining"
                   }
                   value={query}
                 />
@@ -185,12 +185,12 @@ export function RagWorkbench() {
               {mode === "factcheck" && (
                 <div>
                   <label className="text-xs font-black uppercase tracking-widest text-stone-400">
-                    待核查的文章内容
+                    瀵板懏鐗抽弻銉ф畱閺傚洨鐝烽崘鍛啇
                   </label>
                   <textarea
                     className="mt-1 min-h-[200px] w-full rounded-xl border border-stone-200 px-4 py-3 text-sm text-stone-900 outline-none focus:border-blue-500 transition-colors resize-y"
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="粘贴需要事实核查的 AI 生成内容..."
+                    placeholder="缁ǹ鍒涢棁鈧憰浣风皑鐎圭偞鐗抽弻銉ф畱 AI 閻㈢喐鍨氶崘鍛啇..."
                     value={content}
                   />
                 </div>
@@ -205,7 +205,7 @@ export function RagWorkbench() {
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    AI 处理中...
+                    AI 婢跺嫮鎮婃稉锟�...
                   </>
                 ) : (
                   <>
@@ -214,34 +214,34 @@ export function RagWorkbench() {
                     ) : (
                       <ShieldCheck className="h-4 w-4" />
                     )}
-                    {mode === "generate" ? "基于知识库生成" : "开始事实核查"}
+                    {mode === "generate" ? "閸╄桨绨惌銉ㄧ槕鎼存挾鏁撻幋锟�" : "瀵偓婵绨ㄧ€圭偞鐗抽弻锟�"}
                   </>
                 )}
               </button>
             </div>
           </section>
 
-          {/* ── RAG 上下文显示 ── */}
+          {/* 閳光偓閳光偓 RAG 娑撳﹣绗呴弬鍥ㄦ▔缁€锟� 閳光偓閳光偓 */}
           {result?.ragContext && (
             <section className="rounded-[2rem] border border-blue-100 bg-blue-50 p-6">
               <h4 className="text-xs font-black uppercase tracking-widest text-blue-700">
-                RAG 检索上下文
+                RAG 濡偓缁鳖澀绗傛稉瀣瀮
               </h4>
               <div className="mt-3 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-blue-600">匹配产品</span>
+                  <span className="text-blue-600">閸栧綊鍘ゆ禍褍鎼�</span>
                   <span className="font-bold text-blue-900">
-                    {result.ragContext.productsUsed.length} 条
+                    {result.ragContext.productsUsed.length} 閺夛拷
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-600">匹配 FAQ</span>
-                  <span className="font-bold text-blue-900">{result.ragContext.faqsUsed} 条</span>
+                  <span className="text-blue-600">閸栧綊鍘� FAQ</span>
+                  <span className="font-bold text-blue-900">{result.ragContext.faqsUsed} 閺夛拷</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-600">总知识块</span>
+                  <span className="text-blue-600">閹崵鐓＄拠鍡楁健</span>
                   <span className="font-bold text-blue-900">
-                    {result.ragContext.totalChunks} 块
+                    {result.ragContext.totalChunks} 閸э拷
                   </span>
                 </div>
                 {result.ragContext.productsUsed.length > 0 && (
@@ -261,7 +261,7 @@ export function RagWorkbench() {
           )}
         </div>
 
-        {/* ── 输出区 ── */}
+        {/* 閳光偓閳光偓 鏉堟挸鍤崠锟� 閳光偓閳光偓 */}
         <div className="space-y-4">
           {error && (
             <section className="rounded-[2rem] border border-red-200 bg-red-50 p-6">
@@ -272,25 +272,25 @@ export function RagWorkbench() {
             </section>
           )}
 
-          {/* 事实核查结果 */}
+          {/* 娴滃鐤勯弽鍛婄叀缂佹挻鐏� */}
           {factCheck && (
             <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm space-y-5">
-              {/* 评分 */}
+              {/* 鐠囧嫬鍨� */}
               <div className="flex items-center gap-4">
                 <ScoreMeter score={factCheck.overallScore} />
                 <div>
                   <p className="text-xs font-black uppercase tracking-widest text-stone-400">
-                    AI 可信度评分
+                    AI 閸欘垯淇婃惔锕佺槑閸掞拷
                   </p>
                   <p className="mt-1 text-sm text-stone-600">{factCheck.summary}</p>
                 </div>
               </div>
 
-              {/* 问题列表 */}
+              {/* 闂傤噣顣介崚妤勩€� */}
               {factCheck.issues?.length > 0 && (
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-widest text-stone-400 mb-3">
-                    发现 {factCheck.issues.length} 个问题
+                    閸欐垹骞� {factCheck.issues.length} 娑擃亪妫舵０锟�
                   </h4>
                   <div className="space-y-3">
                     {factCheck.issues.map((issue, idx) => (
@@ -321,11 +321,11 @@ export function RagWorkbench() {
                 </div>
               )}
 
-              {/* 优点 */}
+              {/* 娴兼ḿ鍋� */}
               {factCheck.positives?.length > 0 && (
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-widest text-stone-400 mb-2">
-                    亮点
+                    娴滎喚鍋�
                   </h4>
                   <ul className="space-y-1.5">
                     {factCheck.positives.map((pos, idx) => (
@@ -340,12 +340,12 @@ export function RagWorkbench() {
             </section>
           )}
 
-          {/* RAG 生成结果 */}
+          {/* RAG 閻㈢喐鍨氱紒鎾寸亯 */}
           {generated && (
             <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-xs font-black uppercase tracking-widest text-stone-400">
-                  基于知识库生成的内容（草稿）
+                  閸╄桨绨惌銉ㄧ槕鎼存挾鏁撻幋鎰畱閸愬懎顔愰敍鍫ｅ磸缁嬪尅绱�
                 </h4>
                 <button
                   className="flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors"
@@ -353,7 +353,7 @@ export function RagWorkbench() {
                   type="button"
                 >
                   <RefreshCw className="h-3 w-3" />
-                  清除
+                  濞撳懘娅�
                 </button>
               </div>
 
@@ -365,7 +365,7 @@ export function RagWorkbench() {
 
               {generated.usedSources?.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-xs text-stone-400 mb-2">引用来源：</p>
+                  <p className="text-xs text-stone-400 mb-2">瀵洜鏁ら弶銉︾爱閿涳拷</p>
                   <div className="flex flex-wrap gap-1.5">
                     {generated.usedSources.map((src) => (
                       <span
@@ -381,7 +381,7 @@ export function RagWorkbench() {
 
               <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3">
                 <p className="text-xs text-amber-700 font-medium">
-                  ⚠️ 草稿模式 — 发布前请切换到「AI 事实核查」模式验证内容准确性。
+                  閳跨媴绗� 閼藉枪濡€崇础 閳ワ拷 閸欐垵绔烽崜宥堫嚞閸掑洦宕查崚鑸偓瀛塈 娴滃鐤勯弽鍛婄叀閵嗗秵膩瀵繘鐛欑拠浣稿敶鐎圭懓鍣涵顔解偓褋鈧拷
                 </p>
               </div>
             </section>
@@ -392,8 +392,8 @@ export function RagWorkbench() {
               <Database className="h-10 w-10 text-stone-300 mb-3" />
               <p className="text-sm font-bold text-stone-400">
                 {mode === "generate"
-                  ? "输入需求，AI 将基于你的产品知识库生成内容"
-                  : "粘贴 AI 生成的内容，系统将与知识库比对并标红问题"}
+                  ? "鏉堟挸鍙嗛棁鈧Ч鍌︾礉AI 鐏忓棗鐔€娴滃簼缍橀惃鍕獓閸濅胶鐓＄拠鍡楃氨閻㈢喐鍨氶崘鍛啇"
+                  : "缁ǹ鍒� AI 閻㈢喐鍨氶惃鍕敶鐎圭櫢绱濈化鑽ょ埠鐏忓棔绗岄惌銉ㄧ槕鎼存挻鐦€电懓鑻熼弽鍥╁闂傤噣顣�"}
               </p>
             </section>
           )}

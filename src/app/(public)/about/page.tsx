@@ -136,7 +136,7 @@ export default async function AboutPage() {
                             <Target className="h-5 w-5 text-stone-900" />
                         </div>
                         <h5 className="font-bold text-stone-900 mb-2">Absolute Precision</h5>
-                        <p className="text-sm text-stone-500">Tolerances held up to ±0.005mm using premium Hexagon CMM validation.</p>
+                        <p className="text-sm text-stone-500">Tolerances held up to 卤0.005mm using premium Hexagon CMM validation.</p>
                     </div>
                     <div>
                         <div className="h-12 w-12 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center mb-4">

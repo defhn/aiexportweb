@@ -41,7 +41,7 @@ export default async function AdminProductDetailPage({ params }: AdminProductDet
         nameEn: category.nameEn,
         slug: category.slug,
       }))}
-      description="保存后会同步更新公开产品页、分类页以及首页推荐模块中的内容。"
+      description="娣囨繂鐡ㄩ崥搴濈窗閸氬本顒為弴瀛樻煀閸忣剙绱戞禍褍鎼фい鐐光偓浣稿瀻缁銆夋禒銉ュ挤妫ｆ牠銆夐幒銊ㄥ礃濡€虫健娑擃厾娈戦崘鍛啇閵嗭拷"
       fileAssets={fileAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -50,7 +50,7 @@ export default async function AdminProductDetailPage({ params }: AdminProductDet
         altTextZh: asset.altTextZh,
         altTextEn: asset.altTextEn,
       }))}
-      heading="编辑产品"
+      heading="缂傛牞绶禍褍鎼�"
       imageAssets={imageAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -64,7 +64,7 @@ export default async function AdminProductDetailPage({ params }: AdminProductDet
       productAiGate={productAiGate}
       returnTo={`/admin/products/${productId}`}
       saveCategoryAction={saveCategory}
-      submitLabel="保存产品"
+      submitLabel="娣囨繂鐡ㄦ禍褍鎼�"
     />
   );
 }

@@ -1,4 +1,4 @@
-type ModuleEditorProps = {
+﻿type ModuleEditorProps = {
   title: string;
   description: string;
   enabled: boolean;
@@ -32,24 +32,24 @@ export function ModuleEditor({
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl bg-stone-50 p-4">
           <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-            状�?          </p>
+            状态          </p>
           <p className="mt-2 text-sm font-medium text-stone-950">
-            {enabled ? "已启�? : "已停�?}
+            {enabled ? "已启用" : "已停用"}
           </p>
         </div>
         <div className="rounded-2xl bg-stone-50 p-4">
           <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-            推荐分类
+            閹恒劏宕橀崚鍡欒
           </p>
           <p className="mt-2 text-sm font-medium text-stone-950">
-            {featuredCategoryIds.length} �?          </p>
+            {featuredCategoryIds.length} 个          </p>
         </div>
         <div className="rounded-2xl bg-stone-50 p-4">
           <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
             推荐产品
           </p>
           <p className="mt-2 text-sm font-medium text-stone-950">
-            {featuredProductIds.length} �?          </p>
+            {featuredProductIds.length} 个          </p>
         </div>
       </div>
     </section>

@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoTitle = readString(payload, "seoTitle");
   const seoDescription = readString(payload, "seoDescription");
   return {
-    title: seoTitle || "Contact Us �?Get a Quote",
+    title: seoTitle || "Contact Us 閿燂拷?Get a Quote",
     description: seoDescription || "Send your RFQ to our engineering team and get a response within 24 hours.",
   };
 }

@@ -38,16 +38,16 @@ export default async function AdminInquiriesPage({
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-stone-950">询盘管理</h2>
+            <h2 className="text-2xl font-semibold text-stone-950">鐠囥垻娲忕粻锛勬倞</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-              统一查看询盘来源、国家、类型、附件和处理状态，并进入详情页用模板或 AI
-              生成英文回复草稿。?            </p>
+              缂佺喍绔撮弻銉ф箙鐠囥垻娲忛弶銉︾爱閵嗕礁娴楃€硅翰鈧胶琚崹瀣ㄢ偓渚€妾禒璺烘嫲婢跺嫮鎮婇悩鑸碘偓渚婄礉楠炴儼绻橀崗銉嚊閹懘銆夐悽銊δ侀弶鎸庡灗 AI
+              閻㈢喐鍨氶懟杈ㄦ瀮閸ョ偛顦查懡澶屒归妴锟�?            </p>
           </div>
           <Link
             className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
             href="/admin/inquiries/export"
           >
-            导出 CSV
+            鐎电厧鍤� CSV
           </Link>
         </div>
       </section>
@@ -57,27 +57,27 @@ export default async function AdminInquiriesPage({
           className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
           defaultValue={params.q}
           name="q"
-          placeholder="搜索姓名、邮箱、公司或产品"
+          placeholder="閹兼粎鍌ㄦ慨鎾虫倳閵嗕線鍋栫粻渚库偓浣稿彆閸欏憡鍨ㄦ禍褍鎼�"
         />
         <select
           className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
           defaultValue={params.status ?? ""}
           name="status"
         >
-          <option value="">全部状态</option>
-          <option value="new">新线索</option>
-          <option value="processing">跟进中</option>
-          <option value="contacted">已联系</option>
-          <option value="quoted">已报价</option>
-          <option value="won">赢单</option>
-          <option value="done">已完成</option>
+          <option value="">閸忋劑鍎撮悩鑸碘偓锟�</option>
+          <option value="new">閺傛壆鍤庣槐锟�</option>
+          <option value="processing">鐠虹喕绻樻稉锟�</option>
+          <option value="contacted">瀹歌尪浠堢化锟�</option>
+          <option value="quoted">瀹稿弶濮ゆ禒锟�</option>
+          <option value="won">鐠с垹宕�</option>
+          <option value="done">瀹告彃鐣幋锟�</option>
         </select>
         <select
           className="rounded-2xl border border-stone-300 px-4 py-3 text-sm"
           defaultValue={params.inquiryType ?? ""}
           name="inquiryType"
         >
-          <option value="">全部类型</option>
+          <option value="">閸忋劑鍎寸猾璇茬€�</option>
           {inquiryTypes.map((item) => (
             <option key={item} value={item}>
               {item}
@@ -89,7 +89,7 @@ export default async function AdminInquiriesPage({
           defaultValue={params.countryGroup ?? ""}
           name="countryGroup"
         >
-          <option value="">全部地区</option>
+          <option value="">閸忋劑鍎撮崷鏉垮隘</option>
           {countryGroups.map((item) => (
             <option key={item} value={item}>
               {item}
@@ -100,7 +100,7 @@ export default async function AdminInquiriesPage({
           className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
           type="submit"
         >
-          筛选?        </button>
+          缁涙盯鈧拷?        </button>
       </form>
 
       <div className="space-y-4">
@@ -121,10 +121,10 @@ export default async function AdminInquiriesPage({
                   <h3 className="text-xl font-semibold text-stone-950">{record.name}</h3>
                   <p className="text-sm text-stone-600">{record.email}</p>
                   <p className="text-sm text-stone-600">
-                    {record.companyName || "未填写公司"}
+                    {record.companyName || "閺堫亜锝為崘娆忓彆閸欙拷"}
                   </p>
                   <p className="text-sm text-stone-600">
-                    {record.productName || "未关联产品"}
+                    {record.productName || "閺堫亜鍙ч懕鏂鹃獓閸濓拷"}
                   </p>
                 </div>
 
@@ -146,13 +146,13 @@ export default async function AdminInquiriesPage({
                       className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
                       type="submit"
                     >
-                      更新状态?                    </button>
+                      閺囧瓨鏌婇悩鑸碘偓锟�?                    </button>
                   </form>
                   <Link
                     className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
                     href={`/admin/inquiries/${record.id}`}
                   >
-                    查看详情
+                    閺屻儳婀呯拠锔藉剰
                   </Link>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default async function AdminInquiriesPage({
                     rel="noreferrer"
                     target="_blank"
                   >
-                    {record.attachmentName || "下载附件"}
+                    {record.attachmentName || "娑撳娴囬梽鍕"}
                   </a>
                 ) : null}
               </div>
@@ -175,7 +175,7 @@ export default async function AdminInquiriesPage({
           ))
         ) : (
           <div className="rounded-[1.5rem] border border-dashed border-stone-300 bg-white p-8 text-sm text-stone-500">
-            当前还没有询盘记录。?          </div>
+            瑜版挸澧犳潻妯荤梾閺堝顕楅惄妯款唶瑜版洏鈧拷?          </div>
         )}
       </div>
     </div>

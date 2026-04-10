@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { getAdminUserByUsername, verifyPassword } from "@/features/admin-users/service";
 import {
   buildSessionPayload,
   getSafeAdminRedirectPath,
@@ -9,7 +10,6 @@ import {
   sessionCookieOptions,
   signSessionToken,
 } from "@/lib/auth";
-import { getAdminUserByUsername, verifyPassword } from "@/features/admin-users/service";
 
 type LoginRequestBody = {
   username?: string;
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     password: String(body.password ?? ""),
   });
 
-  // 第一优先级：检�?ENV 里的超级管理�?/ 客户管理�?  const envAuthResult = isValidAdminCredentials(input);
+  const envAuthResult = isValidAdminCredentials(input);
   if (envAuthResult.isValid) {
     const token = await signSessionToken(buildSessionPayload(0, envAuthResult.role));
     const response = NextResponse.json({
@@ -42,7 +42,6 @@ export async function POST(request: Request) {
     return response;
   }
 
-  // 第二优先级：检查数据库里的员工账号
   const dbUser = await getAdminUserByUsername(input.username);
   if (dbUser) {
     const passwordOk = await verifyPassword(input.password, dbUser.passwordHash);
@@ -57,5 +56,8 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ error: "账号或密码错误�? }, { status: 401 });
+  return NextResponse.json(
+    { error: "Invalid username or password." },
+    { status: 401 },
+  );
 }

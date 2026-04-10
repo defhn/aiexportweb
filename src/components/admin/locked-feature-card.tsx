@@ -12,7 +12,7 @@ export function LockedFeatureCard({
 }) {
   const upgradePlanName = gate.upgradePlan
     ? getPlanSummary(gate.upgradePlan).nameZh
-    : "更高版本";
+    : "Higher Plan";
 
   return (
     <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 shadow-sm">
@@ -26,14 +26,17 @@ export function LockedFeatureCard({
 
       <div className="mt-5 rounded-2xl bg-white/80 p-4 text-sm text-stone-700">
         <p>
-          当前套餐�?span className="font-semibold text-stone-950">{gate.currentPlanNameZh}</span>
+          Current plan:{" "}
+          <span className="font-semibold text-stone-950">{gate.currentPlanNameZh}</span>
         </p>
         <p className="mt-2">
-          推荐升级到：<span className="font-semibold text-stone-950">{upgradePlanName}</span>
+          Recommended upgrade:{" "}
+          <span className="font-semibold text-stone-950">{upgradePlanName}</span>
         </p>
         {gate.limit !== null ? (
           <p className="mt-2">
-            已用试用次数�?            <span className="font-semibold text-stone-950">
+            Current usage:{" "}
+            <span className="font-semibold text-stone-950">
               {gate.usageCount}/{gate.limit}
             </span>
           </p>
@@ -56,14 +59,14 @@ export function LockedFeatureCard({
           className="rounded-full bg-stone-950 px-5 py-2 text-sm font-medium text-white"
           href={gate.salesContactHref}
         >
-          联系我开�?{upgradePlanName}
+          Contact Sales About {upgradePlanName}
         </Link>
         {gate.pricingHref ? (
           <Link
             className="rounded-full border border-stone-300 px-5 py-2 text-sm font-medium text-stone-700"
             href={gate.pricingHref}
           >
-            查看套餐对比
+            View Pricing
           </Link>
         ) : null}
       </div>

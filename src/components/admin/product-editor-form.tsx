@@ -152,20 +152,15 @@ export function ProductEditorForm({
   ];
 
   const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>(
-    product.faqsJson ?? []
+    product.faqsJson ?? [],
   );
 
-  const addFaq = () =>
-    setFaqs((prev) => [...prev, { question: "", answer: "" }]);
+  const addFaq = () => setFaqs((prev) => [...prev, { question: "", answer: "" }]);
 
   const removeFaq = (index: number) =>
     setFaqs((prev) => prev.filter((_, i) => i !== index));
 
-  const updateFaq = (
-    index: number,
-    field: "question" | "answer",
-    value: string,
-  ) =>
+  const updateFaq = (index: number, field: "question" | "answer", value: string) =>
     setFaqs((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
     );
@@ -183,11 +178,12 @@ export function ProductEditorForm({
 
       <details className="mb-8 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
         <summary className="cursor-pointer list-none text-sm font-semibold text-stone-950">
-          当前页就地新建分�?        </summary>
+          Create category inline
+        </summary>
         <form action={saveCategoryAction} className="mt-4 grid gap-4 md:grid-cols-3">
           <input name="returnTo" type="hidden" value={returnTo} />
           <label className="block text-sm font-medium text-stone-700">
-            分类名称（中文）
+            Category Name (ZH)
             <input className={inputClassName} name="inlineNameZh" required />
           </label>
           <label className="block text-sm font-medium text-stone-700">
@@ -202,7 +198,7 @@ export function ProductEditorForm({
             <input
               className="rounded-full border border-stone-300 px-5 py-3 text-sm font-medium text-stone-700"
               type="submit"
-              value="保存分类并留在当前页"
+              value="Save category and stay on this page"
             />
           </div>
         </form>
@@ -219,25 +215,23 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
               <Images className="h-5 w-5 text-stone-400" />
-              <h3 className="text-xl font-bold text-stone-900">产品图片与资�?/h3>
+              <h3 className="text-xl font-bold text-stone-900">Product Images and Files</h3>
             </div>
 
             <div className="space-y-6">
-              {/* 产品主图 */}
               <div>
-                <p className="mb-3 text-sm font-semibold text-stone-700">产品主图</p>
+                <p className="mb-3 text-sm font-semibold text-stone-700">Cover Image</p>
                 <ImagePicker
                   assets={imageAssets}
                   folders={imageFolders}
-                  label="产品主图"
+                  label="Product Cover Image"
                   name="coverMediaId"
                   selectedAssetId={product.coverMediaId}
                 />
               </div>
 
-              {/* 产品图库 */}
               <div>
-                <p className="mb-3 text-sm font-semibold text-stone-700">产品图库</p>
+                <p className="mb-3 text-sm font-semibold text-stone-700">Gallery</p>
                 <GalleryPicker
                   assets={imageAssets}
                   folders={imageFolders}
@@ -246,16 +240,15 @@ export function ProductEditorForm({
                 />
               </div>
 
-              {/* PDF 资料 */}
               <div>
                 <label className="block text-sm font-semibold text-stone-700">
-                  关联 PDF 文件
+                  Linked PDF File
                   <select
                     className={inputClassName}
                     defaultValue={product.pdfFileId ?? ""}
                     name="pdfFileId"
                   >
-                    <option value="">不绑�?PDF 下载</option>
+                    <option value="">No PDF download linked</option>
                     {fileAssets.map((asset) => (
                       <option key={asset.id} value={asset.id}>
                         {asset.fileName}
@@ -270,19 +263,19 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-8 flex items-center gap-3">
               <FileText className="h-5 w-5 text-stone-400" />
-              <h3 className="text-xl font-bold text-stone-900">基础内容</h3>
+              <h3 className="text-xl font-bold text-stone-900">Core Content</h3>
             </div>
 
             <div className="grid gap-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="block text-sm font-medium text-stone-700">
-                  产品分类
+                  Product Category
                   <select
                     className={inputClassName}
                     defaultValue={product.categoryId ?? ""}
                     name="categoryId"
                   >
-                    <option value="">请选择产品分类</option>
+                    <option value="">Choose a category</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.nameZh} / {category.nameEn}
@@ -291,7 +284,8 @@ export function ProductEditorForm({
                   </select>
                 </label>
                 <label className="block text-sm font-medium text-stone-700">
-                  排序�?                  <input
+                  Sort Order
+                  <input
                     className={inputClassName}
                     defaultValue={product.sortOrder}
                     name="sortOrder"
@@ -302,11 +296,11 @@ export function ProductEditorForm({
 
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="block text-sm font-medium text-stone-700">
-                  中文名称
+                  Product Name (ZH)
                   <input className={inputClassName} defaultValue={product.nameZh} name="nameZh" required />
                 </label>
                 <label className="block text-sm font-medium text-stone-700">
-                  English Name
+                  Product Name (EN)
                   <input className={inputClassName} defaultValue={product.nameEn} name="nameEn" required />
                 </label>
               </div>
@@ -323,14 +317,15 @@ export function ProductEditorForm({
 
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="block text-sm font-medium text-stone-700">
-                  中文短描�?                  <textarea
+                  Short Description (ZH)
+                  <textarea
                     className={textareaClassName}
                     defaultValue={product.shortDescriptionZh}
                     name="shortDescriptionZh"
                   />
                 </label>
                 <label className="block text-sm font-medium text-stone-700">
-                  Short Summary (EN)
+                  Short Description (EN)
                   <textarea
                     className={textareaClassName}
                     defaultValue={product.shortDescriptionEn}
@@ -341,7 +336,7 @@ export function ProductEditorForm({
 
               <div className="grid gap-6 md:grid-cols-2">
                 <label className="block text-sm font-medium text-stone-700">
-                  中文详情
+                  Details (ZH)
                   <textarea
                     className={`${textareaClassName} min-h-56`}
                     defaultValue={product.detailsZh}
@@ -349,7 +344,7 @@ export function ProductEditorForm({
                   />
                 </label>
                 <label className="block text-sm font-medium text-stone-700">
-                  Full Details (EN)
+                  Details (EN)
                   <textarea
                     className={`${textareaClassName} min-h-56`}
                     defaultValue={product.detailsEn}
@@ -362,7 +357,7 @@ export function ProductEditorForm({
             <div className="mt-10 rounded-[2rem] border border-blue-100 bg-blue-50 p-6">
               <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-blue-700">
                 <Sparkles className="h-4 w-4" />
-                AI 辅助文案
+                AI Copy Assistance
               </div>
               <ProductAiTools
                 categories={categories}
@@ -375,36 +370,33 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
               <BarChart3 className="h-5 w-5 text-stone-400" />
-              <h3 className="text-xl font-bold text-stone-900">技术参�?/h3>
+              <h3 className="text-xl font-bold text-stone-900">Specifications</h3>
             </div>
 
-            {/* 默认参数�?*/}
             <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
               {product.defaultFields.map((field) => (
                 <div
                   key={field.fieldKey}
                   className="grid items-center gap-2 px-3 py-2 md:grid-cols-[120px_1fr_1fr_80px]"
                 >
-                  {/* 属性名 */}
                   <span className="text-xs font-semibold text-stone-500">
                     {field.labelZh}
-                    <span className="block text-[10px] font-normal text-stone-400">{field.labelEn}</span>
+                    <span className="block text-[10px] font-normal text-stone-400">
+                      {field.labelEn}
+                    </span>
                   </span>
-                  {/* 中文�?*/}
                   <input
                     className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                     defaultValue={field.valueZh}
                     name={`field-${field.fieldKey}__valueZh`}
-                    placeholder="中文�?
+                    placeholder="Chinese value"
                   />
-                  {/* 英文�?*/}
                   <input
                     className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                     defaultValue={field.valueEn}
                     name={`field-${field.fieldKey}__valueEn`}
                     placeholder="English value"
                   />
-                  {/* 前台显示 */}
                   <label className="flex items-center justify-end gap-1.5 text-xs text-stone-500">
                     <input
                       defaultChecked={field.isVisible}
@@ -412,50 +404,44 @@ export function ProductEditorForm({
                       type="checkbox"
                       className="h-3.5 w-3.5"
                     />
-                    前台
+                    Visible
                   </label>
                 </div>
               ))}
             </div>
 
-            {/* 自定义参�?*/}
             <div className="mt-6">
-              <h4 className="mb-3 text-sm font-semibold text-stone-900">自定义参�?/h4>
+              <h4 className="mb-3 text-sm font-semibold text-stone-900">Custom Fields</h4>
               <div className="divide-y divide-stone-100 rounded-2xl border border-stone-200">
                 {customFields.map((field, index) => (
                   <div
                     key={`custom-${index + 1}`}
                     className="grid items-center gap-2 px-3 py-2 md:grid-cols-[1fr_1fr_1fr_1fr_60px]"
                   >
-                    {/* 字段名中�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.labelZh}
                       name={`custom-${index}__labelZh`}
-                      placeholder="字段名（中）"
+                      placeholder="Field label (ZH)"
                     />
-                    {/* 字段名英�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.labelEn}
                       name={`custom-${index}__labelEn`}
-                      placeholder="Label (EN)"
+                      placeholder="Field label (EN)"
                     />
-                    {/* 值中�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.valueZh}
                       name={`custom-${index}__valueZh`}
-                      placeholder="值（中）"
+                      placeholder="Chinese value"
                     />
-                    {/* 值英�?*/}
                     <input
                       className="w-full rounded-lg border border-stone-200 px-3 py-1.5 text-sm text-stone-900 outline-none focus:border-stone-500"
                       defaultValue={field.valueEn}
                       name={`custom-${index}__valueEn`}
-                      placeholder="Value (EN)"
+                      placeholder="English value"
                     />
-                    {/* 前台显示 */}
                     <label className="flex items-center justify-end gap-1.5 text-xs text-stone-500">
                       <input
                         defaultChecked={field.isVisible}
@@ -463,7 +449,7 @@ export function ProductEditorForm({
                         type="checkbox"
                         className="h-3.5 w-3.5"
                       />
-                      前台
+                      Visible
                     </label>
                   </div>
                 ))}
@@ -471,12 +457,11 @@ export function ProductEditorForm({
             </div>
           </section>
 
-          {/* FAQ 管理 */}
           <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <HelpCircle className="h-5 w-5 text-amber-500" />
-                <h3 className="text-xl font-bold text-stone-900">产品 FAQ</h3>
+                <h3 className="text-xl font-bold text-stone-900">Product FAQ</h3>
               </div>
               <button
                 type="button"
@@ -484,22 +469,22 @@ export function ProductEditorForm({
                 className="flex items-center gap-1.5 rounded-full bg-stone-900 px-4 py-2 text-xs font-bold text-white hover:bg-stone-800"
               >
                 <Plus className="h-3.5 w-3.5" />
-                添加问题
+                Add Question
               </button>
             </div>
 
-            {/* hidden input 存储 JSON */}
             <input type="hidden" name="faqsJson" value={JSON.stringify(faqs)} />
 
             {faqs.length === 0 ? (
               <p className="rounded-2xl border-2 border-dashed border-stone-200 py-8 text-center text-sm text-stone-400">
-                暂无 FAQ，点击「添加问题」开始添�?              </p>
+                No FAQ items yet. Click "Add Question" to start.
+              </p>
             ) : (
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
                   <div
                     key={index}
-                    className="group rounded-2xl border border-stone-200 bg-stone-50 p-4 space-y-3"
+                    className="group space-y-3 rounded-2xl border border-stone-200 bg-stone-50 p-4"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-widest text-stone-400">
@@ -511,18 +496,18 @@ export function ProductEditorForm({
                         className="flex items-center gap-1 rounded-full px-3 py-1 text-xs text-red-500 hover:bg-red-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                        删除
+                        Remove
                       </button>
                     </div>
                     <input
                       className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-medium text-stone-900 outline-none focus:border-stone-500"
-                      placeholder="Question (English)"
+                      placeholder="Question (EN)"
                       value={faq.question}
                       onChange={(e) => updateFaq(index, "question", e.target.value)}
                     />
                     <textarea
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-700 outline-none focus:border-stone-500 resize-none min-h-[80px]"
-                      placeholder="Answer (English)"
+                      className="min-h-[80px] w-full resize-none rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-stone-700 outline-none focus:border-stone-500"
+                      placeholder="Answer (EN)"
                       value={faq.answer}
                       onChange={(e) => updateFaq(index, "answer", e.target.value)}
                     />
@@ -537,44 +522,45 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-sm">
             <div className="mb-8 flex items-center gap-3">
               <Settings2 className="h-5 w-5 text-blue-400" />
-              <h3 className="text-lg font-bold">发布设置</h3>
+              <h3 className="text-lg font-bold">Publishing Settings</h3>
             </div>
 
             <div className="space-y-6">
               <label className="block">
-                <span className="text-xs font-bold text-white/60">当前状�?/span>
+                <span className="text-xs font-bold text-white/60">Current Status</span>
                 <select
                   className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-bold text-white outline-none transition-colors focus:bg-white/10"
                   defaultValue={product.status}
                   name="status"
                 >
                   <option value="draft" className="bg-slate-950">
-                    Draft / 草稿
+                    Draft
                   </option>
                   <option value="published" className="bg-slate-950">
-                    Published / 已发�?                  </option>
+                    Published
+                  </option>
                 </select>
               </label>
 
               <div className="space-y-4 rounded-3xl border border-white/5 bg-white/5 p-6">
                 <SidebarSwitch
                   checked={product.isFeatured}
-                  label="设为推荐产品"
+                  label="Mark as featured product"
                   name="isFeatured"
                 />
                 <SidebarSwitch
                   checked={product.showInquiryButton}
-                  label="显示询盘按钮"
+                  label="Show inquiry button"
                   name="showInquiryButton"
                 />
                 <SidebarSwitch
                   checked={product.showWhatsappButton}
-                  label="显示 WhatsApp 按钮"
+                  label="Show WhatsApp button"
                   name="showWhatsappButton"
                 />
                 <SidebarSwitch
                   checked={product.showPdfDownload}
-                  label="允许下载资料"
+                  label="Enable PDF download"
                   name="showPdfDownload"
                 />
               </div>
@@ -592,7 +578,7 @@ export function ProductEditorForm({
           <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
               <Globe2 className="h-5 w-5 text-emerald-500" />
-              <h3 className="text-lg font-bold text-stone-900">SEO 设置</h3>
+              <h3 className="text-lg font-bold text-stone-900">SEO Settings</h3>
             </div>
             <div className="space-y-4">
               <label className="block text-sm font-medium text-stone-700">

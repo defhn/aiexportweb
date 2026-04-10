@@ -2,6 +2,7 @@ import {
   boolean,
   integer,
   jsonb,
+  numeric,
   pgEnum,
   pgTable,
   text,
@@ -57,10 +58,10 @@ export const siteSettings = pgTable("site_settings", {
   themeBorderRadius: varchar("theme_border_radius", { length: 20 }).default('0.5rem').notNull(),
   themeFontFamily: varchar("theme_font_family", { length: 100 }).default('Inter, sans-serif').notNull(),
   formFieldsJson: jsonb("form_fields_json").$type<Array<{ name: string; label: string; type: 'text'|'textarea'|'file'; required: boolean; placeholder?: string }>>().default([]).notNull(),
-  // SEO 全局配置
-  siteUrl: text("site_url"),                          // 例如 https://acme.com（无尾斜杠），用�?metadataBase + canonical
-  seoTitleTemplate: text("seo_title_template"),        // 例如 "%s | Acme CNC Machining"
-  seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 社交分享�?  webhookUrl: text("webhook_url"),
+  // SEO 閸忋劌鐪柊宥囩枂
+  siteUrl: text("site_url"),                          // 娓氬顩� https://acme.com閿涘牊妫ょ亸鐐灘閺夌媴绱氶敍宀€鏁ら敓锟�?metadataBase + canonical
+  seoTitleTemplate: text("seo_title_template"),        // 娓氬顩� "%s | Acme CNC Machining"
+  seoOgImageMediaId: integer("seo_og_image_media_id"), // 姒涙ǹ顓� OG 缁€鍙ユ唉閸掑棔闊╅敓锟�?  webhookUrl: text("webhook_url"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

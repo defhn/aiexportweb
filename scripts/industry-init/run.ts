@@ -13,11 +13,9 @@
  * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
-// Load .env.local before anything else
-import { config as loadDotenv } from "dotenv";
-import { resolve } from "path";
-loadDotenv({ path: resolve(process.cwd(), ".env.local") });
-loadDotenv({ path: resolve(process.cwd(), ".env") });
+// Load Next-style env files before anything else
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
 
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";

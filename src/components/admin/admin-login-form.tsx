@@ -35,7 +35,7 @@ export function AdminLoginForm({ nextPath }: { nextPath?: string }) {
       };
 
       if (!response.ok) {
-        setError(result.error ?? "账号或密码错误�?);
+        setError(result.error ?? "Invalid username or password.");
         return;
       }
 
@@ -54,27 +54,28 @@ export function AdminLoginForm({ nextPath }: { nextPath?: string }) {
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">
         Admin
       </p>
-      <h1 className="mt-4 text-3xl font-semibold text-stone-950">后台登录</h1>
+      <h1 className="mt-4 text-3xl font-semibold text-stone-950">Sign in to Admin</h1>
       <p className="mt-3 text-sm leading-6 text-stone-600">
-        输入管理员账号密码，进入统一中文后台，维护英文公开站点内容�?      </p>
+        Use an admin account to access the internal dashboard and protected site controls.
+      </p>
 
       <div className="mt-6 space-y-4">
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-stone-700">用户�?/span>
+          <span className="text-sm font-medium text-stone-700">Username</span>
           <input
             className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950"
             name="username"
-            placeholder="请输入用户名"
+            placeholder="Enter your username"
             required
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-stone-700">密码</span>
+          <span className="text-sm font-medium text-stone-700">Password</span>
           <input
             className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950"
             name="password"
-            placeholder="请输入密�?
+            placeholder="Enter your password"
             required
             type="password"
           />
@@ -82,9 +83,7 @@ export function AdminLoginForm({ nextPath }: { nextPath?: string }) {
       </div>
 
       {error ? (
-        <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600">
-          {error}
-        </p>
+        <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>
       ) : null}
 
       <button
@@ -92,7 +91,7 @@ export function AdminLoginForm({ nextPath }: { nextPath?: string }) {
         disabled={pending}
         type="submit"
       >
-        {pending ? "登录�?.." : "登录"}
+        {pending ? "Signing in..." : "Sign in"}
       </button>
     </form>
   );

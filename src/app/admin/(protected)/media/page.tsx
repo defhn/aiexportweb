@@ -69,20 +69,20 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">鍥惧簱绠＄悊</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">图片素材管理</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
-          鏀寔鏃犻檺绾ф枃浠跺す銆佸綋鍓嶇洰褰曚笂浼犮€佹寜鏂囦欢澶圭瓫閫夛紝浠ュ強鏇撮珮瀵嗗害鐨勫浘鐗囩礌鏉愬崱鐗囥€?          浜у搧涓诲浘銆佸崥瀹㈡彃鍥俱€佸垎绫诲皝闈㈤兘鍙互澶嶇敤杩欓噷鐨勭礌鏉愩€?        </p>
+          支持文件夹管理、当前目录上传和按目录筛选，产品主图、博客插图和分类封面都可以复用这里的素材。        </p>
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           {params.saved ? (
-            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">鍥剧墖淇℃伅宸蹭繚瀛?/p>
+            <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">图片信息已保存。</p>
           ) : null}
           {params.deleted ? (
             <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">
-              宸插垹闄?{params.deleted} 寮犲浘鐗?            </p>
+              已删除 {params.deleted} 张图片。            </p>
           ) : null}
           {params.skipped ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              鏈?{params.skipped} 寮犲浘鐗囧垹闄ゆ椂鍙戠敓閿欒锛岃绋嶅悗閲嶈瘯銆?            </p>
+              有 {params.skipped} 张图片删除失败，请稍后重试。            </p>
           ) : null}
           {params.folderSaved ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">鏂囦欢澶瑰凡淇濆瓨</p>
@@ -93,7 +93,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
 
           {params.error === "delete-failed" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              鍒犻櫎鍥剧墖鏃剁綉缁滆繛鎺ュけ璐ワ紝璇烽噸璇曚竴娆°€?            </p>
+              删除图片时网络连接失败，请重试一次。            </p>
           ) : null}
           {params.error === "no-selection" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
@@ -102,7 +102,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
           ) : null}
           {params.folderError === "not-empty" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              褰撳墠鏂囦欢澶逛笅杩樻湁瀛愭枃浠跺す鎴栧浘鐗囷紝鏆傛椂涓嶈兘鍒犻櫎銆?            </p>
+              当前文件夹下仍有子文件夹或图片，暂时不能删除。            </p>
           ) : null}
         </div>
       </section>
@@ -119,12 +119,12 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                 <input name="assetType" type="hidden" value="image" />
                 <input name="parentId" type="hidden" value={selectedFolderId ?? ""} />
                 <input name="returnTo" type="hidden" value={returnTo} />
-                <input className={inputClassName} name="name" placeholder="鏂板缓鏂囦欢澶瑰悕绉? required />
+                <input className={inputClassName} name="name" placeholder="新建文件夹名称" required />
                 <button
                   className="w-full rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
                   type="submit"
                 >
-                  鍦ㄥ綋鍓嶇洰褰曟柊寤?                </button>
+                  在当前目录新建                </button>
               </form>
               {selectedFolderId ? (
                 <form action={deleteAssetFolder}>
@@ -135,7 +135,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                     className="w-full rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600"
                     type="submit"
                   >
-                    鍒犻櫎褰撳墠鏂囦欢澶?                  </button>
+                    删除当前文件夹                  </button>
                 </form>
               ) : null}
             </div>
@@ -148,13 +148,13 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
               <p className="text-sm font-medium text-stone-900">鍥剧墖绱犳潗</p>
               <p className="text-xs text-stone-400 mt-0.5">
                 {selectedFolderId
-                  ? `褰撳墠鐩綍鍏?${images.length} 寮燻
-                  : `鍏ㄩ儴 ${images.length} 寮燻}
+                  ? `当前目录共 ${images.length} 张图片`
+                  : `全部 ${images.length} 张图片`}
               </p>
             </div>
             <AssetUploadPanel
               accept="image/*"
-              buttonLabel="涓婁紶鍥剧墖"
+              buttonLabel="上传图片"
               endpoint="/api/uploads/image"
               folderId={selectedFolderId}
               folderOptions={folderOptions}
@@ -169,7 +169,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                   className="h-12 w-full rounded-xl border border-stone-300 pl-12 pr-4 text-sm"
                   defaultValue={params.q}
                   name="q"
-                  placeholder="鎼滅储鏂囦欢鍚嶆垨涓嫳鏂囧悕绉?
+                  placeholder="搜索文件名或中英文名称"
                 />
                 {selectedFolderId ? <input name="folder" type="hidden" value={selectedFolderId} /> : null}
               </label>
@@ -177,7 +177,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                 className="rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white"
                 type="submit"
               >
-                绛涢€夊浘鐗?              </button>
+                筛选图片              </button>
             </div>
           </form>
 
@@ -187,10 +187,10 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                 <h3 className="text-lg font-semibold text-stone-950">鍥剧墖绱犳潗</h3>
                 <p className="mt-1 text-sm text-stone-500">
                   {selectedFolderId
-                    ? `褰撳墠鏂囦欢澶瑰強瀛愮洰褰曞叡 ${images.length} 寮犲浘鐗嘸
+                    ? `当前文件夹及子目录共 ${images.length} 张图片`
                     : params.q
-                    ? `鎼滅储缁撴灉鍏?${images.length} 寮犲浘鐗嘸
-                    : `鏍圭洰褰曞叡 ${images.length} 寮犲浘鐗囷紙鐐瑰嚮宸︿晶鏂囦欢澶规煡鐪嬪瓙鐩綍锛塦}
+                    ? `搜索结果共 ${images.length} 张图片`
+                    : `根目录共 ${images.length} 张图片（点击左侧文件夹查看子目录）`}
                 </p>
               </div>
             </div>
@@ -244,7 +244,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
                 className="rounded-full border border-orange-200 px-4 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50"
                 type="submit"
               >
-                馃Ч 娓呯悊 404 鍥剧墖
+                清理 404 图片
               </button>
             </form>
 
@@ -262,7 +262,7 @@ export default async function AdminMediaPage({ searchParams }: AdminMediaPagePro
               </div>
             ) : (
               <div className="rounded-2xl border border-dashed border-stone-300 px-4 py-8 text-sm text-stone-500">
-                褰撳墠鐩綍涓嬭繕娌℃湁鍥剧墖绱犳潗銆?              </div>
+                  当前目录下还没有图片素材。              </div>
             )}
           </section>
         </div>

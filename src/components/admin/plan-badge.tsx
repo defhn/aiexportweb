@@ -1,4 +1,4 @@
-import { getPlanSummary, type SitePlan } from "@/lib/plans";
+﻿import { getPlanSummary, type SitePlan } from "@/lib/plans";
 
 export function PlanBadge({ plan }: { plan: SitePlan }) {
   const summary = getPlanSummary(plan);

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 
 import { savePageModules } from "@/features/pages/actions";
 import { getPageModules } from "@/features/pages/queries";
@@ -46,7 +46,7 @@ function ModuleCard({
         </div>
         <label className="flex items-center gap-2 text-sm font-medium text-stone-700">
           <input defaultChecked={enabled} name={`${moduleKey}__enabled`} type="checkbox" />
-          启用
+          閸氼垳鏁?
         </label>
       </div>
       <div className="mt-5">{children}</div>
@@ -124,36 +124,36 @@ export default async function AdminHomeModulesPage() {
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">首页管理</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">妫ｆ牠銆夌粻锛勬倞</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          在这里统一维护首页模块的开关、排序、文案和推荐内容。前台会按照这里的顺序直接渲染�?        </p>
+          閸︺劏绻栭柌宀€绮烘稉鈧紒瀛樺Б妫ｆ牠銆夊Ο鈥虫健閻ㄥ嫬绱戦崗鐐解偓浣瑰笓鎼村繈鈧焦鏋冨鍫濇嫲閹恒劏宕橀崘鍛啇閵嗗倸澧犻崣棰佺窗閹稿鍙庢潻娆撳櫡閻ㄥ嫰銆庢惔蹇曟纯閹恒儲瑕嗛弻鎾扁偓?        </p>
       </section>
 
       <form action={action} className="space-y-6">
 
-        {/* ——�?首页 SEO ——�?*/}
+        {/* 閳ユ柡鈧柡鈧?妫ｆ牠銆?SEO 閳ユ柡鈧柡鈧?*/}
         <section className="rounded-[1.5rem] border border-blue-100 bg-blue-50/40 p-6 shadow-sm">
           <div className="mb-1 flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-stone-950">首页 SEO</h3>
-            <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Google 搜索结果</span>
+            <h3 className="text-lg font-semibold text-stone-950">妫ｆ牠銆?SEO</h3>
+            <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Google 閹兼粎鍌ㄧ紒鎾寸亯</span>
           </div>
           <p className="mb-5 text-sm leading-6 text-stone-500">
-            这里填写的内容会直接出现�?Google 搜索结果里。留空则使用站点全局默认值�?          </p>
+            鏉╂瑩鍣锋繅顐㈠晸閻ㄥ嫬鍞寸€归€涚窗閻╁瓨甯撮崙铏瑰箛閸?Google 閹兼粎鍌ㄧ紒鎾寸亯闁插被鈧倻鏆€缁屽搫鍨担璺ㄦ暏缁旀瑧鍋ｉ崗銊ョ湰姒涙顓婚崐绗衡偓?          </p>
           <div className="grid gap-4">
             <label className="block text-sm font-medium text-stone-700">
-              首页 SEO 标题�?5�?0 字符�?              <input
+              妫ｆ牠銆?SEO 閺嶅洭顣介敍?5閳?0 鐎涙顑侀敍?              <input
                 className={inputClassName}
                 defaultValue={readString(heroModule?.payloadJson ?? {}, "seoTitle")}
                 name="hero__seoTitle"
-                placeholder="例：CNC Precision Machining | Acme Manufacturing"
+                placeholder="娓氬绱癈NC Precision Machining | Acme Manufacturing"
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              首页 SEO 描述�?50�?60 字符�?              <textarea
+              妫ｆ牠銆?SEO 閹诲繗鍫敍?50閳?60 鐎涙顑侀敍?              <textarea
                 className={textareaClassName}
                 defaultValue={readString(heroModule?.payloadJson ?? {}, "seoDescription")}
                 name="hero__seoDescription"
-                placeholder="例：Custom CNC machined parts with tolerances to ±0.005mm. ISO 9001. DDP shipping to 40+ countries."
+                placeholder="娓氬绱癈ustom CNC machined parts with tolerances to 鍗?.005mm. ISO 9001. DDP shipping to 40+ countries."
               />
             </label>
           </div>
@@ -161,13 +161,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="Hero 首屏"
-          description="控制首页第一屏标题、说明和两个按钮�?
+          description="控制首页第一屏标题、说明和两个按钮。"
           moduleKey="hero"
           enabled={heroModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={heroModule?.sortOrder ?? 10}
@@ -176,7 +176,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(heroModule?.payloadJson ?? {}, "eyebrow")}
@@ -184,7 +184,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(heroModule?.payloadJson ?? {}, "title")}
@@ -192,7 +192,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              描述
+              閹诲繗鍫?
               <textarea
                 className={textareaClassName}
                 defaultValue={readString(heroModule?.payloadJson ?? {}, "description")}
@@ -200,7 +200,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              主按钮文�?              <input
+              娑撶粯瀵滈柦顔芥瀮濡?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -210,7 +210,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              主按钮链�?              <input
+              娑撶粯瀵滈柦顕€鎽奸幒?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -220,7 +220,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              次按钮文�?              <input
+              濞嗏剝瀵滈柦顔芥瀮濡?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -230,7 +230,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              次按钮链�?              <input
+              濞嗏剝瀵滈柦顕€鎽奸幒?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   heroModule?.payloadJson ?? {},
@@ -244,13 +244,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="核心优势"
-          description="每行一条，前台会自动排成列表�?
+          description="每行一条，前台会自动排成列表。"
           moduleKey="strengths"
           enabled={strengthsModule?.isEnabled ?? true}
         >
           <div className="grid gap-4">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={strengthsModule?.sortOrder ?? 20}
@@ -259,7 +259,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              卖点列表
+              閸楁牜鍋ｉ崚妤勩€?
               <textarea
                 className={`${textareaClassName} min-h-40`}
                 defaultValue={readStringArray(
@@ -274,13 +274,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="品牌背书"
-          description="用于滚动展示合作品牌、客户品牌或行业关键词�?
+          description="用于滚动展示合作品牌、客户品牌或行业关键词。"
           moduleKey="trust-signals"
           enabled={trustSignalsModule?.isEnabled ?? true}
         >
           <div className="grid gap-4">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={trustSignalsModule?.sortOrder ?? 30}
@@ -289,7 +289,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              模块标题
+              濡€虫健閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(trustSignalsModule?.payloadJson ?? {}, "title")}
@@ -297,7 +297,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              品牌列表
+              閸濅胶澧濋崚妤勩€?
               <textarea
                 className={`${textareaClassName} min-h-40`}
                 defaultValue={readStringArray(
@@ -312,14 +312,14 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="推荐分类"
-          description="控制首页分类模块的文案和要展示的分类�?
+          description="控制首页分类模块的文案和要展示的分类。"
           moduleKey="featured-categories"
           enabled={featuredCategoryModule?.isEnabled ?? true}
         >
           <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-medium text-stone-700">
-                排序
+                閹烘帒绨?
                 <input
                   className={inputClassName}
                   defaultValue={featuredCategoryModule?.sortOrder ?? 40}
@@ -328,7 +328,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                眉题
+                閻顣?
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -339,7 +339,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                标题
+                閺嶅洭顣?
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -350,7 +350,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                描述
+                閹诲繗鍫?
                 <textarea
                   className={textareaClassName}
                   defaultValue={readString(
@@ -375,13 +375,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="工厂实力"
-          description="控制工厂实力模块的标题、说明、卖点和两组统计数字�?
+          description="控制工厂实力模块的标题、说明、卖点和两组统计数字。"
           moduleKey="factory-capability"
           enabled={factoryCapabilityModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={factoryCapabilityModule?.sortOrder ?? 50}
@@ -390,7 +390,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -401,7 +401,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -412,7 +412,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              描述
+              閹诲繗鍫?
               <textarea
                 className={textareaClassName}
                 defaultValue={readString(
@@ -423,7 +423,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              卖点列表
+              閸楁牜鍋ｉ崚妤勩€?
               <textarea
                 className={`${textareaClassName} min-h-40`}
                 defaultValue={readStringArray(
@@ -434,7 +434,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              统计值一
+              缂佺喕顓搁崐闂寸
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -445,7 +445,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              统计说明一
+              缂佺喕顓哥拠瀛樻娑撯偓
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -456,7 +456,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              统计值二
+              缂佺喕顓搁崐闂寸癌
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -467,7 +467,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              统计说明�?              <input
+              缂佺喕顓哥拠瀛樻娴?              <input
                 className={inputClassName}
                 defaultValue={readString(
                   factoryCapabilityModule?.payloadJson ?? {},
@@ -481,13 +481,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="质量认证"
-          description="每行格式�?标题|描述，用于展示认证、审核和合规能力�?
+          description="每行格式为“标题|描述”，用于展示认证、审核和合规能力。"
           moduleKey="quality-certifications"
           enabled={qualityModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={qualityModule?.sortOrder ?? 60}
@@ -496,7 +496,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(qualityModule?.payloadJson ?? {}, "eyebrow")}
@@ -504,7 +504,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(qualityModule?.payloadJson ?? {}, "title")}
@@ -512,7 +512,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              描述
+              閹诲繗鍫?
               <textarea
                 className={textareaClassName}
                 defaultValue={readString(
@@ -523,7 +523,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              条目列表
+              閺夛紕娲伴崚妤勩€?
               <textarea
                 className={`${textareaClassName} min-h-40`}
                 defaultValue={readStringArray(
@@ -538,14 +538,14 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="推荐产品"
-          description="控制首页推荐产品模块的标题、按钮和产品选择�?
+          description="控制首页推荐产品模块的标题、按钮和产品选择。"
           moduleKey="featured-products"
           enabled={featuredProductModule?.isEnabled ?? true}
         >
           <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-medium text-stone-700">
-                排序
+                閹烘帒绨?
                 <input
                   className={inputClassName}
                   defaultValue={featuredProductModule?.sortOrder ?? 70}
@@ -554,7 +554,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                眉题
+                閻顣?
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -565,7 +565,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-                标题
+                閺嶅洭顣?
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -576,7 +576,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                按钮文案
+                閹稿鎸抽弬鍥攳
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -587,7 +587,7 @@ export default async function AdminHomeModulesPage() {
                 />
               </label>
               <label className="block text-sm font-medium text-stone-700">
-                按钮链接
+                閹稿鎸抽柧鐐复
                 <input
                   className={inputClassName}
                   defaultValue={readString(
@@ -612,13 +612,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="合作流程"
-          description="每行格式�?标题|描述，用于展示询盘到出货的步骤�?
+          description="每行格式为“标题|描述”，用于展示询盘到出货的步骤。"
           moduleKey="process-steps"
           enabled={processModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={processModule?.sortOrder ?? 80}
@@ -627,7 +627,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(processModule?.payloadJson ?? {}, "eyebrow")}
@@ -635,7 +635,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(processModule?.payloadJson ?? {}, "title")}
@@ -643,7 +643,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              条目列表
+              閺夛紕娲伴崚妤勩€?
               <textarea
                 className={`${textareaClassName} min-h-40`}
                 defaultValue={readStringArray(
@@ -658,13 +658,13 @@ export default async function AdminHomeModulesPage() {
 
         <ModuleCard
           title="博客入口"
-          description="控制首页博客模块标题，文章会自动读取最新已发布内容�?
+          description="控制首页博客模块标题，文章会自动读取最新已发布内容。"
           moduleKey="latest-insights"
           enabled={latestInsightsModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={latestInsightsModule?.sortOrder ?? 90}
@@ -673,7 +673,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -684,7 +684,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(latestInsightsModule?.payloadJson ?? {}, "title")}
@@ -695,14 +695,14 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title="底部转化�?
-          description="控制首页底部 CTA 区域的文案和按钮�?
+          title="底部 CTA"
+          description="控制首页底部 CTA 区域的文案和按钮。"
           moduleKey="final-cta"
           enabled={finalCtaModule?.isEnabled ?? true}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block text-sm font-medium text-stone-700">
-              排序
+              閹烘帒绨?
               <input
                 className={inputClassName}
                 defaultValue={finalCtaModule?.sortOrder ?? 100}
@@ -711,7 +711,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              眉题
+              閻顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(finalCtaModule?.payloadJson ?? {}, "eyebrow")}
@@ -719,7 +719,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              标题
+              閺嶅洭顣?
               <input
                 className={inputClassName}
                 defaultValue={readString(finalCtaModule?.payloadJson ?? {}, "title")}
@@ -727,7 +727,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700 md:col-span-2">
-              描述
+              閹诲繗鍫?
               <textarea
                 className={textareaClassName}
                 defaultValue={readString(finalCtaModule?.payloadJson ?? {}, "description")}
@@ -735,7 +735,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              按钮文案
+              閹稿鎸抽弬鍥攳
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -746,7 +746,7 @@ export default async function AdminHomeModulesPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              按钮链接
+              閹稿鎸抽柧鐐复
               <input
                 className={inputClassName}
                 defaultValue={readString(
@@ -764,7 +764,7 @@ export default async function AdminHomeModulesPage() {
             className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
             type="submit"
           >
-            保存首页模块
+            娣囨繂鐡ㄦ＃鏍€夊Ο鈥虫健
           </button>
         </div>
       </form>

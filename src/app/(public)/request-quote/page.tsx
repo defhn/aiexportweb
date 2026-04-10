@@ -6,7 +6,7 @@ import { getFeatureGate } from "@/features/plans/access";
 import { getAllProducts } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
 
-// 与 schema.ts 中 formFieldsJson 字段类型一致的精确类型
+// 娑擄拷 schema.ts 娑擄拷 formFieldsJson 鐎涙顔岀猾璇茬€锋稉鈧懛瀵告畱缁墽鈥樼猾璇茬€�
 type FormField = {
   name: string;
   label: string;
@@ -45,7 +45,7 @@ export default async function RequestQuotePage() {
     getSiteSettings(),
   ]);
 
-  // 安全地将 formFieldsJson 从 jsonb (unknown[]) 转成强类型，无效条目静默过滤
+  // 鐎瑰鍙忛崷鏉跨殺 formFieldsJson 娴狅拷 jsonb (unknown[]) 鏉烆剚鍨氬铏硅閸ㄥ绱濋弮鐘虫櫏閺夛紕娲伴棃娆撶帛鏉╁洦鎶�
   const rawFields = Array.isArray(settings.formFieldsJson) ? settings.formFieldsJson : [];
   const formFields: FormField[] = rawFields.filter(isValidFormField);
 

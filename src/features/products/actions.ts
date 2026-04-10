@@ -123,7 +123,7 @@ async function createImportedProduct(input: {
 }
 
 
-// ─── 私有 FormData helper（仅供此文件内的 Server Actions 使用）────────────────
+// 閳光偓閳光偓閳光偓 缁変焦婀� FormData helper閿涘牅绮庢笟娑欘劃閺傚洣娆㈤崘鍛畱 Server Actions 娴ｈ法鏁ら敍澶嗘敘閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 
 function buildDefaultFieldValueDrafts(formData: FormData) {
   return defaultFieldDefinitions.map((field) => ({
@@ -385,7 +385,7 @@ export async function saveProduct(formData: FormData) {
         );
       }
     } catch {
-      // 忽略解析错误，保留空数组
+      // 韫囩晫鏆愮憴锝嗙€介柨娆掝嚖閿涘奔绻氶悾娆戔敄閺佹壆绮�
     }
   }
   const draft = buildProductDraft({

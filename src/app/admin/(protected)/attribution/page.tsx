@@ -10,7 +10,7 @@ import {
 
 export const dynamic = "force-dynamic";
 
-// ─── 辅助：数字卡片 ───────────────────────────────────────────
+// 閳光偓閳光偓閳光偓 鏉堝懎濮敍姘殶鐎涙宕遍悧锟� 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 function StatCard({
   icon: Icon,
   label,
@@ -44,7 +44,7 @@ function StatCard({
   );
 }
 
-// ─── 来源分布条形图 ────────────────────────────────────────────
+// 閳光偓閳光偓閳光偓 閺夈儲绨崚鍡楃閺夆€宠埌閸ワ拷 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓
 function SourceBar({
   label,
   count,
@@ -70,7 +70,7 @@ function SourceBar({
   return (
     <div className="flex items-center gap-3">
       <span className="w-28 shrink-0 truncate text-xs font-bold text-stone-600">
-        {label || "直接访问"}
+        {label || "閻╁瓨甯寸拋鍧楁６"}
       </span>
       <div className="flex-1 rounded-full bg-stone-100 h-2">
         <div className={`h-2 rounded-full ${bg} transition-all`} style={{ width: `${pct}%` }} />
@@ -89,61 +89,61 @@ export default async function AdminAttributionPage() {
 
   return (
     <div className="space-y-6">
-      {/* ── 标题 ── */}
+      {/* 閳光偓閳光偓 閺嶅洭顣� 閳光偓閳光偓 */}
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">流量归因看板</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">濞翠線鍣鸿ぐ鎺戞礈閻婢�</h2>
         <p className="mt-2 text-sm leading-6 text-stone-500">
-          基于 UTM 参数与 Google Ads GCLID 的全链路追踪分析，近 30 天数据。
+          閸╄桨绨� UTM 閸欏倹鏆熸稉锟� Google Ads GCLID 閻ㄥ嫬鍙忛柧鎹愮熅鏉╁€熼嚋閸掑棙鐎介敍宀冪箮 30 婢垛晜鏆熼幑顔衡偓锟�
         </p>
       </section>
 
-      {/* ── 核心指标卡片 ── */}
+      {/* 閳光偓閳光偓 閺嶇ǹ绺鹃幐鍥ㄧ垼閸楋紕澧� 閳光偓閳光偓 */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
           icon={Globe2}
-          label="有来源询盘"
+          label="閺堝娼靛┃鎰嚄閻╋拷"
           value={data.trackedCount}
-          sub={`全部 ${data.totalCount} 条中占 ${trackRate}%`}
+          sub={`閸忋劑鍎� ${data.totalCount} 閺夆€茶厬閸楋拷 ${trackRate}%`}
           color="blue"
         />
         <StatCard
           icon={Target}
-          label="Google Ads 命中"
+          label="Google Ads 閸涙垝鑵�"
           value={data.gclidCount}
-          sub="GCLID 有效覆盖"
+          sub="GCLID 閺堝鏅ョ憰鍡欐磰"
           color="amber"
         />
         <StatCard
           icon={Building2}
-          label="企业级线索"
+          label="娴间椒绗熺痪褏鍤庣槐锟�"
           value={data.highValueCount}
-          sub="已填写公司网址"
+          sub="瀹告彃锝為崘娆忓彆閸欏摜缍夐崸鈧�"
           color="emerald"
         />
         <StatCard
           icon={TrendingUp}
-          label="总询盘量"
+          label="閹槒顕楅惄姗€鍣�"
           value={data.totalCount}
-          sub="全部时间"
+          sub="閸忋劑鍎撮弮鍫曟？"
           color="violet"
         />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* ── UTM Source 分布 ── */}
+        {/* 閳光偓閳光偓 UTM Source 閸掑棗绔� 閳光偓閳光偓 */}
         <section className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
           <h3 className="flex items-center gap-2 text-base font-semibold text-stone-900">
             <Globe2 className="h-4 w-4 text-blue-500" />
-            来源 (utm_source) 分布
+            閺夈儲绨� (utm_source) 閸掑棗绔�
           </h3>
           <div className="mt-5 space-y-3">
             {data.bySource.length === 0 ? (
-              <p className="text-sm text-stone-400">暂无来源数据，等待带 UTM 参数的访客提交询盘。</p>
+              <p className="text-sm text-stone-400">閺嗗倹妫ら弶銉︾爱閺佺増宓侀敍宀€鐡戝鍛敨 UTM 閸欏倹鏆熼惃鍕問鐎广垺褰佹禍銈堫嚄閻╂ǜ鈧拷</p>
             ) : (
               data.bySource.map((row) => (
                 <SourceBar
                   key={row.utmSource ?? "direct"}
-                  label={row.utmSource ?? "直接访问"}
+                  label={row.utmSource ?? "閻╁瓨甯寸拋鍧楁６"}
                   count={row.count}
                   max={maxSource}
                 />
@@ -152,20 +152,20 @@ export default async function AdminAttributionPage() {
           </div>
         </section>
 
-        {/* ── Campaign 分布 ── */}
+        {/* 閳光偓閳光偓 Campaign 閸掑棗绔� 閳光偓閳光偓 */}
         <section className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
           <h3 className="flex items-center gap-2 text-base font-semibold text-stone-900">
             <Megaphone className="h-4 w-4 text-amber-500" />
-            广告系列 (utm_campaign) 分布
+            楠炲灝鎲＄化璇插灙 (utm_campaign) 閸掑棗绔�
           </h3>
           <div className="mt-5 space-y-3">
             {data.byCampaign.length === 0 ? (
-              <p className="text-sm text-stone-400">暂无 Campaign 数据。</p>
+              <p className="text-sm text-stone-400">閺嗗倹妫� Campaign 閺佺増宓侀妴锟�</p>
             ) : (
               data.byCampaign.map((row, idx) => (
                 <SourceBar
                   key={`${row.utmCampaign ?? "none"}-${idx}`}
-                  label={row.utmCampaign ?? "未设置"}
+                  label={row.utmCampaign ?? "閺堫亣顔曠純锟�"}
                   count={row.count}
                   max={maxCampaign}
                 />
@@ -175,28 +175,28 @@ export default async function AdminAttributionPage() {
         </section>
       </div>
 
-      {/* ── 高质量 UTM 线索明细 ── */}
+      {/* 閳光偓閳光偓 妤傛ǹ宸濋柌锟� UTM 缁捐法鍌ㄩ弰搴ｇ矎 閳光偓閳光偓 */}
       <section className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
         <h3 className="flex items-center gap-2 text-base font-semibold text-stone-900">
           <MousePointerClick className="h-4 w-4 text-emerald-500" />
-          近期有效来源询盘明细
+          鏉╂垶婀￠張澶嬫櫏閺夈儲绨拠銏㈡磸閺勫海绮�
         </h3>
         <div className="mt-4 overflow-x-auto">
           {data.recentTracked.length === 0 ? (
             <p className="text-sm text-stone-400 py-4">
-              暂无数据——在推广链接中添加 UTM 参数后即可在此看到归因数据。
+              閺嗗倹妫ら弫鐗堝祦閳ユ柡鈧柨婀幒銊ョ畭闁剧偓甯存稉顓熷潑閸旓拷 UTM 閸欏倹鏆熼崥搴″祮閸欘垰婀銈囨箙閸掓澘缍婇崶鐘虫殶閹诡喓鈧拷
             </p>
           ) : (
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-stone-100 text-left text-stone-400 font-black uppercase tracking-widest">
-                  <th className="py-2 pr-4">客户</th>
-                  <th className="py-2 pr-4">来源</th>
-                  <th className="py-2 pr-4">媒介</th>
-                  <th className="py-2 pr-4">系列</th>
+                  <th className="py-2 pr-4">鐎广垺鍩�</th>
+                  <th className="py-2 pr-4">閺夈儲绨�</th>
+                  <th className="py-2 pr-4">婵帊绮�</th>
+                  <th className="py-2 pr-4">缁鍨�</th>
                   <th className="py-2 pr-4">Google Ads</th>
-                  <th className="py-2 pr-4">公司网址</th>
-                  <th className="py-2">时间</th>
+                  <th className="py-2 pr-4">閸忣剙寰冪純鎴濇絻</th>
+                  <th className="py-2">閺冨爼妫�</th>
                 </tr>
               </thead>
               <tbody>
@@ -207,7 +207,7 @@ export default async function AdminAttributionPage() {
                   >
                     <td className="py-2 pr-4">
                       <p className="font-bold text-stone-900">{row.name}</p>
-                      <p className="text-stone-400">{row.companyName ?? "—"}</p>
+                      <p className="text-stone-400">{row.companyName ?? "閳ワ拷"}</p>
                     </td>
                     <td className="py-2 pr-4">
                       {row.utmSource ? (
@@ -215,18 +215,18 @@ export default async function AdminAttributionPage() {
                           {row.utmSource}
                         </span>
                       ) : (
-                        <span className="text-stone-300">—</span>
+                        <span className="text-stone-300">閳ワ拷</span>
                       )}
                     </td>
-                    <td className="py-2 pr-4 text-stone-500">{row.utmMedium ?? "—"}</td>
-                    <td className="py-2 pr-4 text-stone-500">{row.utmCampaign ?? "—"}</td>
+                    <td className="py-2 pr-4 text-stone-500">{row.utmMedium ?? "閳ワ拷"}</td>
+                    <td className="py-2 pr-4 text-stone-500">{row.utmCampaign ?? "閳ワ拷"}</td>
                     <td className="py-2 pr-4">
                       {row.gclid ? (
                         <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-amber-700 font-bold">
-                          ✓ Ads
+                          閴侊拷 Ads
                         </span>
                       ) : (
-                        <span className="text-stone-300">—</span>
+                        <span className="text-stone-300">閳ワ拷</span>
                       )}
                     </td>
                     <td className="py-2 pr-4">
@@ -240,7 +240,7 @@ export default async function AdminAttributionPage() {
                           {row.companyWebsite}
                         </a>
                       ) : (
-                        <span className="text-stone-300">—</span>
+                        <span className="text-stone-300">閳ワ拷</span>
                       )}
                     </td>
                     <td className="py-2 text-stone-400">

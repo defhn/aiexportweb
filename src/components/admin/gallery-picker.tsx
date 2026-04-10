@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import { Check, FolderTree, ImageOff, X } from "lucide-react";
@@ -18,7 +18,7 @@ type GalleryPickerProps = {
   assets: Asset[];
   folders?: FolderOption[];
   selectedIds: number[];
-  /** name 属性，用于 form 提交 */
+  /** name 鐏炵偞鈧嶇礉閻劋绨?form 閹绘劒姘?*/
   name: string;
 };
 
@@ -70,12 +70,12 @@ export function GalleryPicker({
 
   return (
     <>
-      {/* 隐藏的表单字�?�?每个选中 id 一�?input */}
+      {/* 闂呮劘妫岄惃鍕€冮崡鏇炵摟濞?閳?濮ｅ繋閲滈柅澶夎厬 id 娑撯偓娑?input */}
       {Array.from(selectedIds).map((id) => (
         <input key={id} name={name} type="hidden" value={id} />
       ))}
 
-      {/* 已选缩略图�?*/}
+      {/* 瀹告煡鈧缂夐悾銉ユ禈鐞?*/}
       <div className="flex flex-wrap items-center gap-2">
         {selectedAssets.map((asset) => (
           <div
@@ -92,7 +92,7 @@ export function GalleryPicker({
             <button
               className="absolute inset-0 flex items-center justify-center bg-stone-900/60 opacity-0 transition-opacity group-hover:opacity-100"
               onClick={() => removeId(asset.id)}
-              title="移除"
+              title="移除图片"
               type="button"
             >
               <X className="h-3 w-3 text-white" />
@@ -100,11 +100,11 @@ export function GalleryPicker({
           </div>
         ))}
 
-        {/* 添加按钮 */}
+        {/* 濞ｈ濮為幐澶愭尦 */}
         <button
           className="flex h-20 w-20 items-center justify-center rounded-xl border-2 border-dashed border-stone-300 text-stone-400 hover:border-stone-500 hover:text-stone-600"
           onClick={() => setOpen(true)}
-          title="管理图库"
+          title="选择图库"
           type="button"
         >
           {selectedIds.size === 0 ? (
@@ -119,7 +119,7 @@ export function GalleryPicker({
           onClick={() => setOpen(true)}
           type="button"
         >
-          管理图库
+          选择图库
           {selectedIds.size > 0 ? (
             <span className="ml-1.5 rounded-full bg-stone-100 px-1.5 py-0.5 text-stone-500">
               {selectedIds.size}
@@ -128,7 +128,7 @@ export function GalleryPicker({
         </button>
       </div>
 
-      {/* 弹窗 */}
+      {/* 瀵湱鐛?*/}
       {open ? (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-stone-950/60 pt-16 backdrop-blur-sm"
@@ -137,12 +137,12 @@ export function GalleryPicker({
           }}
         >
           <div className="flex h-[80vh] w-full max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-2xl">
-            {/* 头部 */}
+            {/* 婢舵挳鍎?*/}
             <div className="flex flex-shrink-0 items-center justify-between border-b border-stone-100 px-6 py-4">
               <div>
-                <h3 className="text-base font-semibold text-stone-950">选择产品图库</h3>
+                <h3 className="text-base font-semibold text-stone-950">选择图库图片</h3>
                 <p className="mt-0.5 text-xs text-stone-400">
-                  已�?{selectedIds.size} 张，点击图片切换选中状�?                </p>
+                  已选择 {selectedIds.size} 张图片，可继续增删。                </p>
               </div>
               <button
                 className="rounded-full p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
@@ -153,12 +153,12 @@ export function GalleryPicker({
               </button>
             </div>
 
-            {/* 筛�?*/}
+            {/* 缁涙盯鈧?*/}
             <div className="flex flex-shrink-0 gap-3 border-b border-stone-100 px-6 py-3">
               <input
                 className="flex-1 rounded-xl border border-stone-300 px-3 py-2 text-sm outline-none focus:border-stone-600"
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="搜索文件名�?
+                placeholder="搜索图片名称或 Alt 文案"
                 value={query}
               />
               {folders.length > 0 ? (
@@ -169,7 +169,7 @@ export function GalleryPicker({
                     onChange={(e) => setActiveFolderId(e.target.value)}
                     value={activeFolderId}
                   >
-                    <option value="">全部</option>
+                    <option value="">全部文件夹</option>
                     {folders.map((f) => (
                       <option key={f.id} value={f.id}>{f.label}</option>
                     ))}
@@ -178,7 +178,7 @@ export function GalleryPicker({
               ) : null}
             </div>
 
-            {/* 网格 */}
+            {/* 缂冩垶鐗?*/}
             <div className="min-h-0 flex-1 overflow-y-auto p-4">
               {filteredAssets.length ? (
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
@@ -219,25 +219,25 @@ export function GalleryPicker({
                 </div>
               ) : (
                 <div className="flex h-40 items-center justify-center rounded-2xl border border-dashed border-stone-300 text-sm text-stone-400">
-                  没有匹配的图�?                </div>
+                  当前没有符合条件的图片。                </div>
               )}
             </div>
 
-            {/* 底部确认 */}
+            {/* 鎼存洟鍎寸涵顔款吇 */}
             <div className="flex flex-shrink-0 items-center justify-between border-t border-stone-100 px-6 py-3">
               <button
                 className="text-xs text-stone-400 hover:text-stone-700"
                 onClick={() => setSelectedIds(new Set())}
                 type="button"
               >
-                清除全部
+                清空已选
               </button>
               <button
                 className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white hover:opacity-90"
                 onClick={() => setOpen(false)}
                 type="button"
               >
-                确认（{selectedIds.size} 张）
+                已选择 {selectedIds.size} 张图片
               </button>
             </div>
           </div>

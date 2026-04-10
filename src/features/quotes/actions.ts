@@ -14,6 +14,14 @@ export type QuoteRequestInsertInput = {
   whatsapp?: string;
   message: string;
   attachmentMediaId?: number | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmTerm?: string | null;
+  utmContent?: string | null;
+  gclid?: string | null;
+  annualVolume?: string | null;
+  companyWebsite?: string | null;
   customFieldsJson?: Record<string, string>;
 };
 

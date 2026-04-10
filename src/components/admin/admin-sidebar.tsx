@@ -5,8 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   BarChart3,
-  TrendingUp,
-  Radar,
   BookText,
   Box,
   FileArchive,
@@ -14,24 +12,23 @@ import {
   FolderKanban,
   Globe,
   Images,
-  Layers3,
+  KanbanSquare,
   LayoutDashboard,
+  Layers3,
   LogOut,
   MessageSquareMore,
   Package,
   PhoneCall,
+  Radar,
   Settings,
   ShieldCheck,
   Tags,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-  getFeatureAvailability,
-  type FeatureKey,
-  type SitePlan,
-} from "@/lib/plans";
+import { getFeatureAvailability, type FeatureKey, type SitePlan } from "@/lib/plans";
 
 type NavItem = {
   name: string;
@@ -42,37 +39,68 @@ type NavItem = {
 };
 
 const navigation: NavItem[] = [
-  { name: "数据看板", href: "/admin", icon: LayoutDashboard, featureKey: "dashboard_analytics", group: "overview" },
-  { name: "产品管理", href: "/admin/products", icon: Package, group: "content" },
-  { name: "分类管理", href: "/admin/categories", icon: Tags, group: "content" },
-  { name: "博客管理", href: "/admin/blog", icon: BookText, featureKey: "blog_management", group: "content" },
-  { name: "图库管理", href: "/admin/media", icon: Images, group: "content" },
-  { name: "文件管理", href: "/admin/files", icon: FileArchive, group: "content" },
-  { name: "询盘管理", href: "/admin/inquiries", icon: MessageSquareMore, featureKey: "inquiry_detail", group: "sales" },
-  { name: "报价管理", href: "/admin/quotes", icon: FileStack, featureKey: "quotes", group: "sales" },
-  { name: "回复模板", href: "/admin/reply-templates", icon: FolderKanban, featureKey: "reply_templates", group: "sales" },
-  { name: "首页模块", href: "/admin/pages/home", icon: Layers3, group: "site" },
-  { name: "关于我们", href: "/admin/pages/about", icon: Globe, group: "site" },
-  { name: "联系我们", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
-  { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
-  { name: "SEO �?AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
-  { name: "质量归因", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
+  {
+    name: "Dashboard",
+    href: "/admin",
+    icon: LayoutDashboard,
+    featureKey: "dashboard_analytics",
+    group: "overview",
+  },
+  { name: "Products", href: "/admin/products", icon: Package, group: "content" },
+  { name: "Categories", href: "/admin/categories", icon: Tags, group: "content" },
+  {
+    name: "Blog",
+    href: "/admin/blog",
+    icon: BookText,
+    featureKey: "blog_management",
+    group: "content",
+  },
+  { name: "Media", href: "/admin/media", icon: Images, group: "content" },
+  { name: "Files", href: "/admin/files", icon: FileArchive, group: "content" },
+  {
+    name: "Inquiries",
+    href: "/admin/inquiries",
+    icon: MessageSquareMore,
+    featureKey: "inquiry_detail",
+    group: "sales",
+  },
+  {
+    name: "Quotes",
+    href: "/admin/quotes",
+    icon: FileStack,
+    featureKey: "quotes",
+    group: "sales",
+  },
+  {
+    name: "Reply Templates",
+    href: "/admin/reply-templates",
+    icon: FolderKanban,
+    featureKey: "reply_templates",
+    group: "sales",
+  },
+  { name: "Home Modules", href: "/admin/pages/home", icon: Layers3, group: "site" },
+  { name: "About Page", href: "/admin/pages/about", icon: Globe, group: "site" },
+  { name: "Contact Page", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
+  { name: "Staff", href: "/admin/staff", icon: Users, group: "site" },
+  { name: "SEO + AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
+  { name: "Attribution", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
   { name: "Pipeline", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
-  { name: "RAG 知识工厂", href: "/admin/rag", icon: Radar, group: "site" },
-  { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
+  { name: "RAG Workspace", href: "/admin/rag", icon: Radar, group: "site" },
+  { name: "Settings", href: "/admin/settings", icon: Settings, group: "site" },
 ];
 
 const groupLabels: Record<string, string> = {
-  overview: "总览",
-  content: "内容管理",
-  sales: "销售协�?,
-  site: "站点与系�?,
+  overview: "Overview",
+  content: "Content",
+  sales: "Sales",
+  site: "Site",
 };
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/admin") {
     return pathname === href;
   }
+
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -88,7 +116,7 @@ function PlanTag({
   const availability = getFeatureAvailability({ currentPlan, featureKey });
   if (availability.status === "included") return null;
 
-  const label = availability.requiredPlan === "growth" ? "获客�? : "AI�?;
+  const label = availability.requiredPlan === "growth" ? "Growth" : "AI Sales";
 
   return (
     <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-stone-400">
@@ -123,7 +151,6 @@ export function AdminSidebar({
 
   return (
     <div className="flex h-full flex-col bg-stone-950 text-stone-400">
-      {/* 桌面端才显示顶部 Logo（移动端 drawer 自带 header�?*/}
       <div className="hidden border-b border-white/5 px-5 py-5 md:block">
         <Link className="flex items-center gap-3" href="/admin">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25">
@@ -133,12 +160,12 @@ export function AdminSidebar({
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-blue-300">
               Admin
             </p>
-            <p className="text-sm font-semibold text-white">外贸获客后台</p>
+            <p className="text-sm font-semibold text-white">Export Growth Console</p>
           </div>
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
         {groups.map((group) => {
           const items = navigation.filter((item) => item.group === group);
           if (!items.length) return null;
@@ -151,6 +178,7 @@ export function AdminSidebar({
               <div className="space-y-0.5">
                 {items.map((item) => {
                   const active = isActivePath(pathname, item.href);
+
                   return (
                     <Link
                       key={item.href}
@@ -158,9 +186,7 @@ export function AdminSidebar({
                       onClick={onClose}
                       className={cn(
                         "group flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-all",
-                        active
-                          ? "bg-white/10 text-white"
-                          : "hover:bg-white/5 hover:text-white",
+                        active ? "bg-white/10 text-white" : "hover:bg-white/5 hover:text-white",
                       )}
                     >
                       <item.icon
@@ -191,8 +217,10 @@ export function AdminSidebar({
           </p>
           <div className="mt-2.5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold">标准交付后台</p>
-              <p className="mt-0.5 text-xs text-blue-100/80">产品、内容、询盘统一维护</p>
+              <p className="text-sm font-semibold">Standard Delivery Console</p>
+              <p className="mt-0.5 text-xs text-blue-100/80">
+                Products, content, and inquiries in one place
+              </p>
             </div>
             <BarChart3 className="h-4 w-4 text-blue-100" />
           </div>
@@ -205,7 +233,7 @@ export function AdminSidebar({
           type="button"
         >
           <LogOut className="h-4 w-4" />
-          {loggingOut ? "退出中..." : "退出后�?}
+          {loggingOut ? "Signing out..." : "Sign out"}
         </button>
       </div>
     </div>

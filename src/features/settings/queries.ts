@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+﻿import { desc } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { siteSettings } from "@/db/schema";
@@ -34,7 +34,7 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
       .limit(1);
 
     if (record) {
-      // 如果绑定�?OG 图，查出 URL；否则留�?      let seoOgImageUrl = "";
+      let seoOgImageUrl = "";
       if (record.seoOgImageMediaId) {
         const { mediaAssets } = await import("@/db/schema");
         const { eq } = await import("drizzle-orm");

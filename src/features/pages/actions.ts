@@ -13,7 +13,7 @@ export function buildPageModuleDraft(
 ): SeedPageModule {
   return {
     moduleKey: input.moduleKey,
-    moduleNameZh: input.moduleNameZh ?? "模块",
+    moduleNameZh: input.moduleNameZh ?? "妯″潡",
     moduleNameEn: input.moduleNameEn ?? "Module",
     isEnabled: input.isEnabled ?? true,
     sortOrder: input.sortOrder ?? 100,

@@ -120,7 +120,7 @@ export function SiteFooter({
 
         <div className="mt-16 pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-stone-600">
-            © {new Date().getFullYear()} {companyName}. All rights reserved.
+            漏 {new Date().getFullYear()} {companyName}. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-stone-600 font-medium">
             <Link href="/privacy-policy" className="hover:text-stone-300 transition-colors">
