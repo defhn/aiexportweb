@@ -37,9 +37,9 @@ export default async function AdminNewBlogPage({ searchParams }: AdminNewBlogPag
         nameEn: category.nameEn,
         slug: category.slug,
       }))}
-      description="Create a new blog post with long-form content, image assets, and SEO metadata."
+      description="新建博客文章内容、封面图片、分类标签与 SEO 信息，发布前可先保存为草稿。"
       existingTags={existingTags}
-      heading="New Blog Post"
+      heading="新建文章"
       imageAssets={imageAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -68,7 +68,7 @@ export default async function AdminNewBlogPage({ searchParams }: AdminNewBlogPag
       returnTo="/admin/blog/new"
       saveCategoryAction={saveBlogCategory}
       saveTagAction={saveBlogTag}
-      submitLabel="Create Post"
+      submitLabel="创建文章"
     />
   );
 }

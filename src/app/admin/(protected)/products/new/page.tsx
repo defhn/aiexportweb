@@ -24,7 +24,7 @@ export default async function AdminNewProductPage() {
         nameEn: category.nameEn,
         slug: category.slug,
       }))}
-      description="Create a new product record, manage media, and connect downloadable files."
+      description="新建产品资料，管理媒体文件、规格参数与下载文件，便于后续统一维护。"
       fileAssets={fileAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -33,7 +33,7 @@ export default async function AdminNewProductPage() {
         altTextZh: asset.altTextZh,
         altTextEn: asset.altTextEn,
       }))}
-      heading="New Product"
+      heading="新建产品"
       imageAssets={imageAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -76,7 +76,7 @@ export default async function AdminNewProductPage() {
       }}
       returnTo="/admin/products/new"
       saveCategoryAction={saveCategory}
-      submitLabel="Create Product"
+      submitLabel="创建产品"
     />
   );
 }

@@ -41,10 +41,11 @@ type AdminBlogPageProps = {
 function StatusBadge({ status }: { status: "draft" | "published" }) {
   return status === "published" ? (
     <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-700">
-      已发布    </span>
+      已发布
+    </span>
   ) : (
     <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-600">
-      閼藉枪
+      草稿
     </span>
   );
 }
@@ -109,7 +110,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
         <div>
           <h1 className="text-2xl font-bold text-stone-950">博客管理</h1>
           <p className="mt-1 text-sm text-stone-500">
-            管理博客文章、分类和标签，统一维护内容结构并支持批量操作。          </p>
+            管理博客文章、分类和标签，统一维护内容结构并支持批量操作。
+          </p>
         </div>
         <Link
           href="/admin/blog/new"
@@ -167,7 +169,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             >
               <option value="">全部状态</option>
               <option value="published">已发布</option>
-              <option value="draft">閼藉枪</option>
+              <option value="draft">草稿</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-stone-400" />
           </div>
@@ -176,7 +178,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             className="h-9 rounded-xl bg-stone-900 px-4 text-sm font-medium text-white hover:bg-stone-800"
             type="submit"
           >
-            筛选          </button>
+            筛选
+          </button>
 
           {/* 閸掑棝娈?*/}
           {posts.length ? (
@@ -343,8 +346,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">+ 新建分类</p>
             <div className="grid grid-cols-[1fr_1fr_80px_50px] gap-2 items-center">
               <input className={inlineInput} name="nameZh" placeholder="分类名称（中文）" required />
-              <input className={inlineInput} name="nameEn" placeholder="Name (EN)" required />
-              <input className={inlineInput} name="slug" placeholder="slug" />
+              <input className={inlineInput} name="nameEn" placeholder="分类名称（英文）" required />
+              <input className={inlineInput} name="slug" placeholder="固定链接" />
               <input className={inlineInput} defaultValue={100} name="sortOrder" type="number" title="排序" />
             </div>
             <div className="mt-2 flex items-center justify-between">
@@ -406,7 +409,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                           前台可见
                         </label>
                         <span className="text-[10px] text-stone-400">
-                          {category.postCount} 篇文章                        </span>
+                          {category.postCount} 篇文章
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -448,8 +452,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">+ 新建标签</p>
             <div className="grid grid-cols-[1fr_1fr_1fr] gap-2 items-center">
               <input className={inlineInput} name="nameZh" placeholder="标签名称（中文）" required />
-              <input className={inlineInput} name="nameEn" placeholder="Name (EN)" required />
-              <input className={inlineInput} name="slug" placeholder="slug（可选）" />
+              <input className={inlineInput} name="nameEn" placeholder="标签名称（英文）" required />
+              <input className={inlineInput} name="slug" placeholder="固定链接（可选）" />
             </div>
             <div className="mt-2 flex justify-end">
               <button
@@ -489,7 +493,8 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                     </div>
                     <div className="mt-1.5 flex items-center justify-between">
                       <span className="text-[10px] text-stone-400">
-                        {tag.postCount} 篇文章                      </span>
+                        {tag.postCount} 篇文章
+                      </span>
                       <div className="flex items-center gap-1.5">
                         <button
                           className="rounded-lg border border-stone-200 px-3 py-1 text-xs text-stone-600 hover:bg-stone-50"

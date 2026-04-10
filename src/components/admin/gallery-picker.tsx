@@ -18,7 +18,6 @@ type GalleryPickerProps = {
   assets: Asset[];
   folders?: FolderOption[];
   selectedIds: number[];
-  /** name 鐏炵偞鈧嶇礉閻劋绨?form 閹绘劒姘?*/
   name: string;
 };
 
@@ -70,12 +69,10 @@ export function GalleryPicker({
 
   return (
     <>
-      {/* 闂呮劘妫岄惃鍕€冮崡鏇炵摟濞?閳?濮ｅ繋閲滈柅澶夎厬 id 娑撯偓娑?input */}
       {Array.from(selectedIds).map((id) => (
         <input key={id} name={name} type="hidden" value={id} />
       ))}
 
-      {/* 瀹告煡鈧缂夐悾銉ユ禈鐞?*/}
       <div className="flex flex-wrap items-center gap-2">
         {selectedAssets.map((asset) => (
           <div
@@ -100,7 +97,6 @@ export function GalleryPicker({
           </div>
         ))}
 
-        {/* 濞ｈ濮為幐澶愭尦 */}
         <button
           className="flex h-20 w-20 items-center justify-center rounded-xl border-2 border-dashed border-stone-300 text-stone-400 hover:border-stone-500 hover:text-stone-600"
           onClick={() => setOpen(true)}
@@ -128,7 +124,6 @@ export function GalleryPicker({
         </button>
       </div>
 
-      {/* 瀵湱鐛?*/}
       {open ? (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-stone-950/60 pt-16 backdrop-blur-sm"
@@ -137,12 +132,12 @@ export function GalleryPicker({
           }}
         >
           <div className="flex h-[80vh] w-full max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-2xl">
-            {/* 婢舵挳鍎?*/}
             <div className="flex flex-shrink-0 items-center justify-between border-b border-stone-100 px-6 py-4">
               <div>
                 <h3 className="text-base font-semibold text-stone-950">选择图库图片</h3>
                 <p className="mt-0.5 text-xs text-stone-400">
-                  已选择 {selectedIds.size} 张图片，可继续增删。                </p>
+                  已选择 {selectedIds.size} 张图片，可继续增删。
+                </p>
               </div>
               <button
                 className="rounded-full p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
@@ -153,7 +148,6 @@ export function GalleryPicker({
               </button>
             </div>
 
-            {/* 缁涙盯鈧?*/}
             <div className="flex flex-shrink-0 gap-3 border-b border-stone-100 px-6 py-3">
               <input
                 className="flex-1 rounded-xl border border-stone-300 px-3 py-2 text-sm outline-none focus:border-stone-600"
@@ -178,7 +172,6 @@ export function GalleryPicker({
               ) : null}
             </div>
 
-            {/* 缂冩垶鐗?*/}
             <div className="min-h-0 flex-1 overflow-y-auto p-4">
               {filteredAssets.length ? (
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
@@ -219,11 +212,11 @@ export function GalleryPicker({
                 </div>
               ) : (
                 <div className="flex h-40 items-center justify-center rounded-2xl border border-dashed border-stone-300 text-sm text-stone-400">
-                  当前没有符合条件的图片。                </div>
+                  当前没有符合条件的图片。
+                </div>
               )}
             </div>
 
-            {/* 鎼存洟鍎寸涵顔款吇 */}
             <div className="flex flex-shrink-0 items-center justify-between border-t border-stone-100 px-6 py-3">
               <button
                 className="text-xs text-stone-400 hover:text-stone-700"

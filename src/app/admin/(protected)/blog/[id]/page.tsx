@@ -52,9 +52,9 @@ export default async function AdminBlogDetailPage({ params, searchParams }: Admi
         nameEn: category.nameEn,
         slug: category.slug,
       }))}
-      description="娣囨繂鐡ㄩ崥搴濈窗閸氬本顒為弴瀛樻煀閸忣剙绱戦崡姘吂閸掓銆冮妴浣规瀮缁旂姾顕涢幆鍛淬€夐妴涔籭temap 閸滃瞼绮ㄩ弸鍕閺佺増宓侀妴锟�"
+      description="编辑博客文章内容、封面图片、分类标签与 SEO 信息，保存后会更新当前文章页面。"
       existingTags={existingTags}
-      heading="缂傛牞绶弬鍥╃彿"
+      heading="编辑文章"
       imageAssets={imageAssets.map((asset) => ({
         id: asset.id,
         fileName: asset.fileName,
@@ -72,7 +72,7 @@ export default async function AdminBlogDetailPage({ params, searchParams }: Admi
       returnTo={`/admin/blog/${postId}`}
       saveCategoryAction={saveBlogCategory}
       saveTagAction={saveBlogTag}
-      submitLabel="娣囨繂鐡ㄩ弬鍥╃彿"
+      submitLabel="保存文章"
     />
   );
 }

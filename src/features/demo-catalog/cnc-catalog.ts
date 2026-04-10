@@ -87,7 +87,7 @@ const categorySpecs: SeedCategory[] = [
     isFeatured: true,
   },
   {
-    nameZh: "绮惧瘑杞﹀墛闆朵欢",
+    nameZh: "精密车削零件",
     nameEn: "Precision Turning Parts",
     slug: "precision-turning-parts",
     summaryZh: "用于轴、连接器、衬套和其他高公差车削零件。",

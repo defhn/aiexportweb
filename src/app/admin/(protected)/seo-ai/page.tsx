@@ -5,38 +5,43 @@ import { buildRobotsPolicies } from "@/lib/ai-crawlers";
 const checkboxItems = [
   {
     name: "allowGoogle",
-    label: "允许 Google 抓取",
-    description: "允许 Googlebot 抓取公开页面。",
+    label: "\u5141\u8bb8 Google \u6293\u53d6",
+    description: "\u5141\u8bb8 Googlebot \u6293\u53d6\u516c\u5f00\u9875\u9762\u3002",
   },
   {
     name: "allowBing",
-    label: "允许 Bing 抓取",
-    description: "允许 Bingbot 抓取公开页面。",
+    label: "\u5141\u8bb8 Bing \u6293\u53d6",
+    description: "\u5141\u8bb8 Bingbot \u6293\u53d6\u516c\u5f00\u9875\u9762\u3002",
   },
   {
     name: "allowOaiSearchBot",
-    label: "允许 ChatGPT 搜索引用",
-    description: "允许 OAI-SearchBot 抓取并在搜索型回答中引用。",
+    label: "\u5141\u8bb8 ChatGPT \u641c\u7d22\u5f15\u7528",
+    description:
+      "\u5141\u8bb8 OAI-SearchBot \u6293\u53d6\u5e76\u5728\u641c\u7d22\u578b\u56de\u7b54\u4e2d\u5f15\u7528\u3002",
   },
   {
     name: "allowClaudeSearchBot",
-    label: "允许 Claude 搜索引用",
-    description: "允许 Claude-SearchBot 抓取公开页面。",
+    label: "\u5141\u8bb8 Claude \u641c\u7d22\u5f15\u7528",
+    description:
+      "\u5141\u8bb8 Claude-SearchBot \u6293\u53d6\u516c\u5f00\u9875\u9762\u3002",
   },
   {
     name: "allowPerplexityBot",
-    label: "允许 Perplexity 引用",
-    description: "允许 PerplexityBot 抓取公开页面。",
+    label: "\u5141\u8bb8 Perplexity \u5f15\u7528",
+    description:
+      "\u5141\u8bb8 PerplexityBot \u6293\u53d6\u516c\u5f00\u9875\u9762\u3002",
   },
   {
     name: "allowGptBot",
-    label: "允许 OpenAI 训练抓取",
-    description: "默认建议关闭，避免开放训练型抓取。",
+    label: "\u5141\u8bb8 OpenAI \u8bad\u7ec3\u6293\u53d6",
+    description:
+      "\u9ed8\u8ba4\u5efa\u8bae\u5173\u95ed\uff0c\u907f\u514d\u5f00\u653e\u8bad\u7ec3\u578b\u6293\u53d6\u3002",
   },
   {
     name: "allowClaudeBot",
-    label: "允许 Anthropic 训练抓取",
-    description: "默认建议关闭，避免开放训练型抓取。",
+    label: "\u5141\u8bb8 Anthropic \u8bad\u7ec3\u6293\u53d6",
+    description:
+      "\u9ed8\u8ba4\u5efa\u8bae\u5173\u95ed\uff0c\u907f\u514d\u5f00\u653e\u8bad\u7ec3\u578b\u6293\u53d6\u3002",
   },
 ] as const;
 
@@ -50,10 +55,13 @@ export default async function AdminSeoAiPage() {
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">SEO 与 AI 抓取</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">
+          {"SEO \u4e0e AI \u6293\u53d6"}
+        </h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
-          默认建议允许搜索型抓取，训练型抓取保持关闭。保存后 `robots.txt`
-          会按后台设置输出。
+          {
+            "\u9ed8\u8ba4\u5efa\u8bae\u5141\u8bb8\u641c\u7d22\u578b\u6293\u53d6\uff0c\u8bad\u7ec3\u578b\u6293\u53d6\u4fdd\u6301\u5173\u95ed\u3002\u4fdd\u5b58\u540e robots.txt \u4f1a\u6309\u540e\u53f0\u8bbe\u7f6e\u8f93\u51fa\u3002"
+          }
         </p>
       </section>
 
@@ -62,8 +70,8 @@ export default async function AdminSeoAiPage() {
           <div className="grid gap-4 md:grid-cols-2">
             {checkboxItems.map((item) => (
               <label
-                key={item.name}
                 className="rounded-2xl border border-stone-200 p-4 text-sm text-stone-700"
+                key={item.name}
               >
                 <span className="flex items-start gap-3">
                   <input
@@ -85,18 +93,20 @@ export default async function AdminSeoAiPage() {
           </div>
 
           <label className="mt-5 block text-sm font-medium text-stone-700">
-            额外 robots 备注
+            {"\u989d\u5916 robots \u5907\u6ce8"}
             <textarea
               className={textareaClassName}
               defaultValue={settings.extraRobotsTxt}
               name="extraRobotsTxt"
-              placeholder="可选，仅用于记录特殊说明。"
+              placeholder="\u53ef\u9009\uff0c\u4ec5\u7528\u4e8e\u8bb0\u5f55\u7279\u6b8a\u8bf4\u660e\u3002"
             />
           </label>
         </section>
 
         <article className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-stone-950">robots 预览</h3>
+          <h3 className="text-lg font-semibold text-stone-950">
+            {"robots \u9884\u89c8"}
+          </h3>
           <pre className="mt-4 overflow-x-auto rounded-2xl bg-stone-950 p-5 text-xs leading-6 text-stone-100">
             {robotsPreview}
             {settings.extraRobotsTxt ? `\n\n${settings.extraRobotsTxt}` : ""}
@@ -108,7 +118,7 @@ export default async function AdminSeoAiPage() {
             className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
             type="submit"
           >
-            保存抓取设置
+            {"\u4fdd\u5b58\u6293\u53d6\u8bbe\u7f6e"}
           </button>
         </div>
       </form>

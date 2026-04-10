@@ -46,7 +46,7 @@ function MetricCard({
         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${colorClass}`}>
           <Icon className="h-6 w-6" />
         </div>
-        <div className="text-xs font-black uppercase tracking-widest text-stone-300">Metric</div>
+        <div className="text-xs font-black uppercase tracking-widest text-stone-300">指标</div>
       </div>
 
       <p className="mb-1 text-sm font-bold text-stone-400">{label}</p>
@@ -123,12 +123,14 @@ export default async function AdminDashboardPage() {
     <div className="space-y-12 pb-20">
       <section>
         <p className="mb-2 text-xs font-black uppercase tracking-[0.4em] text-stone-400">
-          System Control Center
+          系统控制台
         </p>
         <h1 className="text-4xl font-bold leading-none tracking-tight text-stone-900">
-          后台仪表盘        </h1>
+          后台仪表盘
+        </h1>
         <p className="mt-4 max-w-2xl leading-relaxed text-stone-500">
-          在这里快速查看询盘、产品、博客与流量概况，帮助团队及时发现增长信号与待处理事项。        </p>
+          在这里快速查看询盘、产品、博客与流量概况，帮助团队及时发现增长信号与待处理事项。
+        </p>
       </section>
 
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -143,12 +145,13 @@ export default async function AdminDashboardPage() {
             <div>
               <h3 className="text-xl font-bold text-stone-900">询盘增长趋势</h3>
               <p className="mt-1 text-xs font-bold uppercase tracking-widest text-stone-400">
-                Inquiry Generation Trend
+                询盘生成趋势
               </p>
             </div>
             <div className="flex h-8 items-center rounded-full bg-stone-100 p-1">
               <button className="h-full rounded-full bg-white px-4 text-[10px] font-black uppercase tracking-widest text-stone-900 shadow-sm">
-                最近 7 天              </button>
+                最近 7 天
+              </button>
             </div>
           </div>
 
@@ -230,7 +233,7 @@ export default async function AdminDashboardPage() {
                     <span className="text-sm font-bold text-stone-900">{item.productName}</span>
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-amber-600">
-                    {item.count} Inquiries
+                    {item.count} 条询盘
                   </span>
                 </div>
               ))
@@ -259,7 +262,7 @@ export default async function AdminDashboardPage() {
                     <span className="text-sm font-bold text-stone-900">{item.productName}</span>
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-blue-600">
-                    {item.count} Views
+                    {item.count} 次浏览
                   </span>
                 </div>
               ))

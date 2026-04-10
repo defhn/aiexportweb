@@ -47,7 +47,6 @@ type UploadedAsset = RichTextAsset & {
   mimeType?: string;
 };
 
-// 閺夌偛顭烽崳锟?Markdown 闁筹拷?HTML 閺夌儐鍓氬畷鏌ユ晬閸喐锟ラ梻鍥ｅ亾濠㈣埖鐗犻崕瀛樻償閹垮嫮绀?
 function markdownToHtml(md: string): string {
   const lines = md.split("\n");
   const result: string[] = [];
@@ -57,7 +56,6 @@ function markdownToHtml(md: string): string {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // 闁哄秴娲。锟?
     if (/^### (.+)/.test(line)) {
       if (inList) { result.push(`</${listType}>`); inList = false; }
       result.push(`<h3>${line.replace(/^### /, "")}</h3>`);
@@ -74,14 +72,12 @@ function markdownToHtml(md: string): string {
       continue;
     }
 
-    // 鐎殿喗娲滈弫锟?
     if (/^> (.+)/.test(line)) {
       if (inList) { result.push(`</${listType}>`); inList = false; }
       result.push(`<blockquote>${line.replace(/^> /, "")}</blockquote>`);
       continue;
     }
 
-    // 闁哄啰濮寸花顓㈠礆濡ゅ嫨鈧拷
     if (/^- (.+)/.test(line) || /^\* (.+)/.test(line)) {
       if (!inList || listType !== "ul") {
         if (inList) result.push(`</${listType}>`);
@@ -92,7 +88,6 @@ function markdownToHtml(md: string): string {
       continue;
     }
 
-    // 闁哄牆顦花顓㈠礆濡ゅ嫨鈧拷
     if (/^\d+\. (.+)/.test(line)) {
       if (!inList || listType !== "ol") {
         if (inList) result.push(`</${listType}>`);
@@ -103,14 +98,12 @@ function markdownToHtml(md: string): string {
       continue;
     }
 
-    // 缂佸矂缂氶、锟?
     if (line.trim() === "") {
       if (inList) { result.push(`</${listType}>`); inList = false; }
       continue;
     }
 
-    // 闁哄拋鍣ｉ埀顒佺椤斿矂鎷?    if (inList) { result.push(`</${listType}>`); inList = false; }
-    // 閻炴稑鑻崬锟?markdown
+    if (inList) { result.push(`</${listType}>`); inList = false; }
     const inline = line
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
@@ -134,13 +127,11 @@ function isImageClipboardItem(item: DataTransferItem) {
 const btnCls =
   "inline-flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 border border-transparent hover:border-stone-200";
 
-const sectionBtnCls = "flex h-8 items-center gap-1 rounded-lg bg-stone-100/60 px-2.5 text-xs font-semibold text-stone-500";
-
 export function RichTextEditor({
   label,
   name,
   defaultValue = "",
-  placeholder = "璇疯緭鍏ュ唴瀹?..",
+  placeholder = "请输入内容...",
   assets = [],
   folders = [],
   locale = "zh",
@@ -285,7 +276,6 @@ export function RichTextEditor({
   async function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
     const items = Array.from(event.clipboardData.items);
 
-    // 1. Handle pasted images first.
     const imageItem = items.find(isImageClipboardItem);
     if (imageItem) {
       event.preventDefault();
@@ -295,7 +285,6 @@ export function RichTextEditor({
       return;
     }
 
-    // 2. Convert pasted Markdown into rich text.
     const textItem = items.find((i) => i.kind === "string" && i.type === "text/plain");
     if (textItem) {
       textItem.getAsString((text) => {
@@ -305,12 +294,10 @@ export function RichTextEditor({
           insertHtmlFragment(converted);
           setMessage("已识别 Markdown 格式并转换为富文本。");
         }
-        // Keep the browser's default paste behavior for plain text.
       });
     }
   }
 
-  // Locale badge for the current editor instance.
   const localeBadge =
     locale === "zh" ? (
       <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">
@@ -318,13 +305,12 @@ export function RichTextEditor({
       </span>
     ) : (
       <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">
-        English
+        英文
       </span>
     );
 
   return (
     <section className="rounded-2xl border border-stone-200 bg-white shadow-sm">
-      {/* Editor header */}
       <div className="flex items-center justify-between gap-3 border-b border-stone-100 px-5 py-3.5">
         <h3 className="text-sm font-bold text-stone-900">{label}</h3>
         <div className="flex items-center gap-2">
@@ -332,18 +318,16 @@ export function RichTextEditor({
           <span className="text-xs text-stone-400">
             {locale === "zh"
               ? "支持直接粘贴图片，Markdown 会自动转换。"
-              : "Paste images directly; Markdown is auto-converted."}
+              : "英文编辑区支持直接粘贴图片，Markdown 会自动转换。"}
           </span>
         </div>
       </div>
 
-      {/* 鐎规悶鍎遍崣鍧楀冀?闁筹拷?sticky 闁革拷?main 闁伙拷?top-0 */}
       <div
         data-testid="rich-text-toolbar"
         className="sticky top-0 z-20 border-b border-stone-100 bg-white/98 backdrop-blur-sm px-4 py-2.5 shadow-sm"
       >
         <div className="flex flex-wrap items-center gap-1.5">
-          {/* 闁哄秴娲。浠嬪冀閻撳海纭€ */}
           <div className="flex items-center gap-0.5">
             <button className={btnCls} onClick={() => applyHeading("H1")} type="button" title="H1 标题">
               <Heading1 className="h-3.5 w-3.5" />
@@ -358,7 +342,6 @@ export function RichTextEditor({
 
           <div className="h-5 w-px bg-stone-200" />
 
-          {/* 闁哄秶鍘х槐锟?*/}
           <div className="flex items-center gap-0.5">
             <button className={btnCls} onClick={() => exec("bold")} type="button" title="加粗">
               <Bold className="h-3.5 w-3.5" />
@@ -373,19 +356,17 @@ export function RichTextEditor({
 
           <div className="h-5 w-px bg-stone-200" />
 
-          {/* 闁告帗顨夐妴锟?*/}
           <div className="flex items-center gap-0.5">
-            <button className={btnCls} onClick={() => exec("insertUnorderedList")} type="button" title="闁哄啰濮寸花顓㈠礆濡ゅ嫨鈧拷">
+            <button className={btnCls} onClick={() => exec("insertUnorderedList")} type="button" title="无序列表">
               <List className="h-3.5 w-3.5" />
             </button>
-            <button className={btnCls} onClick={() => exec("insertOrderedList")} type="button" title="闁哄牆顦花顓㈠礆濡ゅ嫨鈧拷">
+            <button className={btnCls} onClick={() => exec("insertOrderedList")} type="button" title="有序列表">
               <ListOrdered className="h-3.5 w-3.5" />
             </button>
           </div>
 
           <div className="h-5 w-px bg-stone-200" />
 
-          {/* 闂佸墽鍋撶敮锟?*/}
           <button
             className={btnCls}
             onClick={() => {
@@ -400,7 +381,6 @@ export function RichTextEditor({
 
           <div className="h-5 w-px bg-stone-200" />
 
-          {/* 闁搞儱澧芥晶锟?*/}
           <button
             className={`${btnCls} gap-1.5`}
             onClick={() => { rememberSelection(); setShowLibrary(true); }}
@@ -408,24 +388,23 @@ export function RichTextEditor({
             title="从图库插入图片"
           >
             <ImagePlus className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline text-xs">{locale === "zh" ? "插图" : "Insert"}</span>
+            <span className="hidden sm:inline text-xs">插图</span>
           </button>
           <button
             className={`${btnCls} gap-1.5`}
             onClick={() => fileInputRef.current?.click()}
             type="button"
-            title="濞戞挸锕ｇ槐鍫曞炊閸撗冾暬"
+            title="上传图片"
             disabled={uploading}
           >
             <Upload className="h-3.5 w-3.5" />
             <span className="hidden sm:inline text-xs">
-              {uploading ? (locale === "zh" ? "上传中..." : "Uploading...") : (locale === "zh" ? "上传" : "Upload")} 
+              {uploading ? "上传中..." : "上传"}
             </span>
           </button>
 
           <div className="h-5 w-px bg-stone-200" />
 
-          {/* 闁逛勘鍊濋弨锟?闁哄秶鍘х槐鈥炽€掗崨瀛樼彑 */}
           <div className="flex items-center gap-0.5">
             <button className={btnCls} onClick={() => exec("undo")} type="button" title="撤销">
               <Undo2 className="h-3.5 w-3.5" />
@@ -433,13 +412,12 @@ export function RichTextEditor({
             <button className={btnCls} onClick={() => exec("redo")} type="button" title="重做">
               <Redo2 className="h-3.5 w-3.5" />
             </button>
-            <button className={btnCls} onClick={() => exec("removeFormat")} type="button" title="婵炴挸鎳樺▍搴ㄥ冀閻撳海纭€">
+            <button className={btnCls} onClick={() => exec("removeFormat")} type="button" title="清除格式">
               <RemoveFormatting className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>
 
-        {/* 婵炴垵鐗婃导锟?闂佹寧鐟ㄩ銈夊箵閹邦喓浠?*/}
         {message ? (
           <p className="mt-2 text-[11px] text-emerald-700">{message}</p>
         ) : null}
@@ -448,7 +426,6 @@ export function RichTextEditor({
         ) : null}
       </div>
 
-      {/* 缂傚倹鐗炵欢顐﹀礌?*/}
       <div className="relative">
         <div
           data-testid={`rich-text-editor-surface-${name}`}
@@ -481,7 +458,6 @@ export function RichTextEditor({
         type="file"
       />
 
-      {/* 闁搞儲鍎崇花鍗烆嚕閸︻厾宕?*/}
       {showLibrary ? (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-stone-950/50 p-0 sm:p-6">
           <div className="max-h-[92vh] sm:max-h-[90vh] w-full sm:max-w-5xl overflow-hidden rounded-t-3xl sm:rounded-3xl bg-white shadow-2xl">

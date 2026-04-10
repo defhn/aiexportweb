@@ -40,60 +40,60 @@ type NavItem = {
 
 const navigation: NavItem[] = [
   {
-    name: "Dashboard",
+    name: "数据看板",
     href: "/admin",
     icon: LayoutDashboard,
     featureKey: "dashboard_analytics",
     group: "overview",
   },
-  { name: "Products", href: "/admin/products", icon: Package, group: "content" },
-  { name: "Categories", href: "/admin/categories", icon: Tags, group: "content" },
+  { name: "产品管理", href: "/admin/products", icon: Package, group: "content" },
+  { name: "分类管理", href: "/admin/categories", icon: Tags, group: "content" },
   {
-    name: "Blog",
+    name: "博客管理",
     href: "/admin/blog",
     icon: BookText,
     featureKey: "blog_management",
     group: "content",
   },
-  { name: "Media", href: "/admin/media", icon: Images, group: "content" },
-  { name: "Files", href: "/admin/files", icon: FileArchive, group: "content" },
+  { name: "媒体库", href: "/admin/media", icon: Images, group: "content" },
+  { name: "文件管理", href: "/admin/files", icon: FileArchive, group: "content" },
   {
-    name: "Inquiries",
+    name: "询盘管理",
     href: "/admin/inquiries",
     icon: MessageSquareMore,
     featureKey: "inquiry_detail",
     group: "sales",
   },
   {
-    name: "Quotes",
+    name: "报价管理",
     href: "/admin/quotes",
     icon: FileStack,
     featureKey: "quotes",
     group: "sales",
   },
   {
-    name: "Reply Templates",
+    name: "回复模板",
     href: "/admin/reply-templates",
     icon: FolderKanban,
     featureKey: "reply_templates",
     group: "sales",
   },
-  { name: "Home Modules", href: "/admin/pages/home", icon: Layers3, group: "site" },
-  { name: "About Page", href: "/admin/pages/about", icon: Globe, group: "site" },
-  { name: "Contact Page", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
-  { name: "Staff", href: "/admin/staff", icon: Users, group: "site" },
-  { name: "SEO + AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
-  { name: "Attribution", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
-  { name: "Pipeline", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
-  { name: "RAG Workspace", href: "/admin/rag", icon: Radar, group: "site" },
-  { name: "Settings", href: "/admin/settings", icon: Settings, group: "site" },
+  { name: "首页模块", href: "/admin/pages/home", icon: Layers3, group: "site" },
+  { name: "关于我们", href: "/admin/pages/about", icon: Globe, group: "site" },
+  { name: "联系我们", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
+  { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
+  { name: "SEO 与 AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
+  { name: "归因分析", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
+  { name: "线索流程", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
+  { name: "RAG 知识库", href: "/admin/rag", icon: Radar, group: "site" },
+  { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
 ];
 
 const groupLabels: Record<string, string> = {
-  overview: "Overview",
-  content: "Content",
-  sales: "Sales",
-  site: "Site",
+  overview: "总览",
+  content: "内容管理",
+  sales: "销售管理",
+  site: "站点设置",
 };
 
 function isActivePath(pathname: string, href: string) {
@@ -116,7 +116,7 @@ function PlanTag({
   const availability = getFeatureAvailability({ currentPlan, featureKey });
   if (availability.status === "included") return null;
 
-  const label = availability.requiredPlan === "growth" ? "Growth" : "AI Sales";
+  const label = availability.requiredPlan === "growth" ? "增长版" : "AI 版";
 
   return (
     <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-stone-400">
@@ -158,9 +158,9 @@ export function AdminSidebar({
           </div>
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-blue-300">
-              Admin
+              后台
             </p>
-            <p className="text-sm font-semibold text-white">Export Growth Console</p>
+            <p className="text-sm font-semibold text-white">中文后台</p>
           </div>
         </Link>
       </div>
@@ -213,13 +213,13 @@ export function AdminSidebar({
       <div className="border-t border-white/5 p-3">
         <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-xl shadow-blue-950/30">
           <p className="text-[9px] font-black uppercase tracking-[0.35em] text-blue-100/80">
-            Growth System
+            管理中心
           </p>
           <div className="mt-2.5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold">Standard Delivery Console</p>
+              <p className="text-sm font-semibold">统一运营后台</p>
               <p className="mt-0.5 text-xs text-blue-100/80">
-                Products, content, and inquiries in one place
+                产品、内容、询盘集中管理
               </p>
             </div>
             <BarChart3 className="h-4 w-4 text-blue-100" />
@@ -233,7 +233,7 @@ export function AdminSidebar({
           type="button"
         >
           <LogOut className="h-4 w-4" />
-          {loggingOut ? "Signing out..." : "Sign out"}
+          {loggingOut ? "退出中..." : "退出登录"}
         </button>
       </div>
     </div>

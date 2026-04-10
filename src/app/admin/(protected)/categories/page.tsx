@@ -28,7 +28,6 @@ export default async function AdminCategoriesPage() {
   const mappedImageFolders = buildAssetFolderOptions(imageFolders);
   const bulkFormId = "categories-bulk-form";
 
-  // mediaId 鈫?url 鏄犲皠锛岀敤浜庣缉鐣ュ浘灞曠ず
   const assetUrlMap = new Map(mappedImageAssets.map((a) => [a.id, a.url]));
   const nextSortOrder =
     categories.length > 0
@@ -37,29 +36,25 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div className="space-y-4">
-      {/* 椤靛ご */}
       <div>
         <div className="mb-1 flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-stone-400">
           <Layers className="h-3 w-3" />
-          Categories
+          分类管理
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-stone-900">浜у搧鍒嗙被</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-stone-900">产品分类</h1>
         <p className="mt-1 text-sm text-stone-500">
-          鍏?{categories.length} 涓垎绫?路 榧犳爣鎮仠琛屽熬鐐归搮绗斿浘鏍囧睍寮€缂栬緫
+          共 {categories.length} 个分类。将鼠标悬停到行尾图标可展开编辑。
         </p>
       </div>
 
-      {/* 鏂板缓鍒嗙被锛堟姌鍙犻潰鏉匡級 */}
       <NewCategoryPanel
         imageAssets={mappedImageAssets}
         imageFolders={mappedImageFolders}
         nextSortOrder={nextSortOrder}
       />
 
-      {/* 鎵归噺鎿嶄綔鏍?*/}
       {categories.length > 0 ? <BulkActionsBar bulkFormId={bulkFormId} /> : null}
 
-      {/* 鍒嗙被鍒楄〃琛ㄦ牸 */}
       <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
         <table className="w-full">
           <thead>
@@ -67,16 +62,17 @@ export default async function AdminCategoriesPage() {
               <th className="w-8 px-3 py-2.5" />
               <th className="w-10 px-2 py-2.5" />
               <th className="px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
-                鍒嗙被鍚嶇О
+                分类名称
               </th>
               <th className="hidden px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
-                Slug
+                固定链接
               </th>
               <th className="hidden w-16 px-3 py-2.5 text-center text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
-                鎺掑簭
+                排序
               </th>
               <th className="hidden px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-stone-500 md:table-cell">
-                鐘舵€?              </th>
+                状态
+              </th>
               <th className="w-20 px-3 py-2.5" />
             </tr>
           </thead>
@@ -84,7 +80,8 @@ export default async function AdminCategoriesPage() {
             {categories.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-16 text-center text-sm text-stone-400">
-                  杩樻病鏈夊垎绫伙紝鐐瑰嚮涓婃柟銆屾柊寤哄垎绫汇€嶅紑濮嬫坊鍔犮€?                </td>
+                  还没有分类，点击上方“新增分类”开始添加。
+                </td>
               </tr>
             ) : (
               categories.map((category) => (

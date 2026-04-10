@@ -78,7 +78,7 @@ export function GalleryReplaceButton({
         onClick={() => inputRef.current?.click()}
         type="button"
       >
-        {pending ? "鏇挎崲涓?.." : "鏇挎崲鍥剧墖"}
+        {pending ? "\u66ff\u6362\u4e2d..." : "\u66ff\u6362\u56fe\u7247"}
       </button>
     </div>
   );

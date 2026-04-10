@@ -10,9 +10,7 @@ type AssetUploadPanelProps = {
   endpoint: "/api/uploads/image" | "/api/uploads/file";
   accept: string;
   buttonLabel: string;
-  /** 鐟滅増鎸告晶鐘差啅閺屻儮鍋撴径澶庡幀闁汇劌瀚弸鍐╃鐠烘亽浠氶柨娑樼墔缂嶆梹绋夊ú顏嗗笡閻犱降鍊楀ú浼村冀閸ワ妇绉寸紓鍐惧櫙缁憋拷 */
   folderId?: number | null;
-  /** 闁告瑯鍨堕埀顒€顦卞ú浼村冀閸ャ劍鐎ù鐘烘硾閵囨瑩宕氬Δ鍕┾偓鍐晬閸繆鍓ㄧ紒鎰仦閼垫垹浠﹂弴鐘粵闁匡拷?*/
   folderOptions?: FolderOption[];
 };
 
@@ -68,7 +66,6 @@ export function AssetUploadPanel({
       router.refresh();
     } finally {
       setPending(false);
-      // 婵炴挸鎳愰埞锟?input 濞寸姰鍎遍崢鎴犳媼閹间礁娅㈠璺虹Ч閳ь剙顦幃鎾寸▔閳ь剟寮崶锔筋偨
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
@@ -78,7 +75,6 @@ export function AssetUploadPanel({
 
   return (
     <>
-      {/* 閻熸瑱绠戣ぐ鍌炲箰婢舵劖灏?*/}
       <button
         className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
         onClick={openDialog}
@@ -88,7 +84,6 @@ export function AssetUploadPanel({
         {buttonLabel}
       </button>
 
-      {/* 闂傚懏鍔樺Λ宀勬儍閸曨剚鐎ù鐘茬埣閳ь剙顦扮€氥劑宕?*/}
       <input
         ref={fileInputRef}
         accept={accept}
@@ -98,7 +93,6 @@ export function AssetUploadPanel({
         type="file"
       />
 
-      {/* 鐎殿喖婀遍悰銉╂焼椤旀儳鍏?*/}
       {open ? (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 backdrop-blur-sm"
@@ -107,7 +101,6 @@ export function AssetUploadPanel({
           }}
         >
           <div className="relative w-full max-w-md rounded-[2rem] border border-stone-200 bg-white p-8 shadow-2xl">
-            {/* 闁稿繑濞婂Λ锟?*/}
             <button
               className="absolute right-5 top-5 rounded-full p-1.5 text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-900"
               disabled={pending}
@@ -119,20 +112,15 @@ export function AssetUploadPanel({
 
             <h3 className="text-lg font-semibold text-stone-950">上传资源</h3>
 
-            {/* 闁烩晩鍠楅悥锝夊棘閸ワ附顐藉璺虹秺閳ь剙顦扮€氾拷 */}
             <label className="mt-6 block text-sm font-medium text-stone-700">
-              <span className="flex items-center gap-1.5 mb-2">
+              <span className="mb-2 flex items-center gap-1.5">
                 <Folder className="h-4 w-4 text-stone-400" />
-                  上传到文件夹
+                上传到文件夹
               </span>
               <select
                 className="w-full rounded-xl border border-stone-300 px-3 py-2.5 text-sm outline-none focus:border-stone-950"
                 disabled={pending}
-                onChange={(e) =>
-                  setTargetFolderId(
-                    e.target.value ? Number(e.target.value) : "",
-                  )
-                }
+                onChange={(e) => setTargetFolderId(e.target.value ? Number(e.target.value) : "")}
                 value={targetFolderId}
               >
                 <option value="">根目录</option>
@@ -144,11 +132,11 @@ export function AssetUploadPanel({
               </select>
             </label>
 
-            {/* 闁绘鍩栭埀顑跨鐏忥拷 */}
             {pending ? (
               <div className="mt-6 flex items-center justify-center gap-3 rounded-2xl bg-stone-50 py-8 text-sm text-stone-500">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-stone-300 border-t-stone-700" />
-                正在上传，请稍候...              </div>
+                正在上传，请稍候...
+              </div>
             ) : result ? (
               <div
                 className={`mt-6 flex items-start gap-3 rounded-2xl px-4 py-4 text-sm ${
@@ -169,13 +157,12 @@ export function AssetUploadPanel({
               >
                 <Upload className="h-8 w-8" />
                 <span>
-                  点击此处选择文件并上传到 
+                  点击此处选择文件并上传到
                   <strong className="text-stone-700">{targetLabel}</strong>
                 </span>
               </div>
             )}
 
-            {/* 閹煎瓨娲熼崕鎾箼瀹ュ嫮绋?*/}
             <div className="mt-6 flex justify-between gap-3">
               {result?.ok ? (
                 <>
@@ -204,7 +191,7 @@ export function AssetUploadPanel({
                   onClick={closeDialog}
                   type="button"
                 >
-                    关闭
+                  关闭
                 </button>
               )}
             </div>

@@ -56,7 +56,7 @@ export default async function AdminProductsPage({
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="mb-2 text-xs font-black uppercase tracking-[0.35em] text-stone-400">
-              Product Management
+              产品管理
             </p>
             <h1 className="text-3xl font-semibold text-stone-950">产品管理</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-600">
@@ -84,19 +84,23 @@ export default async function AdminProductsPage({
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           {params.deleted ? (
             <p className="rounded-2xl bg-emerald-50 px-4 py-2 text-emerald-700">
-              已删除 {params.deleted} 个产品。            </p>
+              已删除 {params.deleted} 个产品。
+            </p>
           ) : null}
           {params.imported ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">
-              已导入 {params.imported} 个产品。            </p>
+              已导入 {params.imported} 个产品。
+            </p>
           ) : null}
           {params.saved === "bulk-moved" ? (
             <p className="rounded-2xl bg-blue-50 px-4 py-2 text-blue-700">
-              已将所选产品移动到新的分类。            </p>
+              已将所选产品移动到新的分类。
+            </p>
           ) : null}
           {params.error === "no-selection" ? (
             <p className="rounded-2xl bg-amber-50 px-4 py-2 text-amber-700">
-              请先选择要操作的产品。            </p>
+              请先选择要操作的产品。
+            </p>
           ) : null}
         </div>
       </section>
@@ -133,7 +137,7 @@ export default async function AdminProductsPage({
         >
           <option value="">全部状态</option>
           <option value="published">已发布</option>
-          <option value="draft">閼藉枪</option>
+          <option value="draft">草稿</option>
         </select>
 
         <button
@@ -141,7 +145,8 @@ export default async function AdminProductsPage({
           className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-stone-950 px-6 text-sm font-medium text-white"
         >
           <Filter className="h-4 w-4" />
-          筛选        </button>
+          筛选
+        </button>
       </form>
 
       {products.length ? (
@@ -184,17 +189,19 @@ export default async function AdminProductsPage({
           <thead>
             <tr className="border-b border-stone-200 bg-stone-50/70">
               <th className="w-16 px-4 py-4 text-center text-[11px] font-semibold text-stone-500">
-                选择              </th>
+                选择
+              </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
-                娴溠冩惂
+                产品信息
               </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
                 分类
               </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
-                状态              </th>
+                状态
+              </th>
               <th className="px-6 py-4 text-left text-[11px] font-semibold text-stone-500">
-                閺囧瓨鏌婇弮鍫曟？
+                最后更新时间
               </th>
               <th className="px-6 py-4 text-right text-[11px] font-semibold text-stone-500">
                 操作
@@ -286,7 +293,8 @@ export default async function AdminProductsPage({
 
         {products.length === 0 ? (
           <div className="px-6 py-20 text-center text-sm text-stone-500">
-            当前没有匹配条件的产品。          </div>
+            当前没有匹配条件的产品。
+          </div>
         ) : null}
       </section>
     </div>

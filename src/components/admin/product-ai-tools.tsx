@@ -117,10 +117,10 @@ export function ProductAiTools({
   return (
     <div className="rounded-2xl bg-stone-50 p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-medium text-stone-950">AI 閼昏鲸鏋冮弬鍥攳鏉堝懎濮�</p>
+        <p className="text-sm font-medium text-stone-950">AI 智能文案工具</p>
         {gate.status === "trial" && remaining !== null ? (
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-            鐠囨洜鏁ら崜鈺€缍� {remaining}/{gate.limit}
+            剩余次数 {remaining}/{gate.limit}
           </span>
         ) : null}
       </div>
@@ -141,7 +141,7 @@ export function ProductAiTools({
             onClick={() => handleGenerate("name")}
             type="button"
           >
-            {pendingMode === "name" ? "閻㈢喐鍨氭稉?.." : "閻㈢喐鍨氶懟杈ㄦ瀮閺嶅洭顣�"}
+            {pendingMode === "name" ? "生成中..." : "生成英文产品名"}
           </button>
           <button
             className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 disabled:opacity-60"
@@ -149,7 +149,7 @@ export function ProductAiTools({
             onClick={() => handleGenerate("copy")}
             type="button"
           >
-            {pendingMode === "copy" ? "閻㈢喐鍨氭稉?.." : "閻㈢喐鍨氶懟杈ㄦ瀮閹诲繗鍫�"}
+            {pendingMode === "copy" ? "生成中..." : "生成英文描述与详情"}
           </button>
           <button
             className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 disabled:opacity-60"
@@ -157,7 +157,7 @@ export function ProductAiTools({
             onClick={() => handleGenerate("seo")}
             type="button"
           >
-            {pendingMode === "seo" ? "閻㈢喐鍨氭稉?.." : "閻㈢喐鍨� SEO 閺傚洦顢�"}
+            {pendingMode === "seo" ? "生成中..." : "生成英文 SEO 文案"}
           </button>
         </div>
       ) : (
@@ -166,13 +166,14 @@ export function ProductAiTools({
             className="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white"
             href={gate.salesContactHref}
           >
-            閼辨梻閮撮幋鎴濆磳缁�?          </Link>
+            联系销售升级
+          </Link>
           {gate.pricingHref ? (
             <Link
               className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
               href={gate.pricingHref}
             >
-              閺屻儳婀呮總妤咁樀鐎佃鐦�
+              查看套餐说明
             </Link>
           ) : null}
         </div>

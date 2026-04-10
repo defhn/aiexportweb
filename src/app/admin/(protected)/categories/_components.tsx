@@ -45,7 +45,6 @@ export type CategoryItem = {
   isFeatured: boolean;
 };
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸愬懓浠堢紓鏍帆鐞?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function CategoryRow({
   category,
   imageAssets,
@@ -64,9 +63,7 @@ export function CategoryRow({
 
   return (
     <>
-      {/* 娑撴槒顢?*/}
       <tr className="group border-b border-stone-100 hover:bg-stone-50/60">
-        {/* checkbox */}
         <td className="w-8 px-3 py-2.5">
           {category.id ? (
             <input
@@ -79,7 +76,6 @@ export function CategoryRow({
           ) : null}
         </td>
 
-        {/* 缂傗晝鏆愰崶?*/}
         <td className="w-10 px-2 py-2">
           <div className="h-9 w-9 overflow-hidden rounded-lg border border-stone-200 bg-stone-100">
             {coverUrl ? (
@@ -92,7 +88,6 @@ export function CategoryRow({
           </div>
         </td>
 
-        {/* 閸氬秶袨 */}
         <td className="px-3 py-2.5">
           <p className="text-sm font-semibold text-stone-900">
             {category.nameZh || <span className="text-stone-400">--</span>}
@@ -100,19 +95,16 @@ export function CategoryRow({
           <p className="text-xs text-stone-400">{category.nameEn}</p>
         </td>
 
-        {/* slug */}
         <td className="hidden px-3 py-2.5 md:table-cell">
           <code className="rounded bg-stone-100 px-2 py-0.5 text-xs text-stone-600">
             {category.slug || "--"}
           </code>
         </td>
 
-        {/* 閹烘帒绨?*/}
         <td className="hidden w-16 px-3 py-2.5 text-center text-sm text-stone-500 md:table-cell">
           {category.sortOrder}
         </td>
 
-        {/* 閻樿埖鈧?*/}
         <td className="hidden px-3 py-2.5 md:table-cell">
           <div className="flex gap-2">
             {category.isVisible ? (
@@ -132,7 +124,6 @@ export function CategoryRow({
           </div>
         </td>
 
-        {/* 閹垮秳缍?*/}
         <td className="px-3 py-2.5">
           <div className="flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
             <button
@@ -159,7 +150,6 @@ export function CategoryRow({
         </td>
       </tr>
 
-      {/* 鐏炴洖绱戠紓鏍帆鐞?*/}
       {expanded ? (
         <tr className="bg-stone-50/80">
           <td colSpan={7} className="px-4 pb-4 pt-3">
@@ -186,7 +176,7 @@ export function CategoryRow({
                   className={inputCls}
                   defaultValue={category.nameEn}
                   name="nameEn"
-                  placeholder="Category Name (EN)"
+                  placeholder="分类名称（英文）"
                   required
                 />
                 <input
@@ -214,7 +204,7 @@ export function CategoryRow({
                   className={`${inputCls} min-h-16 resize-none`}
                   defaultValue={category.summaryEn}
                   name="summaryEn"
-                  placeholder="Summary (EN)"
+                  placeholder="英文简介"
                 />
               </div>
 
@@ -270,7 +260,6 @@ export function CategoryRow({
   );
 }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閺傛澘缂撻崚鍡欒閹舵ê褰旈棃銏℃緲 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function NewCategoryPanel({
   imageAssets,
   imageFolders,
@@ -312,7 +301,7 @@ export function NewCategoryPanel({
           >
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <input className={inputCls} name="nameZh" placeholder="分类名称（中文）" required />
-              <input className={inputCls} name="nameEn" placeholder="Category Name (EN)" required />
+              <input className={inputCls} name="nameEn" placeholder="分类名称（英文）" required />
               <input className={inputCls} name="slug" placeholder="slug（留空自动生成）" />
               <input
                 className={inputCls}
@@ -332,7 +321,7 @@ export function NewCategoryPanel({
               <textarea
                 className={`${inputCls} min-h-16 resize-none`}
                 name="summaryEn"
-                placeholder="Summary (EN)"
+                placeholder="英文简介"
               />
             </div>
 
@@ -376,7 +365,6 @@ export function NewCategoryPanel({
   );
 }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閹靛綊鍣洪幙宥勭稊閺?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 export function BulkActionsBar({ bulkFormId }: { bulkFormId: string }) {
   return (
     <form
@@ -389,8 +377,9 @@ export function BulkActionsBar({ bulkFormId }: { bulkFormId: string }) {
         className="flex items-center gap-2 rounded-full border border-red-200 px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
       >
         <Trash2 className="h-3.5 w-3.5" />
-        批量删除所选      </button>
-      <p className="text-xs text-stone-400">娴犲懎鍨归梽銈嗘弓鐞氼偂楠囬崫浣稿窗閻劎娈戦崚鍡欒</p>
+        批量删除所选
+      </button>
+      <p className="text-xs text-stone-400">勾选分类后可批量删除，请谨慎操作。</p>
     </form>
   );
 }

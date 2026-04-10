@@ -93,13 +93,10 @@ export function ImagePicker({
 
   return (
     <>
-      {/* 闂傚懏鍔樺Λ宀勬儍閸曨厽鍩傞悗鍦仩閵嗗啴宕￠弴鐐垫憻婵烇拷?*/}
       <input name={name} type="hidden" value={selectedId ?? ""} />
 
-      {/* 缂佹瘱鍐ㄦ濡澘瀚～宥囨偘?*/}
-      <div className="flex items-start gap-4">
-        {/* 缂傚倵鏅濋弳鎰板炊?- 250閼村磭鐥?90px */}
-        <div className="relative w-[250px] flex-shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-100">
+      <div className="flex max-w-[260px] flex-col gap-3">
+        <div className="relative w-full overflow-hidden rounded-xl border border-stone-200 bg-stone-100">
           <div className="aspect-[4/3]">
             {selectedAsset ? (
               <>
@@ -125,25 +122,15 @@ export function ImagePicker({
           </div>
         </div>
 
-        {/* 闁哄倸娲ｅ▎銏ゅ触?+ 闁瑰灝绉崇紞鏃堝箰婢舵劖灏?*/}
-        <div className="flex flex-col gap-2 pt-1">
-          <p className="text-sm font-medium text-stone-900">
-            {selectedAsset?.fileName ?? <span className="text-stone-400">未选择{label}</span>}
-          </p>
-          <p className="text-xs text-stone-400">
-            {selectedAsset ? "点击更换图片，或清除当前选择。" : "点击按钮从媒体库选择图片。"}
-          </p>
-          <button
-            className="mt-1 w-fit rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-500 hover:text-stone-900"
-            onClick={() => setOpen(true)}
-            type="button"
-          >
-            {selectedAsset ? "更换图片" : "选择图片"}
-          </button>
-        </div>
+        <button
+          className="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 hover:border-stone-500 hover:text-stone-900"
+          onClick={() => setOpen(true)}
+          type="button"
+        >
+          {selectedAsset ? "更换图片" : `选择${label}`}
+        </button>
       </div>
 
-      {/* 鐎殿喖婀遍悰锟?*/}
       {open ? (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-stone-950/60 pt-16 backdrop-blur-sm"
@@ -152,7 +139,6 @@ export function ImagePicker({
           }}
         >
           <div className="flex h-[80vh] w-full max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-2xl">
-            {/* 鐎殿喖婀遍悰銉﹀緞閹绢喖鍔?*/}
             <div className="flex flex-shrink-0 items-center justify-between border-b border-stone-100 px-6 py-4">
               <h3 className="text-base font-semibold text-stone-950">选择{label}</h3>
               <div className="flex items-center gap-2">
@@ -175,7 +161,6 @@ export function ImagePicker({
               </div>
             </div>
 
-            {/* 缂佹稒鐩埀顒€顦伴悥锟?*/}
             <div className="flex flex-shrink-0 gap-3 border-b border-stone-100 px-6 py-3">
               <input
                 className="flex-1 rounded-xl border border-stone-300 px-3 py-2 text-sm outline-none focus:border-stone-600"
@@ -202,7 +187,6 @@ export function ImagePicker({
               ) : null}
             </div>
 
-            {/* 闁搞儱澧芥晶鏍磾閹寸偟澹?*/}
             <div className="min-h-0 flex-1 overflow-y-auto p-4">
               {uploadError ? (
                 <p className="mb-3 rounded-xl bg-red-50 px-4 py-2 text-sm text-red-600">

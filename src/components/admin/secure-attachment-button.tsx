@@ -3,10 +3,6 @@
 import { useState } from "react";
 import { Download, Loader2, ShieldCheck } from "lucide-react";
 
-/**
- * 鐎瑰鍙忛梽鍕娑撳娴囬幐澶愭尦
- * 閻愮懓鍤弮璺烘倻閸氬海顏拠閿嬬湴妫板嫮顒烽崥锟� URL閿涳拷15 閸掑棝鎸撻崘鍛箒閺佸牞绱濋柆鍨帳閺嗘挳婀堕崗顒€绱戠€涙ê鍋嶅鎯扮熅瀵帮拷
- */
 export function SecureAttachmentButton({
   inquiryId,
   fileName,
@@ -23,11 +19,12 @@ export function SecureAttachmentButton({
     try {
       const res = await fetch(`/api/admin/attachment-url?inquiryId=${inquiryId}`);
       const data = (await res.json()) as { url?: string; error?: string };
-      if (!res.ok || !data.url) throw new Error(data.error ?? "閼惧嘲褰囬柧鐐复婢惰精瑙�");
-      // 閹垫挸绱戞０鍕劮閸氾拷 URL閿涘牊绁荤憴鍫濇珤閺傜増鐖ｇ粵鍙ョ瑓鏉炴枻绱�
+      if (!res.ok || !data.url) {
+        throw new Error(data.error ?? "\u83b7\u53d6\u5b89\u5168\u4e0b\u8f7d\u94fe\u63a5\u5931\u8d25");
+      }
       window.open(data.url, "_blank", "noopener,noreferrer");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "娑撳娴囨径杈Е");
+      setError(err instanceof Error ? err.message : "\u4e0b\u8f7d\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5");
     } finally {
       setLoading(false);
     }
@@ -46,11 +43,11 @@ export function SecureAttachmentButton({
         ) : (
           <Download className="h-4 w-4" />
         )}
-        {fileName ?? "娑撳娴囬梽鍕"}
+        {fileName ?? "\u4e0b\u8f7d\u9644\u4ef6"}
       </button>
       <span className="flex items-center gap-1 text-xs text-stone-400">
         <ShieldCheck className="h-3 w-3" />
-        閸旂姴鐦戦柧鐐复 璺� 15 閸掑棝鎸撻張澶嬫櫏
+        {"\u5b89\u5168\u94fe\u63a5\u6709\u6548\u671f\u4e3a 15 \u5206\u949f"}
       </span>
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>

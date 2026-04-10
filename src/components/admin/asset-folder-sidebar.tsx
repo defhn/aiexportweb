@@ -68,7 +68,8 @@ export function AssetFolderSidebar({
       <div>
         <div className="flex items-center gap-2 text-sm font-semibold text-stone-950">
           <FolderPlus className="h-4 w-4" />
-          鏂囦欢澶?        </div>
+          {"\u65b0\u5efa\u6587\u4ef6\u5939"}
+        </div>
         <div className="mt-4">{createFolderAction}</div>
       </div>
 
@@ -76,7 +77,8 @@ export function AssetFolderSidebar({
         <div className="flex flex-wrap items-center gap-2 text-stone-500">
           <Link href={basePath} className="inline-flex items-center gap-1 hover:text-stone-900">
             <Home className="h-4 w-4" />
-            鏍圭洰褰?          </Link>
+            {"\u6839\u76ee\u5f55"}
+          </Link>
           {breadcrumbs.map((item) => (
             <span key={item.id} className="inline-flex items-center gap-2">
               <ChevronRight className="h-4 w-4" />
@@ -99,7 +101,7 @@ export function AssetFolderSidebar({
           ].join(" ")}
         >
           <Folder className="h-4 w-4" />
-          <span>鍏ㄩ儴绱犳潗</span>
+          <span>{"\u5168\u90e8\u7d20\u6750"}</span>
         </Link>
         {tree.map((node) => (
           <FolderBranch
