@@ -169,6 +169,13 @@ export function buildFallbackInquiryReply(input: InquiryReplyInput) {
 // ──────────────────────────────────────────────────────────
 
 const GEMINI_MODEL = "gemini-2.5-flash-preview-04-17";
+// Vertex AI Express: 支持 AQ. 格式 API Key，无需 OAuth2 服务账号
+const VERTEX_PROJECT = process.env.VERTEX_PROJECT_ID ?? "huachuanghub";
+const VERTEX_LOCATION = process.env.VERTEX_LOCATION ?? "us-central1";
+
+function buildVertexUrl(model: string) {
+  return `https://${VERTEX_LOCATION}-aiplatform.googleapis.com/v1/projects/${VERTEX_PROJECT}/locations/${VERTEX_LOCATION}/publishers/google/models/${model}:generateContent`;
+}
 
 async function callGeminiText(prompt: {
   system: string;
@@ -177,7 +184,7 @@ async function callGeminiText(prompt: {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  const url = `${buildVertexUrl(GEMINI_MODEL)}?key=${apiKey}`;
 
   try {
     const response = await fetch(url, {
@@ -213,7 +220,7 @@ async function callGeminiJson<T>(
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return { result: fallback, provider: "fallback" };
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  const url = `${buildVertexUrl(GEMINI_MODEL)}?key=${apiKey}`;
 
   try {
     const response = await fetch(url, {
@@ -230,7 +237,7 @@ async function callGeminiJson<T>(
     });
 
     if (!response.ok) {
-      console.warn("[ai] Gemini JSON error:", response.status);
+      console.warn("[ai] Gemini JSON error:", response.status, await response.text());
       return { result: fallback, provider: "fallback" };
     }
 

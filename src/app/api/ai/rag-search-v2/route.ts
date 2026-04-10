@@ -10,8 +10,10 @@ type FaqItem = { question: string; answer: string };
 type EmbeddingVector = number[];
 
 async function getEmbedding(text: string, apiKey: string): Promise<EmbeddingVector> {
+  const project = process.env.VERTEX_PROJECT_ID ?? "huachuanghub";
+  const location = process.env.VERTEX_LOCATION ?? "us-central1";
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`,
+    `https://${location}-aiplatform.googleapis.com/v1/projects/${project}/locations/${location}/publishers/google/models/text-embedding-004:embedContent?key=${apiKey}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -222,9 +224,11 @@ Return strict JSON in this shape:
   "usedSources": ["source names"]
 }`;
 
+  const v2Project = process.env.VERTEX_PROJECT_ID ?? "huachuanghub";
+  const v2Location = process.env.VERTEX_LOCATION ?? "us-central1";
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://${v2Location}-aiplatform.googleapis.com/v1/projects/${v2Project}/locations/${v2Location}/publishers/google/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

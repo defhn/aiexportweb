@@ -32,6 +32,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "未配置 GEMINI_API_KEY" }, { status: 500 });
   }
 
+  // Vertex AI Express endpoint
+  const project = process.env.VERTEX_PROJECT_ID ?? "huachuanghub";
+  const location = process.env.VERTEX_LOCATION ?? "us-central1";
+  const ragModel = "gemini-2.0-flash";
+
   // ── 1. 从 products 表检索产品数据 ──────────────────────────────────────
   const db = getDb();
 
@@ -141,7 +146,7 @@ ${ragContext || "（暂无产品数据，请基于通用行业知识回答，并
   // ── 4. 调用 Gemini ─────────────────────────────────────────────────────
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://${location}-aiplatform.googleapis.com/v1/projects/${project}/locations/${location}/publishers/google/models/${ragModel}:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
