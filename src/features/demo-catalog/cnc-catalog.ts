@@ -160,36 +160,36 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "custom-aluminum-cnc-bracket",
     categorySlug: "aluminum-machining-parts",
-    nameZh: "閻庤鑹鹃崺妤呮煣濠靛棙鍊ら梺锟?CNC 闁衡偓椤栨稓浠",
+    nameZh: "定制铝合金 CNC 支架",
     nameEn: "Custom Aluminum CNC Bracket",
-    shortDescriptionZh: "闂傚牄鍨归幃婊堟嚊椤忓嫬袟闁告牗鐗為鏇熷緞閸パ勫闁哄牆鎼▍鎺撶閾忓湱娉㈤柡瀣濞堟垶娼繝姘闁告牗鐗滅花璺ㄢ偓闈涙閺侇噣寮搁煬娴嬪亾",
+    shortDescriptionZh: "用于自动化框架和机器人装配的轻量化精密支架。",
     shortDescriptionEn:
       "A lightweight precision bracket for automation frames and robotic assemblies.",
-    detailLeadZh: "閺夆晜鐟﹂娆撳绩椤栨稓浠搁梺顐㈠€搁幃搴ㄦ閳ь剛鎲版担鎴掓唉闂佹彃绻愮€垫煡宕畝鈧彊閻庤淇洪ˉ濠囨煀瀹ュ洨缈遍幖杈惧濞堟垿鎳涢鍕楅柛鏍ㄧ墵閵嗗秹鎯勯琛″亾",
+    detailLeadZh: "该支架专为需要低重量和稳定安装精度的自动化项目设计。",
     detailLeadEn:
       "This bracket is designed for automation projects that need low weight and stable mounting accuracy.",
     model: "CNC-BR-001",
-    materialZh: "6061 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "6061 铝合金",
     materialEn: "Aluminum 6061",
-    processZh: "CNC 闂佹拝绲芥晶锟",
+    processZh: "CNC 铣削",
     processEn: "CNC Milling",
-    sizeZh: "闁圭顦ù妯肩棯缁嬭法鏆伴柛锟",
+    sizeZh: "按图纸定制",
     sizeEn: "Custom per drawing",
     tolerance: "+/-0.01 mm",
-    surfaceTreatmentZh: "闂傚啳娅曢悗顒€顫濊鐎碉拷",
+    surfaceTreatmentZh: "阳极氧化",
     surfaceTreatmentEn: "Anodizing",
-    colorZh: "闂佺偓鍎兼竟锟?/ 濮掓稒鍨兼竟锟",
+    colorZh: "银色 / 黑色",
     colorEn: "Silver / Black",
-    applicationZh: "闁哄牆鎼▍鎺撶閻戞ɑ鏆滈柡瀣堪閳ь兛娴囬崵婊堝礉閵娿儱顕у鍓佹嚀閸欏潡濡存担椋庣倞闂侇偂鑳堕崵搴∥熼敍鍕煁",
+    applicationZh: "机器人支架、自动化夹具和传送带模块",
     applicationEn: "robot brackets, automation fixtures, and conveyor modules",
     moq: "100 pcs",
     sampleLeadTime: "5-7 days",
     leadTime: "15-20 days",
-    packagingZh: "闁告娲戝▎銏＄┍濠靛洤袘閻烇拷?+ 闁告垵鎼ぐ娑氱棯閸濄儺鍞",
+    packagingZh: "防护袋 + 出口纸箱",
     packagingEn: "Protective bag + export carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?50,000 濞达拷",
+    supplyAbilityZh: "每月 50,000 件",
     supplyAbilityEn: "50,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
@@ -205,36 +205,36 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "precision-steel-drive-shaft",
     categorySlug: "precision-turning-parts",
-    nameZh: "缂侇喗鍎抽惁鎴︽煢閵忕姴鐓戝ù鑲╁Т婵晜娼",
+    nameZh: "精密钢制传动轴",
     nameEn: "Precision Steel Drive Shaft",
-    shortDescriptionZh: "闂侇偄鍊婚弫銈嗙鎼粹€茬矗濞戞挻鐭槐鍫曞礉閵娧囧厙缂備胶鍠撳▓鎴烆殗濡儤鍊遍弶鐐存綑鐎硅櫕娼€垫瓕顫﹂梻鍡樻构濞嗐垽濡",
+    shortDescriptionZh: "适用于工业传动系统的高同心度轴类零件。",
     shortDescriptionEn:
       "A high-concentricity shaft component for industrial transmission systems.",
-    detailLeadZh: "閻犲洢鍎撮柊杈╃尵鐠佹娊鐛撻柛婵呯閻栧爼鎮介妸銈囪壘闂傗偓閹稿孩鍩傞弶鈺冨仧閻㈢粯娼婚幇顖ｆ斀闁汇劌瀚弫鎼佸嫉閸濆嫭瀚插ù鑲╁Т婵晛螣閿涘嫮鐭嬮柕锟",
+    detailLeadZh: "该传动轴常用于需要长时间稳定运行的电动驱动组件。",
     detailLeadEn:
       "This shaft is commonly used in motorized drive assemblies that require long, stable operation.",
     model: "SHAFT-018",
     materialZh: "SUS 304 / 42CrMo",
     materialEn: "SUS 304 / 42CrMo",
-    processZh: "CNC 閺夌儑绠戞晶锟?+ 缂侇喖澧介敍锟",
+    processZh: "CNC 车削 + 磨削",
     processEn: "CNC Turning + Grinding",
-    sizeZh: "闁烩晜娼欑欢锟?18-42 mm",
+    sizeZh: "直径 18-42 mm",
     sizeEn: "Diameter 18-42 mm",
     tolerance: "+/-0.005 mm",
-    surfaceTreatmentZh: "闁硅埖绋戦崢锟?/ 闁告瑦鍨跨划锟",
+    surfaceTreatmentZh: "抛光 / 发黑",
     surfaceTreatmentEn: "Polishing / Black Oxide",
-    colorZh: "闂佸弶鍨甸惈姗€寮甸鍐棌",
+    colorZh: "金属原色",
     colorEn: "Metallic",
-    applicationZh: "鐎规悶鍎扮粭鐔煎礄韫囨稈鍋撻悢鍛婄皻闁靛棔鑳堕弫鎼佸嫉鏉炴壆鐐婇柛鏂诲妸閳ь兛绀佺€垫鎲楅崨閭﹀晭濠拷",
+    applicationZh: "工业变速箱、电机驱动和包装设备",
     applicationEn: "industrial gearboxes, motor drives, and packaging equipment",
     moq: "200 pcs",
     sampleLeadTime: "7 days",
     leadTime: "18 days",
-    packagingZh: "闂傚啯鐓￠弨顒€鈻?+ 闁绘繂绉惰ぐ鏂课?+ 闁哄牄鍔庨锟",
+    packagingZh: "防锈油 + 泡棉 + 出口木箱",
     packagingEn: "Anti-rust oil + foam + export case",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?30,000 濞达拷",
+    supplyAbilityZh: "每月 30,000 件",
     supplyAbilityEn: "30,000 pcs per month",
     certification: "ISO 9001 / RoHS",
     customFields: [
@@ -250,36 +250,47 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "cnc-machined-housing",
     categorySlug: "aluminum-machining-parts",
-    nameZh: "CNC 缂侇喗鍎抽惁鎴﹀礉閻樿弓绱ｅ鑸电墪閿涳拷",
+    nameZh: "CNC 精密加工壳体",
+
     nameEn: "CNC Machined Housing",
-    shortDescriptionZh: "闁烩偓鍔嬬花顒勫箳瑜嶉崺妤呭闯閵婏絺鍋撴担椋庣倞闁规壆鍠庡▍鎺楀椽鐏炴垝绱ｅ☉鎾存皑缁挾绮╅婊勭暠閻庤鑹鹃崺妤佸緞閺嵮嶇处濞寸姾缈伴埀锟",
+    shortDescriptionZh: "适用于控制器、传感器与工业终端的定制屏蔽件，铝合金定制铣削。",
+
     shortDescriptionEn:
       "A custom enclosure part for controllers, sensors, and industrial terminals.",
-    detailLeadZh: "闂侇偄鍊搁幃搴ｂ偓鐢垫嚀椤﹁崵鎲撮崒妯峰亾娴ｇ瓔妫呴梺鏉跨Т閻＄喐鎷呭鍛闁轰緤绲块崕褰掑箑瑜戦崗姗€寮垫径搴矗婵懓鍊诲▓鎴︽偨闂堟稓鎽嶉悹浣瑰劤椤︻剚寰勯弽褝绱﹀銈呮贡濞蹭即濡",
+    detailLeadZh: "适用于对外观、安装孔精度及散热性能有要求的电子屏蔽壳体。",
+
     detailLeadEn:
       "Built for electronic enclosures that require clean appearance, accurate mounting holes, and stable thermal performance.",
     model: "HSG-220",
-    materialZh: "6063 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "6063 铝合金",
+
     materialEn: "Aluminum 6063",
-    processZh: "CNC 闂佹拝绲芥晶锟?+ 闁衡偓閼姐倕顫",
+    processZh: "CNC 铣削 + 攻丝",
+
     processEn: "CNC Milling + Tapping",
     sizeZh: "220 x 145 x 68 mm",
     sizeEn: "220 x 145 x 68 mm",
     tolerance: "+/-0.02 mm",
-    surfaceTreatmentZh: "闁哥娀顥撻悥鐐烘⒓閾忣偆鈧拷",
+    surfaceTreatmentZh: "喷砂阳极氧化",
+
     surfaceTreatmentEn: "Sandblasted Anodizing",
-    colorZh: "濮掓稒鍨兼竟锟?/ 婵烇綀浜导锟",
+    colorZh: "黑色 / 深灰",
+
     colorEn: "Black / Dark Gray",
-    applicationZh: "闁硅矇鍐ㄧ厬闁革絻鍔岄ˇ缁樼珶閻愯В鍋撴担闀愮矗濞戞挻姘ㄧ紞澶愬礂閻愯В鍋撴担椋庣倞闁规壆鍠愯啯闁革拷",
+    applicationZh: "控制器壳体、工业网关及传感器模块封装件",
+
     applicationEn: "controller housings, industrial gateways, and sensor modules",
     moq: "80 pcs",
     sampleLeadTime: "6 days",
     leadTime: "16-22 days",
-    packagingZh: "闁绘繂绉惰ぐ鏂课涙径鎰吘閻忥拷?+ 濠㈣埖鐗滈锟",
+    packagingZh: "泡棉隔板 + 出口纸箱",
+
     packagingEn: "Foam divider + export carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?20,000 濞达拷",
+    supplyAbilityZh: "每月 20,000 件",
+
     supplyAbilityEn: "20,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
@@ -295,36 +306,46 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "stainless-steel-flange-plate",
     categorySlug: "stainless-steel-components",
-    nameZh: "濞戞挸绉归弨顒勬煢閵忥紕銆婇柛蹇曞濠拷",
+    nameZh: "不锈钢法兰盘",
+
     nameEn: "Stainless Steel Flange Plate",
-    shortDescriptionZh: "闂傚牄鍨归幃婊兠规担椋庣Ъ閻犱焦鍎抽ˇ顒勫椽鐏炵晫鏆旈悷浣告噽闁绱掗悢鐑樼暠濡ゅ倹锚瀹歌鲸鎯旈敂鐣屻€婇柛蹇斿缁绘盯骞掗妷锔界凡闁碉拷",
+    shortDescriptionZh: "适用于流体设备与安装系统的高强度法兰盘。",
+
     shortDescriptionEn:
       "A high-strength flange plate for fluid equipment and mounting systems.",
-    detailLeadZh: "闂侇偄鍊搁幃搴♀枖閻㈠憡顬婇柕鍡曟祰缁诲啫饪伴妶鍫晭濠㈣泛娲ら幏鎵不閿熺姳澹曢悗鐟邦槼椤ュ﹥銇勯崷顓熺獥闁汇劌瀚换娑㈠箳閵夈倗鐟㈤悗瑙勭煯缂嶅懘濡",
+    detailLeadZh: "适用于泵体、阀门组件、过滤设备及管道安装系统。",
+
     detailLeadEn:
       "Suitable for pumps, valve assemblies, filtration equipment, and pipeline mounting systems.",
     model: "FLG-316-12",
     materialZh: "SUS 316L",
     materialEn: "SUS 316L",
-    processZh: "CNC 闂佹拝绲芥晶锟?+ 闁稿﹥甯熼～锟",
+    processZh: "CNC 铣削 + 倒角",
+
     processEn: "CNC Milling + Chamfering",
     sizeZh: "180 x 180 x 12 mm",
     sizeEn: "180 x 180 x 12 mm",
     tolerance: "+/-0.02 mm",
-    surfaceTreatmentZh: "闂佽姤绻傜€碉拷",
+    surfaceTreatmentZh: "钝化处理",
+
     surfaceTreatmentEn: "Passivation",
-    colorZh: "闂佸弶鍨甸惈姗€寮甸鍐棌",
+    colorZh: "金属原色",
+
     colorEn: "Metallic",
-    applicationZh: "婵炲鏁诲鍓у寲閼姐倗鍩犻柕鍡曟祰缁诲啫饪伴妶鍛彜閻庣懓顦抽ˉ濠囧Υ娓氣偓椤ャ倝宕担绛嬪晭濠拷",
+    applicationZh: "泵体系统、过滤器安装及食品加工设备",
+
     applicationEn: "pump systems, filter mounting, and food-processing equipment",
     moq: "120 pcs",
     sampleLeadTime: "7 days",
     leadTime: "18-24 days",
-    packagingZh: "闂傚啯褰冮崺澶愭嚉?+ 闁告帒妫欓悧鍝ョ不",
+    packagingZh: "保护膜 + 分格纸箱",
+
     packagingEn: "Protective film + divided carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?18,000 濞达拷",
+    supplyAbilityZh: "每月 18,000 件",
+
     supplyAbilityEn: "18,000 pcs per month",
     certification: "ISO 9001 / FDA material compliance",
     customFields: [
@@ -340,40 +361,52 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "brass-threaded-connector",
     categorySlug: "precision-turning-parts",
-    nameZh: "濮掓稑瀚伴幗鎰版懚閾忚鐫忛弶鈺冨仦鐢瓨绂",
+    nameZh: "黄铜螺纹接头",
+
     nameEn: "Brass Threaded Connector",
-    shortDescriptionZh: "闂侇偄鍊搁幃搴∶规担椋庣Ъ闁靛棔鑳堕弫绋款潩閺傛寧瀚插ù鐙€浜ｉ妴鍐寲閼姐倗鍩犻柣銊ュ缁ㄨ法鈧潧妫滈悘顏嗙棯绾懐绠鹃柟鎭掑劙濞嗐垽濡",
+    shortDescriptionZh: "适用于流体、电气和仪表系统的精密螺纹接头。",
+
     shortDescriptionEn:
       "A precision threaded connector for fluid, electrical, and instrumentation systems.",
-    detailLeadZh: "闂侇偄鍊搁幃搴ㄦ閳ь剛鎲版笟鈧悵顔锯偓浣冨亹閺佹悂骞€瑜嶉幏鎵矙閸愯尙鏆伴悗闈涙閻ㄦ繈骞€瑜戦崗姗€鎯冮崟顔剧闁规亽鍎卞┃鈧柡鍜佸灛閳э拷",
+    detailLeadZh: "专为需要导电性、密封稳定性和精确螺纹的连接点设计。",
+
     detailLeadEn:
       "Designed for connection points that require conductivity, sealing stability, and accurate threads.",
     model: "BRC-M12",
-    materialZh: "H59 濮掓稑瀚伴幗锟",
+    materialZh: "H59 黄铜",
+
     materialEn: "Brass H59",
-    processZh: "CNC 閺夌儑绠戞晶锟?+ 婵犲﹥淇烘慨锟",
+    processZh: "CNC 车削 + 滚花",
+
     processEn: "CNC Turning + Knurling",
     sizeZh: "M12 / M16 / M20",
     sizeEn: "M12 / M16 / M20",
     tolerance: "+/-0.01 mm",
-    surfaceTreatmentZh: "闂傗偓閳ь剟姊",
+    surfaceTreatmentZh: "镀镍",
+
     surfaceTreatmentEn: "Nickel Plating",
-    colorZh: "闂佺偓鍎兼竟锟",
+    colorZh: "银色",
+
     colorEn: "Silver",
-    applicationZh: "婵ɑ鏌ㄦ慨鈺呭箳閵夈儯浠堥柕鍡曟閸楀海鎮伴妸銊х闁规亽鍎埀顑胯兌閺佺顫濋弮鍫濆姤濞达拷",
+    applicationZh: "气动接头、仪表连接件和电气零件",
+
     applicationEn: "pneumatic fittings, instrumentation connectors, and electrical parts",
     moq: "500 pcs",
     sampleLeadTime: "4-5 days",
     leadTime: "12-18 days",
-    packagingZh: "PE 閻烇拷?+ 闁哄秴娲ㄩ鐑芥儎",
+    packagingZh: "PE 袋 + 标签盒",
+
     packagingEn: "PE bag + labeled box",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?80,000 濞达拷",
+    supplyAbilityZh: "每月 80,000 件",
+
     supplyAbilityEn: "80,000 pcs per month",
     certification: "RoHS",
     customFields: [
-      { labelZh: "闁炬槒娅ｅЧ妤呭冀閸パ冩珯", labelEn: "Thread Standard", valueZh: "Metric / BSP", valueEn: "Metric / BSP", visible: true, sortOrder: 10 },
+      { labelZh: "螺纹标准", labelEn: "Thread Standard", valueZh: "Metric / BSP", valueEn: "Metric / BSP", visible: True, sortOrder: 10 },
+
       { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 0.8", valueEn: "Ra 0.8", visible: true, sortOrder: 20 },
     ],
     shape: "connector",
@@ -385,41 +418,54 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "cnc-turning-bushing",
     categorySlug: "precision-turning-parts",
-    nameZh: "CNC 閺夌儑绠戞晶娑氭偘椤掆偓椤拷",
+    nameZh: "CNC 车削套筒",
+
     nameEn: "CNC Turning Bushing",
-    shortDescriptionZh: "闁烩偓鍔嬬花顒佹姜椤掆偓婵晠濡存担鍓插殼闁告碍鍨甸幏浼村礄韫囨柨鐩佺紓浣稿濞嗐垽鎯冮崟顖滃蒋缂侇喗鍎崇€瑰磭鎮伴鈧〃婊勭闊祴鍋",
+    shortDescriptionZh: "用于旋转导向、对中和阻尼组件的高精度套筒。",
+
     shortDescriptionEn:
       "A high-precision bushing for rotary guidance, alignment, and damping assemblies.",
-    detailLeadZh: "閻犲洢鍎撮垾鏍ㄧ附濡ゅ應鍋撻崒姘€ら梻鈧幐搴㈠焸闂佹澘绉撮幃搴㈡交閹邦剙袟闁革妇鍎ゅ▍娆撴晬鐏炶棄绻侀悹瀣暙閺勫倻鈧潧鎽滆彊閻庤鑹鹃幏鎵偘閵娾晜妗ㄩ悹鎰╁姂閸ｆ椽濡",
+    detailLeadZh: "该套筒支持尺寸稳定性和光滑表面质量要求较高的往复运动应用场景。",
+
     detailLeadEn:
       "This bushing supports repeated motion applications where dimensional stability and smooth finish matter.",
     model: "BSH-028",
     materialZh: "SUS 303 / C45",
     materialEn: "SUS 303 / C45",
-    processZh: "CNC 閺夌儑绠戞晶锟",
+    processZh: "CNC 车削",
+
     processEn: "CNC Turning",
-    sizeZh: "濠㈣埖鐗曠欢锟?28 mm",
+    sizeZh: "外径 28 mm",
+
     sizeEn: "Outer diameter 28 mm",
     tolerance: "+/-0.008 mm",
-    surfaceTreatmentZh: "闁告绮惁娲礆?+ 闁硅埖绋戦崢锟",
+    surfaceTreatmentZh: "去毛刺 + 抛光",
+
     surfaceTreatmentEn: "Deburring + Polishing",
-    colorZh: "闂佸弶鍨甸惈姗€寮甸鍐棌",
+    colorZh: "金属原色",
+
     colorEn: "Metallic",
-    applicationZh: "閺夌偛鐡ㄦ竟娆愭償瑜嬮埀顑跨劍缁箓宕濋妸锔界皻闁哄瀚ㄩ埀顑跨鐎垫鎲楅崨顔界皻婵拷",
+    applicationZh: "轴承座、滑动系统和包装机械",
+
     applicationEn: "bearing seats, sliding systems, and packaging machinery",
     moq: "300 pcs",
     sampleLeadTime: "5 days",
     leadTime: "14-18 days",
-    packagingZh: "闂傚啯鐓￠弨顒傛偖?+ 闁告垵鎼ぐ娑氱棯閸濄儺鍞",
+    packagingZh: "防锈袋 + 出口纸箱",
+
     packagingEn: "Anti-rust bag + export carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?60,000 濞达拷",
+    supplyAbilityZh: "每月 60,000 件",
+
     supplyAbilityEn: "60,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
-      { labelZh: "闁革箑妫楃€癸拷", labelEn: "Roundness", valueZh: "0.005 mm", valueEn: "0.005 mm", visible: true, sortOrder: 10 },
-      { labelZh: "检测方式", labelEn: "Inspection", valueZh: "气动量仪检测", valueEn: "Air gauge inspection", visible: true, sortOrder: 20 },
+      { labelZh: "圆度", labelEn: "Roundness", valueZh: "0.005 mm", valueEn: "0.005 mm", visible: True, sortOrder: 10 },
+
+      { labelZh: "气检验收", labelEn: "Inspection", valueZh: "气规检测", valueEn: "Air gauge inspection", visible: True, sortOrder: 20 },
+
     ],
     shape: "bushing",
     tone: "steel",
@@ -430,40 +476,52 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "aluminum-heat-sink-base",
     categorySlug: "aluminum-machining-parts",
-    nameZh: "闂佺偓绻傞幃搴ㄦ煂閹寸偞娈犻柣鎴幖缁ㄨ櫕鎯",
+    nameZh: "铝合金散热基板",
+
     nameEn: "Aluminum Heat Sink Base",
-    shortDescriptionZh: "闂侇偄鍊婚弫銈嗙鎼达絾鏆╂繝褎鍔栬啯闁秆勵殔閹蜂即骞掕閸╂鍖栭懡銈囧煚闁汇劌瀚花璺ㄢ偓闈涙閺嗗酣鎮滈鐐典亢閹煎洷浣插亾",
+    shortDescriptionZh: "用于功率器件和热管理模块的高导热铝合金散热基板。",
+
     shortDescriptionEn:
       "A precision heat sink base for power modules and control systems.",
-    detailLeadZh: "闂傚牄鍨归幃婊堟倻椤撶媭鍚€闁荤偛妫滈々锕€效閸屾繄绐涘Δ鍌涐缚濞堟垿鎮介棃娑氭憤閻熶礁鎳橀崢銈嗐亜閸︻厽绐楅柨娑樿嫰閸氬銇勯悙顒佹疇闁绘埈鍘虹粭宀€鈧懓顦抽ˉ濠勫垝閹冾唺闁碉拷",
+    detailLeadZh: "适用于高功率密度模块，要求表面平整度和导热接触面精度的场合。",
+
     detailLeadEn:
       "Developed for electronic assemblies that need both heat dissipation and accurate mounting geometry.",
     model: "HSB-160",
-    materialZh: "6061-T6 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "6061-T6 铝合金",
+
     materialEn: "Aluminum 6061-T6",
-    processZh: "CNC 闂佹拝绲芥晶锟?+ 鐎殿喒鍋撴俊锟",
+    processZh: "CNC 铣削 + 精磨",
+
     processEn: "CNC Milling + Slotting",
     sizeZh: "160 x 90 x 18 mm",
     sizeEn: "160 x 90 x 18 mm",
     tolerance: "+/-0.02 mm",
-    surfaceTreatmentZh: "闁哥娀顥撻悥鐐烘⒓閾忣偆鈧拷",
+    surfaceTreatmentZh: "阳极氧化",
+
     surfaceTreatmentEn: "Sandblasted Anodizing",
-    colorZh: "濮掓稒鍨兼竟锟?/ 闂佺偓鍎兼竟锟",
+    colorZh: "黑色 / 银色",
+
     colorEn: "Black / Silver",
-    applicationZh: "闁告瑦锕㈤。鍫曞闯閵婏絺鍋撴担鐑樻毄婵犙勫姈鑶╅柛褎銇滈埀顑跨娴兼劖绋夊顓炰粯闁告帟娉涘▍锟",
+    applicationZh: "电源模块、IGBT 散热底板和工业变频器",
+
     applicationEn: "inverters, power modules, and industrial controllers",
     moq: "150 pcs",
     sampleLeadTime: "5 days",
     leadTime: "15-18 days",
-    packagingZh: "闁告娲戝▎銏ゆ⒕閺傝法婀?+ 闁告垵鎼ぐ娑氱棯閸濄儺鍞",
+    packagingZh: "珍珠棉袋 + 出口纸箱",
+
     packagingEn: "Individual divider + export carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?40,000 濞达拷",
+    supplyAbilityZh: "每月 40,000 件",
+
     supplyAbilityEn: "40,000 pcs per month",
     certification: "RoHS",
     customFields: [
-      { labelZh: "散热要求", labelEn: "Thermal Requirement", valueZh: "优先保证平面导热接触", valueEn: "Priority on flat thermal contact", visible: true, sortOrder: 10 },
+      { labelZh: "散热优先级", labelEn: "Thermal Requirement", valueZh: "优先保证平面贴合导热", valueEn: "Priority on flat thermal contact", visible: True, sortOrder: 10 },
+
       { labelZh: "翅片间距", labelEn: "Fin Pitch", valueZh: "3.5 mm", valueEn: "3.5 mm", visible: true, sortOrder: 20 },
     ],
     shape: "heatsink",
@@ -475,41 +533,53 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "precision-mounting-block",
     categorySlug: "aluminum-machining-parts",
-    nameZh: "缂侇喗鍎抽惁鎴犫偓鐟邦槼椤ュ﹪宕",
+    nameZh: "精密铣削安装块",
+
     nameEn: "Precision Mounting Block",
-    shortDescriptionZh: "闂侇偄鍊搁幃搴ㄦ嚊椤忓嫬袟闁告牗鐗曟导鎰啑閸涱厽瀚查悹浣瑰劤椤︻剟宕洪崫鍕珯閻庤鐭紞鍛存儍閸曨偆鏆旈悷浣告噹濞硷繝濡",
+    shortDescriptionZh: "用于结构支撑与设备安装的高强度铝合金精密铣削块。",
+
     shortDescriptionEn:
       "A precision mounting block for automation tooling and reference positioning.",
-    detailLeadZh: "闂侇偄鍊搁幃搴㈠緞閻熸澘寰旈柕鍡曠劍缁箓宕ｉ弶鎸庡閻熸瑥妫滈～搴ｆ媼閹屾У闁汇劌瀚伴崳鍛婂緞瀹ュ懐鏆板ù锝呯Т閻ｃ劎鎲楅崨顐熷亾",
+    detailLeadZh: "适用于需要高刚性、重复定位精度和多面加工的安装基座应用。",
+
     detailLeadEn:
       "Built for repeated-position assemblies such as fixtures, motion slides, and vision systems.",
     model: "MBL-064",
-    materialZh: "7075 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "7075 铝合金",
+
     materialEn: "Aluminum 7075",
-    processZh: "CNC 闂佹拝绲芥晶锟?+ 闂佸€燁嚙閻★拷",
+    processZh: "CNC 铣削 + 钻孔",
+
     processEn: "CNC Milling + Drilling",
     sizeZh: "64 x 64 x 28 mm",
     sizeEn: "64 x 64 x 28 mm",
     tolerance: "+/-0.01 mm",
-    surfaceTreatmentZh: "缁绢収鍓濆婵嬫⒓閾忣偆鈧拷",
+    surfaceTreatmentZh: "硬质阳极氧化",
+
     surfaceTreatmentEn: "Hard Anodizing",
-    colorZh: "濮掓稒鍨兼竟锟",
+    colorZh: "黑色",
+
     colorEn: "Black",
-    applicationZh: "闁煎浜滄慨鈺呭礌閺嵮佷粴闁稿繑鐏氶埀顑跨劍缁箓宕ｉ弶璺ㄦ殧閻熶礁鎳岄埀顑挎祰椤鎲存径灞剧ゲ闁哄牆鎼悢鈧幖锟",
+    applicationZh: "机器人结构件、精密夹具和自动化设备安装基座",
+
     applicationEn: "automation fixtures, linear slide mounts, and vision camera bases",
     moq: "100 pcs",
     sampleLeadTime: "4-6 days",
     leadTime: "12-16 days",
-    packagingZh: "闂傚啯褰冮崺澶愭嚉?+ 闂傚懏鏌ㄩ惇浼存儎",
+    packagingZh: "泡棉袋 + 木箱",
+
     packagingEn: "Protective film + divided box",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?35,000 濞达拷",
+    supplyAbilityZh: "每月 35,000 件",
+
     supplyAbilityEn: "35,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
       { labelZh: "垂直度", labelEn: "Perpendicularity", valueZh: "0.01 mm", valueEn: "0.01 mm", visible: true, sortOrder: 10 },
-      { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 1.6", valueEn: "Ra 1.6", visible: true, sortOrder: 20 },
+      { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 1.6", valueEn: "Ra 1.6", visible: True, sortOrder: 20 },
+
     ],
     shape: "block",
     tone: "graphite",
@@ -520,40 +590,53 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "cnc-motor-end-cap",
     categorySlug: "stainless-steel-components",
-    nameZh: "CNC 闁汇垹鐏氬┃鈧紒鏃戝灣濞诧拷",
+    nameZh: "CNC 车削主轴套",
+
     nameEn: "CNC Motor End Cap",
-    shortDescriptionZh: "闁烩偓鍔嬬花顒佸閻戞ɑ绠涢柣銏犵仛濠р偓闁告粌鑻导鎰▔濮樺灈鏀抽柛鏂诲妼瀹曠喖宕楅崘顏呯暠缂侇喗鍎抽惁鎴犵博椤栨粍纾伴柕锟",
+    shortDescriptionZh: "用于主轴、滚珠丝杠和直线导轨系统的高精度套管。",
+
     shortDescriptionEn:
       "A precision end cap for servo motors and industrial drive units.",
-    detailLeadZh: "鐎殿噣缂氶惃鐔告姜鐎涙ê顥炲ù锝呯Ф缁ㄦ寧鎯旈敂琛″亾娴ｅ摜鎽曞ù锝呯С缁旀挳鎳涚€涙ǚ鍋撹閹蜂即骞嶈ぐ鎺戞缂佸鍟块悾楣冨箑瑜嬮埀锟",
+    detailLeadZh: "适用于需要同轴度、内孔光洁度和精确配合公差的传动部件应用。",
+
     detailLeadEn:
       "Focused on bearing-seat accuracy, hole consistency, and stable mass-production repeatability.",
     model: "MEC-102",
-    materialZh: "SUS 304 / 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "SUS 304 / 铝合金",
+
     materialEn: "SUS 304 / Aluminum",
-    processZh: "CNC 閺夌儑绠撻幗姘緞瀹ュ懏鍊",
+    processZh: "CNC 车铣复合加工",
+
     processEn: "Turn-Mill Machining",
-    sizeZh: "闁烩晜娼欑欢锟?102 mm",
+    sizeZh: "内径 102 mm",
+
     sizeEn: "Diameter 102 mm",
     tolerance: "+/-0.01 mm",
-    surfaceTreatmentZh: "闁哥娀顥撻悥锟?/ 闁硅埖绋戦崢锟",
+    surfaceTreatmentZh: "阳极氧化 / 抛光",
+
     surfaceTreatmentEn: "Bead Blasting / Polishing",
-    colorZh: "闂佸弶鍨甸惈姗€寮甸鍐棌",
+    colorZh: "金属原色",
+
     colorEn: "Metallic",
-    applicationZh: "濞磋偐鍎ゅ﹢鍥偨閸偅绨氶柕鍡曠窔閳瑰秹宕濋妸未渚€宕稿灏栧亾娓氣偓椤ユ捇寮甸悜妯峰亾缂佹ê鐏",
+    applicationZh: "主轴系统、线性传动和工业机器人关节",
+
     applicationEn: "servo motors, drive units, and blower assemblies",
     moq: "120 pcs",
     sampleLeadTime: "6 days",
     leadTime: "15-20 days",
-    packagingZh: "闂傚啯鐓￠弨顒傛偖?+ 闁告帒妫楅惇鎵棯閸濄儺鍞",
+    packagingZh: "防锈袋 + 海绵托盘",
+
     packagingEn: "Anti-rust bag + layered carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?25,000 濞达拷",
+    supplyAbilityZh: "每月 25,000 件",
+
     supplyAbilityEn: "25,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
-      { labelZh: "轴承位公差", labelEn: "Bearing Seat Tolerance", valueZh: "H7", valueEn: "H7", visible: true, sortOrder: 10 },
+      { labelZh: "轴承孔公差", labelEn: "Bearing Seat Tolerance", valueZh: "H7", valueEn: "H7", visible: True, sortOrder: 10 },
+
       { labelZh: "检测方式", labelEn: "Inspection", valueZh: "CMM + 通止规", valueEn: "CMM + go/no-go gauge", visible: true, sortOrder: 20 },
     ],
     shape: "endcap",
@@ -565,36 +648,47 @@ const productSpecs: ProductSpec[] = [
   {
     slug: "custom-sensor-mount",
     categorySlug: "aluminum-machining-parts",
-    nameZh: "閻庤鑹鹃崺妤佸閻樺啿濡抽柛锝冨妼閻ｃ劎鎲楅崨顓㈢崜",
+    nameZh: "精密铣削电机端盖",
+
     nameEn: "Custom Sensor Mount",
-    shortDescriptionZh: "濞戞捇缂氶～瀣喆婢跺牃鍋撴担璇℃⒕婵炴潙顑呴幏鎵偓瑙勭煯缂嶅懐鍖栭懡銈囧煚闁圭粯鍔掔欢鐢电矙閸愯尙鏆伴悗鐟邦槼椤ュ﹪宕洪崫鍕崜闁碉拷",
+    shortDescriptionZh: "适用于精密电机和编码器的 CNC 铣削铝合金端盖。",
+
     shortDescriptionEn:
       "A stable mounting base for vision, sensing, and positioning systems.",
-    detailLeadZh: "闂侇偄鍊搁幃搴ㄦ閳ь剛鎲版担鎴掓唉闂佹彃绻愮€垫煡濡存担鍝ユ瘓閻忓繐鎼顓㈠椽鐏炶姤褰ラ梺顐ゅ枍濮橈箓寮芥搴㈢暠濞磋偐濮甸崝鍛村闯閵娿儲绁奸悗瑙勭煯濞嗐垺銇勯崷顓熺獥闁碉拷",
+    detailLeadZh: "适用于电机壳体封装、编码器安装及轴承支撑的高精度端盖。",
+
     detailLeadEn:
       "Ideal for sensor support projects that need compact structure, low weight, and quick sampling.",
     model: "SMT-045",
-    materialZh: "6061 闂佺偓绻傞幃搴ㄦ煂",
+    materialZh: "6061 铝合金",
+
     materialEn: "Aluminum 6061",
-    processZh: "CNC 闂佹拝绲芥晶锟?+ 闁衡偓閼姐倕顫",
+    processZh: "CNC 铣削 + 精磨",
+
     processEn: "CNC Milling + Tapping",
     sizeZh: "45 x 38 x 22 mm",
     sizeEn: "45 x 38 x 22 mm",
     tolerance: "+/-0.01 mm",
-    surfaceTreatmentZh: "濮掓稒鍨兼竟濠囨⒓閾忣偆鈧拷",
+    surfaceTreatmentZh: "黑色阳极氧化",
+
     surfaceTreatmentEn: "Black Anodizing",
-    colorZh: "濮掓稒鍨兼竟锟",
+    colorZh: "黑色",
+
     colorEn: "Black",
-    applicationZh: "閻熸瑥妫滈～搴㈠閻樺啿濡抽柛锝冨妸閳ь兛绀侀崢婊堟偨閸偒姊炬繛鏉戭儍閳ь兛绀侀悾鐐媴瀹ュ洨鐭嬪ù锟",
+    applicationZh: "精密电机端盖、编码器支架和轴承座",
+
     applicationEn: "vision sensors, photoelectric inspection, and positioning assemblies",
     moq: "200 pcs",
     sampleLeadTime: "3-5 days",
     leadTime: "10-15 days",
-    packagingZh: "闁告娲戝▎銏焊韫囨凹鏆?+ 濠㈣埖鐗滈锟",
+    packagingZh: "珍珠棉袋 + 出口纸箱",
+
     packagingEn: "Individual small bag + export carton",
-    placeOfOriginZh: "濞戞搩鍘煎ù妤佺▔濠婂棗閲",
+    placeOfOriginZh: "中国东莞",
+
     placeOfOriginEn: "Dongguan, China",
-    supplyAbilityZh: "婵絽绻戝﹢鈧?70,000 濞达拷",
+    supplyAbilityZh: "每月 70,000 件",
+
     supplyAbilityEn: "70,000 pcs per month",
     certification: "RoHS",
     customFields: [
