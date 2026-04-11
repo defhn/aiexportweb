@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import {
+  canAccessAdminPath,
   getSafeAdminRedirectPath,
   isProtectedAdminPath,
   SESSION_COOKIE_NAME,
@@ -27,36 +28,8 @@ export async function proxy(request: NextRequest) {
   const session = await verifySessionToken(token);
 
   if (session) {
-    if (session.role === "employee") {
-      const allowedPrefixes = [
-        "/admin",
-        "/admin/products",
-        "/admin/blog",
-        "/admin/inquiries",
-        "/admin/quotes",
-        "/admin/media",
-      ];
-
-      const isAllowed =
-        allowedPrefixes.some((prefix) => pathname === prefix) ||
-        pathname.startsWith("/admin/products") ||
-        pathname.startsWith("/admin/blog") ||
-        pathname.startsWith("/admin/inquiries") ||
-        pathname.startsWith("/admin/quotes") ||
-        pathname.startsWith("/admin/media");
-
-      if (!isAllowed) {
-        return NextResponse.redirect(new URL("/admin", request.url));
-      }
-    }
-
-    if (session.role === "client_admin") {
-      const isRestricted =
-        pathname.startsWith("/admin/settings") || pathname.startsWith("/admin/seo-ai");
-
-      if (isRestricted) {
-        return NextResponse.redirect(new URL("/admin", request.url));
-      }
+    if (!canAccessAdminPath(session.role, pathname)) {
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
 
     return NextResponse.next();

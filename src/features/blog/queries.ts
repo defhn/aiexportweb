@@ -238,82 +238,86 @@ export async function listAdminBlogPosts(
     return mapSeedBlogPosts(seedPackKey);
   }
 
-  const db = getDb();
-  const conditions = [];
+  try {
+    const db = getDb();
+    const conditions = [];
 
-  if (filters?.query) {
-    conditions.push(
-      or(
-        ilike(blogPosts.titleZh, `%${filters.query}%`),
-        ilike(blogPosts.titleEn, `%${filters.query}%`),
-        ilike(blogPosts.slug, `%${filters.query}%`),
-        ilike(blogCategories.nameZh, `%${filters.query}%`),
-        ilike(blogCategories.nameEn, `%${filters.query}%`),
-      )!,
-    );
-  }
+    if (filters?.query) {
+      conditions.push(
+        or(
+          ilike(blogPosts.titleZh, `%${filters.query}%`),
+          ilike(blogPosts.titleEn, `%${filters.query}%`),
+          ilike(blogPosts.slug, `%${filters.query}%`),
+          ilike(blogCategories.nameZh, `%${filters.query}%`),
+          ilike(blogCategories.nameEn, `%${filters.query}%`),
+        )!,
+      );
+    }
 
-  if (filters?.status) {
-    conditions.push(eq(blogPosts.status, filters.status));
-  }
+    if (filters?.status) {
+      conditions.push(eq(blogPosts.status, filters.status));
+    }
 
-  if (filters?.categoryId) {
-    conditions.push(eq(blogPosts.categoryId, filters.categoryId));
-  }
+    if (filters?.categoryId) {
+      conditions.push(eq(blogPosts.categoryId, filters.categoryId));
+    }
 
-  const query = db
-    .select({
-      id: blogPosts.id,
-      categoryId: blogPosts.categoryId,
-      categoryNameZh: blogCategories.nameZh,
-      categoryNameEn: blogCategories.nameEn,
-      categorySlug: blogCategories.slug,
-      titleZh: blogPosts.titleZh,
-      titleEn: blogPosts.titleEn,
-      slug: blogPosts.slug,
-      excerptZh: blogPosts.excerptZh,
-      excerptEn: blogPosts.excerptEn,
-      contentZh: blogPosts.contentZh,
-      contentEn: blogPosts.contentEn,
-      coverMediaId: blogPosts.coverMediaId,
-      coverImageUrl: mediaAssets.url,
-      coverImageAlt: mediaAssets.altTextEn,
-      seoTitle: blogPosts.seoTitle,
-      seoDescription: blogPosts.seoDescription,
-      status: blogPosts.status,
-      publishedAt: blogPosts.publishedAt,
-      updatedAt: blogPosts.updatedAt,
-    })
-    .from(blogPosts)
-    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
-    .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
-    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.id));
+    const query = db
+      .select({
+        id: blogPosts.id,
+        categoryId: blogPosts.categoryId,
+        categoryNameZh: blogCategories.nameZh,
+        categoryNameEn: blogCategories.nameEn,
+        categorySlug: blogCategories.slug,
+        titleZh: blogPosts.titleZh,
+        titleEn: blogPosts.titleEn,
+        slug: blogPosts.slug,
+        excerptZh: blogPosts.excerptZh,
+        excerptEn: blogPosts.excerptEn,
+        contentZh: blogPosts.contentZh,
+        contentEn: blogPosts.contentEn,
+        coverMediaId: blogPosts.coverMediaId,
+        coverImageUrl: mediaAssets.url,
+        coverImageAlt: mediaAssets.altTextEn,
+        seoTitle: blogPosts.seoTitle,
+        seoDescription: blogPosts.seoDescription,
+        status: blogPosts.status,
+        publishedAt: blogPosts.publishedAt,
+        updatedAt: blogPosts.updatedAt,
+      })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
+      .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.id));
 
-  const rows = conditions.length
-    ? await query.where(and(...conditions))
-    : await query;
+    const rows = conditions.length
+      ? await query.where(and(...conditions))
+      : await query;
 
-  if (rows.length) {
-    return rows.map((row) => ({
-      ...row,
-      categoryNameZh: row.categoryNameZh ?? "",
-      categoryNameEn: row.categoryNameEn ?? "",
-      categorySlug: row.categorySlug ?? "",
-      excerptZh: row.excerptZh || createExcerptFallback(row.contentZh ?? ""),
-      excerptEn: row.excerptEn || createExcerptFallback(row.contentEn ?? ""),
-      contentZh: row.contentZh ?? "",
-      contentEn: row.contentEn ?? "",
-      coverMediaId: row.coverMediaId ?? null,
-      coverImageUrl: row.coverImageUrl ?? null,
-      coverImageAlt: row.coverImageAlt ?? row.titleEn,
-      seoTitle: row.seoTitle ?? row.titleEn,
-      seoDescription:
-        row.seoDescription ||
-        row.excerptEn ||
-        createExcerptFallback(row.contentEn ?? row.titleEn),
-      publishedAt: row.publishedAt?.toISOString() ?? "",
-      updatedAt: row.updatedAt?.toISOString() ?? "",
-    }));
+    if (rows.length) {
+      return rows.map((row) => ({
+        ...row,
+        categoryNameZh: row.categoryNameZh ?? "",
+        categoryNameEn: row.categoryNameEn ?? "",
+        categorySlug: row.categorySlug ?? "",
+        excerptZh: row.excerptZh || createExcerptFallback(row.contentZh ?? ""),
+        excerptEn: row.excerptEn || createExcerptFallback(row.contentEn ?? ""),
+        contentZh: row.contentZh ?? "",
+        contentEn: row.contentEn ?? "",
+        coverMediaId: row.coverMediaId ?? null,
+        coverImageUrl: row.coverImageUrl ?? null,
+        coverImageAlt: row.coverImageAlt ?? row.titleEn,
+        seoTitle: row.seoTitle ?? row.titleEn,
+        seoDescription:
+          row.seoDescription ||
+          row.excerptEn ||
+          createExcerptFallback(row.contentEn ?? row.titleEn),
+        publishedAt: row.publishedAt?.toISOString() ?? "",
+        updatedAt: row.updatedAt?.toISOString() ?? "",
+      }));
+    }
+  } catch (error) {
+    console.error("Falling back to seed admin blog posts after database read failure.", error);
   }
 
   return mapSeedBlogPosts(seedPackKey);

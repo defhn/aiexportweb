@@ -267,21 +267,25 @@ export async function getAllCategories(seedPackKey: SeedPackKey = "cnc") {
 }
 
 export async function listAdminCategories(seedPackKey: SeedPackKey = "cnc") {
-  const categories = await listDatabaseCategories({ includeHidden: true });
+  try {
+    const categories = await listDatabaseCategories({ includeHidden: true });
 
-  if (categories.length) {
-    return categories.map((category) => ({
-      id: category.id,
-      nameZh: category.nameZh,
-      nameEn: category.nameEn,
-      slug: category.slug,
-      summaryZh: category.summaryZh ?? "",
-      summaryEn: category.summaryEn ?? "",
-      imageMediaId: category.imageMediaId ?? null,
-      sortOrder: category.sortOrder,
-      isVisible: category.isVisible,
-      isFeatured: category.isFeatured,
-    }));
+    if (categories.length) {
+      return categories.map((category) => ({
+        id: category.id,
+        nameZh: category.nameZh,
+        nameEn: category.nameEn,
+        slug: category.slug,
+        summaryZh: category.summaryZh ?? "",
+        summaryEn: category.summaryEn ?? "",
+        imageMediaId: category.imageMediaId ?? null,
+        sortOrder: category.sortOrder,
+        isVisible: category.isVisible,
+        isFeatured: category.isFeatured,
+      }));
+    }
+  } catch (error) {
+    console.error("Falling back to seed admin categories after database read failure.", error);
   }
 
   return mapSeedCategories(seedPackKey);
@@ -390,81 +394,85 @@ export async function listAdminProducts(
       });
   }
 
-  const db = getDb();
-  const conditions = [];
+  try {
+    const db = getDb();
+    const conditions = [];
 
-  if (filters?.query?.trim()) {
-    const keyword = `%${filters.query.trim()}%`;
-    conditions.push(
-      or(
-        ilike(products.nameZh, keyword),
-        ilike(products.nameEn, keyword),
-        ilike(products.slug, keyword),
-      )!,
+    if (filters?.query?.trim()) {
+      const keyword = `%${filters.query.trim()}%`;
+      conditions.push(
+        or(
+          ilike(products.nameZh, keyword),
+          ilike(products.nameEn, keyword),
+          ilike(products.slug, keyword),
+        )!,
+      );
+    }
+
+    if (filters?.categorySlug) {
+      conditions.push(eq(productCategories.slug, filters.categorySlug));
+    }
+
+    if (filters?.status) {
+      conditions.push(eq(products.status, filters.status));
+    }
+
+    const query = db
+      .select({
+        id: products.id,
+        categoryId: products.categoryId,
+        categorySlug: productCategories.slug,
+        categoryNameZh: productCategories.nameZh,
+        nameZh: products.nameZh,
+        nameEn: products.nameEn,
+        slug: products.slug,
+        shortDescriptionZh: products.shortDescriptionZh,
+        shortDescriptionEn: products.shortDescriptionEn,
+        detailsZh: products.detailsZh,
+        detailsEn: products.detailsEn,
+        seoTitle: products.seoTitle,
+        seoDescription: products.seoDescription,
+        sortOrder: products.sortOrder,
+        status: products.status,
+        isFeatured: products.isFeatured,
+        showInquiryButton: products.showInquiryButton,
+        showWhatsappButton: products.showWhatsappButton,
+        showPdfDownload: products.showPdfDownload,
+        coverImageUrl: mediaAssets.url,
+        coverImageAlt: mediaAssets.altTextEn,
+        pdfFileId: products.pdfFileId,
+        updatedAt: products.updatedAt,
+      })
+      .from(products)
+      .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
+      .leftJoin(mediaAssets, eq(products.coverMediaId, mediaAssets.id));
+
+    const rows = await (conditions.length ? query.where(and(...conditions)) : query).orderBy(
+      asc(products.sortOrder),
+      asc(products.id),
     );
-  }
 
-  if (filters?.categorySlug) {
-    conditions.push(eq(productCategories.slug, filters.categorySlug));
-  }
-
-  if (filters?.status) {
-    conditions.push(eq(products.status, filters.status));
-  }
-
-  const query = db
-    .select({
-      id: products.id,
-      categoryId: products.categoryId,
-      categorySlug: productCategories.slug,
-      categoryNameZh: productCategories.nameZh,
-      nameZh: products.nameZh,
-      nameEn: products.nameEn,
-      slug: products.slug,
-      shortDescriptionZh: products.shortDescriptionZh,
-      shortDescriptionEn: products.shortDescriptionEn,
-      detailsZh: products.detailsZh,
-      detailsEn: products.detailsEn,
-      seoTitle: products.seoTitle,
-      seoDescription: products.seoDescription,
-      sortOrder: products.sortOrder,
-      status: products.status,
-      isFeatured: products.isFeatured,
-      showInquiryButton: products.showInquiryButton,
-      showWhatsappButton: products.showWhatsappButton,
-      showPdfDownload: products.showPdfDownload,
-      coverImageUrl: mediaAssets.url,
-      coverImageAlt: mediaAssets.altTextEn,
-      pdfFileId: products.pdfFileId,
-      updatedAt: products.updatedAt,
-    })
-    .from(products)
-    .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
-    .leftJoin(mediaAssets, eq(products.coverMediaId, mediaAssets.id));
-
-  const rows = await (conditions.length ? query.where(and(...conditions)) : query).orderBy(
-    asc(products.sortOrder),
-    asc(products.id),
-  );
-
-  if (rows.length) {
-    return rows.map((row) => ({
-      ...row,
-      categorySlug: row.categorySlug ?? "",
-      categoryNameZh: row.categoryNameZh ?? "",
-      shortDescriptionZh: row.shortDescriptionZh ?? "",
-      shortDescriptionEn: row.shortDescriptionEn ?? "",
-      detailsZh: row.detailsZh ?? "",
-      detailsEn: row.detailsEn ?? "",
-      seoTitle: row.seoTitle ?? "",
-      seoDescription: row.seoDescription ?? "",
-      coverImageUrl: getPreferredProductImageUrl({
-        slug: row.slug,
-        currentUrl: row.coverImageUrl ?? null,
-      }),
-      coverImageAlt: row.coverImageAlt ?? row.nameEn,
-      updatedAt: row.updatedAt?.toISOString() ?? "",
-    }));
+    if (rows.length) {
+      return rows.map((row) => ({
+        ...row,
+        categorySlug: row.categorySlug ?? "",
+        categoryNameZh: row.categoryNameZh ?? "",
+        shortDescriptionZh: row.shortDescriptionZh ?? "",
+        shortDescriptionEn: row.shortDescriptionEn ?? "",
+        detailsZh: row.detailsZh ?? "",
+        detailsEn: row.detailsEn ?? "",
+        seoTitle: row.seoTitle ?? "",
+        seoDescription: row.seoDescription ?? "",
+        coverImageUrl: getPreferredProductImageUrl({
+          slug: row.slug,
+          currentUrl: row.coverImageUrl ?? null,
+        }),
+        coverImageAlt: row.coverImageAlt ?? row.nameEn,
+        updatedAt: row.updatedAt?.toISOString() ?? "",
+      }));
+    }
+  } catch (error) {
+    console.error("Falling back to seed admin products after database read failure.", error);
   }
 
   const seedCategories = mapSeedCategories(seedPackKey);

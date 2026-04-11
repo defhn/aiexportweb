@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import type { AdminRole } from "@/lib/auth";
 
-export function MobileDrawer() {
+export function MobileDrawer({ currentRole = "super_admin" }: { currentRole?: AdminRole }) {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -73,7 +74,7 @@ export function MobileDrawer() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <AdminSidebar onClose={() => setOpen(false)} />
+            <AdminSidebar currentRole={currentRole} onClose={() => setOpen(false)} />
           </div>
         </div>
       </dialog>

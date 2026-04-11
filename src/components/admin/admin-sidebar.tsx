@@ -27,6 +27,7 @@ import {
   Users,
 } from "lucide-react";
 
+import { canAccessAdminPath, type AdminRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { getFeatureAvailability, type FeatureKey, type SitePlan } from "@/lib/plans";
 
@@ -127,9 +128,11 @@ function PlanTag({
 
 export function AdminSidebar({
   currentPlan = "ai_sales",
+  currentRole = "super_admin",
   onClose,
 }: {
   currentPlan?: SitePlan;
+  currentRole?: AdminRole;
   onClose?: () => void;
 }) {
   const pathname = usePathname();
@@ -148,6 +151,9 @@ export function AdminSidebar({
   }
 
   const groups = ["overview", "content", "sales", "site"];
+  const visibleNavigation = navigation.filter((item) =>
+    canAccessAdminPath(currentRole, item.href),
+  );
 
   return (
     <div className="flex h-full flex-col bg-stone-950 text-stone-400">
@@ -167,7 +173,7 @@ export function AdminSidebar({
 
       <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
         {groups.map((group) => {
-          const items = navigation.filter((item) => item.group === group);
+          const items = visibleNavigation.filter((item) => item.group === group);
           if (!items.length) return null;
 
           return (

@@ -1,22 +1,29 @@
 import type { ReactNode } from "react";
+import { cookies } from "next/headers";
 import { Bell } from "lucide-react";
 
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { MobileDrawer } from "@/components/admin/mobile-drawer";
+import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
-export default function ProtectedAdminLayout({
+export default async function ProtectedAdminLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const session = token ? await verifySessionToken(token) : null;
+  const currentRole = session?.role ?? "super_admin";
+
   return (
     <div className="flex h-screen bg-stone-50">
       <aside className="hidden w-64 shrink-0 border-r border-white/5 md:block">
-        <AdminSidebar />
+        <AdminSidebar currentRole={currentRole} />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-stone-200 bg-white px-4 md:px-6">
           <div className="flex flex-1 items-center gap-2">
-            <MobileDrawer />
+            <MobileDrawer currentRole={currentRole} />
             <p className="text-sm font-semibold text-stone-700 md:hidden">后台控制台</p>
             <div className="relative hidden w-full max-w-sm md:block">
               <svg

@@ -4,6 +4,8 @@ import { env } from "@/env";
 
 export const SESSION_COOKIE_NAME = "admin_session";
 
+export type AdminRole = "super_admin" | "client_admin" | "employee";
+
 export const sessionCookieOptions = {
   httpOnly: true,
   sameSite: "lax" as const,
@@ -14,14 +16,14 @@ export const sessionCookieOptions = {
 
 export type SessionPayload = {
   adminUserId: number;
-  role: "super_admin" | "client_admin" | "employee";
+  role: AdminRole;
 };
 
 function getSessionSecret() {
   return new TextEncoder().encode(env.SESSION_SECRET);
 }
 
-export function buildSessionPayload(adminUserId: number, role: "super_admin" | "client_admin" | "employee"): SessionPayload {
+export function buildSessionPayload(adminUserId: number, role: AdminRole): SessionPayload {
   return { adminUserId, role };
 }
 
@@ -68,6 +70,42 @@ export function getSafeAdminRedirectPath(nextPath?: string | null) {
     return "/admin";
   }
   return nextPath;
+}
+
+export function canAccessAdminPath(role: AdminRole, pathname: string) {
+  if (!pathname.startsWith("/admin")) {
+    return false;
+  }
+
+  if (role === "super_admin") {
+    return true;
+  }
+
+  if (role === "client_admin") {
+    return true;
+  }
+
+  const allowedPrefixes = [
+    "/admin",
+    "/admin/products",
+    "/admin/blog",
+    "/admin/inquiries",
+    "/admin/quotes",
+    "/admin/media",
+  ];
+
+  return (
+    allowedPrefixes.some((prefix) => pathname === prefix) ||
+    pathname.startsWith("/admin/products/") ||
+    pathname.startsWith("/admin/blog/") ||
+    pathname.startsWith("/admin/inquiries/") ||
+    pathname.startsWith("/admin/quotes/") ||
+    pathname.startsWith("/admin/media/")
+  );
+}
+
+export function getVisibleAdminHrefs(role: AdminRole, hrefs: string[]) {
+  return hrefs.filter((href) => canAccessAdminPath(role, href));
 }
 
 export async function signSessionToken(payload: SessionPayload) {
