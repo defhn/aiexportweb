@@ -67,6 +67,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           description: post.excerptEn,
           url: postUrl,
           publishedAt: post.publishedAt,
+          modifiedAt: post.updatedAt ?? post.publishedAt,
         })}
       />
       <JsonLdScript
@@ -77,7 +78,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         ])}
       />
 
-      <article className="mx-auto max-w-4xl px-6 py-20">
+      <article className="mx-auto max-w-4xl px-6 pt-28 pb-20">
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">
           Blog
         </p>
@@ -88,13 +89,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           {post.excerptEn}
         </p>
         {post.coverImageUrl ? (
-          <div className="relative mt-10 h-[360px] overflow-hidden rounded-[2rem] border border-stone-200 bg-stone-100">
+          <div className="relative mt-10 h-[200px] sm:h-[360px] overflow-hidden rounded-[2rem] border border-stone-200 bg-stone-100">
             <Image
               src={post.coverImageUrl}
               alt={post.coverImageAlt || post.titleEn}
               fill
               sizes="(max-width: 768px) 100vw, 896px"
               className="object-cover"
+              priority
             />
           </div>
         ) : null}

@@ -1,20 +1,13 @@
 import { buildAbsoluteUrl } from "./seo";
 
-export function buildOrganizationJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Export Growth Demo Factory",
-    url: buildAbsoluteUrl("/"),
-    email: "sales@example.com",
-  };
-}
+// 注意：buildOrganizationJsonLd 已移除，请在页面中直接使用 settings 数据动态构建
 
 export function buildProductJsonLd(input: {
   name: string;
   description: string;
   category: string;
   url: string;
+  imageUrl?: string;
   specs: Array<{ label: string; value: string }>;
   faqs: Array<{ question: string; answer: string }>;
 }) {
@@ -25,6 +18,7 @@ export function buildProductJsonLd(input: {
     description: input.description,
     category: input.category,
     url: input.url,
+    ...(input.imageUrl ? { image: input.imageUrl } : {}),
     additionalProperty: input.specs.map((row) => ({
       "@type": "PropertyValue",
       name: row.label,
@@ -45,18 +39,21 @@ export function buildArticleJsonLd(input: {
   headline: string;
   description: string;
   url: string;
+  authorName?: string;
   publishedAt?: string;
+  modifiedAt?: string;
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: input.headline,
     description: input.description,
     url: input.url,
     datePublished: input.publishedAt,
+    dateModified: input.modifiedAt ?? input.publishedAt,
     author: {
       "@type": "Organization",
-      name: "Export Growth Demo Factory",
+      name: input.authorName ?? "Industrial Manufacturer",
     },
   };
 }

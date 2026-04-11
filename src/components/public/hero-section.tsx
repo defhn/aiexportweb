@@ -93,8 +93,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            aria-label={title}
-            className="max-w-5xl text-5xl font-extrabold tracking-tighter text-white sm:text-6xl md:text-8xl leading-[1.05]"
+            className="max-w-5xl text-[2.5rem] font-extrabold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-8xl leading-[1.05]"
           >
             {(() => {
               const t = title || "Precision Parts, Built for Global Buyers";
@@ -131,8 +130,8 @@ export function HeroSection({
               className="group relative flex w-full sm:w-auto items-center justify-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 text-base font-bold text-[#0a0a0a] transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
             >
               <span>{primaryCtaLabel}</span>
-              <div className="flex items-center justify-center h-6 w-6 rounded-full bg-[#0a0a0a] text-white transition-transform group-hover:translate-x-1">
-                <ArrowRight className="h-3 w-3" />
+              <div className="flex items-center justify-center h-8 w-8 rounded-full bg-[#0a0a0a] text-white transition-transform group-hover:translate-x-1">
+                <ArrowRight className="h-4 w-4" />
               </div>
             </Link>
 

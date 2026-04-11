@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 
@@ -15,6 +15,7 @@ import { getBlogPosts } from "@/features/blog/queries";
 import { getPageModules } from "@/features/pages/queries";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
+import { buildAbsoluteUrl } from "@/lib/seo";
 
 // 棣栭〉 generateMetadata锛氳鍙?hero 妯″潡鐨?seoTitle/seoDescription锛堢鐞嗗憳鍦ㄥ悗鍙板～鍐欙級
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +30,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: seoTitle || settings.companyNameEn,
     description: seoDescription || settings.taglineEn || "B2B CNC machining and industrial export.",
-    alternates: settings.siteUrl ? { canonical: settings.siteUrl } : undefined,
+    alternates: { canonical: buildAbsoluteUrl("/") },
+    openGraph: {
+      type: "website",
+      ...(settings.seoOgImageUrl ? { images: [{ url: settings.seoOgImageUrl, width: 1200, height: 630, alt: seoTitle || settings.companyNameEn }] } : {}),
+    },
   };
 }
 

@@ -10,12 +10,14 @@ import { getBlogPosts } from "@/features/blog/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { getSiteSettings } from "@/features/settings/queries";
 
+import { buildAbsoluteUrl } from "@/lib/seo";
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
     title: "Blog",
     description: settings.taglineEn || "Technical articles, DFM guides, and manufacturing strategies for global procurement.",
-    alternates: settings.siteUrl ? { canonical: `${settings.siteUrl}/blog` } : undefined,
+    alternates: { canonical: buildAbsoluteUrl("/blog") },
   };
 }
 
@@ -51,13 +53,13 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between md:items-end gap-12">
           <div>
-            <h1 className="text-sm font-black uppercase tracking-[0.4em] text-blue-500 mb-6 drop-shadow-sm">
+            <p className="text-sm font-black uppercase tracking-[0.4em] text-blue-500 mb-6 drop-shadow-sm">
               TITAN CNC Hub
-            </h1>
-            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white max-w-2xl leading-[1.1]">
-              Engineering Insights & <br className="hidden md:block" />
+            </p>
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white max-w-2xl leading-[1.1]">
+              Engineering Insights &amp;{" "}<br className="hidden md:block" />
               DFM Guides
-            </h2>
+            </h1>
             <p className="mt-6 text-lg text-stone-400 max-w-xl">
               Publishing technical articles, material references, and manufacturing
               strategies to support your global procurement decisions.
@@ -75,7 +77,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                 className="w-full md:w-80 bg-stone-900 border border-stone-800 text-stone-300 rounded-full pl-12 pr-4 py-3 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap max-h-20 overflow-y-hidden">
               <Link
                 href="/blog"
                 className={[

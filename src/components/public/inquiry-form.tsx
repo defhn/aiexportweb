@@ -94,7 +94,7 @@ export function InquiryForm({
           <div className="grid gap-6 md:grid-cols-2">
             <div className="relative group">
                 <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
                 name="name"
                 placeholder="Full Name"
                 required
@@ -102,7 +102,7 @@ export function InquiryForm({
             </div>
             <div className="relative group">
                 <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
                 name="email"
                 placeholder="Business Email"
                 required
@@ -113,12 +113,12 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-            className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
             name="companyName"
             placeholder="Company"
             />
             <input
-            className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
             name="country"
             placeholder="Country"
             />
@@ -126,12 +126,12 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
                 name="whatsapp"
                 placeholder="WhatsApp (Optional)"
             />
             <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
                 defaultValue={defaultProductName}
                 name="productName"
                 placeholder="Interested Product"
@@ -139,7 +139,7 @@ export function InquiryForm({
           </div>
 
           <textarea
-            className="min-h-[120px] w-full bg-transparent border-b-2 border-stone-100 py-3 text-sm font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300 resize-none"
+            className="min-h-[120px] w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300 resize-none"
             name="message"
             placeholder="Technical requirements & Project scope..."
             required

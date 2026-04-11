@@ -10,6 +10,12 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
 
   return {
     rules: [
+      // 通配规则：所有未列出的爬虫默认允许抓取
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
+      },
       {
         userAgent: "Googlebot",
         allow: settings.allowGoogle ? "/" : undefined,

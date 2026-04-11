@@ -36,7 +36,7 @@ function getMapping(text: string) {
 export function StrengthsSection({ items }: StrengthsSectionProps) {
   return (
     <section className="mx-auto max-w-7xl px-6 relative z-30">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {items.map((item, index) => {
           const { icon: Icon, image } = getMapping(item);
           const title = item.split(" - ")[0] || item;

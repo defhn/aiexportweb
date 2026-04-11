@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoTitle = readString(payload, "seoTitle");
   const seoDescription = readString(payload, "seoDescription");
   return {
-    title: seoTitle || "Contact Us 閿燂拷?Get a Quote",
+    title: seoTitle || "Contact Us — Get a Quote",
     description: seoDescription || "Send your RFQ to our engineering team and get a response within 24 hours.",
   };
 }
@@ -69,7 +69,7 @@ export default async function ContactPage() {
         <div className="bg-white rounded-[2.5rem] shadow-2xl border border-stone-200 overflow-hidden flex flex-col lg:flex-row">
             
             {/* Left Rail: Dark Trust Panel */}
-            <div className="w-full lg:w-2/5 bg-stone-950 p-10 md:p-16 relative overflow-hidden flex flex-col justify-between">
+            <div className="w-full lg:w-2/5 bg-stone-950 p-6 md:p-10 lg:p-16 relative overflow-hidden flex flex-col justify-between">
                 <div className="absolute inset-0 opacity-10 texture-carbon" />
                 <div className="relative z-10">
                     <h3 className="text-2xl font-bold text-white mb-8">Talk to a Lead Engineer.</h3>
