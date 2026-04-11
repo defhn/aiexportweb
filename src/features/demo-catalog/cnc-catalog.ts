@@ -405,7 +405,7 @@ const productSpecs: ProductSpec[] = [
     supplyAbilityEn: "80,000 pcs per month",
     certification: "RoHS",
     customFields: [
-      { labelZh: "螺纹标准", labelEn: "Thread Standard", valueZh: "Metric / BSP", valueEn: "Metric / BSP", visible: True, sortOrder: 10 },
+      { labelZh: "螺纹标准", labelEn: "Thread Standard", valueZh: "Metric / BSP", valueEn: "Metric / BSP", visible: true, sortOrder: 10 },
 
       { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 0.8", valueEn: "Ra 0.8", visible: true, sortOrder: 20 },
     ],
@@ -462,9 +462,9 @@ const productSpecs: ProductSpec[] = [
     supplyAbilityEn: "60,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
-      { labelZh: "圆度", labelEn: "Roundness", valueZh: "0.005 mm", valueEn: "0.005 mm", visible: True, sortOrder: 10 },
+      { labelZh: "圆度", labelEn: "Roundness", valueZh: "0.005 mm", valueEn: "0.005 mm", visible: true, sortOrder: 10 },
 
-      { labelZh: "气检验收", labelEn: "Inspection", valueZh: "气规检测", valueEn: "Air gauge inspection", visible: True, sortOrder: 20 },
+      { labelZh: "气检验收", labelEn: "Inspection", valueZh: "气规检测", valueEn: "Air gauge inspection", visible: true, sortOrder: 20 },
 
     ],
     shape: "bushing",
@@ -520,7 +520,7 @@ const productSpecs: ProductSpec[] = [
     supplyAbilityEn: "40,000 pcs per month",
     certification: "RoHS",
     customFields: [
-      { labelZh: "散热优先级", labelEn: "Thermal Requirement", valueZh: "优先保证平面贴合导热", valueEn: "Priority on flat thermal contact", visible: True, sortOrder: 10 },
+      { labelZh: "散热优先级", labelEn: "Thermal Requirement", valueZh: "优先保证平面贴合导热", valueEn: "Priority on flat thermal contact", visible: true, sortOrder: 10 },
 
       { labelZh: "翅片间距", labelEn: "Fin Pitch", valueZh: "3.5 mm", valueEn: "3.5 mm", visible: true, sortOrder: 20 },
     ],
@@ -578,7 +578,7 @@ const productSpecs: ProductSpec[] = [
     certification: "ISO 9001",
     customFields: [
       { labelZh: "垂直度", labelEn: "Perpendicularity", valueZh: "0.01 mm", valueEn: "0.01 mm", visible: true, sortOrder: 10 },
-      { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 1.6", valueEn: "Ra 1.6", visible: True, sortOrder: 20 },
+      { labelZh: "表面粗糙度", labelEn: "Surface Roughness", valueZh: "Ra 1.6", valueEn: "Ra 1.6", visible: true, sortOrder: 20 },
 
     ],
     shape: "block",
@@ -635,7 +635,7 @@ const productSpecs: ProductSpec[] = [
     supplyAbilityEn: "25,000 pcs per month",
     certification: "ISO 9001",
     customFields: [
-      { labelZh: "轴承孔公差", labelEn: "Bearing Seat Tolerance", valueZh: "H7", valueEn: "H7", visible: True, sortOrder: 10 },
+      { labelZh: "轴承孔公差", labelEn: "Bearing Seat Tolerance", valueZh: "H7", valueEn: "H7", visible: true, sortOrder: 10 },
 
       { labelZh: "检测方式", labelEn: "Inspection", valueZh: "CMM + 通止规", valueEn: "CMM + go/no-go gauge", visible: true, sortOrder: 20 },
     ],
@@ -927,3 +927,4 @@ export function buildCncProductImageSvg(product: SeedProduct, variant: CncImageV
   <text x="210" y="1014" fill="#94a3b8" font-family="Arial, sans-serif" font-size="20">Material: ${material} | Process: ${process}</text>
 </svg>`.trim();
 }
+
