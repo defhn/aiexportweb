@@ -7,6 +7,34 @@ import {
   listInquiryTypes,
 } from "@/features/inquiries/queries";
 
+// 类型名称中文映射
+const INQUIRY_TYPE_LABELS: Record<string, string> = {
+  quotation: "询盘报价",
+  general: "一般咨询",
+  technical: "技术问题",
+  sample: "样品申请",
+  complaint: "投诉建议",
+};
+
+// 来源类型中文映射
+const SOURCE_TYPE_LABELS: Record<string, string> = {
+  product: "产品页",
+  "request-quote": "报价页",
+  contact: "联系页",
+  general: "通用",
+  unknown: "未知",
+};
+
+function getTypeLabel(type?: string | null) {
+  if (!type) return "未分类";
+  return INQUIRY_TYPE_LABELS[type] ?? type;
+}
+
+function getSourceLabel(source?: string | null) {
+  if (!source) return "未知来源";
+  return SOURCE_TYPE_LABELS[source] ?? source;
+}
+
 type AdminInquiriesPageProps = {
   searchParams?: Promise<{
     q?: string;
@@ -81,7 +109,7 @@ export default async function AdminInquiriesPage({
           <option value="">全部类型</option>
           {inquiryTypes.map((item) => (
             <option key={item} value={item}>
-              {item}
+              {getTypeLabel(item)}
             </option>
           ))}
         </select>
@@ -115,10 +143,10 @@ export default async function AdminInquiriesPage({
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-stone-500">
-                    <span>{record.sourceType || record.sourcePage || "general"}</span>
+                    <span>{getSourceLabel(record.sourceType || record.sourcePage)}</span>
                     <span>{record.countryCode || "N/A"}</span>
-                    <span>{record.countryGroup || "Unknown"}</span>
-                    <span>{record.inquiryType || "untyped"}</span>
+                    <span>{record.countryGroup || "未知地区"}</span>
+                    <span>{getTypeLabel(record.inquiryType)}</span>
                   </div>
                   <h3 className="text-xl font-semibold text-stone-950">{record.name}</h3>
                   <p className="text-sm text-stone-600">{record.email}</p>
@@ -140,9 +168,12 @@ export default async function AdminInquiriesPage({
                       defaultValue={record.status}
                       name="status"
                     >
-                      <option value="new">new</option>
-                      <option value="processing">processing</option>
-                      <option value="done">done</option>
+                      <option value="new">待处理</option>
+                      <option value="processing">跟进中</option>
+                      <option value="contacted">已联系</option>
+                      <option value="quoted">已报价</option>
+                      <option value="won">已成交</option>
+                      <option value="done">已完成</option>
                     </select>
                     <button
                       className="rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white"
