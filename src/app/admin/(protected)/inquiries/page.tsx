@@ -25,6 +25,23 @@ const SOURCE_TYPE_LABELS: Record<string, string> = {
   unknown: "未知",
 };
 
+// 地区分组中文映射
+const COUNTRY_GROUP_LABELS: Record<string, string> = {
+  Unknown: "未知地区",
+  "North America": "北美洲",
+  Europe: "欧洲",
+  "Asia-Pacific": "亚太地区",
+  "Middle East": "中东",
+  "Latin America": "拉丁美洲",
+  Africa: "非洲",
+  Oceania: "大洋洲",
+};
+
+function getCountryGroupLabel(group?: string | null) {
+  if (!group) return "未知地区";
+  return COUNTRY_GROUP_LABELS[group] ?? group;
+}
+
 function getTypeLabel(type?: string | null) {
   if (!type) return "未分类";
   return INQUIRY_TYPE_LABELS[type] ?? type;
@@ -121,7 +138,7 @@ export default async function AdminInquiriesPage({
           <option value="">全部地区</option>
           {countryGroups.map((item) => (
             <option key={item} value={item}>
-              {item}
+              {getCountryGroupLabel(item)}
             </option>
           ))}
         </select>
