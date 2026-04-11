@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildAbsoluteUrl("/request-quote"), lastModified: staticDate, changeFrequency: "monthly", priority: 0.8 },
     { url: buildAbsoluteUrl("/products"), lastModified: staticDate, changeFrequency: "weekly", priority: 0.9 },
     { url: buildAbsoluteUrl("/capabilities"), lastModified: staticDate, changeFrequency: "monthly", priority: 0.7 },
+    { url: buildAbsoluteUrl("/pricing"), lastModified: staticDate, changeFrequency: "monthly", priority: 0.8 },
 
     // 产品分类页面：使用 updatedAt 提供精确更新信号
     ...categories.map((category) => ({
