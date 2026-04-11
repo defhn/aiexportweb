@@ -11,13 +11,15 @@ export default function SalesLayout({
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-700">
               Sales Page
             </p>
-            <p className="mt-2 text-xl font-semibold text-stone-950">澶栬锤鑾峰缃戠珯绯荤粺瀹氫环</p>
+            <p className="mt-2 text-xl font-semibold text-stone-950">
+              外贸建站系统定价
+            </p>
           </div>
           <Link
-            className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700"
+            className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-950 hover:text-stone-950"
             href="/"
           >
-            杩斿洖缃戠珯
+            返回网站
           </Link>
         </div>
       </header>
