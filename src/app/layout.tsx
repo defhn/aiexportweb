@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 
 import { getSiteSettings } from "@/features/settings/queries";
 
-// 鍔ㄦ€佺敓鎴愭牴绾?metadata锛坢etadataBase + title template锛夛紝
-// 瀛愰〉闈㈤€氳繃鍚勮嚜鐨?generateMetadata 瑕嗙洊 title/description
+// 动态生成根级 metadata（metadataBase + title template），
+// 子页面通过各自的 generateMetadata 覆盖 title/description
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 

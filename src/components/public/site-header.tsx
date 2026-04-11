@@ -21,7 +21,7 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
   const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0a]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
@@ -36,8 +36,8 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
               href={item.href}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 pathname === item.href
-                  ? "bg-white/10 text-white"
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
+                  ? "bg-white/15 text-white"
+                  : "text-white/85 hover:bg-white/10 hover:text-white"
               }`}
             >
               {item.label}
@@ -58,7 +58,7 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="flex md:hidden items-center justify-center rounded-lg p-2 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+          className="flex md:hidden items-center justify-center rounded-lg p-2 text-white hover:bg-white/10 transition-colors"
           onClick={() => setOpen(!open)}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -67,7 +67,7 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
 
       {/* Mobile Drawer */}
       {open && (
-        <div className="md:hidden border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl">
+        <div className="md:hidden border-t border-white/10 bg-[#0a0a0a] shadow-xl">
           <nav className="flex flex-col px-4 py-4 gap-1">
             {navItems.map((item) => (
               <Link
@@ -76,8 +76,8 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
                 onClick={() => setOpen(false)}
                 className={`rounded-xl px-4 py-3 text-base font-medium transition-colors ${
                   pathname === item.href
-                    ? "bg-white/10 text-white"
-                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                    ? "bg-white/15 text-white"
+                    : "text-white hover:bg-white/10"
                 }`}
               >
                 {item.label}
@@ -99,3 +99,4 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
     </header>
   );
 }
+
