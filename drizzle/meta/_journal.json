@@ -8,6 +8,13 @@
       "when": 1775704633858,
       "tag": "0000_empty_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776042909093,
+      "tag": "0001_perpetual_marten_broadcloak",
+      "breakpoints": true
     }
   ]
 }

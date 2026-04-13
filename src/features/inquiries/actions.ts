@@ -122,21 +122,39 @@ export async function updateInquiryStatus(id: number, status: "new" | "processin
   return record;
 }
 
+const VALID_INQUIRY_STATUSES = ["new", "processing", "contacted", "quoted", "won", "done"] as const;
+type InquiryStatus = typeof VALID_INQUIRY_STATUSES[number];
+
+const VALID_CLASSIFICATION_METHODS = ["rule", "ai", "manual"] as const;
+type ClassificationMethod = typeof VALID_CLASSIFICATION_METHODS[number];
+
+export function normalizeInquiryStatus(status: string): InquiryStatus {
+  return VALID_INQUIRY_STATUSES.includes(status as InquiryStatus)
+    ? (status as InquiryStatus)
+    : "new";
+}
+
+export function normalizeClassificationMethod(method: string): ClassificationMethod {
+  return VALID_CLASSIFICATION_METHODS.includes(method as ClassificationMethod)
+    ? (method as ClassificationMethod)
+    : "manual";
+}
+
 export async function updateInquiryDetail(input: {
   id: number;
-  status: "new" | "processing" | "contacted" | "quoted" | "won" | "done";
+  status: InquiryStatus;
   inquiryType?: string | null;
   internalNote?: string | null;
-  classificationMethod?: "rule" | "ai" | "manual";
+  classificationMethod?: ClassificationMethod;
 }) {
   const db = getDb();
   const [record] = await db
     .update(inquiries)
     .set({
-      status: input.status,
+      status: normalizeInquiryStatus(input.status),
       inquiryType: input.inquiryType?.trim() || null,
       internalNote: input.internalNote?.trim() || null,
-      classificationMethod: input.classificationMethod ?? "manual",
+      classificationMethod: normalizeClassificationMethod(input.classificationMethod ?? "manual"),
       updatedAt: new Date(),
     })
     .where(eq(inquiries.id, input.id))
@@ -157,27 +175,26 @@ export async function saveInquiryStatus(formData: FormData) {
   const status = readText(formData, "status");
   const query = readText(formData, "q");
   const filterStatus = readText(formData, "filterStatus");
+  const filterCountryGroup = readText(formData, "filterCountryGroup");
+  const filterInquiryType = readText(formData, "filterInquiryType");
+  const page = readText(formData, "page");
 
   if (!Number.isFinite(inquiryId)) {
     redirect("/admin/inquiries");
   }
 
-  const normalizedStatus = [
-    "new", "processing", "contacted", "quoted", "won", "done",
-  ].includes(status)
-    ? (status as "new" | "processing" | "contacted" | "quoted" | "won" | "done")
-    : ("new" as const);
+  const normalizedStatus = normalizeInquiryStatus(status);
 
   await updateInquiryStatus(inquiryId, normalizedStatus);
   revalidatePath("/admin/inquiries");
 
+  // 保留所有筛选参数，防止状态修改后丢失筛选条件
   const search = new URLSearchParams();
-  if (query) {
-    search.set("q", query);
-  }
-  if (filterStatus) {
-    search.set("status", filterStatus);
-  }
+  if (query) search.set("q", query);
+  if (filterStatus) search.set("status", filterStatus);
+  if (filterCountryGroup) search.set("countryGroup", filterCountryGroup);
+  if (filterInquiryType) search.set("inquiryType", filterInquiryType);
+  if (page && page !== "1") search.set("page", page);
 
   redirect(
     search.size > 0 ? `/admin/inquiries?${search.toString()}` : "/admin/inquiries",
@@ -200,13 +217,10 @@ export async function saveInquiryDetail(formData: FormData) {
 
   await updateInquiryDetail({
     id: inquiryId,
-    status: status === "processing" || status === "done" ? status : "new",
+    status: normalizeInquiryStatus(status),
     inquiryType,
     internalNote,
-    classificationMethod:
-      classificationMethod === "ai" || classificationMethod === "rule"
-        ? classificationMethod
-        : "manual",
+    classificationMethod: normalizeClassificationMethod(classificationMethod),
   });
 
   revalidatePath("/admin/inquiries");

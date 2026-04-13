@@ -72,36 +72,36 @@ export function getSafeAdminRedirectPath(nextPath?: string | null) {
   return nextPath;
 }
 
+// 黑名单模式：employee 只禁止访问敏感管理页；client_admin/super_admin 访问全部路由
+const EMPLOYEE_BLOCKED_PATHS = [
+  "/admin/settings",
+  "/admin/seo-ai",
+  "/admin/staff",
+  "/admin/attribution",
+  "/admin/pipeline",
+  "/admin/rag",
+  "/admin/files",
+  "/admin/categories",
+  "/admin/pages",
+  "/admin/reply-templates",
+];
+
 export function canAccessAdminPath(role: AdminRole, pathname: string) {
   if (!pathname.startsWith("/admin")) {
     return false;
   }
 
-  if (role === "super_admin") {
+  // super_admin 和 client_admin 可以访问所有后台路由
+  if (role === "super_admin" || role === "client_admin") {
     return true;
   }
 
-  if (role === "client_admin") {
-    return true;
-  }
-
-  const allowedPrefixes = [
-    "/admin",
-    "/admin/products",
-    "/admin/blog",
-    "/admin/inquiries",
-    "/admin/quotes",
-    "/admin/media",
-  ];
-
-  return (
-    allowedPrefixes.some((prefix) => pathname === prefix) ||
-    pathname.startsWith("/admin/products/") ||
-    pathname.startsWith("/admin/blog/") ||
-    pathname.startsWith("/admin/inquiries/") ||
-    pathname.startsWith("/admin/quotes/") ||
-    pathname.startsWith("/admin/media/")
+  // employee 角色：黑名单屏蔽敏感路由
+  const isBlocked = EMPLOYEE_BLOCKED_PATHS.some(
+    (blocked) => pathname === blocked || pathname.startsWith(`${blocked}/`),
   );
+
+  return !isBlocked;
 }
 
 export function getVisibleAdminHrefs(role: AdminRole, hrefs: string[]) {

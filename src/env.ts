@@ -13,7 +13,7 @@ const nonProductionDefaults = {
   TURNSTILE_SECRET_KEY: "dev-turnstile-secret",
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
   ADMIN_USERNAME: "admin",
-  ADMIN_PASSWORD: "changeme",
+  ADMIN_PASSWORD: "dev-only-change-in-production",
   NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3000",
   SITE_PLAN: "ai_sales",
   ENABLE_PRICING_PAGE: "true",
@@ -33,11 +33,33 @@ const envSchema = z.object({
   TURNSTILE_SECRET_KEY: z.string().min(1),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
   ADMIN_USERNAME: z.string().min(1),
-  ADMIN_PASSWORD: z.string().min(6),
+  // 生产环境强制要求密码不能是默认弱密码
+  ADMIN_PASSWORD: z
+    .string()
+    .min(8, "ADMIN_PASSWORD 至少 8 位")
+    .refine(
+      (v) =>
+        process.env.NODE_ENV !== "production" ||
+        !["changeme", "admin", "password", "123456", "dev-only-change-in-production"].includes(v),
+      { message: "生产环境禁止使用默认密码，请修改 ADMIN_PASSWORD" },
+    ),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   SITE_PLAN: z.enum(["basic", "growth", "ai_sales"]).default("ai_sales"),
   ENABLE_PRICING_PAGE: z.enum(["true", "false", "1", "0"]).default("true"),
   SALES_CONTACT_URL: z.string().min(1).default("/contact"),
+
+  // ── AI 配置（均为可选，但存在时格式校验） ──────────────────────
+  // Gemini AI Studio Key（格式 AIza...）
+  GEMINI_API_KEY: z.string().optional(),
+  // DeepSeek API Key
+  DEEPSEEK_API_KEY: z.string().optional(),
+  // Google Service Account JSON（用于 Vertex AI，JSON 字符串）
+  GOOGLE_APPLICATION_CREDENTIALS_JSON: z.string().optional(),
+  // Vertex AI 项目配置
+  VERTEX_PROJECT_ID: z.string().optional(),
+  VERTEX_LOCATION: z.string().optional(),
+  // Vertex AI Express 专用 API Key（AQ. 前缀）
+  VERTEX_EXPRESS_API_KEY: z.string().optional(),
 });
 
 function buildRuntimeEnv() {
@@ -58,9 +80,9 @@ const parsedEnv = envSchema.safeParse(buildRuntimeEnv());
 
 if (!parsedEnv.success) {
   throw new Error(
-    `Invalid environment variables: ${parsedEnv.error.issues
-      .map((issue) => issue.path.join("."))
-      .join(", ")}`,
+    `环境变量配置错误: ${parsedEnv.error.issues
+      .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+      .join("; ")}`,
   );
 }
 

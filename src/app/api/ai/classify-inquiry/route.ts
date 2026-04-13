@@ -7,9 +7,10 @@ import {
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { withAdminAuth } from "@/lib/admin-auth";
 import { classifyInquiry } from "@/lib/ai";
 
-export async function POST(request: Request) {
+export const POST = withAdminAuth(async (request) => {
   const gate = await getFeatureGate("ai_inquiry_classification");
 
   if (gate.status === "locked") {
@@ -19,13 +20,13 @@ export async function POST(request: Request) {
   const body = (await request.json()) as { inquiryId?: number };
 
   if (!body.inquiryId) {
-    return NextResponse.json({ error: "Missing inquiry id." }, { status: 400 });
+    return NextResponse.json({ error: "缺少询盘 ID。" }, { status: 400 });
   }
 
   const inquiry = await getInquiryById(body.inquiryId);
 
   if (!inquiry) {
-    return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });
+    return NextResponse.json({ error: "询盘不存在。" }, { status: 404 });
   }
 
   const { inquiryType, provider } = await classifyInquiry({
@@ -51,4 +52,4 @@ export async function POST(request: Request) {
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
   });
-}
+});

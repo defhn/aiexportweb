@@ -5,9 +5,10 @@ import {
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { withAdminAuth } from "@/lib/admin-auth";
 import { generateProductCopy } from "@/lib/ai";
 
-export async function POST(request: Request) {
+export const POST = withAdminAuth(async (request) => {
   const gate = await getFeatureGate("ai_product_copy");
 
   if (gate.status === "locked") {
@@ -38,4 +39,4 @@ export async function POST(request: Request) {
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
   });
-}
+});

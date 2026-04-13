@@ -57,7 +57,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(
-    { error: "Invalid username or password." },
+    { error: "用户名或密码错误，请重试。" },
     { status: 401 },
   );
 }

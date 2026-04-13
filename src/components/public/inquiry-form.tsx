@@ -1,7 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle, UploadCloud } from "lucide-react";
 
@@ -25,9 +25,15 @@ export function InquiryForm({
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const submittingRef = useRef(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    // 防止重复提交
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+
     setPending(true);
     setMessage("");
     setError("");
@@ -64,8 +70,10 @@ export function InquiryForm({
       setError("Network error. Please try again.");
     } finally {
       setPending(false);
+      submittingRef.current = false;
     }
   }
+
 
   if (message) {
       return (

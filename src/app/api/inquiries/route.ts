@@ -1,11 +1,13 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { createMediaAsset } from "@/features/media/actions";
 import { createInquiry } from "@/features/inquiries/actions";
 import { validateInquiryAttachment } from "@/features/inquiries/validation";
+import { getSiteSettings } from "@/features/settings/queries";
 import { sendInquiryNotification } from "@/lib/brevo";
 import { uploadToR2 } from "@/lib/r2";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { sendInquiryWebhook } from "@/lib/webhook";
 
 export const runtime = "nodejs";
 
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
     companyWebsite: String(formData.get("companyWebsite") ?? "") || null,
   });
 
-  await sendInquiryNotification({
+  const emailPayload = {
     name: inquiry.name,
     email: inquiry.email,
     companyName: inquiry.companyName,
@@ -76,7 +78,17 @@ export async function POST(request: Request) {
     productName: String(formData.get("productName") ?? ""),
     sourceUrl: inquiry.sourceUrl,
     attachmentUrl,
-  });
+  };
+
+  await sendInquiryNotification(emailPayload);
+
+  // 异步触发 webhook（不阻断响应）
+  getSiteSettings().then((settings) => {
+    void sendInquiryWebhook(
+      (settings as { webhookUrl?: string }).webhookUrl,
+      emailPayload,
+    );
+  }).catch(() => { /* 静默失败 */ });
 
   return NextResponse.json({ success: true, inquiryId: inquiry.id });
 }

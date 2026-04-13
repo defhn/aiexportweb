@@ -307,6 +307,9 @@ export const blogPosts = pgTable("blog_posts", {
   seoDescription: text("seo_description"),
   status: publishStatusEnum("status").default("draft").notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
