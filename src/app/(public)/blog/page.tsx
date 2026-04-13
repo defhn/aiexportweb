@@ -12,6 +12,9 @@ import { getSiteSettings } from "@/features/settings/queries";
 
 import { buildAbsoluteUrl } from "@/lib/seo";
 
+// ISR: 博客列表页每 1 小时重新生成，新文章发布后最多 60 分钟内全网生效
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {

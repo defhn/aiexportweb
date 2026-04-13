@@ -37,9 +37,12 @@ export default async function ProtectedAdminLayout({
                 <path d="m21 21-4.35-4.35" />
               </svg>
               <input
-                className="w-full rounded-full border border-stone-200 bg-stone-50 py-1.5 pl-10 pr-4 text-sm text-stone-700 outline-none transition-colors focus:border-blue-500 focus:bg-white"
-                placeholder="搜索产品、询盘、文章或设置"
+                className="w-full cursor-not-allowed rounded-full border border-stone-200 bg-stone-100 py-1.5 pl-10 pr-4 text-sm text-stone-400 outline-none"
+                placeholder="全局搜索（即将上线）"
                 type="text"
+                disabled
+                readOnly
+                title="全局搜索功能正在开发中，敬请期待"
               />
             </div>
           </div>

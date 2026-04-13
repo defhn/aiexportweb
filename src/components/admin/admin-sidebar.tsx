@@ -84,9 +84,9 @@ const navigation: NavItem[] = [
   { name: "联系我们", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
   { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
   { name: "SEO 与 AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
-  { name: "归因分析", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
-  { name: "线索流程", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
-  { name: "RAG 知识库", href: "/admin/rag", icon: Radar, group: "site" },
+  { name: "归因分析 (开发中)", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
+  { name: "线索流程 (开发中)", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
+  { name: "RAG 知识库 (开发中)", href: "/admin/rag", icon: Radar, group: "site" },
   { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
 ];
 
@@ -95,6 +95,7 @@ const groupLabels: Record<string, string> = {
   content: "内容管理",
   sales: "销售管理",
   site: "站点设置",
+  crm: "CRM（开发中）",
 };
 
 function isActivePath(pathname: string, href: string) {

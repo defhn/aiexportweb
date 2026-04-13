@@ -4,9 +4,18 @@ import Image from "next/image";
 
 import { JsonLdScript } from "@/components/public/json-ld-script";
 import { getFeatureGate } from "@/features/plans/access";
-import { getBlogPostBySlug } from "@/features/blog/queries";
+import { getBlogPostBySlug, getBlogPosts } from "@/features/blog/queries";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/json-ld";
 import { buildAbsoluteUrl, buildPageMetadata } from "@/lib/seo";
+
+// ISR: 每篇文章每 1 小时重新生成
+export const revalidate = 3600;
+
+// 构建时预渲染已发布文章
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((p) => ({ slug: p.slug }));
+}
 
 type BlogDetailPageProps = {
   params: Promise<{ slug: string }>;
