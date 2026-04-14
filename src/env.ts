@@ -32,17 +32,10 @@ const envSchema = z.object({
   BREVO_TO_EMAIL: z.string().email(),
   TURNSTILE_SECRET_KEY: z.string().min(1),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
-  ADMIN_USERNAME: z.string().min(1),
-  // 生产环境强制要求密码不能是默认弱密码
-  ADMIN_PASSWORD: z
-    .string()
-    .min(8, "ADMIN_PASSWORD 至少 8 位")
-    .refine(
-      (v) =>
-        process.env.NODE_ENV !== "production" ||
-        !["changeme", "admin", "password", "123456", "dev-only-change-in-production"].includes(v),
-      { message: "生产环境禁止使用默认密码，请修改 ADMIN_PASSWORD" },
-    ),
+  ADMIN_USERNAME: z.string().min(1).optional(),
+  // 密码验证已迁移到数据库（adminUsers 表，bcrypt hash）
+  // 此处保留为可选的兜底方案；如数据库中无账号则回退使用此环境变量
+  ADMIN_PASSWORD: z.string().min(1).optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   SITE_PLAN: z.enum(["basic", "growth", "ai_sales"]).default("ai_sales"),
   ENABLE_PRICING_PAGE: z.enum(["true", "false", "1", "0"]).default("true"),

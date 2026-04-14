@@ -26,6 +26,9 @@ describe("auth helpers", () => {
   });
 
   it("creates a stable session payload", () => {
-    expect(buildSessionPayload(7)).toEqual({ adminUserId: 7 });
+    expect(buildSessionPayload(7, "client_admin")).toEqual({
+      adminUserId: 7,
+      role: "client_admin",
+    });
   });
 });

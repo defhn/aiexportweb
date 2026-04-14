@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { KeyRound, Loader2, Plus, Trash2, Users } from "lucide-react";
 
+import { ChangePasswordForm } from "@/components/admin/change-password-form";
+
 type Employee = {
   id: number;
   username: string;
@@ -292,6 +294,8 @@ export default function StaffPage() {
           </div>
         )}
       </section>
+      {/* ── 修改我的密码 ── */}
+      <ChangePasswordForm />
     </div>
   );
 }
