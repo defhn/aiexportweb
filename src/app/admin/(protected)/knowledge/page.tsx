@@ -1,8 +1,5 @@
-"use server";
-
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { desc, eq, isNull, or, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { products, siteSettings } from "@/db/schema";
