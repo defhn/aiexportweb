@@ -20,11 +20,11 @@ export default async function AdminAboutPage() {
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <h2 className="text-2xl font-semibold text-stone-950">
-          {"\u5173\u4e8e\u6211\u4eec"}
+          {"关于我们"}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
           {
-            "\u5728\u8fd9\u91cc\u7ef4\u62a4 About \u9875\u9762\u7684\u516c\u53f8\u4ecb\u7ecd\u3001\u54c1\u724c\u6545\u4e8b\u548c\u5bf9\u5916\u5c55\u793a\u6587\u6848\uff0c\u4fdd\u5b58\u540e\u4f1a\u540c\u6b65\u5230\u524d\u53f0\u9875\u9762\u3002"
+            "在这里维护 About 页面的公司介绍、品牌故事和对外展示文案，保存后会同步到前台页面。"
           }
         </p>
       </section>
@@ -34,11 +34,11 @@ export default async function AdminAboutPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-stone-950">
-                {"\u516c\u53f8\u6545\u4e8b"}
+                {"公司故事"}
               </h3>
               <p className="mt-2 text-sm text-stone-600">
                 {
-                  "\u7528\u4e8e\u7ef4\u62a4 About \u9875\u9762\u7684\u4e3b\u6807\u9898\u548c\u516c\u53f8\u7b80\u4ecb\uff0c\u524d\u53f0\u4f1a\u76f4\u63a5\u4f7f\u7528\u8fd9\u91cc\u7684\u5185\u5bb9\u3002"
+                  "用于维护 About 页面的主标题和公司简介，前台会直接使用这里的内容。"
                 }
               </p>
             </div>
@@ -48,13 +48,13 @@ export default async function AdminAboutPage() {
                 name="company-story__enabled"
                 type="checkbox"
               />
-              {"\u542f\u7528"}
+              {"启用"}
             </label>
           </div>
 
           <div className="mt-5 grid gap-4">
             <label className="block text-sm font-medium text-stone-700">
-              {"\u6392\u5e8f"}
+              {"排序"}
               <input
                 className={inputClassName}
                 defaultValue={module?.sortOrder ?? 10}
@@ -63,7 +63,7 @@ export default async function AdminAboutPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              {"\u4e3b\u6807\u9898"}
+              {"主标题"}
               <input
                 className={inputClassName}
                 defaultValue={readString(module?.payloadJson ?? {}, "title")}
@@ -71,7 +71,7 @@ export default async function AdminAboutPage() {
               />
             </label>
             <label className="block text-sm font-medium text-stone-700">
-              {"\u63cf\u8ff0"}
+              {"描述"}
               <textarea
                 className={textareaClassName}
                 defaultValue={readString(
@@ -89,7 +89,7 @@ export default async function AdminAboutPage() {
             className="rounded-full bg-slate-950 px-5 py-2 text-sm font-medium text-white"
             type="submit"
           >
-            {"\u4fdd\u5b58 About \u9875\u9762"}
+            {"保存 About 页面"}
           </button>
         </div>
       </form>

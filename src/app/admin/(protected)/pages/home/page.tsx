@@ -9,25 +9,25 @@ const inputClassName =
 
 const textareaClassName = `${inputClassName} min-h-28`;
 
-const LABEL_ENABLED = "\u542f\u7528";
-const LABEL_SORT_ORDER = "\u6392\u5e8f";
-const LABEL_EYEBROW = "\u5c0f\u6807\u9898";
-const LABEL_TITLE = "\u4e3b\u6807\u9898";
-const LABEL_DESCRIPTION = "\u63cf\u8ff0";
-const LABEL_ITEMS = "\u5217\u8868\u5185\u5bb9";
-const LABEL_PRIMARY_CTA_LABEL = "\u4e3b\u6309\u94ae\u6587\u6848";
-const LABEL_PRIMARY_CTA_HREF = "\u4e3b\u6309\u94ae\u94fe\u63a5";
-const LABEL_SECONDARY_CTA_LABEL = "\u6b21\u6309\u94ae\u6587\u6848";
-const LABEL_SECONDARY_CTA_HREF = "\u6b21\u6309\u94ae\u94fe\u63a5";
-const LABEL_CTA_LABEL = "\u6309\u94ae\u6587\u6848";
-const LABEL_CTA_HREF = "\u6309\u94ae\u94fe\u63a5";
-const LABEL_SEO_TITLE = "SEO \u6807\u9898\uff0855-60 \u5b57\u7b26\uff09";
-const LABEL_SEO_DESCRIPTION = "SEO \u63cf\u8ff0\uff08150-160 \u5b57\u7b26\uff09";
-const LABEL_STAT_ONE_VALUE = "\u7edf\u8ba1\u4e00\u6570\u503c";
-const LABEL_STAT_ONE_LABEL = "\u7edf\u8ba1\u4e00\u6587\u6848";
-const LABEL_STAT_TWO_VALUE = "\u7edf\u8ba1\u4e8c\u6570\u503c";
-const LABEL_STAT_TWO_LABEL = "\u7edf\u8ba1\u4e8c\u6587\u6848";
-const SAVE_LABEL = "\u4fdd\u5b58\u9996\u9875\u6a21\u5757";
+const LABEL_ENABLED = "启用";
+const LABEL_SORT_ORDER = "排序";
+const LABEL_EYEBROW = "小标题";
+const LABEL_TITLE = "主标题";
+const LABEL_DESCRIPTION = "描述";
+const LABEL_ITEMS = "列表内容";
+const LABEL_PRIMARY_CTA_LABEL = "主按钮文案";
+const LABEL_PRIMARY_CTA_HREF = "主按钮链接";
+const LABEL_SECONDARY_CTA_LABEL = "次按钮文案";
+const LABEL_SECONDARY_CTA_HREF = "次按钮链接";
+const LABEL_CTA_LABEL = "按钮文案";
+const LABEL_CTA_HREF = "按钮链接";
+const LABEL_SEO_TITLE = "SEO 标题（55-60 字符）";
+const LABEL_SEO_DESCRIPTION = "SEO 描述（150-160 字符）";
+const LABEL_STAT_ONE_VALUE = "统计一数值";
+const LABEL_STAT_ONE_LABEL = "统计一文案";
+const LABEL_STAT_TWO_VALUE = "统计二数值";
+const LABEL_STAT_TWO_LABEL = "统计二文案";
+const SAVE_LABEL = "保存首页模块";
 
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
@@ -138,10 +138,10 @@ export default async function AdminHomeModulesPage() {
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-stone-950">{"\u9996\u9875\u6a21\u5757"}</h2>
+        <h2 className="text-2xl font-semibold text-stone-950">{"首页模块"}</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
           {
-            "\u5728\u8fd9\u91cc\u7edf\u4e00\u7ef4\u62a4\u9996\u9875\u5404\u6a21\u5757\u7684\u6807\u9898\u3001\u63cf\u8ff0\u3001\u6309\u94ae\u548c\u5c55\u793a\u987a\u5e8f\uff0c\u4fdd\u5b58\u540e\u524d\u53f0\u9996\u9875\u4f1a\u540c\u6b65\u66f4\u65b0\u3002"
+            "在这里统一维护首页各模块的标题、描述、按钮和展示顺序，保存后前台首页会同步更新。"
           }
         </p>
       </section>
@@ -149,14 +149,14 @@ export default async function AdminHomeModulesPage() {
       <form action={action} className="space-y-6">
         <section className="rounded-[1.5rem] border border-blue-100 bg-blue-50/40 p-6 shadow-sm">
           <div className="mb-1 flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-stone-950">{"\u9996\u5c4f SEO"}</h3>
+            <h3 className="text-lg font-semibold text-stone-950">{"首屏 SEO"}</h3>
             <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-              {"Google \u641c\u7d22\u6458\u8981"}
+              {"Google 搜索摘要"}
             </span>
           </div>
           <p className="mb-5 text-sm leading-6 text-stone-500">
             {
-              "\u8fd9\u91cc\u63a7\u5236\u9996\u9875\u5728 Google \u641c\u7d22\u7ed3\u679c\u4e2d\u7684\u6807\u9898\u548c\u63cf\u8ff0\uff0c\u6709\u52a9\u4e8e\u63d0\u5347\u70b9\u51fb\u7387\u548c\u641c\u7d22\u53ef\u89c1\u6027\u3002"
+              "这里控制首页在 Google 搜索结果中的标题和描述，有助于提升点击率和搜索可见性。"
             }
           </p>
           <div className="grid gap-4">
@@ -182,8 +182,8 @@ export default async function AdminHomeModulesPage() {
         </section>
 
         <ModuleCard
-          title={"Hero \u9996\u5c4f"}
-          description={"\u63a7\u5236\u9996\u9875\u7b2c\u4e00\u5c4f\u6807\u9898\u3001\u8bf4\u660e\u548c\u4e24\u4e2a\u6309\u94ae\u3002"}
+          title={"Hero 首屏"}
+          description={"控制首页第一屏标题、说明和两个按钮。"}
           moduleKey="hero"
           enabled={heroModule?.isEnabled ?? true}
         >
@@ -224,8 +224,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u6838\u5fc3\u4f18\u52bf"}
-          description={"\u6bcf\u884c\u4e00\u6761\uff0c\u524d\u53f0\u4f1a\u81ea\u52a8\u6392\u6210\u5217\u8868\u3002"}
+          title={"核心优势"}
+          description={"每行一条，前台会自动排成列表。"}
           moduleKey="strengths"
           enabled={strengthsModule?.isEnabled ?? true}
         >
@@ -242,8 +242,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u54c1\u724c\u80cc\u4e66"}
-          description={"\u7528\u4e8e\u6eda\u52a8\u5c55\u793a\u5408\u4f5c\u54c1\u724c\u3001\u5ba2\u6237\u54c1\u724c\u6216\u884c\u4e1a\u5173\u952e\u8bcd\u3002"}
+          title={"品牌背书"}
+          description={"用于滚动展示合作品牌、客户品牌或行业关键词。"}
           moduleKey="trust-signals"
           enabled={trustSignalsModule?.isEnabled ?? true}
         >
@@ -264,8 +264,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u63a8\u8350\u5206\u7c7b"}
-          description={"\u63a7\u5236\u9996\u9875\u5206\u7c7b\u6a21\u5757\u7684\u6587\u6848\u548c\u8981\u5c55\u793a\u7684\u5206\u7c7b\u3002"}
+          title={"推荐分类"}
+          description={"控制首页分类模块的文案和要展示的分类。"}
           moduleKey="featured-categories"
           enabled={featuredCategoryModule?.isEnabled ?? true}
         >
@@ -301,8 +301,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u5de5\u5382\u5b9e\u529b"}
-          description={"\u63a7\u5236\u5de5\u5382\u5b9e\u529b\u6a21\u5757\u7684\u6807\u9898\u3001\u8bf4\u660e\u3001\u5356\u70b9\u548c\u4e24\u7ec4\u7edf\u8ba1\u6570\u5b57\u3002"}
+          title={"工厂实力"}
+          description={"控制工厂实力模块的标题、说明、卖点和两组统计数字。"}
           moduleKey="factory-capability"
           enabled={factoryCapabilityModule?.isEnabled ?? true}
         >
@@ -347,8 +347,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u8d28\u91cf\u8ba4\u8bc1"}
-          description={"\u6bcf\u884c\u683c\u5f0f\u4e3a\u201c\u6807\u9898|\u63cf\u8ff0\u201d\uff0c\u7528\u4e8e\u5c55\u793a\u8ba4\u8bc1\u3001\u5ba1\u6838\u548c\u5408\u89c4\u80fd\u529b\u3002"}
+          title={"质量认证"}
+          description={"每行格式为“标题|描述”，用于展示认证、审核和合规能力。"}
           moduleKey="quality-certifications"
           enabled={qualityModule?.isEnabled ?? true}
         >
@@ -377,8 +377,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u63a8\u8350\u4ea7\u54c1"}
-          description={"\u63a7\u5236\u9996\u9875\u63a8\u8350\u4ea7\u54c1\u6a21\u5757\u7684\u6807\u9898\u3001\u6309\u94ae\u548c\u4ea7\u54c1\u9009\u62e9\u3002"}
+          title={"推荐产品"}
+          description={"控制首页推荐产品模块的标题、按钮和产品选择。"}
           moduleKey="featured-products"
           enabled={featuredProductModule?.isEnabled ?? true}
         >
@@ -418,8 +418,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u5408\u4f5c\u6d41\u7a0b"}
-          description={"\u6bcf\u884c\u683c\u5f0f\u4e3a\u201c\u6807\u9898|\u63cf\u8ff0\u201d\uff0c\u7528\u4e8e\u5c55\u793a\u8be2\u76d8\u5230\u51fa\u8d27\u7684\u6b65\u9aa4\u3002"}
+          title={"合作流程"}
+          description={"每行格式为“标题|描述”，用于展示询盘到出货的步骤。"}
           moduleKey="process-steps"
           enabled={processModule?.isEnabled ?? true}
         >
@@ -444,8 +444,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u535a\u5ba2\u5165\u53e3"}
-          description={"\u63a7\u5236\u9996\u9875\u535a\u5ba2\u6a21\u5757\u6807\u9898\uff0c\u6587\u7ae0\u4f1a\u81ea\u52a8\u8bfb\u53d6\u6700\u65b0\u5df2\u53d1\u5e03\u5185\u5bb9\u3002"}
+          title={"博客入口"}
+          description={"控制首页博客模块标题，文章会自动读取最新已发布内容。"}
           moduleKey="latest-insights"
           enabled={latestInsightsModule?.isEnabled ?? true}
         >
@@ -466,8 +466,8 @@ export default async function AdminHomeModulesPage() {
         </ModuleCard>
 
         <ModuleCard
-          title={"\u5e95\u90e8 CTA"}
-          description={"\u63a7\u5236\u9996\u9875\u5e95\u90e8 CTA \u533a\u57df\u7684\u6587\u6848\u548c\u6309\u94ae\u3002"}
+          title={"底部 CTA"}
+          description={"控制首页底部 CTA 区域的文案和按钮。"}
           moduleKey="final-cta"
           enabled={finalCtaModule?.isEnabled ?? true}
         >

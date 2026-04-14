@@ -35,7 +35,7 @@ export default function StaffPage() {
       const data = await res.json();
       setEmployees(Array.isArray(data) ? data : []);
     } catch {
-      setError("\u52a0\u8f7d\u5458\u5de5\u5217\u8868\u5931\u8d25");
+      setError("加载员工列表失败");
     } finally {
       setLoading(false);
     }
@@ -61,17 +61,17 @@ export default function StaffPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "\u521b\u5efa\u5931\u8d25");
+        throw new Error(data.error || "创建失败");
       }
       setNewUsername("");
       setNewPassword("");
-      showSuccess("\u5458\u5de5\u8d26\u53f7\u5df2\u521b\u5efa");
+      showSuccess("员工账号已创建");
       await fetchEmployees();
     } catch (err: unknown) {
       setError(
         err instanceof Error
           ? err.message
-          : "\u521b\u5efa\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5",
+          : "创建失败，请稍后重试",
       );
     } finally {
       setSubmitting(false);
@@ -81,7 +81,7 @@ export default function StaffPage() {
   const handleDelete = async (id: number, username: string) => {
     if (
       !confirm(
-        `\u786e\u5b9a\u8981\u5220\u9664\u5458\u5de5 ${username} \u5417\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u6062\u590d\u3002`,
+        `确定要删除员工 ${username} 吗？此操作不可恢复。`,
       )
     ) {
       return;
@@ -90,15 +90,15 @@ export default function StaffPage() {
     try {
       const res = await fetch(`/api/admin/staff/${id}`, { method: "DELETE" });
       if (!res.ok) {
-        throw new Error("\u5220\u9664\u5931\u8d25");
+        throw new Error("删除失败");
       }
-      showSuccess(`${username} \u5df2\u5220\u9664`);
+      showSuccess(`${username} 已删除`);
       await fetchEmployees();
     } catch (err: unknown) {
       setError(
         err instanceof Error
           ? err.message
-          : "\u5220\u9664\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5",
+          : "删除失败，请稍后重试",
       );
     }
   };
@@ -116,16 +116,16 @@ export default function StaffPage() {
         body: JSON.stringify({ password: resetPassword }),
       });
       if (!res.ok) {
-        throw new Error("\u91cd\u7f6e\u5931\u8d25");
+        throw new Error("重置失败");
       }
       setResetId(null);
       setResetPassword("");
-      showSuccess("\u5bc6\u7801\u5df2\u91cd\u7f6e");
+      showSuccess("密码已重置");
     } catch (err: unknown) {
       setError(
         err instanceof Error
           ? err.message
-          : "\u91cd\u7f6e\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5",
+          : "重置失败，请稍后重试",
       );
     }
   };
@@ -138,12 +138,12 @@ export default function StaffPage() {
             <Users className="h-5 w-5 text-blue-600" />
           </div>
           <h2 className="text-2xl font-semibold text-stone-950">
-            {"\u5458\u5de5\u8d26\u53f7\u7ba1\u7406"}
+            {"员工账号管理"}
           </h2>
         </div>
         <p className="text-sm leading-6 text-stone-500">
           {
-            "\u7ba1\u7406\u53ef\u767b\u5f55 Admin \u540e\u53f0\u7684\u5458\u5de5\u8d26\u53f7\uff0c\u5bc6\u7801\u5728\u521b\u5efa\u540e\u65e0\u6cd5\u518d\u6b21\u67e5\u770b\uff0c\u8bf7\u59a5\u5584\u4fdd\u5b58\u3002"
+            "管理可登录 Admin 后台的员工账号，密码在创建后无法再次查看，请妥善保存。"
           }
         </p>
       </section>
@@ -162,21 +162,21 @@ export default function StaffPage() {
             onClick={() => setError("")}
             type="button"
           >
-            {"\u5173\u95ed"}
+            {"关闭"}
           </button>
         </div>
       ) : null}
 
       <section className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm">
         <h3 className="mb-4 text-base font-semibold text-stone-950">
-          {"\u65b0\u589e\u5458\u5de5"}
+          {"新增员工"}
         </h3>
         <form className="flex flex-wrap gap-3" onSubmit={handleCreate}>
           <input
             className="min-w-48 flex-1 rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
             minLength={3}
             onChange={(e) => setNewUsername(e.target.value)}
-            placeholder="\u7528\u6237\u540d\uff08\u81f3\u5c113\u4f4d\uff09"
+            placeholder="用户名（至少3位）"
             required
             value={newUsername}
           />
@@ -184,7 +184,7 @@ export default function StaffPage() {
             className="min-w-48 flex-1 rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
             minLength={6}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="\u5bc6\u7801\uff08\u81f3\u5c116\u4f4d\uff09"
+            placeholder="密码（至少6位）"
             required
             type="password"
             value={newPassword}
@@ -199,7 +199,7 @@ export default function StaffPage() {
             ) : (
               <Plus className="h-4 w-4" />
             )}
-            {"\u521b\u5efa\u8d26\u53f7"}
+            {"创建账号"}
           </button>
         </form>
       </section>
@@ -207,7 +207,7 @@ export default function StaffPage() {
       <section className="overflow-hidden rounded-[1.5rem] border border-stone-200 bg-white shadow-sm">
         <div className="border-b border-stone-200 px-6 py-4">
           <h3 className="text-base font-semibold text-stone-950">
-            {`\u5f53\u524d\u5458\u5de5 (${employees.length})`}
+            {`当前员工 (${employees.length})`}
           </h3>
         </div>
 
@@ -217,7 +217,7 @@ export default function StaffPage() {
           </div>
         ) : employees.length === 0 ? (
           <div className="py-12 text-center text-sm text-stone-400">
-            {"\u6682\u65e0\u5458\u5de5\u8d26\u53f7"}
+            {"暂无员工账号"}
           </div>
         ) : (
           <div className="divide-y divide-stone-100">
@@ -229,7 +229,7 @@ export default function StaffPage() {
                 <div>
                   <div className="font-medium text-stone-900">{emp.username}</div>
                   <div className="mt-0.5 text-xs text-stone-400">
-                    {`\u521b\u5efa\u4e8e ${new Date(emp.createdAt).toLocaleDateString("zh-CN")}`}
+                    {`创建于 ${new Date(emp.createdAt).toLocaleDateString("zh-CN")}`}
                   </div>
                 </div>
 
@@ -243,7 +243,7 @@ export default function StaffPage() {
                     type="button"
                   >
                     <KeyRound className="h-3.5 w-3.5" />
-                    {"\u91cd\u7f6e\u5bc6\u7801"}
+                    {"重置密码"}
                   </button>
                   <button
                     className="flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
@@ -251,7 +251,7 @@ export default function StaffPage() {
                     type="button"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                    {"\u5220\u9664"}
+                    {"删除"}
                   </button>
                 </div>
 
@@ -261,13 +261,13 @@ export default function StaffPage() {
                     onSubmit={handleReset}
                   >
                     <p className="mb-3 text-sm font-semibold text-stone-900">
-                      {`\u4e3a\u300c${emp.username}\u300d\u8bbe\u7f6e\u65b0\u5bc6\u7801`}
+                      {`为「${emp.username}」设置新密码`}
                     </p>
                     <input
                       className="mb-3 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
                       minLength={6}
                       onChange={(e) => setResetPassword(e.target.value)}
-                      placeholder="\u81f3\u5c11 6 \u4f4d"
+                      placeholder="至少 6 位"
                       required
                       type="password"
                       value={resetPassword}
@@ -277,14 +277,14 @@ export default function StaffPage() {
                         className="flex-1 rounded-lg bg-blue-600 py-1.5 text-sm font-semibold text-white hover:bg-blue-700"
                         type="submit"
                       >
-                        {"\u786e\u8ba4\u91cd\u7f6e"}
+                        {"确认重置"}
                       </button>
                       <button
                         className="flex-1 rounded-lg border border-stone-200 py-1.5 text-sm text-stone-600 hover:bg-stone-50"
                         onClick={() => setResetId(null)}
                         type="button"
                       >
-                        {"\u53d6\u6d88"}
+                        {"取消"}
                       </button>
                     </div>
                   </form>

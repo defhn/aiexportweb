@@ -38,7 +38,7 @@ export function MobileDrawer({ currentRole = "super_admin" }: { currentRole?: Ad
   return (
     <>
       <button
-        aria-label={"\u6253\u5f00\u83dc\u5355"}
+        aria-label={"打开菜单"}
         className="mr-2 flex h-9 w-9 items-center justify-center rounded-xl text-stone-500 hover:bg-stone-100 hover:text-stone-900 md:hidden"
         onClick={() => setOpen(true)}
         type="button"
@@ -62,10 +62,10 @@ export function MobileDrawer({ currentRole = "super_admin" }: { currentRole?: Ad
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600 text-white">
                 <span className="text-xs font-black">A</span>
               </div>
-              <p className="text-sm font-semibold text-white">{"\u4e2d\u6587\u540e\u53f0"}</p>
+              <p className="text-sm font-semibold text-white">{"中文后台"}</p>
             </Link>
             <button
-              aria-label={"\u5173\u95ed\u83dc\u5355"}
+              aria-label={"关闭菜单"}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-stone-400 hover:bg-white/5 hover:text-white"
               onClick={() => setOpen(false)}
               type="button"

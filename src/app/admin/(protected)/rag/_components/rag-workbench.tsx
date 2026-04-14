@@ -44,9 +44,9 @@ type RagResponse = {
 };
 
 const severityLabel: Record<RagIssue["severity"], string> = {
-  high: "\u9ad8\u98ce\u9669",
-  medium: "\u4e2d\u98ce\u9669",
-  low: "\u4f4e\u98ce\u9669",
+  high: "高风险",
+  medium: "中风险",
+  low: "低风险",
 };
 
 function SeverityBadge({ severity }: { severity: RagIssue["severity"] }) {
@@ -129,7 +129,7 @@ export function RagWorkbench() {
       setError(
         err instanceof Error
           ? err.message
-          : "\u8bf7\u6c42\u5904\u7406\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5",
+          : "请求处理失败，请稍后重试",
       );
     } finally {
       setLoading(false);
@@ -153,7 +153,7 @@ export function RagWorkbench() {
             type="button"
           >
             <Sparkles className="h-4 w-4" />
-            {"RAG \u6587\u6848\u751f\u6210"}
+            {"RAG 文案生成"}
           </button>
           <button
             className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${
@@ -165,7 +165,7 @@ export function RagWorkbench() {
             type="button"
           >
             <ShieldCheck className="h-4 w-4" />
-            {"AI \u5185\u5bb9\u6838\u67e5"}
+            {"AI 内容核查"}
           </button>
         </div>
       </div>
@@ -176,24 +176,24 @@ export function RagWorkbench() {
             <h3 className="flex items-center gap-2 text-base font-bold text-stone-900">
               <Database className="h-4 w-4 text-blue-500" />
               {mode === "generate"
-                ? "\u751f\u6210\u9700\u6c42\u8f93\u5165"
-                : "\u5f85\u6838\u67e5\u5185\u5bb9\u8f93\u5165"}
+                ? "生成需求输入"
+                : "待核查内容输入"}
             </h3>
 
             <div className="mt-4 space-y-3">
               <div>
                 <label className="text-xs font-black uppercase tracking-widest text-stone-400">
                   {mode === "generate"
-                    ? "\u751f\u6210\u9700\u6c42 / \u5173\u952e\u8bcd"
-                    : "\u6838\u67e5\u4e3b\u9898\u5173\u952e\u8bcd"}
+                    ? "生成需求 / 关键词"
+                    : "核查主题关键词"}
                 </label>
                 <input
                   className="mt-1 w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm text-stone-900 outline-none transition-colors focus:border-blue-500"
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={
                     mode === "generate"
-                      ? "\u4f8b\u5982\uff1aCNC titanium grade 5 machining capabilities"
-                      : "\u4f8b\u5982\uff1atitanium alloy, CNC machining"
+                      ? "例如：CNC titanium grade 5 machining capabilities"
+                      : "例如：titanium alloy, CNC machining"
                   }
                   value={query}
                 />
@@ -202,12 +202,12 @@ export function RagWorkbench() {
               {mode === "factcheck" ? (
                 <div>
                   <label className="text-xs font-black uppercase tracking-widest text-stone-400">
-                    {"\u5f85\u6838\u67e5\u7684\u6b63\u6587\u5185\u5bb9"}
+                    {"待核查的正文内容"}
                   </label>
                   <textarea
                     className="mt-1 min-h-[200px] w-full resize-y rounded-xl border border-stone-200 px-4 py-3 text-sm text-stone-900 outline-none transition-colors focus:border-blue-500"
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="\u628a\u9700\u8981\u6838\u67e5\u7684 AI \u6587\u6848\u7c98\u8d34\u5230\u8fd9\u91cc..."
+                    placeholder="把需要核查的 AI 文案粘贴到这里..."
                     value={content}
                   />
                 </div>
@@ -222,7 +222,7 @@ export function RagWorkbench() {
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    {"AI \u6b63\u5728\u5904\u7406\u4e2d..."}
+                    {"AI 正在处理中..."}
                   </>
                 ) : (
                   <>
@@ -232,8 +232,8 @@ export function RagWorkbench() {
                       <ShieldCheck className="h-4 w-4" />
                     )}
                     {mode === "generate"
-                      ? "\u5f00\u59cb\u751f\u6210 RAG \u6587\u6848"
-                      : "\u5f00\u59cb\u6838\u67e5\u5185\u5bb9"}
+                      ? "开始生成 RAG 文案"
+                      : "开始核查内容"}
                   </>
                 )}
               </button>
@@ -243,31 +243,31 @@ export function RagWorkbench() {
           {result?.ragContext ? (
             <section className="rounded-[2rem] border border-blue-100 bg-blue-50 p-6">
               <h4 className="text-xs font-black uppercase tracking-widest text-blue-700">
-                {"RAG \u53c2\u8003\u6765\u6e90"}
+                {"RAG 参考来源"}
               </h4>
               <div className="mt-3 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-blue-600">
-                    {"\u5f15\u7528\u4ea7\u54c1"}
+                    {"引用产品"}
                   </span>
                   <span className="font-bold text-blue-900">
-                    {`${result.ragContext.productsUsed.length} \u4e2a`}
+                    {`${result.ragContext.productsUsed.length} 个`}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-600">
-                    {"\u5f15\u7528 FAQ"}
+                    {"引用 FAQ"}
                   </span>
                   <span className="font-bold text-blue-900">
-                    {`${result.ragContext.faqsUsed} \u6761`}
+                    {`${result.ragContext.faqsUsed} 条`}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-600">
-                    {"\u547d\u4e2d\u6587\u6863\u5757"}
+                    {"命中文档块"}
                   </span>
                   <span className="font-bold text-blue-900">
-                    {`${result.ragContext.totalChunks} \u5757`}
+                    {`${result.ragContext.totalChunks} 块`}
                   </span>
                 </div>
                 {result.ragContext.productsUsed.length > 0 ? (
@@ -303,7 +303,7 @@ export function RagWorkbench() {
                 <ScoreMeter score={factCheck.overallScore} />
                 <div>
                   <p className="text-xs font-black uppercase tracking-widest text-stone-400">
-                    {"AI \u6838\u67e5\u8bc4\u5206"}
+                    {"AI 核查评分"}
                   </p>
                   <p className="mt-1 text-sm text-stone-600">{factCheck.summary}</p>
                 </div>
@@ -312,7 +312,7 @@ export function RagWorkbench() {
               {factCheck.issues?.length > 0 ? (
                 <div>
                   <h4 className="mb-3 text-xs font-black uppercase tracking-widest text-stone-400">
-                    {`\u53d1\u73b0\u95ee\u9898 ${factCheck.issues.length} \u9879`}
+                    {`发现问题 ${factCheck.issues.length} 项`}
                   </h4>
                   <div className="space-y-3">
                     {factCheck.issues.map((issue, idx) => (
@@ -348,7 +348,7 @@ export function RagWorkbench() {
               {factCheck.positives?.length > 0 ? (
                 <div>
                   <h4 className="mb-2 text-xs font-black uppercase tracking-widest text-stone-400">
-                    {"\u8868\u73b0\u8f83\u597d"}
+                    {"表现较好"}
                   </h4>
                   <ul className="space-y-1.5">
                     {factCheck.positives.map((pos, idx) => (
@@ -370,7 +370,7 @@ export function RagWorkbench() {
             <section className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h4 className="text-xs font-black uppercase tracking-widest text-stone-400">
-                  {"\u751f\u6210\u7ed3\u679c"}
+                  {"生成结果"}
                 </h4>
                 <button
                   className="flex items-center gap-1 text-xs text-stone-400 transition-colors hover:text-stone-600"
@@ -378,7 +378,7 @@ export function RagWorkbench() {
                   type="button"
                 >
                   <RefreshCw className="h-3 w-3" />
-                  {"\u91cd\u65b0\u751f\u6210"}
+                  {"重新生成"}
                 </button>
               </div>
 
@@ -391,7 +391,7 @@ export function RagWorkbench() {
               {generated.usedSources?.length > 0 ? (
                 <div className="mt-4">
                   <p className="mb-2 text-xs text-stone-400">
-                    {"\u5f15\u7528\u6765\u6e90"}
+                    {"引用来源"}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {generated.usedSources.map((src) => (
@@ -409,7 +409,7 @@ export function RagWorkbench() {
               <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3">
                 <p className="text-xs font-medium text-amber-700">
                   {
-                    "\u751f\u6210\u5185\u5bb9\u57fa\u4e8e\u5f53\u524d RAG \u547d\u4e2d\u8d44\u6599\u548c AI \u63a8\u7406\u7ed3\u679c\uff0c\u6b63\u5f0f\u53d1\u5e03\u524d\u4ecd\u5efa\u8bae\u4f60\u7ed3\u5408\u5b9e\u9645\u4ea7\u54c1\u8d44\u6599\u518d\u590d\u6838\u4e00\u904d\u3002"
+                    "生成内容基于当前 RAG 命中资料和 AI 推理结果，正式发布前仍建议你结合实际产品资料再复核一遍。"
                   }
                 </p>
               </div>
@@ -421,8 +421,8 @@ export function RagWorkbench() {
               <Database className="mb-3 h-10 w-10 text-stone-300" />
               <p className="text-sm font-bold text-stone-400">
                 {mode === "generate"
-                  ? "\u8f93\u5165\u4f60\u7684\u751f\u6210\u9700\u6c42\uff0cAI \u4f1a\u7ed3\u5408 RAG \u68c0\u7d22\u7ed3\u679c\u4e3a\u4f60\u751f\u6210\u53c2\u8003\u6587\u6848\u3002"
-                  : "\u7c98\u8d34\u9700\u8981\u6838\u67e5\u7684 AI \u6587\u6848\uff0c\u7cfb\u7edf\u4f1a\u7ed3\u5408 RAG \u8d44\u6599\u4e3a\u4f60\u6807\u51fa\u95ee\u9898\u70b9\u3002"}
+                  ? "输入你的生成需求，AI 会结合 RAG 检索结果为你生成参考文案。"
+                  : "粘贴需要核查的 AI 文案，系统会结合 RAG 资料为你标出问题点。"}
               </p>
             </section>
           ) : null}

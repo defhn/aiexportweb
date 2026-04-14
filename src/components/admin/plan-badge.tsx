@@ -4,10 +4,10 @@ export function PlanBadge({ plan }: { plan: SitePlan }) {
   const summary = getPlanSummary(plan);
   const planNameZh =
     plan === "basic"
-      ? "\u57fa\u7840\u7248"
+      ? "基础版"
       : plan === "growth"
-        ? "\u589e\u957f\u7248"
-        : "AI\u9500\u552e\u589e\u957f\u7248";
+        ? "增长版"
+        : "AI销售增长版";
 
   const className =
     plan === "basic"
@@ -20,7 +20,7 @@ export function PlanBadge({ plan }: { plan: SitePlan }) {
     <span
       className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${className}`}
     >
-      {"\u5f53\u524d\u5957\u9910\uff1a"}
+      {"当前套餐："}
       {planNameZh || summary.nameZh}
     </span>
   );

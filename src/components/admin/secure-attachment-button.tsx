@@ -20,11 +20,11 @@ export function SecureAttachmentButton({
       const res = await fetch(`/api/admin/attachment-url?inquiryId=${inquiryId}`);
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
-        throw new Error(data.error ?? "\u83b7\u53d6\u5b89\u5168\u4e0b\u8f7d\u94fe\u63a5\u5931\u8d25");
+        throw new Error(data.error ?? "获取安全下载链接失败");
       }
       window.open(data.url, "_blank", "noopener,noreferrer");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "\u4e0b\u8f7d\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5");
+      setError(err instanceof Error ? err.message : "下载失败，请稍后重试");
     } finally {
       setLoading(false);
     }
@@ -43,11 +43,11 @@ export function SecureAttachmentButton({
         ) : (
           <Download className="h-4 w-4" />
         )}
-        {fileName ?? "\u4e0b\u8f7d\u9644\u4ef6"}
+        {fileName ?? "下载附件"}
       </button>
       <span className="flex items-center gap-1 text-xs text-stone-400">
         <ShieldCheck className="h-3 w-3" />
-        {"\u5b89\u5168\u94fe\u63a5\u6709\u6548\u671f\u4e3a 15 \u5206\u949f"}
+        {"安全链接有效期为 15 分钟"}
       </span>
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>

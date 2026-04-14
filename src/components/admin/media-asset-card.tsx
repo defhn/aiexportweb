@@ -44,7 +44,7 @@ export function MediaAssetCard({
               type="checkbox"
               value={asset.id}
             />
-            {"\u9009\u62e9"}
+            {"选择"}
           </label>
         </div>
       ) : null}

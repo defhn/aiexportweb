@@ -4,25 +4,25 @@ import { FileText, Home, Info, Phone } from "lucide-react";
 const PAGES = [
   {
     key: "home",
-    label: "\u9996\u9875\u6a21\u5757",
+    label: "首页模块",
     description:
-      "\u7edf\u4e00\u7ba1\u7406 Hero \u9996\u5c4f\u3001\u6838\u5fc3\u4f18\u52bf\u3001\u54c1\u724c\u80cc\u4e66\u3001\u63a8\u8350\u4ea7\u54c1\u3001\u5408\u4f5c\u6d41\u7a0b\u4e0e CTA \u7b49\u9996\u9875\u6a21\u5757\u7684\u6587\u6848\u548c\u6392\u5e8f\u3002",
+      "统一管理 Hero 首屏、核心优势、品牌背书、推荐产品、合作流程与 CTA 等首页模块的文案和排序。",
     href: "/admin/pages/home",
     icon: Home,
   },
   {
     key: "about",
-    label: "\u5173\u4e8e\u6211\u4eec",
+    label: "关于我们",
     description:
-      "\u7ef4\u62a4\u516c\u53f8\u4ecb\u7ecd\u3001\u5de5\u5382\u80fd\u529b\u3001\u56e2\u961f\u4fe1\u606f\u3001\u8d44\u8d28\u4e0e\u53d1\u5c55\u5386\u7a0b\u7b49 About \u9875\u9762\u5185\u5bb9\u3002",
+      "维护公司介绍、工厂能力、团队信息、资质与发展历程等 About 页面内容。",
     href: "/admin/pages/about",
     icon: Info,
   },
   {
     key: "contact",
-    label: "\u8054\u7cfb\u6211\u4eec",
+    label: "联系我们",
     description:
-      "\u914d\u7f6e\u8054\u7cfb\u65b9\u5f0f\u3001\u5730\u5740\u3001\u8868\u5355\u8bf4\u660e\u3001\u5730\u56fe\u4fe1\u606f\u548c\u5e38\u89c1\u95ee\u9898\u7b49 Contact \u9875\u5185\u5bb9\u3002",
+      "配置联系方式、地址、表单说明、地图信息和常见问题等 Contact 页内容。",
     href: "/admin/pages/contact",
     icon: Phone,
   },
@@ -33,11 +33,11 @@ export default function AdminPagesIndexPage() {
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
         <h2 className="text-2xl font-semibold text-stone-950">
-          {"\u7ad9\u70b9\u5355\u9875\u7ba1\u7406"}
+          {"站点单页管理"}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-stone-600">
           {
-            "\u5728\u8fd9\u91cc\u5206\u522b\u7ba1\u7406\u9996\u9875\u6a21\u5757\u3001\u5173\u4e8e\u6211\u4eec\u548c\u8054\u7cfb\u6211\u4eec\u7b49\u9875\u9762\u7684\u524d\u53f0\u5c55\u793a\u5185\u5bb9\uff0c\u4fee\u6539\u540e\u4f1a\u76f4\u63a5\u53cd\u6620\u5728\u5b98\u7f51\u9875\u9762\u3002"
+            "在这里分别管理首页模块、关于我们和联系我们等页面的前台展示内容，修改后会直接反映在官网页面。"
           }
         </p>
       </section>
@@ -58,7 +58,7 @@ export default function AdminPagesIndexPage() {
             <p className="text-sm leading-6 text-stone-500">{description}</p>
             <div className="mt-auto flex items-center gap-1 text-xs font-semibold text-blue-600">
               <FileText className="h-3.5 w-3.5" />
-              {"\u8fdb\u5165\u7f16\u8f91"}
+              {"进入编辑"}
             </div>
           </Link>
         ))}

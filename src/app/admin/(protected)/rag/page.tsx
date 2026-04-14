@@ -45,11 +45,11 @@ export default async function AdminRagPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-stone-950">
-              {"RAG \u77e5\u8bc6\u5e93\u5de5\u4f5c\u53f0"}
+              {"RAG 知识库工作台"}
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
               {
-                "\u8fd9\u91cc\u53ef\u4ee5\u68c0\u67e5\u4ea7\u54c1\u8be6\u60c5\u3001FAQ \u548c RAG \u7d22\u5f15\u51c6\u5907\u60c5\u51b5\uff0c\u65b9\u4fbf\u4f60\u5728\u4ea7\u54c1\u6570\u636e\u5165\u5e93\u540e\u7eed\u7eed\u8865\u5168\u53ef\u88ab AI \u68c0\u7d22\u7684\u77e5\u8bc6\u5185\u5bb9\u3002"
+                "这里可以检查产品详情、FAQ 和 RAG 索引准备情况，方便你在产品数据入库后续续补全可被 AI 检索的知识内容。"
               }
             </p>
           </div>
@@ -66,15 +66,15 @@ export default async function AdminRagPage() {
               }`}
             />
             {stats.products > 0
-              ? "\u5df2\u68c0\u6d4b\u5230\u53ef\u7528\u4ea7\u54c1\u6570\u636e"
-              : "\u6682\u672a\u68c0\u6d4b\u5230\u4ea7\u54c1\u6570\u636e"}
+              ? "已检测到可用产品数据"
+              : "暂未检测到产品数据"}
           </span>
         </div>
 
         {!databaseConfigured ? (
           <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
             {
-              "\u5f53\u524d\u672a\u914d\u7f6e DATABASE_URL\uff0cRAG \u7edf\u8ba1\u6570\u636e\u6682\u65f6\u65e0\u6cd5\u8bfb\u53d6\u3002\u4f46\u5de5\u4f5c\u53f0\u9875\u9762\u4ecd\u53ef\u4ee5\u6b63\u5e38\u6253\u5f00\u3002"
+              "当前未配置 DATABASE_URL，RAG 统计数据暂时无法读取。但工作台页面仍可以正常打开。"
             }
           </div>
         ) : null}
@@ -82,7 +82,7 @@ export default async function AdminRagPage() {
         {databaseConfigured && databaseError ? (
           <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
             {
-              "\u5f53\u524d\u6570\u636e\u5e93\u8fde\u63a5\u5931\u8d25\uff0cRAG \u7edf\u8ba1\u533a\u57df\u5df2\u81ea\u52a8\u964d\u7ea7\u4e3a\u7a7a\u6570\u636e\u663e\u793a\uff0c\u4f46\u9875\u9762\u4ecd\u53ef\u6b63\u5e38\u6253\u5f00\u3002"
+              "当前数据库连接失败，RAG 统计区域已自动降级为空数据显示，但页面仍可正常打开。"
             }
           </div>
         ) : null}
@@ -97,7 +97,7 @@ export default async function AdminRagPage() {
                 {stats.products}
               </p>
               <p className="text-xs text-stone-400">
-                {"\u4ea7\u54c1\u603b\u6570"}
+                {"产品总数"}
               </p>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default async function AdminRagPage() {
                 {stats.withDetails}
               </p>
               <p className="text-xs text-stone-400">
-                {`\u5df2\u586b\u5199\u8be6\u60c5 (${coverageRate}%)`}
+                {`已填写详情 (${coverageRate}%)`}
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default async function AdminRagPage() {
                 {stats.withFaqs}
               </p>
               <p className="text-xs text-stone-400">
-                {"\u5df2\u586b\u5199 FAQ"}
+                {"已填写 FAQ"}
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export default async function AdminRagPage() {
         {stats.products > 0 && coverageRate < 50 ? (
           <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
             {
-              `\u5f53\u524d\u8be6\u60c5\u8986\u76d6\u7387\u4ec5 ${coverageRate}%\uff0c\u5efa\u8bae\u4f18\u5148\u8865\u5168\u4ea7\u54c1\u7684 detailsEn \u5b57\u6bb5\uff0c\u518d\u8fdb\u884c RAG \u77e5\u8bc6\u5e93\u6784\u5efa\u548c AI \u95ee\u7b54\u8c03\u7528\u3002`
+              `当前详情覆盖率仅 ${coverageRate}%，建议优先补全产品的 detailsEn 字段，再进行 RAG 知识库构建和 AI 问答调用。`
             }
           </div>
         ) : null}
