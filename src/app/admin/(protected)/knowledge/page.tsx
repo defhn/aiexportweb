@@ -11,6 +11,8 @@ import { getSiteSettings } from "@/features/settings/queries";
 import { convertKnowledgeToMarkdown, type KnowledgeJson } from "@/lib/knowledge-to-markdown";
 
 import KnowledgeEditor from "./knowledge-editor";
+import { AiPreviewPanel } from "./ai-preview";
+
 
 export const dynamic = "force-dynamic";
 
@@ -148,6 +150,8 @@ export default async function KnowledgePage() {
       </div>
 
       {/* 主编辑器（Client Component） */}
+      <AiPreviewPanel />
+
       <KnowledgeEditor
         saveAction={saveKnowledge}
         initialIndustryCode={settings.industryCode ?? ""}

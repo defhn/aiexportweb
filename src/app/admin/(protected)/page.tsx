@@ -1,11 +1,15 @@
-﻿import {
+import Link from "next/link";
+import {
   CalendarClock,
+  CheckCircle2,
+  Circle,
   FileText,
   Globe2,
   Layers,
   MessageSquare,
   MousePointer2,
   Package,
+  Rocket,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -132,6 +136,94 @@ export default async function AdminDashboardPage() {
           在这里快速查看询盘、产品、博客与流量概况，帮助团队及时发现增长信号与待处理事项。
         </p>
       </section>
+
+      {/* ── 🚀 新手引导检查清单（完成度 < 100% 时显示） ── */}
+      {(() => {
+        const steps = [
+          {
+            done: snapshot.cards.today + snapshot.cards.thisWeek + snapshot.cards.pending > 0 || products.length > 0,
+            label: "填写公司名称和联系方式",
+            link: "/admin/settings",
+            linkLabel: "前往设置",
+          },
+          {
+            done: products.length >= 3,
+            label: `上传至少 3 个产品（当前 ${products.length} 个）`,
+            link: "/admin/products/new",
+            linkLabel: "添加产品",
+          },
+          {
+            done: products.length >= 1,
+            label: "填写工厂知识库（AI 回复精准度核心）",
+            link: "/admin/knowledge",
+            linkLabel: "去填写",
+          },
+          {
+            done: posts.length >= 1,
+            label: "发布至少 1 篇博客（提升 SEO 权重）",
+            link: "/admin/blog/new",
+            linkLabel: "写博客",
+          },
+          {
+            done: snapshot.cards.pending === 0 && (snapshot.cards.today + snapshot.cards.thisWeek) > 0,
+            label: "处理第一条询盘（测试 AI 回复效果）",
+            link: "/admin/inquiries",
+            linkLabel: "查看询盘",
+          },
+        ];
+        const doneCount = steps.filter((s) => s.done).length;
+        const pct = Math.round((doneCount / steps.length) * 100);
+        if (pct === 100) return null;
+        return (
+          <section className="rounded-[2.5rem] border border-amber-100 bg-amber-50 p-8">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100">
+                <Rocket className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-stone-900">
+                  🚀 快速启动（完成后 AI 回复质量提升 80%）
+                </h2>
+                <p className="text-xs text-stone-500">完成以下步骤，让 AI 全面了解你的工厂</p>
+              </div>
+              <div className="ml-auto text-right">
+                <p className="text-2xl font-black text-amber-600">{pct}%</p>
+                <p className="text-xs text-stone-400">{doneCount}/{steps.length} 完成</p>
+              </div>
+            </div>
+            <div className="mb-4 h-2 overflow-hidden rounded-full bg-amber-100">
+              <div
+                className="h-full rounded-full bg-amber-500 transition-all"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <div className="space-y-3">
+              {steps.map((step, i) => (
+                <div key={i} className="flex items-center justify-between rounded-2xl bg-white px-5 py-3">
+                  <div className="flex items-center gap-3">
+                    {step.done ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <Circle className="h-5 w-5 text-stone-300" />
+                    )}
+                    <span className={`text-sm ${step.done ? "text-stone-400 line-through" : "font-medium text-stone-800"}`}>
+                      第 {i + 1} 步：{step.label}
+                    </span>
+                  </div>
+                  {!step.done && (
+                    <Link
+                      href={step.link}
+                      className="rounded-full bg-amber-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-amber-600"
+                    >
+                      {step.linkLabel} →
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
 
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (

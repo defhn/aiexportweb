@@ -46,6 +46,15 @@ export default async function AdminReplyTemplatesPage({
         ) : null}
       </section>
 
+      {/* AI 联动说明 */}
+      <section className="rounded-2xl border border-blue-100 bg-blue-50 px-6 py-4">
+        <p className="text-sm font-semibold text-blue-800">💡 这些模板会影响 AI 的回复风格</p>
+        <p className="mt-1 text-sm text-blue-700 leading-6">
+          AI 不会直接套用模板，而是<strong>参考模板的语气、结构和称呼习惯</strong>，为每条询盘生成一封<strong>个性化</strong>的回复草稿。
+          模板越完整，AI 回复越贴近你的真实风格。建议至少添加 1 个「报价咨询」和 1 个「样品申请」类型的模板。
+        </p>
+      </section>
+
       <form
         action={saveReplyTemplate}
         className="rounded-[1.5rem] border border-stone-200 bg-white p-6 shadow-sm"

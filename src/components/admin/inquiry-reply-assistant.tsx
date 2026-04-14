@@ -235,6 +235,76 @@ export function InquiryReplyAssistant({
         </p>
       </div>
 
+      {/* ── AI 准备状态（知识库健康度）── */}
+      <div className="rounded-2xl border border-stone-100 bg-stone-50 p-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-400">
+          AI 上下文状态
+        </p>
+        <div className="space-y-2">
+          {/* 产品知识 */}
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2 text-stone-700">
+              {specs.length > 0 ? (
+                <span className="text-green-500">✅</span>
+              ) : (
+                <span className="text-amber-500">⚠️</span>
+              )}
+              产品知识
+            </span>
+            {specs.length > 0 ? (
+              <span className="text-xs text-stone-500">已关联产品规格</span>
+            ) : (
+              <Link
+                href="/admin/products"
+                className="text-xs text-blue-600 hover:underline"
+              >
+                关联产品 →
+              </Link>
+            )}
+          </div>
+
+          {/* 企业知识 */}
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2 text-stone-700">
+              {templates.length > 0 || specs.length > 0 ? (
+                <span className="text-green-500">✅</span>
+              ) : (
+                <span className="text-amber-500">⚠️</span>
+              )}
+              企业知识库
+            </span>
+            <Link
+              href="/admin/knowledge"
+              className="text-xs text-blue-600 hover:underline"
+            >
+              查看/补充 →
+            </Link>
+          </div>
+
+          {/* 回复模板 */}
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2 text-stone-700">
+              {templates.length > 0 ? (
+                <span className="text-green-500">✅</span>
+              ) : (
+                <span className="text-stone-400">○</span>
+              )}
+              回复模板
+            </span>
+            {templates.length > 0 ? (
+              <span className="text-xs text-stone-500">{templates.length} 个已配置</span>
+            ) : (
+              <Link
+                href="/admin/reply-templates"
+                className="text-xs text-blue-600 hover:underline"
+              >
+                添加模板 →
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-wrap gap-2">
         {replyGate.status === "trial" && replyRemaining !== null ? (
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
