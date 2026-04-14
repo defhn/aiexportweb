@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/db/client";
-import { products } from "@/db/schema";
 
 export const runtime = "nodejs";
-
-type FaqItem = { question: string; answer: string };
 
 /**
  * RAG 产品知识库检索 + AI 内容生成/事实核查
  * POST /api/ai/rag-search
- * body: { query: string; topK?: number; mode?: "generate"|"factcheck"; content?: string }
+ *
+ * v2 版本：已迁移到统一的 rag-utils 库
+ *   - 优先使用 DB 预计算的 embedding（降低 API 成本 ~30x）
+ *   - 自动合并企业知识库（companyKnowledgeMd）
+ *   - 支持 generate / factcheck 两种模式
  */
 export async function POST(request: Request) {
   const body = (await request.json()) as {
@@ -32,118 +32,69 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "未配置 GEMINI_API_KEY" }, { status: 500 });
   }
 
-  // Vertex AI Express endpoint
+  // ── 1. 使用统一 RAG 工具库检索 ─────────────────────────────────────────────
+  const { buildRagContext } = await import("@/lib/rag-utils");
+
+  const { context: ragContext, meta } = await buildRagContext({
+    query: query || body.content || "",
+    includeCompanyKnowledge: true,
+    includeReplyTemplates: false,
+    topK,
+  });
+
+  // ── 2. 构建 Prompt ────────────────────────────────────────────────────────
   const project = process.env.VERTEX_PROJECT_ID ?? "huachuanghub";
   const location = process.env.VERTEX_LOCATION ?? "us-central1";
   const ragModel = "gemini-2.0-flash";
 
-  // ── 1. 从 products 表检索产品数据 ──────────────────────────────────────
-  const db = getDb();
-
-  const allProducts = await db
-    .select({
-      id: products.id,
-      nameEn: products.nameEn,
-      nameZh: products.nameZh,
-      shortDescriptionEn: products.shortDescriptionEn,
-      detailsEn: products.detailsEn,
-      faqsJson: products.faqsJson,
-    })
-    .from(products)
-    .limit(100);
-
-  // 简单关键词匹配评分（降级方案，无向量embedding）
-  const queryLower = query.toLowerCase();
-  const queryWords = queryLower.split(/\s+/).filter(Boolean);
-
-  const score = (text: string) =>
-    queryWords.reduce((acc, w) => acc + (text.toLowerCase().includes(w) ? 1 : 0), 0);
-
-  const scoredProducts = allProducts
-    .map((p) => ({
-      ...p,
-      score: score(
-        [p.nameEn, p.nameZh, p.shortDescriptionEn, p.detailsEn].filter(Boolean).join(" ")
-      ),
-    }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK);
-
-  // ── 2. 构建 RAG 上下文片段 ─────────────────────────────────────────────
-  const contextChunks: string[] = [];
-  const usedNames: string[] = [];
-  let faqsUsed = 0;
-
-  for (const p of scoredProducts) {
-    const name = p.nameEn ?? p.nameZh ?? "Unknown";
-    usedNames.push(name);
-
-    const chunk = [
-      `[产品] ${name}`,
-      p.shortDescriptionEn ?? "",
-      p.detailsEn ?? "",
-    ]
-      .filter(Boolean)
-      .join("\n")
-      .trim();
-
-    if (chunk.length > 10) contextChunks.push(chunk);
-
-    // FAQs
-    const faqs: FaqItem[] = Array.isArray(p.faqsJson) ? (p.faqsJson as FaqItem[]) : [];
-    for (const faq of faqs.slice(0, 3)) {
-      contextChunks.push(`Q: ${faq.question}\nA: ${faq.answer}`);
-      faqsUsed++;
-    }
-  }
-
-  const ragContext = contextChunks.join("\n\n");
-
-  // ── 3. 构建 Prompt ────────────────────────────────────────────────────
   let prompt: string;
 
   if (mode === "factcheck") {
-    prompt = `你是一位专业的外贸产品文案质量审核员。请根据以下产品知识库，核查用户提供的文案是否准确。
+    prompt = `You are a B2B manufacturing content fact-checker.
 
-产品知识库：
-${ragContext || "（暂无产品数据，请基于通用产品知识进行判断）"}
+Use the reference material below to review the draft content. Identify factual risks, vague claims, unsupported statements, or details that do not match the provided reference context.
+
+Reference material:
+${ragContext}
 
 ---
-待核查文案：
+Draft content to review:
 ${body.content ?? query}
 
----
-请以 JSON 格式返回核查结果，结构如下：
+Return strict JSON in this shape:
 {
   "overallScore": 85,
   "issues": [
     {
-      "severity": "high",
-      "quote": "文案中有误的原文片段",
-      "issue": "错误说明",
-      "suggestion": "修改建议"
+      "severity": "high|medium|low",
+      "quote": "quoted text from the draft",
+      "issue": "what is wrong",
+      "suggestion": "how to improve it"
     }
   ],
-  "positives": ["文案优点描述"],
-  "summary": "总体评价"
+  "positives": ["what is already good"],
+  "summary": "one short summary"
 }`;
   } else {
-    prompt = `你是一位专业的外贸产品文案撰写专家，擅长用英文写吸引买家的产品介绍。请根据以下产品知识库，回答客户的问题或生成产品内容。
+    prompt = `You are a B2B manufacturing copywriting assistant.
 
-产品知识库：
-${ragContext || "（暂无产品数据，请基于通用行业知识回答，并说明内容来自通用知识而非具体产品资料）"}
+Use the reference material below to generate a practical, accurate draft that stays close to the retrieved product knowledge. Avoid inventing specifications that are not supported by the reference material.
+
+Reference material:
+${ragContext}
 
 ---
-客户问题：${query}
+User request:
+${query}
 
-请以 JSON 格式返回：
+Return strict JSON in this shape:
 {
-  "content": "你生成的英文产品内容或问题回复",
-  "usedSources": ["引用的产品名称列表"]
+  "content": "generated content",
+  "usedSources": ["source names"]
 }`;
   }
 
-  // ── 4. 调用 Gemini ─────────────────────────────────────────────────────
+  // ── 3. 调用 Gemini ─────────────────────────────────────────────────────────
   try {
     const response = await fetch(
       `https://${location}-aiplatform.googleapis.com/v1/projects/${project}/locations/${location}/publishers/google/models/${ragModel}:generateContent?key=${apiKey}`,
@@ -154,16 +105,19 @@ ${ragContext || "（暂无产品数据，请基于通用行业知识回答，并
           contents: [{ role: "user", parts: [{ text: prompt }] }],
           generationConfig: {
             responseMimeType: "application/json",
-            temperature: 0.3,
+            temperature: 0.2,
             maxOutputTokens: 2048,
           },
         }),
-      }
+      },
     );
 
     if (!response.ok) {
       const errText = await response.text();
-      return NextResponse.json({ error: `Gemini API 调用失败: ${errText}` }, { status: 502 });
+      return NextResponse.json(
+        { error: `Gemini API 调用失败: ${errText}` },
+        { status: 502 },
+      );
     }
 
     const json = (await response.json()) as {
@@ -175,24 +129,27 @@ ${ragContext || "（暂无产品数据，请基于通用行业知识回答，并
     try {
       parsed = JSON.parse(raw);
     } catch {
-      parsed = mode === "factcheck"
-        ? { overallScore: 0, issues: [], positives: [], summary: raw }
-        : { content: raw, usedSources: [] };
+      parsed =
+        mode === "factcheck"
+          ? { overallScore: 0, issues: [], positives: [], summary: raw }
+          : { content: raw, usedSources: [] };
     }
 
     return NextResponse.json({
       result: parsed,
       ragContext: {
-        productsUsed: usedNames,
-        faqsUsed,
-        totalChunks: contextChunks.length,
+        productsUsed: meta.productsUsed,
+        faqsUsed: meta.faqsUsed,
+        totalChunks: meta.productsUsed.length,
+        usedEmbedding: meta.usedEmbedding,
+        hasCompanyKnowledge: meta.hasCompanyKnowledge,
       },
       mode,
     });
   } catch (error) {
     return NextResponse.json(
       { error: "AI 服务暂时不可用", detail: String(error) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

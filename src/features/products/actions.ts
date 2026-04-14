@@ -517,6 +517,13 @@ export async function saveProduct(formData: FormData) {
     }
   }
 
+  // 产品保存成功后，异步触发 embedding 更新（fire-and-forget，不阻塞用户操作）
+  void import("@/lib/rag-utils").then(({ computeAndStoreProductEmbedding }) =>
+    computeAndStoreProductEmbedding(savedProduct.id).catch((err) =>
+      console.warn("[saveProduct] embedding 更新失败:", err),
+    ),
+  );
+
   redirect(`/admin/products/${savedProduct.id}?saved=1`);
 }
 

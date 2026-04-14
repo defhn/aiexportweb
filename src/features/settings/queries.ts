@@ -1,4 +1,4 @@
-﻿import { desc } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { siteSettings } from "@/db/schema";
@@ -64,6 +64,10 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
         siteUrl: record.siteUrl ?? "",
         seoTitleTemplate: record.seoTitleTemplate ?? "%s",
         seoOgImageUrl,
+        // AI 知识库
+        industryCode: record.industryCode ?? "",
+        knowledgeSectionsJson: record.knowledgeSectionsJson ?? {},
+        companyKnowledgeMd: record.companyKnowledgeMd ?? "",
       };
     }
   } catch (error) {
@@ -89,5 +93,9 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
     siteUrl: "",
     seoTitleTemplate: "%s",
     seoOgImageUrl: "",
+    // AI 知识库
+    industryCode: "",
+    knowledgeSectionsJson: {},
+    companyKnowledgeMd: "",
   };
 }

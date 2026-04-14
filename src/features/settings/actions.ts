@@ -19,6 +19,8 @@ export type SiteSettingsDraft = {
   siteUrl: string;
   seoTitleTemplate: string;
   seoOgImageMediaId: number | null;
+  // AI 知识库
+  companyKnowledgeMd: string;
 };
 
 export function buildSiteSettingsDraft(
@@ -38,6 +40,7 @@ export function buildSiteSettingsDraft(
     siteUrl: input.siteUrl ?? "",
     seoTitleTemplate: input.seoTitleTemplate ?? "%s",
     seoOgImageMediaId: input.seoOgImageMediaId ?? null,
+    companyKnowledgeMd: input.companyKnowledgeMd ?? "",
   };
 }
 
@@ -72,6 +75,7 @@ export async function saveSiteSettings(formData: FormData) {
     siteUrl: readText(formData, "siteUrl").replace(/\/$/, ""),
     seoTitleTemplate: readText(formData, "seoTitleTemplate"),
     seoOgImageMediaId: readOptionalNumber(formData, "seoOgImageMediaId"),
+    companyKnowledgeMd: readText(formData, "companyKnowledgeMd"),
   });
 
   const [existing] = await db

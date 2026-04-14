@@ -6,8 +6,16 @@ import {
   incrementFeatureUsage,
 } from "@/features/plans/access";
 import { withAdminAuth } from "@/lib/admin-auth";
-import { generateInquiryReply } from "@/lib/ai";
+import { generateInquiryReplyWithRag } from "@/lib/ai";
 
+/**
+ * POST /api/ai/generate-inquiry-reply
+ * 
+ * 升级版：在生成前自动检索：
+ *   1. 相关产品知识（规格、FAQ、认证）
+ *   2. 企业能力知识库（companyKnowledgeMd）
+ *   3. 匹配的回复模板（风格参考）
+ */
 export const POST = withAdminAuth(async (request) => {
   const gate = await getFeatureGate("ai_inquiry_reply");
 
@@ -20,17 +28,21 @@ export const POST = withAdminAuth(async (request) => {
     companyName?: string;
     message?: string;
     productName?: string;
+    productId?: number;
     specs?: string[];
     tone?: string;
+    inquiryType?: string;
   };
 
-  const { reply, provider } = await generateInquiryReply({
+  const { reply, provider, ragMeta } = await generateInquiryReplyWithRag({
     customerName: body.customerName?.trim() || "Customer",
     companyName: body.companyName?.trim() || "",
     message: body.message?.trim() || "",
     productName: body.productName?.trim() || "",
+    productId: body.productId,
     specs: body.specs ?? [],
     tone: body.tone?.trim() || "professional",
+    inquiryType: body.inquiryType?.trim(),
   });
 
   if (gate.status === "trial") {
@@ -42,5 +54,7 @@ export const POST = withAdminAuth(async (request) => {
     provider,
     remaining:
       gate.remaining !== null ? Math.max(gate.remaining - 1, 0) : gate.remaining,
+    // 溯源信息（前端可选展示）
+    ragMeta,
   });
 });

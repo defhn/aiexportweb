@@ -558,3 +558,142 @@ export async function classifyInquiry(input: InquiryClassifyInput): Promise<{
     provider: matched ? provider : "fallback",
   };
 }
+
+// ──────────────────────────────────────────────────────────
+//  RAG 增强版询盘回复（核心升级）
+//  在生成前自动检索：产品知识 + 企业能力知识 + 回复风格模板
+// ──────────────────────────────────────────────────────────
+
+type InquiryReplyWithRagInput = InquiryReplyInput & {
+  productId?: number;
+  inquiryType?: string;
+};
+
+export async function generateInquiryReplyWithRag(
+  input: InquiryReplyWithRagInput,
+): Promise<{
+  reply: string;
+  provider: AiProvider;
+  ragMeta: {
+    productsUsed: string[];
+    faqsUsed: number;
+    usedEmbedding: boolean;
+    hasCompanyKnowledge: boolean;
+    hasTemplates: boolean;
+  };
+}> {
+  // 动态引入避免循环依赖
+  const { buildRagContext } = await import("@/lib/rag-utils");
+
+  // 以询盘消息 + 产品名作为检索 query
+  const searchQuery = [input.productName, input.message].filter(Boolean).join(" ").slice(0, 500);
+
+  const { context: ragContext, meta } = await buildRagContext({
+    query: searchQuery,
+    inquiryType: input.inquiryType,
+    includeCompanyKnowledge: true,
+    includeReplyTemplates: true,
+    topK: 5,
+  });
+
+  // 构建带 RAG 上下文的 Prompt
+  const ragPrompt = {
+    system: `You draft professional English sales replies for manufacturing export inquiries.
+Keep them concise, accurate, and safe for human review before sending.
+IMPORTANT: Only include facts that are explicitly supported by the knowledge base below.
+Do NOT invent specifications, certifications, prices, or lead times that are not mentioned.`,
+    user: [
+      "=== Knowledge Base ===",
+      ragContext,
+      "=== Reply Task ===",
+      `Customer: ${input.customerName}`,
+      `Company: ${input.companyName || "N/A"}`,
+      `Inquiry: ${input.message}`,
+      `Product: ${input.productName || "N/A"}`,
+      `Specs mentioned: ${(input.specs ?? []).join("; ") || "N/A"}`,
+      `Tone: ${input.tone || "professional"}`,
+      "",
+      "Write a professional email reply. Use facts from the knowledge base above when relevant. Return plain text only, no JSON, no markdown.",
+    ].join("\n"),
+  };
+
+  // 调用 AI（Gemini → DeepSeek → fallback）
+  const { text, provider } = await callAiText(ragPrompt);
+
+  if (provider !== "fallback" && text) {
+    return { reply: text, provider, ragMeta: meta };
+  }
+
+  // 降级：使用基础模板
+  return {
+    reply: buildFallbackInquiryReply(input),
+    provider: "fallback",
+    ragMeta: meta,
+  };
+}
+
+// ──────────────────────────────────────────────────────────
+//  RAG 增强版产品文案生成
+//  注入同品类其他产品知识，让文案更有针对性
+// ──────────────────────────────────────────────────────────
+
+export async function generateProductCopyWithRag(
+  input: ProductCopyInput,
+): Promise<{
+  result: ProductCopyResult;
+  provider: AiProvider;
+  ragMeta: {
+    productsUsed: string[];
+    usedEmbedding: boolean;
+  };
+}> {
+  const { buildRagContext } = await import("@/lib/rag-utils");
+
+  const searchQuery = [input.nameZh, input.shortDescriptionZh]
+    .filter(Boolean)
+    .join(" ")
+    .slice(0, 400);
+
+  const { context: ragContext, meta } = await buildRagContext({
+    query: searchQuery,
+    includeCompanyKnowledge: true,
+    includeReplyTemplates: false,
+    topK: 4,
+  });
+
+  const terms = Object.values(input.defaultFields ?? {})
+    .map((v) => String(v).trim())
+    .filter(Boolean)
+    .slice(0, 4);
+
+  const ragPrompt = {
+    system:
+      "You write concise, conversion-oriented English copy for industrial manufacturing export websites. Keep wording factual, export-ready, and SEO-aware. Only include verified specs from the knowledge base.",
+    user: [
+      "=== Company & Product Knowledge Base ===",
+      ragContext,
+      "=== New Product to Write Copy For ===",
+      `Industry: ${input.industry}`,
+      `Chinese product name: ${input.nameZh}`,
+      `Chinese short description: ${input.shortDescriptionZh?.trim() || "N/A"}`,
+      `Known specs: ${terms.join("; ") || "N/A"}`,
+      "",
+      'Return JSON with exactly these keys: nameEn, shortDescriptionEn, detailsEn, seoTitle, seoDescription.',
+    ].join("\n"),
+  };
+
+  const { result, provider } = await callAiJson<ProductCopyResult>(
+    ragPrompt,
+    buildFallbackProductCopy(input),
+  );
+
+  return {
+    result,
+    provider,
+    ragMeta: {
+      productsUsed: meta.productsUsed,
+      usedEmbedding: meta.usedEmbedding,
+    },
+  };
+}
+

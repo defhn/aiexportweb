@@ -63,6 +63,12 @@ export const siteSettings = pgTable("site_settings", {
   seoTitleTemplate: text("seo_title_template"),        // 例如 "%s | Acme CNC Machining"
   seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 图片关联的媒体资源 ID
   webhookUrl: text("webhook_url"),
+  // AI 知识库 - 行业代码（决定展示哪个专属模块）
+  industryCode: text("industry_code"),   // 如 "I01"（金属/五金）~ "I12"（礼品/玩具）
+  // AI 知识库 - 结构化 JSON（用户表单填写的原始数据，UI 使用）
+  knowledgeSectionsJson: jsonb("knowledge_sections_json").$type<Record<string, Record<string, Record<string, string | string[]>>>>(),
+  // AI 知识库 - 自动生成的 Markdown（供 RAG 向量化用，勿手动编辑）
+  companyKnowledgeMd: text("company_knowledge_md"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -189,6 +195,9 @@ export const products = pgTable("products", {
     .$type<Array<{ question: string; answer: string }>>()
     .default([])
     .notNull(),
+  // 向量预计算：Vertex AI text-embedding-004 输出（768维），存为 jsonb number[]  
+  embeddingJson: jsonb("embedding_json").$type<number[]>(),
+  embeddingUpdatedAt: timestamp("embedding_updated_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

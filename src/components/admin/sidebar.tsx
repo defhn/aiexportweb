@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,6 +23,7 @@ const navItems = [
     featureKey: "reply_templates" as const,
   },
   { label: "报价请求", href: "/admin/quotes", featureKey: "quotes" as const },
+  { label: "AI 知识库", href: "/admin/knowledge" },
   { label: "SEO / AI", href: "/admin/seo-ai" },
 ] satisfies ReadonlyArray<{
   label: string;
