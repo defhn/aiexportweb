@@ -96,7 +96,7 @@ export default async function KnowledgePage() {
   const stats = await getEmbeddingStats();
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 p-6">
+    <div className="w-full space-y-6 p-6">
       {/* 页面标题 */}
       <div>
         <h1 className="text-2xl font-bold text-stone-900">教 AI 了解你的工厂</h1>
