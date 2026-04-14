@@ -262,6 +262,28 @@ function FieldInput({
 
 // ─── Section 内容面板 ────────────────────────────────────────────────────────
 
+// ─── 英文填写提示横幅 ───────────────────────────────────────────────────────
+
+function EnglishTip() {
+  return (
+    <div className="flex gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4">
+      <span className="mt-0.5 text-lg leading-none">💡</span>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-amber-800">
+          建议用英文填写此模块
+        </p>
+        <p className="text-xs leading-relaxed text-amber-700">
+          这里的内容会被 AI 直接注入到给欧美客户的邮件回复中。
+          <strong>用中文填写会产生「翻译损耗」</strong>——
+          AI 需要先理解中文、再翻译成英文输出，专业术语（如材质牌号、认证标准、交货条款）
+          容易变得不准确或不地道，同时也会消耗更多 AI 算力。
+          直接用英文填写，AI 可以原文引用，回复更精准、更专业。
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function SectionContent({
   section,
   data,
@@ -279,6 +301,8 @@ function SectionContent({
 }) {
   return (
     <div className="space-y-6">
+      {/* 英文填写提示 */}
+      <EnglishTip />
       {/* 字段按子分类分组，每组 2 列网格 */}
       {section.subsections.map((sub) => (
         <div key={sub.key}>
