@@ -40,6 +40,7 @@ export type SectionDef = {
   icon: string;
   layer: "universal" | "industry";
   industryCode?: string; // for industry sections, e.g. "I01"
+  description?: string;  // 简短说明，在右侧面板标题下方展示
   subsections: SubsectionDef[];
 };
 
