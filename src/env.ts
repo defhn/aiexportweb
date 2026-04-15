@@ -16,6 +16,7 @@ const nonProductionDefaults = {
   ADMIN_PASSWORD: "dev-only-change-in-production",
   NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3000",
   SITE_PLAN: "ai_sales",
+  SITE_TEMPLATE: "template-01",
   ENABLE_PRICING_PAGE: "true",
   SALES_CONTACT_URL: "/contact",
 } as const;
@@ -38,6 +39,8 @@ const envSchema = z.object({
   ADMIN_PASSWORD: z.string().min(1).optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   SITE_PLAN: z.enum(["basic", "growth", "ai_sales"]).default("ai_sales"),
+  // 前台模板 ID，对应 src/templates/ 下的目录名
+  SITE_TEMPLATE: z.string().min(1).default("template-01"),
   ENABLE_PRICING_PAGE: z.enum(["true", "false", "1", "0"]).default("true"),
   SALES_CONTACT_URL: z.string().min(1).default("/contact"),
 

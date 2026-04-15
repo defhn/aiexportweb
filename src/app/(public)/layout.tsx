@@ -1,9 +1,16 @@
-import { SiteFooter } from "@/components/public/site-footer";
-import { SiteHeader } from "@/components/public/site-header";
-import { CookieConsentBanner } from "@/components/public/trust-compliance";
-import { TrackingProvider } from "@/components/tracking-provider";
+/**
+ * 公共页面布局 — 模板分发器
+ *
+ * 此文件只负责：
+ * 1. 获取公共数据（settings、categories）
+ * 2. 调用当前激活模板的 PublicLayout 渲染 Header/Footer
+ *
+ * ⚠️  不要在此文件写任何 UI 代码。布局 UI 在 src/templates/[template-id]/layout.tsx 里。
+ */
+
 import { getAllCategories } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
+import { getActiveTemplate } from "@/templates";
 
 export default async function PublicLayout({
   children,
@@ -13,22 +20,11 @@ export default async function PublicLayout({
     getAllCategories(),
   ]);
 
+  const { PublicLayout: TemplateLayout } = getActiveTemplate();
+
   return (
-    <div className="min-h-screen bg-white text-slate-950 flex flex-col relative selection:bg-blue-500/30 selection:text-blue-900">
-      <TrackingProvider />
-      <SiteHeader companyName={settings.companyNameEn} />
-      <main className="flex-1">{children}</main>
-      <SiteFooter
-        address={settings.addressEn}
-        categories={categories.slice(0, 4).map((category) => ({
-          nameEn: category.nameEn,
-          slug: category.slug,
-        }))}
-        companyName={settings.companyNameEn}
-        email={settings.email}
-        phone={settings.phone}
-      />
-      <CookieConsentBanner />
-    </div>
+    <TemplateLayout settings={settings} categories={categories}>
+      {children}
+    </TemplateLayout>
   );
 }
