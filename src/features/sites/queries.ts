@@ -35,8 +35,13 @@ export async function getSiteBySlug(slug: string): Promise<SiteRecord | null> {
   }
 
   const db = getDb();
-  const [record] = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
-  return record ? mapSiteRecord(record) : null;
+  try {
+    const [record] = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
+    return record ? mapSiteRecord(record) : null;
+  } catch (error) {
+    console.warn("Falling back after site slug lookup failure.", error);
+    return null;
+  }
 }
 
 export async function listSites(): Promise<SiteRecord[]> {
@@ -67,11 +72,18 @@ export async function getSiteByHost(host: string): Promise<SiteRecord | null> {
 
   const subdomain = normalizedHost.split(".")[0] ?? "";
   const db = getDb();
-  const [record] = await db
-    .select()
-    .from(sites)
-    .where(or(eq(sites.domain, normalizedHost), eq(sites.subdomain, subdomain)))
-    .limit(1);
+  let record: typeof sites.$inferSelect | undefined;
+
+  try {
+    [record] = await db
+      .select()
+      .from(sites)
+      .where(or(eq(sites.domain, normalizedHost), eq(sites.subdomain, subdomain)))
+      .limit(1);
+  } catch (error) {
+    console.warn("Falling back after site host lookup failure.", error);
+    return null;
+  }
 
   return record ? mapSiteRecord(record) : null;
 }
