@@ -1,15 +1,18 @@
 import { ProductCard } from "@/components/public/product-card";
 import { getProductsByCategorySlug } from "@/features/products/queries";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 type CategoryPageProps = {
   params: Promise<{ categorySlug: string }>;
 };
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const { categorySlug } = await params;
-  const products = await getProductsByCategorySlug(categorySlug);
-  const template = getActiveTemplate();
+  const products = await getProductsByCategorySlug(categorySlug, currentSite.seedPackKey, siteId);
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
   const categoryName = products[0]?.categorySlug.replace(/-/g, " ") || categorySlug.replace(/-/g, " ");
 

@@ -5,7 +5,8 @@ import { RequestQuoteForm } from "@/components/public/request-quote-form";
 import { getFeatureGate } from "@/features/plans/access";
 import { getAllProducts } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 type FormField = {
   name: string;
@@ -27,7 +28,8 @@ function isValidFormField(value: unknown): value is FormField {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const template = getActiveTemplate();
+  const currentSite = await getCurrentSiteFromRequest();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   return {
@@ -37,14 +39,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RequestQuotePage() {
-  const gate = await getFeatureGate("request_quote");
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const gate = await getFeatureGate("request_quote", currentSite.plan);
 
   if (gate.status === "locked") {
     notFound();
   }
 
-  const [products, settings] = await Promise.all([getAllProducts(), getSiteSettings()]);
-  const template = getActiveTemplate();
+  const [products, settings] = await Promise.all([
+    getAllProducts(currentSite.seedPackKey, siteId),
+    getSiteSettings(currentSite.seedPackKey, siteId),
+  ]);
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   const rawFields = Array.isArray(settings.formFieldsJson) ? settings.formFieldsJson : [];

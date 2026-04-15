@@ -6,8 +6,9 @@ import { Activity, Building2, Globe2, MapPin, Target, Zap } from "lucide-react";
 import { JsonLdScript } from "@/components/public/json-ld-script";
 import { getPageModules } from "@/features/pages/queries";
 import { getSiteSettings } from "@/features/settings/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { buildAbsoluteUrl, buildPageMetadata } from "@/lib/seo";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
@@ -15,7 +16,8 @@ function readString(payload: Record<string, unknown>, key: string) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const modules = await getPageModules("about");
+  const currentSite = await getCurrentSiteFromRequest();
+  const modules = await getPageModules("about", currentSite.seedPackKey, currentSite.id ?? null);
   const payload = modules[0]?.payloadJson ?? {};
   const seoTitle = readString(payload, "seoTitle");
   const seoDescription = readString(payload, "seoDescription");
@@ -27,8 +29,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const [settings, modules] = await Promise.all([getSiteSettings(), getPageModules("about")]);
-  const template = getActiveTemplate();
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const [settings, modules] = await Promise.all([
+    getSiteSettings(currentSite.seedPackKey, siteId),
+    getPageModules("about", currentSite.seedPackKey, siteId),
+  ]);
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
   const aboutModule = modules[0];
   const heroTitle = readString(aboutModule?.payloadJson ?? {}, "title") || theme.about.title;

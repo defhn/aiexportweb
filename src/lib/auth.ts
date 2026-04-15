@@ -167,6 +167,7 @@ export function getSafeAdminRedirectPath(nextPath?: string | null) {
 const EMPLOYEE_BLOCKED_PATHS = [
   "/admin/settings",
   "/admin/seo-ai",
+  "/admin/sites",
   "/admin/staff",
   "/admin/attribution",
   "/admin/pipeline",

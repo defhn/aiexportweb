@@ -1,12 +1,18 @@
 import { CategoryGrid } from "@/components/public/category-grid";
 import { ProductCard } from "@/components/public/product-card";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 import Link from "next/link";
 
 export default async function ProductsPage() {
-  const [categories, products] = await Promise.all([getAllCategories(), getAllProducts()]);
-  const template = getActiveTemplate();
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const [categories, products] = await Promise.all([
+    getAllCategories(currentSite.seedPackKey, siteId),
+    getAllProducts(currentSite.seedPackKey, siteId),
+  ]);
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   return (

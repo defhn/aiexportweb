@@ -38,9 +38,34 @@ export const fieldInputTypeEnum = pgEnum("field_input_type", [
   "number",
   "select",
 ]);
+export const sitePlanEnum = pgEnum("site_plan", ["basic", "growth", "ai_sales"]);
+export const siteStatusEnum = pgEnum("site_status", ["draft", "active", "suspended"]);
+
+export const sites = pgTable("sites", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: text("name").notNull(),
+  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  domain: text("domain").unique(),
+  subdomain: varchar("subdomain", { length: 160 }),
+  templateId: varchar("template_id", { length: 40 }).default("template-01").notNull(),
+  seedPackKey: varchar("seed_pack_key", { length: 80 }).default("cnc").notNull(),
+  plan: sitePlanEnum("plan").default("basic").notNull(),
+  status: siteStatusEnum("status").default("active").notNull(),
+  companyName: text("company_name").notNull(),
+  logoUrl: text("logo_url"),
+  primaryColor: varchar("primary_color", { length: 50 }),
+  enabledFeaturesJson: jsonb("enabled_features_json").$type<string[]>().default([]).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
 
 export const siteSettings = pgTable("site_settings", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   companyNameZh: text("company_name_zh").notNull(),
   companyNameEn: text("company_name_en").notNull(),
   taglineZh: text("tagline_zh"),
@@ -84,6 +109,7 @@ export const adminRolesEnum = pgEnum("admin_roles", [
 
 export const adminUsers = pgTable("admin_users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   username: text("username").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   role: adminRolesEnum("role").default("employee").notNull(),
@@ -97,6 +123,7 @@ export const adminUsers = pgTable("admin_users", {
 
 export const pageModules = pgTable("page_modules", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   pageKey: pageKeyEnum("page_key").notNull(),
   moduleKey: varchar("module_key", { length: 80 }).notNull(),
   moduleNameZh: text("module_name_zh").notNull(),
@@ -116,6 +143,7 @@ export const pageModules = pgTable("page_modules", {
 
 export const mediaAssets = pgTable("media_assets", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   assetType: assetTypeEnum("asset_type").notNull(),
   bucketKey: text("bucket_key").notNull().unique(),
   url: text("url").notNull(),
@@ -135,6 +163,7 @@ export const mediaAssets = pgTable("media_assets", {
 
 export const assetFolders = pgTable("asset_folders", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   assetType: assetTypeEnum("asset_type").notNull(),
   name: text("name").notNull(),
   parentId: integer("parent_id"),
@@ -146,9 +175,10 @@ export const assetFolders = pgTable("asset_folders", {
 
 export const productCategories = pgTable("product_categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   nameZh: text("name_zh").notNull(),
   nameEn: text("name_en").notNull(),
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  slug: varchar("slug", { length: 160 }).notNull(),
   summaryZh: text("summary_zh"),
   summaryEn: text("summary_en"),
   imageMediaId: integer("image_media_id").references(() => mediaAssets.id, {
@@ -167,12 +197,13 @@ export const productCategories = pgTable("product_categories", {
 
 export const products = pgTable("products", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   categoryId: integer("category_id").references(() => productCategories.id, {
     onDelete: "set null",
   }),
   nameZh: text("name_zh").notNull(),
   nameEn: text("name_en").notNull(),
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  slug: varchar("slug", { length: 160 }).notNull(),
   shortDescriptionZh: text("short_description_zh"),
   shortDescriptionEn: text("short_description_en"),
   detailsZh: text("details_zh"),
@@ -283,28 +314,31 @@ export const downloadFiles = pgTable("download_files", {
 
 export const blogCategories = pgTable("blog_categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   nameZh: text("name_zh").notNull(),
   nameEn: text("name_en").notNull(),
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  slug: varchar("slug", { length: 160 }).notNull(),
   sortOrder: integer("sort_order").default(100).notNull(),
   isVisible: boolean("is_visible").default(true).notNull(),
 });
 
 export const blogTags = pgTable("blog_tags", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   nameZh: text("name_zh").notNull(),
   nameEn: text("name_en").notNull(),
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  slug: varchar("slug", { length: 160 }).notNull(),
 });
 
 export const blogPosts = pgTable("blog_posts", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   categoryId: integer("category_id").references(() => blogCategories.id, {
     onDelete: "set null",
   }),
   titleZh: text("title_zh").notNull(),
   titleEn: text("title_en").notNull(),
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  slug: varchar("slug", { length: 160 }).notNull(),
   excerptZh: text("excerpt_zh"),
   excerptEn: text("excerpt_en"),
   contentZh: text("content_zh"),
@@ -336,6 +370,7 @@ export const blogPostTags = pgTable("blog_post_tags", {
 
 export const inquiries = pgTable("inquiries", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   email: text("email").notNull(),
   companyName: text("company_name"),
@@ -388,6 +423,7 @@ export const inquiries = pgTable("inquiries", {
 
 export const replyTemplates = pgTable("reply_templates", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   category: varchar("category", { length: 80 }),
   contentZh: text("content_zh"),
@@ -416,6 +452,7 @@ export const productViews = pgTable("product_views", {
 
 export const quoteRequests = pgTable("quote_requests", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   email: text("email").notNull(),
   companyName: text("company_name"),
@@ -463,6 +500,7 @@ export const quoteRequestItems = pgTable("quote_request_items", {
 
 export const seoAiSettings = pgTable("seo_ai_settings", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   allowGoogle: boolean("allow_google").default(true).notNull(),
   allowBing: boolean("allow_bing").default(true).notNull(),
   allowOaiSearchBot: boolean("allow_oai_search_bot").default(true).notNull(),
@@ -480,6 +518,7 @@ export const seoAiSettings = pgTable("seo_ai_settings", {
 
 export const featureUsageCounters = pgTable("feature_usage_counters", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
   featureKey: varchar("feature_key", { length: 80 }).notNull().unique(),
   usageCount: integer("usage_count").default(0).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })

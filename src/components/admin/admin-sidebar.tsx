@@ -85,6 +85,7 @@ const navigation: NavItem[] = [
   { name: "员工管理", href: "/admin/staff", icon: Users, group: "site" },
   { name: "SEO 与 AI", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
   { name: "AI 知识库", href: "/admin/knowledge", icon: BrainCircuit, group: "site" },
+  { name: "站点/模板", href: "/admin/sites", icon: Globe, group: "site" },
   { name: "站点设置", href: "/admin/settings", icon: Settings, group: "site" },
   { name: "归因分析 (开发中)", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
   { name: "线索流程 (开发中)", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },

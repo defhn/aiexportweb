@@ -10,17 +10,20 @@
 
 import { getAllCategories } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
-import { getActiveTemplate } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById } from "@/templates";
 
 export default async function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const [settings, categories] = await Promise.all([
-    getSiteSettings(),
-    getAllCategories(),
+    getSiteSettings(currentSite.seedPackKey, siteId),
+    getAllCategories(currentSite.seedPackKey, siteId),
   ]);
 
-  const { PublicLayout: TemplateLayout } = getActiveTemplate();
+  const { PublicLayout: TemplateLayout } = getTemplateById(currentSite.templateId);
 
   return (
     <TemplateLayout settings={settings} categories={categories}>

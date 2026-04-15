@@ -1,10 +1,10 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { siteSettings } from "@/db/schema";
 import { getSeedPack, type SeedPackKey } from "@/db/seed";
 
-export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
+export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   const pack = getSeedPack(seedPackKey);
 
   if (!process.env.DATABASE_URL) {
@@ -27,11 +27,12 @@ export async function getSiteSettings(seedPackKey: SeedPackKey = "cnc") {
 
   try {
     const db = getDb();
-    const [record] = await db
+    const query = db
       .select()
       .from(siteSettings)
       .orderBy(desc(siteSettings.updatedAt), desc(siteSettings.id))
       .limit(1);
+    const [record] = siteId ? await query.where(eq(siteSettings.siteId, siteId)) : await query;
 
     if (record) {
       let seoOgImageUrl = "";

@@ -10,11 +10,40 @@ import {
   verifySessionToken,
 } from "@/lib/auth";
 
+const PREVIEW_SITE_COOKIE_NAME = "preview_site";
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const previewSiteFromQuery = request.nextUrl.searchParams.get("site")?.trim();
+  const previewSiteFromCookie = request.cookies.get(PREVIEW_SITE_COOKIE_NAME)?.value;
+  const previewSite = previewSiteFromQuery || previewSiteFromCookie || "";
+  const requestHeaders = new Headers(request.headers);
+
+  if (previewSite) {
+    requestHeaders.set("x-preview-site", previewSite);
+  }
+
+  const nextWithPreviewHeaders = () => {
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+
+    if (previewSiteFromQuery) {
+      response.cookies.set(PREVIEW_SITE_COOKIE_NAME, previewSiteFromQuery, {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24,
+      });
+    }
+
+    return response;
+  };
 
   if (!isProtectedAdminPath(pathname)) {
-    return NextResponse.next();
+    return nextWithPreviewHeaders();
   }
 
   const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
@@ -32,7 +61,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    return NextResponse.next();
+    return nextWithPreviewHeaders();
   }
 
   const loginUrl = new URL("/admin/login", request.url);
@@ -48,5 +77,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon.png).*)"],
 };

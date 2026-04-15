@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { pageModules } from "@/db/schema";
@@ -140,6 +140,7 @@ export function buildModulePayload(
 export async function getPageModules(
   pageKey: SeedPageKey,
   seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
 ) {
   const defaults = getSeedPack(seedPackKey).pages[pageKey];
 
@@ -148,11 +149,22 @@ export async function getPageModules(
   }
 
   const db = getDb();
-  const records = await db
-    .select()
-    .from(pageModules)
-    .where(eq(pageModules.pageKey, pageKey))
-    .orderBy(asc(pageModules.sortOrder), asc(pageModules.id));
+  let records: (typeof pageModules.$inferSelect)[];
+
+  try {
+    records = await db
+      .select()
+      .from(pageModules)
+      .where(
+        siteId
+          ? and(eq(pageModules.pageKey, pageKey), eq(pageModules.siteId, siteId))
+          : eq(pageModules.pageKey, pageKey),
+      )
+      .orderBy(asc(pageModules.sortOrder), asc(pageModules.id));
+  } catch (error) {
+    console.warn("Falling back to seed page modules after database read failure.", error);
+    return normalizePageModules<SeedPageModule>([...defaults]);
+  }
 
   if (records.length) {
     return normalizePageModules(mergePageModulesWithDefaults(records, defaults));

@@ -9,7 +9,8 @@ import { buildBlogCategoryFilters, filterBlogPosts } from "@/features/blog/filte
 import { getBlogPosts } from "@/features/blog/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { getSiteSettings } from "@/features/settings/queries";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 import { buildAbsoluteUrl } from "@/lib/seo";
 
@@ -17,7 +18,8 @@ import { buildAbsoluteUrl } from "@/lib/seo";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const currentSite = await getCurrentSiteFromRequest();
+  const settings = await getSiteSettings(currentSite.seedPackKey, currentSite.id ?? null);
   return {
     title: "Blog",
     description: settings.taglineEn || "Technical articles, DFM guides, and manufacturing strategies for global procurement.",
@@ -33,16 +35,18 @@ type BlogListPageProps = {
 };
 
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
-  const gate = await getFeatureGate("blog_management");
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const gate = await getFeatureGate("blog_management", currentSite.plan);
 
   if (gate.status === "locked") {
     notFound();
   }
 
-  const template = getActiveTemplate();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
   const params = (await searchParams) ?? {};
-  const allPosts = await getBlogPosts();
+  const allPosts = await getBlogPosts(currentSite.seedPackKey, siteId);
   const categoryFilters = buildBlogCategoryFilters(allPosts);
   const filteredPosts = filterBlogPosts(allPosts, {
     query: params.q,

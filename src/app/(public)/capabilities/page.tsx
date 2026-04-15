@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { CheckCircle2, Layers, Settings } from "lucide-react";
 
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
-export default function CapabilitiesPage() {
-  const template = getActiveTemplate();
+export default async function CapabilitiesPage() {
+  const currentSite = await getCurrentSiteFromRequest();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   return (

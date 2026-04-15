@@ -14,15 +14,18 @@ import { getBlogPosts } from "@/features/blog/queries";
 import { getPageModules } from "@/features/pages/queries";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
 import { getSiteSettings } from "@/features/settings/queries";
-import { getActiveTemplate } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById } from "@/templates";
 import { buildAbsoluteUrl } from "@/lib/seo";
 
 // ─── SEO Metadata（所有模板共享同一套 SEO 逻辑） ──────────────────────────
 
 export async function generateMetadata(): Promise<Metadata> {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const [modules, settings] = await Promise.all([
-    getPageModules("home"),
-    getSiteSettings(),
+    getPageModules("home", currentSite.seedPackKey, siteId),
+    getSiteSettings(currentSite.seedPackKey, siteId),
   ]);
   const heroModule = modules.find((m) => m.moduleKey === "hero");
   const payload = heroModule?.payloadJson ?? {};
@@ -55,13 +58,15 @@ export async function generateMetadata(): Promise<Metadata> {
 // ─── 首页组件（路由分发器） ────────────────────────────────────────────────
 
 export default async function HomePage() {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   // 1️⃣ 并行获取所有数据（与 UI 无关，所有模板复用）
   const [modules, allCategories, allProducts, blogPosts, settings] = await Promise.all([
-    getPageModules("home"),
-    getAllCategories(),
-    getAllProducts(),
-    getBlogPosts(),
-    getSiteSettings(),
+    getPageModules("home", currentSite.seedPackKey, siteId),
+    getAllCategories(currentSite.seedPackKey, siteId),
+    getAllProducts(currentSite.seedPackKey, siteId),
+    getBlogPosts(currentSite.seedPackKey, siteId),
+    getSiteSettings(currentSite.seedPackKey, siteId),
   ]);
 
   // 2️⃣ 将博客数据整理为模板标准格式（published 时 excerptEn/categorySlug/publishedAt 均已是 string）
@@ -75,7 +80,7 @@ export default async function HomePage() {
   }));
 
   // 3️⃣ 读取当前激活模板，渲染对应的 UI
-  const { HomePage: TemplateHomePage } = getActiveTemplate();
+  const { HomePage: TemplateHomePage } = getTemplateById(currentSite.templateId);
 
   return (
     <TemplateHomePage

@@ -6,7 +6,8 @@ import { getSiteSettings } from "@/features/settings/queries";
 import { Mail, Phone, MessageCircle, MapPin, CheckCircle2, ShieldCheck } from "lucide-react";
 import { JsonLdScript } from "@/components/public/json-ld-script";
 import { buildAbsoluteUrl } from "@/lib/seo";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 function readString(payload: Record<string, unknown>, key: string) {
   const value = payload[key];
@@ -14,9 +15,10 @@ function readString(payload: Record<string, unknown>, key: string) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const template = getActiveTemplate();
+  const currentSite = await getCurrentSiteFromRequest();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
-  const modules = await getPageModules("contact");
+  const modules = await getPageModules("contact", currentSite.seedPackKey, currentSite.id ?? null);
   const payload = modules[0]?.payloadJson ?? {};
   const seoTitle = readString(payload, "seoTitle");
   const seoDescription = readString(payload, "seoDescription");
@@ -29,9 +31,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 
 export default async function ContactPage() {
-  const [settings, modules] = await Promise.all([getSiteSettings(), getPageModules("contact")]);
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const [settings, modules] = await Promise.all([
+    getSiteSettings(currentSite.seedPackKey, siteId),
+    getPageModules("contact", currentSite.seedPackKey, siteId),
+  ]);
   const contactModule = modules[0];
-  const template = getActiveTemplate();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   return (

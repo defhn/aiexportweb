@@ -7,7 +7,8 @@ import { getFeatureGate } from "@/features/plans/access";
 import { getBlogPostBySlug, getBlogPosts } from "@/features/blog/queries";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/json-ld";
 import { buildAbsoluteUrl, buildPageMetadata } from "@/lib/seo";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 // ISR: 每篇文章每 1 小时重新生成
 export const revalidate = 3600;
@@ -25,7 +26,9 @@ type BlogDetailPageProps = {
 export async function generateMetadata({
   params,
 }: BlogDetailPageProps): Promise<Metadata> {
-  const gate = await getFeatureGate("blog_management");
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const gate = await getFeatureGate("blog_management", currentSite.plan);
 
   if (gate.status === "locked") {
     return buildPageMetadata({
@@ -36,7 +39,7 @@ export async function generateMetadata({
   }
 
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug, currentSite.seedPackKey, siteId);
 
   if (!post) {
     return buildPageMetadata({
@@ -54,20 +57,22 @@ export async function generateMetadata({
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const gate = await getFeatureGate("blog_management");
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const gate = await getFeatureGate("blog_management", currentSite.plan);
 
   if (gate.status === "locked") {
     notFound();
   }
 
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug, currentSite.seedPackKey, siteId);
 
   if (!post) {
     notFound();
   }
 
-  const template = getActiveTemplate();
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
   const postUrl = buildAbsoluteUrl(`/blog/${post.slug}`);
 

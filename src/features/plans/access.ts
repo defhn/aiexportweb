@@ -58,8 +58,11 @@ export async function getFeatureUsageCount(featureKey: FeatureKey) {
   }
 }
 
-export async function getFeatureGate(featureKey: FeatureKey): Promise<FeatureGate> {
-  const currentPlan = getCurrentSitePlan();
+export async function getFeatureGate(
+  featureKey: FeatureKey,
+  sitePlan?: SitePlan | null,
+): Promise<FeatureGate> {
+  const currentPlan = sitePlan ?? getCurrentSitePlan();
   const usageCount = await getFeatureUsageCount(featureKey);
   const availability = getFeatureAvailability({
     currentPlan,

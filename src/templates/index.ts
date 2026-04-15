@@ -50,6 +50,10 @@ const DEFAULT_TEMPLATE_ID = "template-01";
  */
 export function getActiveTemplate(): TemplateDefinition {
   const templateId = process.env.TEMPLATE_ID ?? process.env.SITE_TEMPLATE ?? DEFAULT_TEMPLATE_ID;
+  return getTemplateById(templateId);
+}
+
+export function getTemplateById(templateId: string): TemplateDefinition {
   const template = TEMPLATE_REGISTRY[templateId];
 
   if (!template) {

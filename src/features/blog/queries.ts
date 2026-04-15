@@ -47,30 +47,32 @@ function mapSeedBlogPosts(seedPackKey: SeedPackKey) {
   }));
 }
 
-async function hasDatabasePosts() {
+async function hasDatabasePosts(siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return false;
   }
 
   const db = getDb();
-  const [record] = await db.select({ id: blogPosts.id }).from(blogPosts).limit(1);
+  const query = db.select({ id: blogPosts.id }).from(blogPosts).limit(1);
+  const [record] = siteId ? await query.where(eq(blogPosts.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
-async function hasDatabaseCategories() {
+async function hasDatabaseCategories(siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return false;
   }
 
   const db = getDb();
-  const [record] = await db
+  const query = db
     .select({ id: blogCategories.id })
     .from(blogCategories)
     .limit(1);
+  const [record] = siteId ? await query.where(eq(blogCategories.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
-export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc") {
+export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return mapSeedBlogCategories(seedPackKey);
   }
@@ -79,7 +81,11 @@ export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc") {
   const rows = await db
     .select()
     .from(blogCategories)
-    .where(eq(blogCategories.isVisible, true))
+    .where(
+      siteId
+        ? and(eq(blogCategories.isVisible, true), eq(blogCategories.siteId, siteId))
+        : eq(blogCategories.isVisible, true),
+    )
     .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
 
   if (rows.length) {
@@ -93,15 +99,15 @@ export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc") {
     }));
   }
 
-  if (await hasDatabaseCategories()) {
+  if (await hasDatabaseCategories(siteId)) {
     return [];
   }
 
   return mapSeedBlogCategories(seedPackKey);
 }
 
-export async function getBlogCategoryOptions(seedPackKey: SeedPackKey = "cnc") {
-  return getBlogCategories(seedPackKey);
+export async function getBlogCategoryOptions(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
+  return getBlogCategories(seedPackKey, siteId);
 }
 
 export async function listAdminBlogCategories(seedPackKey: SeedPackKey = "cnc") {
@@ -165,7 +171,7 @@ export async function listAdminBlogTags() {
     .orderBy(asc(blogTags.nameEn), asc(blogTags.id));
 }
 
-export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc") {
+export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return mapSeedBlogPosts(seedPackKey);
   }
@@ -195,7 +201,11 @@ export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc") {
     .from(blogPosts)
     .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
     .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
-    .where(eq(blogPosts.status, "published"))
+    .where(
+      siteId
+        ? and(eq(blogPosts.status, "published"), eq(blogPosts.siteId, siteId))
+        : eq(blogPosts.status, "published"),
+    )
     .orderBy(asc(blogPosts.publishedAt), asc(blogPosts.id));
 
   if (rows.length) {
@@ -219,7 +229,7 @@ export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc") {
     }));
   }
 
-  if (await hasDatabasePosts()) {
+  if (await hasDatabasePosts(siteId)) {
     return [];
   }
 
@@ -326,8 +336,9 @@ export async function listAdminBlogPosts(
 export async function getBlogPostBySlug(
   slug: string,
   seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
 ) {
-  const posts = await getBlogPosts(seedPackKey);
+  const posts = await getBlogPosts(seedPackKey, siteId);
   return posts.find((post) => post.slug === slug) ?? null;
 }
 

@@ -137,27 +137,29 @@ function mapSeedCustomFields(
   }));
 }
 
-async function hasDatabaseCategories() {
+async function hasDatabaseCategories(siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return false;
   }
 
   const db = getDb();
-  const [record] = await db.select({ id: productCategories.id }).from(productCategories).limit(1);
+  const query = db.select({ id: productCategories.id }).from(productCategories).limit(1);
+  const [record] = siteId ? await query.where(eq(productCategories.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
-async function hasDatabaseProducts() {
+async function hasDatabaseProducts(siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return false;
   }
 
   const db = getDb();
-  const [record] = await db.select({ id: products.id }).from(products).limit(1);
+  const query = db.select({ id: products.id }).from(products).limit(1);
+  const [record] = siteId ? await query.where(eq(products.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
-async function listDatabaseCategories(options?: { includeHidden?: boolean }) {
+async function listDatabaseCategories(options?: { includeHidden?: boolean; siteId?: number | null }) {
   if (!process.env.DATABASE_URL) {
     return [];
   }
@@ -168,11 +170,11 @@ async function listDatabaseCategories(options?: { includeHidden?: boolean }) {
     .from(productCategories)
     .orderBy(asc(productCategories.sortOrder), asc(productCategories.id));
 
-  if (options?.includeHidden) {
-    return query;
-  }
+  const conditions = [];
+  if (!options?.includeHidden) conditions.push(eq(productCategories.isVisible, true));
+  if (options?.siteId) conditions.push(eq(productCategories.siteId, options.siteId));
 
-  return query.where(eq(productCategories.isVisible, true));
+  return conditions.length ? query.where(and(...conditions)) : query;
 }
 
 function buildProductFaqs() {
@@ -210,9 +212,9 @@ export function buildProductDetailViewModel(input: ProductDetailViewModelInput) 
   };
 }
 
-export async function getAllCategories(seedPackKey: SeedPackKey = "cnc") {
+export async function getAllCategories(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   try {
-    const categories = await listDatabaseCategories();
+    const categories = await listDatabaseCategories({ siteId });
 
     if (categories.length) {
       const imageIds = categories
@@ -256,7 +258,7 @@ export async function getAllCategories(seedPackKey: SeedPackKey = "cnc") {
       }));
     }
 
-    if (await hasDatabaseCategories()) {
+    if (await hasDatabaseCategories(siteId)) {
       return [];
     }
   } catch (error) {
@@ -266,9 +268,9 @@ export async function getAllCategories(seedPackKey: SeedPackKey = "cnc") {
   return mapSeedCategories(seedPackKey);
 }
 
-export async function listAdminCategories(seedPackKey: SeedPackKey = "cnc") {
+export async function listAdminCategories(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   try {
-    const categories = await listDatabaseCategories({ includeHidden: true });
+    const categories = await listDatabaseCategories({ includeHidden: true, siteId });
 
     if (categories.length) {
       return categories.map((category) => ({
@@ -291,7 +293,7 @@ export async function listAdminCategories(seedPackKey: SeedPackKey = "cnc") {
   return mapSeedCategories(seedPackKey);
 }
 
-export async function getAllProducts(seedPackKey: SeedPackKey = "cnc") {
+export async function getAllProducts(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return mapSeedProducts(seedPackKey);
   }
@@ -328,6 +330,7 @@ export async function getAllProducts(seedPackKey: SeedPackKey = "cnc") {
         and(
           eq(products.status, "published"),
           eq(productCategories.isVisible, true),
+          ...(siteId ? [eq(products.siteId, siteId)] : []),
         ),
       )
       .orderBy(asc(products.sortOrder), asc(products.id));
@@ -350,7 +353,7 @@ export async function getAllProducts(seedPackKey: SeedPackKey = "cnc") {
       }));
     }
 
-    if (await hasDatabaseProducts()) {
+    if (await hasDatabaseProducts(siteId)) {
       return [];
     }
   } catch (error) {
@@ -504,6 +507,7 @@ export async function listAdminProducts(
 export async function getProductsByCategorySlug(
   categorySlug: string,
   seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
 ) {
   if (!process.env.DATABASE_URL) {
     return mapSeedProducts(seedPackKey).filter((product) => product.categorySlug === categorySlug);
@@ -542,6 +546,7 @@ export async function getProductsByCategorySlug(
           eq(productCategories.slug, categorySlug),
           eq(productCategories.isVisible, true),
           eq(products.status, "published"),
+          ...(siteId ? [eq(products.siteId, siteId)] : []),
         ),
       )
       .orderBy(asc(products.sortOrder), asc(products.id));
@@ -564,7 +569,7 @@ export async function getProductsByCategorySlug(
       }));
     }
 
-    if (await hasDatabaseProducts()) {
+    if (await hasDatabaseProducts(siteId)) {
       return [];
     }
   } catch (error) {
@@ -751,6 +756,7 @@ export async function getProductDetailBySlugs(
   categorySlug: string,
   productSlug: string,
   seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
 ) {
   if (!process.env.DATABASE_URL) {
     const seedProducts = mapSeedProducts(seedPackKey);
@@ -811,6 +817,7 @@ export async function getProductDetailBySlugs(
           eq(products.slug, productSlug),
           eq(products.status, "published"),
           eq(productCategories.isVisible, true),
+          ...(siteId ? [eq(products.siteId, siteId)] : []),
         ),
       )
       .limit(1);

@@ -10,7 +10,8 @@ import { JsonLdScript } from "@/components/public/json-ld-script";
 import { ProductFaq } from "@/components/public/product-faq";
 import { ProductCard } from "@/components/public/product-card";
 import { SpecTable } from "@/components/public/spec-table";
-import { getActiveTemplate, getTemplateTheme } from "@/templates";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 import {
   buildVisibleSpecRows,
   getProductDetailBySlugs,
@@ -33,8 +34,15 @@ type ProductDetailPageProps = {
 export async function generateMetadata({
   params,
 }: ProductDetailPageProps): Promise<Metadata> {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const { categorySlug, productSlug } = await params;
-  const product = await getProductDetailBySlugs(categorySlug, productSlug);
+  const product = await getProductDetailBySlugs(
+    categorySlug,
+    productSlug,
+    currentSite.seedPackKey,
+    siteId,
+  );
 
   if (!product) {
     return buildPageMetadata({
@@ -54,9 +62,16 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const { categorySlug, productSlug } = await params;
-  const product = await getProductDetailBySlugs(categorySlug, productSlug);
-  const template = getActiveTemplate();
+  const product = await getProductDetailBySlugs(
+    categorySlug,
+    productSlug,
+    currentSite.seedPackKey,
+    siteId,
+  );
+  const template = getTemplateById(currentSite.templateId);
   const theme = getTemplateTheme(template.id);
 
   if (!product) {
