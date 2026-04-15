@@ -567,6 +567,7 @@ export async function classifyInquiry(input: InquiryClassifyInput): Promise<{
 type InquiryReplyWithRagInput = InquiryReplyInput & {
   productId?: number;
   inquiryType?: string;
+  siteId?: number | null;
 };
 
 export async function generateInquiryReplyWithRag(
@@ -594,6 +595,7 @@ export async function generateInquiryReplyWithRag(
     includeCompanyKnowledge: true,
     includeReplyTemplates: true,
     topK: 5,
+    siteId: input.siteId,
   });
 
   // 构建带 RAG 上下文的 Prompt
@@ -696,4 +698,3 @@ export async function generateProductCopyWithRag(
     },
   };
 }
-

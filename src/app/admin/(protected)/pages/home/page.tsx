@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { savePageModules } from "@/features/pages/actions";
 import { getPageModules } from "@/features/pages/queries";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const inputClassName =
   "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
@@ -113,11 +114,12 @@ function SlugCheckboxGrid({
 }
 
 export default async function AdminHomeModulesPage() {
+  const currentSite = await getCurrentSiteFromRequest();
   const action = savePageModules.bind(null, "home");
   const [modules, categories, products] = await Promise.all([
-    getPageModules("home"),
-    getAllCategories(),
-    getAllProducts(),
+    getPageModules("home", currentSite.seedPackKey, currentSite.id),
+    getAllCategories(currentSite.seedPackKey, currentSite.id),
+    getAllProducts(currentSite.seedPackKey, currentSite.id),
   ]);
 
   const moduleMap = new Map(modules.map((module) => [module.moduleKey, module]));

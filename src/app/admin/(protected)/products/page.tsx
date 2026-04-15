@@ -7,6 +7,7 @@ import {
   deleteProduct,
 } from "@/features/products/actions";
 import { listAdminCategories, listAdminProducts } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 type AdminProductsPageProps = {
   searchParams?: Promise<{
@@ -36,16 +37,17 @@ export default async function AdminProductsPage({
   searchParams,
 }: AdminProductsPageProps) {
   const params = (await searchParams) ?? {};
+  const currentSite = await getCurrentSiteFromRequest();
   const [categories, products] = await Promise.all([
-    listAdminCategories(),
-    listAdminProducts("cnc", {
+    listAdminCategories(currentSite.seedPackKey, currentSite.id),
+    listAdminProducts(currentSite.seedPackKey, {
       query: params.q,
       categorySlug: params.category,
       status:
         params.status === "draft" || params.status === "published"
           ? params.status
           : "",
-    }),
+    }, currentSite.id),
   ]);
 
   const bulkFormId = "products-bulk-form";

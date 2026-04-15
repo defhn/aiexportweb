@@ -5,14 +5,16 @@ import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { saveCategory, saveProduct } from "@/features/products/actions";
 import { listAdminCategories } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export default async function AdminNewProductPage() {
+  const currentSite = await getCurrentSiteFromRequest();
   const [categories, imageAssets, fileAssets, imageFolders, productAiGate] = await Promise.all([
-    listAdminCategories(),
+    listAdminCategories(currentSite.seedPackKey, currentSite.id),
     listMediaAssets("image"),
     listMediaAssets("file"),
     listAssetFolders("image").catch(() => []),
-    getFeatureGate("ai_product_copy"),
+    getFeatureGate("ai_product_copy", currentSite.plan, currentSite.id),
   ]);
 
   return (

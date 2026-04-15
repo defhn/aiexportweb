@@ -9,6 +9,7 @@ import { getInquiryById } from "@/features/inquiries/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { buildVisibleSpecRows, getProductById } from "@/features/products/queries";
 import { listReplyTemplates } from "@/features/reply-templates/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const inputClassName =
   "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
@@ -20,7 +21,8 @@ export default async function AdminInquiryDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const detailGate = await getFeatureGate("inquiry_detail");
+  const currentSite = await getCurrentSiteFromRequest();
+  const detailGate = await getFeatureGate("inquiry_detail", currentSite.plan, currentSite.id);
 
   if (detailGate.status === "locked") {
     return <LockedFeatureCard gate={detailGate} />;
@@ -33,17 +35,19 @@ export default async function AdminInquiryDetailPage({
     notFound();
   }
 
-  const inquiry = await getInquiryById(inquiryId);
+  const inquiry = await getInquiryById(inquiryId, currentSite.id);
 
   if (!inquiry) {
     notFound();
   }
 
   const [product, templates, replyGate, classifyGate] = await Promise.all([
-    inquiry.productId ? getProductById(inquiry.productId) : Promise.resolve(null),
-    listReplyTemplates(),
-    getFeatureGate("ai_inquiry_reply"),
-    getFeatureGate("ai_inquiry_classification"),
+    inquiry.productId
+      ? getProductById(inquiry.productId, currentSite.seedPackKey, currentSite.id)
+      : Promise.resolve(null),
+    listReplyTemplates(currentSite.id),
+    getFeatureGate("ai_inquiry_reply", currentSite.plan, currentSite.id),
+    getFeatureGate("ai_inquiry_classification", currentSite.plan, currentSite.id),
   ]);
 
   const specs = product

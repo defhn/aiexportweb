@@ -4,6 +4,7 @@ import { createQuoteRequest } from "@/features/quotes/actions";
 import { normalizeCountryInput } from "@/lib/country";
 import { validateInquiryAttachment } from "@/features/inquiries/validation";
 import { getFeatureGate } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { uploadToR2 } from "@/lib/r2";
 import { createMediaAsset } from "@/features/media/actions";
 import { verifyTurnstileToken } from "@/lib/turnstile";
@@ -11,7 +12,8 @@ import { verifyTurnstileToken } from "@/lib/turnstile";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const gate = await getFeatureGate("request_quote");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("request_quote", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return NextResponse.json(
@@ -62,6 +64,7 @@ export async function POST(request: Request) {
   }
 
   const record = await createQuoteRequest({
+    siteId: currentSite.id,
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
     companyName: String(formData.get("companyName") ?? ""),

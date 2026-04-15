@@ -6,6 +6,7 @@ import {
 } from "@/features/plans/access";
 import { saveSiteSettings } from "@/features/settings/actions";
 import { getSiteSettings } from "@/features/settings/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const inputClassName =
   "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
@@ -13,8 +14,9 @@ const inputClassName =
 const textareaClassName = `${inputClassName} min-h-28`;
 
 export default async function AdminSettingsPage() {
-  const settings = await getSiteSettings();
-  const currentPlan = getCurrentSitePlan();
+  const currentSite = await getCurrentSiteFromRequest();
+  const settings = await getSiteSettings(currentSite.seedPackKey, currentSite.id);
+  const currentPlan = currentSite.plan ?? getCurrentSitePlan();
   const pricingHref = getPricingHref();
   const salesContactHref = getSalesContactHref();
 

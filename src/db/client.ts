@@ -1,9 +1,10 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 
+import { env } from "@/env";
 import * as schema from "./schema";
 
-export function getDb(databaseUrl = process.env.DATABASE_URL) {
+export function getDb(databaseUrl = env.DATABASE_URL) {
   if (!databaseUrl) {
     throw new Error("DATABASE_URL is not set.");
   }

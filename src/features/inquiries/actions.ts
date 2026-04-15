@@ -1,12 +1,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { inquiries, productCategories, products } from "@/db/schema";
 import { classifyInquiryByRules } from "@/features/inquiries/classification";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export type InquiryInsertInput = {
+  siteId?: number | null;
   name: string;
   email: string;
   companyName?: string;
@@ -37,6 +39,7 @@ export type InquiryInsertInput = {
 
 export function buildInquiryInsertPayload(input: InquiryInsertInput) {
   return {
+    siteId: input.siteId ?? null,
     name: input.name.trim(),
     email: input.email.trim().toLowerCase(),
     companyName: input.companyName?.trim() ?? null,
@@ -109,6 +112,8 @@ export async function createInquiry(input: InquiryInsertInput) {
 }
 
 export async function updateInquiryStatus(id: number, status: "new" | "processing" | "contacted" | "quoted" | "won" | "done") {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
   const [record] = await db
     .update(inquiries)
@@ -116,7 +121,7 @@ export async function updateInquiryStatus(id: number, status: "new" | "processin
       status,
       updatedAt: new Date(),
     })
-    .where(eq(inquiries.id, id))
+    .where(siteId ? and(eq(inquiries.id, id), eq(inquiries.siteId, siteId)) : eq(inquiries.id, id))
     .returning();
 
   return record;
@@ -147,6 +152,8 @@ export async function updateInquiryDetail(input: {
   internalNote?: string | null;
   classificationMethod?: ClassificationMethod;
 }) {
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
   const [record] = await db
     .update(inquiries)
@@ -157,7 +164,7 @@ export async function updateInquiryDetail(input: {
       classificationMethod: normalizeClassificationMethod(input.classificationMethod ?? "manual"),
       updatedAt: new Date(),
     })
-    .where(eq(inquiries.id, input.id))
+    .where(siteId ? and(eq(inquiries.id, input.id), eq(inquiries.siteId, siteId)) : eq(inquiries.id, input.id))
     .returning();
 
   return record;
@@ -229,8 +236,10 @@ export async function saveInquiryDetail(formData: FormData) {
 }
 
 export async function exportInquiriesToCsv() {
+  const currentSite = await getCurrentSiteFromRequest();
   const db = getDb();
-  const records = await db.select().from(inquiries).orderBy(desc(inquiries.createdAt));
+  const query = db.select().from(inquiries).orderBy(desc(inquiries.createdAt));
+  const records = currentSite.id ? await query.where(eq(inquiries.siteId, currentSite.id)) : await query;
   const header =
     "Name,Email,Company,Country,Country Code,Country Group,WhatsApp,Status,Inquiry Type,Source Type,Source Page,Source URL,Created At";
   const rows = records.map((record) =>

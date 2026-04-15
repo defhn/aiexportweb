@@ -4,6 +4,7 @@ import { createMediaAsset } from "@/features/media/actions";
 import { createInquiry } from "@/features/inquiries/actions";
 import { validateInquiryAttachment } from "@/features/inquiries/validation";
 import { getSiteSettings } from "@/features/settings/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { sendInquiryNotification } from "@/lib/brevo";
 import { uploadToR2 } from "@/lib/r2";
 import { verifyTurnstileToken } from "@/lib/turnstile";
@@ -12,6 +13,7 @@ import { sendInquiryWebhook } from "@/lib/webhook";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const currentSite = await getCurrentSiteFromRequest();
   const formData = await request.formData();
   const token = String(formData.get("turnstileToken") ?? "");
 
@@ -47,6 +49,7 @@ export async function POST(request: Request) {
   }
 
   const inquiry = await createInquiry({
+    siteId: currentSite.id,
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
     companyName: String(formData.get("companyName") ?? ""),
@@ -83,7 +86,7 @@ export async function POST(request: Request) {
   await sendInquiryNotification(emailPayload);
 
   // 异步触发 webhook（不阻断响应）
-  getSiteSettings().then((settings) => {
+  getSiteSettings(currentSite.seedPackKey, currentSite.id).then((settings) => {
     void sendInquiryWebhook(
       (settings as { webhookUrl?: string }).webhookUrl,
       emailPayload,

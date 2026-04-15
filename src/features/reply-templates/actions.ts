@@ -1,9 +1,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { replyTemplates } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 function readText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -42,6 +43,8 @@ export function buildReplyTemplateDraft(input: {
 export async function saveReplyTemplate(formData: FormData) {
   "use server";
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
   const draft = buildReplyTemplateDraft({
     id: readOptionalNumber(formData, "id"),
@@ -63,9 +66,14 @@ export async function saveReplyTemplate(formData: FormData) {
         applicableScene: draft.applicableScene,
         updatedAt: new Date(),
       })
-      .where(eq(replyTemplates.id, draft.id));
+      .where(
+        siteId
+          ? and(eq(replyTemplates.id, draft.id), eq(replyTemplates.siteId, siteId))
+          : eq(replyTemplates.id, draft.id),
+      );
   } else {
     await db.insert(replyTemplates).values({
+      siteId,
       title: draft.title,
       category: draft.category,
       contentZh: draft.contentZh,
@@ -81,6 +89,8 @@ export async function saveReplyTemplate(formData: FormData) {
 export async function deleteReplyTemplate(formData: FormData) {
   "use server";
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const id = readOptionalNumber(formData, "id");
 
   if (!id) {
@@ -88,7 +98,13 @@ export async function deleteReplyTemplate(formData: FormData) {
   }
 
   const db = getDb();
-  await db.delete(replyTemplates).where(eq(replyTemplates.id, id));
+  await db
+    .delete(replyTemplates)
+    .where(
+      siteId
+        ? and(eq(replyTemplates.id, id), eq(replyTemplates.siteId, siteId))
+        : eq(replyTemplates.id, id),
+    );
   revalidatePath("/admin/reply-templates");
   redirect("/admin/reply-templates?deleted=1");
 }

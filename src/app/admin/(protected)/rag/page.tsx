@@ -1,14 +1,22 @@
-import { count, isNotNull } from "drizzle-orm";
+import { and, count, eq, isNotNull } from "drizzle-orm";
 import { Database, FileText, HelpCircle } from "lucide-react";
 
 import { getDb } from "@/db/client";
 import { products } from "@/db/schema";
 
 import { RagWorkbench } from "./_components/rag-workbench";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { getFeatureGate } from "@/features/plans/access";
+import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminRagPage() {
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("rag_factory", currentSite.plan, currentSite.id);
+  if (gate.status === "locked") {
+    return <LockedFeatureCard gate={gate} />;
+  }
   const stats = {
     products: 0,
     withDetails: 0,
@@ -21,10 +29,20 @@ export default async function AdminRagPage() {
     try {
       const db = getDb();
 
+      const siteFilter = currentSite.id ? eq(products.siteId, currentSite.id) : null;
+
       const [totalProducts, withDetails, withFaqs] = await Promise.all([
-        db.select({ count: count() }).from(products),
-        db.select({ count: count() }).from(products).where(isNotNull(products.detailsEn)),
-        db.select({ count: count() }).from(products).where(isNotNull(products.faqsJson)),
+        siteFilter
+          ? db.select({ count: count() }).from(products).where(siteFilter)
+          : db.select({ count: count() }).from(products),
+        db
+          .select({ count: count() })
+          .from(products)
+          .where(siteFilter ? and(isNotNull(products.detailsEn), siteFilter) : isNotNull(products.detailsEn)),
+        db
+          .select({ count: count() })
+          .from(products)
+          .where(siteFilter ? and(isNotNull(products.faqsJson), siteFilter) : isNotNull(products.faqsJson)),
       ]);
 
       stats.products = totalProducts[0]?.count ?? 0;

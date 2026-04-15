@@ -131,10 +131,12 @@ function PlanTag({
 export function AdminSidebar({
   currentPlan = "ai_sales",
   currentRole = "super_admin",
+  currentSiteName,
   onClose,
 }: {
   currentPlan?: SitePlan;
   currentRole?: AdminRole;
+  currentSiteName?: string;
   onClose?: () => void;
 }) {
   const pathname = usePathname();

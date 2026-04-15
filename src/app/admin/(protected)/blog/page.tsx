@@ -25,6 +25,7 @@ import {
   listAdminBlogTags,
 } from "@/features/blog/queries";
 import { getFeatureGate } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 type AdminBlogPageProps = {
   searchParams?: Promise<{
@@ -55,25 +56,26 @@ const inlineInput =
   "w-full rounded-lg border border-stone-200 bg-white px-2.5 py-1.5 text-xs text-stone-900 outline-none focus:border-stone-500 focus:ring-1 focus:ring-stone-500/20";
 
 export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps) {
-  const gate = await getFeatureGate("blog_management");
+  const params = (await searchParams) ?? {};
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("blog_management", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;
   }
 
-  const params = (await searchParams) ?? {};
   const categoryId = Number.parseInt(params.categoryId ?? "", 10);
   const [posts, categories, tags] = await Promise.all([
-    listAdminBlogPosts("cnc", {
+    listAdminBlogPosts(currentSite.seedPackKey, {
       query: params.q,
       status:
         params.status === "draft" || params.status === "published"
           ? params.status
           : "",
       categoryId: Number.isFinite(categoryId) ? categoryId : null,
-    }),
-    listAdminBlogCategories(),
-    listAdminBlogTags(),
+    }, currentSite.id),
+    listAdminBlogCategories(currentSite.seedPackKey, currentSite.id),
+    listAdminBlogTags(currentSite.id),
   ]);
 
   const bulkFormId = "blog-post-bulk-form";

@@ -4,6 +4,7 @@ import { desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { seoAiSettings } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { getDefaultCrawlerPolicy } from "@/lib/ai-crawlers";
 
 type SeoAiSettingsDraft = {
@@ -48,6 +49,8 @@ function readText(formData: FormData, key: keyof SeoAiSettingsDraft) {
 export async function saveSeoAiSettings(formData: FormData) {
   "use server";
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
   const draft = buildSeoAiSettingsDraft({
     allowGoogle: readCheckbox(formData, "allowGoogle"),
@@ -60,11 +63,12 @@ export async function saveSeoAiSettings(formData: FormData) {
     extraRobotsTxt: readText(formData, "extraRobotsTxt"),
   });
 
-  const [existing] = await db
+  const query = db
     .select({ id: seoAiSettings.id })
     .from(seoAiSettings)
     .orderBy(desc(seoAiSettings.updatedAt), desc(seoAiSettings.id))
     .limit(1);
+  const [existing] = siteId ? await query.where(eq(seoAiSettings.siteId, siteId)) : await query;
 
   if (existing) {
     await db
@@ -75,7 +79,7 @@ export async function saveSeoAiSettings(formData: FormData) {
       })
       .where(eq(seoAiSettings.id, existing.id));
   } else {
-    await db.insert(seoAiSettings).values(draft);
+    await db.insert(seoAiSettings).values({ ...draft, siteId });
   }
 
   revalidatePath("/robots.txt");

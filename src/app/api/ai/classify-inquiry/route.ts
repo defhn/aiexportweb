@@ -7,11 +7,13 @@ import {
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { withAdminAuth } from "@/lib/admin-auth";
 import { classifyInquiry } from "@/lib/ai";
 
 export const POST = withAdminAuth(async (request) => {
-  const gate = await getFeatureGate("ai_inquiry_classification");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("ai_inquiry_classification", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
@@ -23,7 +25,7 @@ export const POST = withAdminAuth(async (request) => {
     return NextResponse.json({ error: "缺少询盘 ID。" }, { status: 400 });
   }
 
-  const inquiry = await getInquiryById(body.inquiryId);
+  const inquiry = await getInquiryById(body.inquiryId, currentSite.id);
 
   if (!inquiry) {
     return NextResponse.json({ error: "询盘不存在。" }, { status: 404 });
@@ -43,7 +45,7 @@ export const POST = withAdminAuth(async (request) => {
   });
 
   if (gate.status === "trial") {
-    await incrementFeatureUsage("ai_inquiry_classification");
+    await incrementFeatureUsage("ai_inquiry_classification", currentSite.id);
   }
 
   return NextResponse.json({

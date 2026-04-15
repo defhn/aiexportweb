@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { pageModules } from "@/db/schema";
 import { getSeedPack, type SeedPageKey, type SeedPageModule } from "@/db/seed";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 import { buildModulePayload } from "./queries";
 
@@ -69,10 +70,13 @@ function readSortOrder(formData: FormData, moduleKey: string, fallback: number) 
 export async function savePageModules(pageKey: SeedPageKey, formData: FormData) {
   "use server";
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
-  const defaults = getSeedPack("cnc").pages[pageKey];
+  const defaults = getSeedPack(currentSite.seedPackKey).pages[pageKey];
 
   const rows = defaults.map((module) => ({
+    siteId,
     pageKey,
     moduleKey: module.moduleKey,
     moduleNameZh: module.moduleNameZh,
@@ -85,7 +89,13 @@ export async function savePageModules(pageKey: SeedPageKey, formData: FormData) 
     ),
   }));
 
-  await db.delete(pageModules).where(eq(pageModules.pageKey, pageKey));
+  await db
+    .delete(pageModules)
+    .where(
+      siteId
+        ? and(eq(pageModules.pageKey, pageKey), eq(pageModules.siteId, siteId))
+        : eq(pageModules.pageKey, pageKey),
+    );
 
   if (rows.length) {
     await db.insert(pageModules).values(rows);

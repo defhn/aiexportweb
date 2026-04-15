@@ -3,6 +3,7 @@ import { and, asc, desc, eq, ilike, inArray, isNull, or } from "drizzle-orm";
 import { getDb } from "@/db/client";
 import { assetFolders, downloadFiles, mediaAssets, products } from "@/db/schema";
 import { collectAssetFolderIds, type AssetFolderRow } from "@/features/media/folders";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export async function listMediaAssets(
   assetType?: "image" | "file",
@@ -19,6 +20,8 @@ export async function listMediaAssets(
   }
 
   try {
+    const currentSite = await getCurrentSiteFromRequest();
+    const siteId = currentSite.id ?? null;
     const db = getDb();
     const conditions = [];
     const shouldLoadFolders =
@@ -32,6 +35,9 @@ export async function listMediaAssets(
 
     if (assetType) {
       conditions.push(eq(mediaAssets.assetType, assetType));
+    }
+    if (siteId) {
+      conditions.push(eq(mediaAssets.siteId, siteId));
     }
 
     if (typeof filters?.folderId === "number" && Number.isInteger(filters.folderId)) {
@@ -77,11 +83,13 @@ export async function listAssetFolders(assetType: "image" | "file") {
   }
 
   try {
+    const currentSite = await getCurrentSiteFromRequest();
+    const siteId = currentSite.id ?? null;
     const db = getDb();
     return db
       .select()
       .from(assetFolders)
-      .where(eq(assetFolders.assetType, assetType))
+      .where(siteId ? and(eq(assetFolders.assetType, assetType), eq(assetFolders.siteId, siteId)) : eq(assetFolders.assetType, assetType))
       .orderBy(asc(assetFolders.sortOrder), asc(assetFolders.id));
   } catch (error) {
     console.error("Falling back to empty asset folders after database read failure.", error);
@@ -103,6 +111,8 @@ export async function listDownloadFiles(filters?: {
   }
 
   try {
+    const currentSite = await getCurrentSiteFromRequest();
+    const siteId = currentSite.id ?? null;
     const db = getDb();
     const conditions = [];
     const shouldLoadFolders =
@@ -121,6 +131,9 @@ export async function listDownloadFiles(filters?: {
           ilike(mediaAssets.fileName, `%${filters.query}%`),
         )!,
       );
+    }
+    if (siteId) {
+      conditions.push(eq(mediaAssets.siteId, siteId));
     }
 
     if (filters?.category) {

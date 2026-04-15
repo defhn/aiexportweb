@@ -1,5 +1,6 @@
 import { saveSeoAiSettings } from "@/features/seo-ai/actions";
 import { getSeoAiSettings } from "@/features/seo-ai/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { buildRobotsPolicies } from "@/lib/ai-crawlers";
 
 const checkboxItems = [
@@ -49,7 +50,8 @@ const textareaClassName =
   "mt-2 min-h-28 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
 
 export default async function AdminSeoAiPage() {
-  const settings = await getSeoAiSettings();
+  const currentSite = await getCurrentSiteFromRequest();
+  const settings = await getSeoAiSettings(currentSite.id);
   const robotsPreview = buildRobotsPolicies(settings);
 
   return (

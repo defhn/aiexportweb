@@ -52,10 +52,14 @@ async function hasDatabasePosts(siteId?: number | null) {
     return false;
   }
 
-  const db = getDb();
-  const query = db.select({ id: blogPosts.id }).from(blogPosts).limit(1);
-  const [record] = siteId ? await query.where(eq(blogPosts.siteId, siteId)) : await query;
-  return Boolean(record);
+  try {
+    const db = getDb();
+    const query = db.select({ id: blogPosts.id }).from(blogPosts).limit(1);
+    const [record] = siteId ? await query.where(eq(blogPosts.siteId, siteId)) : await query;
+    return Boolean(record);
+  } catch {
+    return false;
+  }
 }
 
 async function hasDatabaseCategories(siteId?: number | null) {
@@ -63,13 +67,17 @@ async function hasDatabaseCategories(siteId?: number | null) {
     return false;
   }
 
-  const db = getDb();
-  const query = db
-    .select({ id: blogCategories.id })
-    .from(blogCategories)
-    .limit(1);
-  const [record] = siteId ? await query.where(eq(blogCategories.siteId, siteId)) : await query;
-  return Boolean(record);
+  try {
+    const db = getDb();
+    const query = db
+      .select({ id: blogCategories.id })
+      .from(blogCategories)
+      .limit(1);
+    const [record] = siteId ? await query.where(eq(blogCategories.siteId, siteId)) : await query;
+    return Boolean(record);
+  } catch {
+    return false;
+  }
 }
 
 export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
@@ -77,30 +85,34 @@ export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc", siteId
     return mapSeedBlogCategories(seedPackKey);
   }
 
-  const db = getDb();
-  const rows = await db
-    .select()
-    .from(blogCategories)
-    .where(
-      siteId
-        ? and(eq(blogCategories.isVisible, true), eq(blogCategories.siteId, siteId))
-        : eq(blogCategories.isVisible, true),
-    )
-    .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
+  try {
+    const db = getDb();
+    const rows = await db
+      .select()
+      .from(blogCategories)
+      .where(
+        siteId
+          ? and(eq(blogCategories.isVisible, true), eq(blogCategories.siteId, siteId))
+          : eq(blogCategories.isVisible, true),
+      )
+      .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
 
-  if (rows.length) {
-    return rows.map((row) => ({
-      id: row.id,
-      nameZh: row.nameZh,
-      nameEn: row.nameEn,
-      slug: row.slug,
-      sortOrder: row.sortOrder,
-      isVisible: row.isVisible,
-    }));
-  }
+    if (rows.length) {
+      return rows.map((row) => ({
+        id: row.id,
+        nameZh: row.nameZh,
+        nameEn: row.nameEn,
+        slug: row.slug,
+        sortOrder: row.sortOrder,
+        isVisible: row.isVisible,
+      }));
+    }
 
-  if (await hasDatabaseCategories(siteId)) {
-    return [];
+    if (await hasDatabaseCategories(siteId)) {
+      return [];
+    }
+  } catch (error) {
+    console.error("Falling back to seed blog categories after database read failure.", error);
   }
 
   return mapSeedBlogCategories(seedPackKey);
@@ -110,7 +122,10 @@ export async function getBlogCategoryOptions(seedPackKey: SeedPackKey = "cnc", s
   return getBlogCategories(seedPackKey, siteId);
 }
 
-export async function listAdminBlogCategories(seedPackKey: SeedPackKey = "cnc") {
+export async function listAdminBlogCategories(
+  seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
+) {
   if (!process.env.DATABASE_URL) {
     return mapSeedBlogCategories(seedPackKey).map((category) => ({
       ...category,
@@ -118,31 +133,41 @@ export async function listAdminBlogCategories(seedPackKey: SeedPackKey = "cnc") 
     }));
   }
 
-  const db = getDb();
-  const rows = await db
-    .select({
-      id: blogCategories.id,
-      nameZh: blogCategories.nameZh,
-      nameEn: blogCategories.nameEn,
-      slug: blogCategories.slug,
-      sortOrder: blogCategories.sortOrder,
-      isVisible: blogCategories.isVisible,
-      postCount: count(blogPosts.id),
-    })
-    .from(blogCategories)
-    .leftJoin(blogPosts, eq(blogPosts.categoryId, blogCategories.id))
-    .groupBy(
-      blogCategories.id,
-      blogCategories.nameZh,
-      blogCategories.nameEn,
-      blogCategories.slug,
-      blogCategories.sortOrder,
-      blogCategories.isVisible,
-    )
-    .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
+  try {
+    const db = getDb();
+    const baseQuery = db
+      .select({
+        id: blogCategories.id,
+        nameZh: blogCategories.nameZh,
+        nameEn: blogCategories.nameEn,
+        slug: blogCategories.slug,
+        sortOrder: blogCategories.sortOrder,
+        isVisible: blogCategories.isVisible,
+        postCount: count(blogPosts.id),
+      })
+      .from(blogCategories)
+      .leftJoin(
+        blogPosts,
+        siteId
+          ? and(eq(blogPosts.categoryId, blogCategories.id), eq(blogPosts.siteId, siteId))
+          : eq(blogPosts.categoryId, blogCategories.id),
+      )
+      .groupBy(
+        blogCategories.id,
+        blogCategories.nameZh,
+        blogCategories.nameEn,
+        blogCategories.slug,
+        blogCategories.sortOrder,
+        blogCategories.isVisible,
+      )
+      .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
+    const rows = siteId ? await baseQuery.where(eq(blogCategories.siteId, siteId)) : await baseQuery;
 
-  if (rows.length) {
-    return rows;
+    if (rows.length) {
+      return rows;
+    }
+  } catch (error) {
+    console.error("Falling back to seed admin blog categories after database read failure.", error);
   }
 
   return mapSeedBlogCategories(seedPackKey).map((category) => ({
@@ -151,24 +176,30 @@ export async function listAdminBlogCategories(seedPackKey: SeedPackKey = "cnc") 
   }));
 }
 
-export async function listAdminBlogTags() {
+export async function listAdminBlogTags(siteId?: number | null) {
   if (!process.env.DATABASE_URL) {
     return [];
   }
 
-  const db = getDb();
-  return db
-    .select({
-      id: blogTags.id,
-      nameZh: blogTags.nameZh,
-      nameEn: blogTags.nameEn,
-      slug: blogTags.slug,
-      postCount: count(blogPostTags.id),
-    })
-    .from(blogTags)
-    .leftJoin(blogPostTags, eq(blogPostTags.blogTagId, blogTags.id))
-    .groupBy(blogTags.id, blogTags.nameZh, blogTags.nameEn, blogTags.slug)
-    .orderBy(asc(blogTags.nameEn), asc(blogTags.id));
+  try {
+    const db = getDb();
+    const query = db
+      .select({
+        id: blogTags.id,
+        nameZh: blogTags.nameZh,
+        nameEn: blogTags.nameEn,
+        slug: blogTags.slug,
+        postCount: count(blogPostTags.id),
+      })
+      .from(blogTags)
+      .leftJoin(blogPostTags, eq(blogPostTags.blogTagId, blogTags.id))
+      .groupBy(blogTags.id, blogTags.nameZh, blogTags.nameEn, blogTags.slug)
+      .orderBy(asc(blogTags.nameEn), asc(blogTags.id));
+    return siteId ? query.where(eq(blogTags.siteId, siteId)) : query;
+  } catch (error) {
+    console.error("Falling back to empty admin blog tags after database read failure.", error);
+    return [];
+  }
 }
 
 export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc", siteId?: number | null) {
@@ -176,61 +207,65 @@ export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc", siteId?: nu
     return mapSeedBlogPosts(seedPackKey);
   }
 
-  const db = getDb();
-  const rows = await db
-    .select({
-      id: blogPosts.id,
-      categoryId: blogPosts.categoryId,
-      categorySlug: blogCategories.slug,
-      titleZh: blogPosts.titleZh,
-      titleEn: blogPosts.titleEn,
-      slug: blogPosts.slug,
-      excerptZh: blogPosts.excerptZh,
-      excerptEn: blogPosts.excerptEn,
-      contentZh: blogPosts.contentZh,
-      contentEn: blogPosts.contentEn,
-      coverMediaId: blogPosts.coverMediaId,
-      coverImageUrl: mediaAssets.url,
-      coverImageAlt: mediaAssets.altTextEn,
-      seoTitle: blogPosts.seoTitle,
-      seoDescription: blogPosts.seoDescription,
-      status: blogPosts.status,
-      publishedAt: blogPosts.publishedAt,
-      updatedAt: blogPosts.updatedAt,
-    })
-    .from(blogPosts)
-    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
-    .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
-    .where(
-      siteId
-        ? and(eq(blogPosts.status, "published"), eq(blogPosts.siteId, siteId))
-        : eq(blogPosts.status, "published"),
-    )
-    .orderBy(asc(blogPosts.publishedAt), asc(blogPosts.id));
+  try {
+    const db = getDb();
+    const rows = await db
+      .select({
+        id: blogPosts.id,
+        categoryId: blogPosts.categoryId,
+        categorySlug: blogCategories.slug,
+        titleZh: blogPosts.titleZh,
+        titleEn: blogPosts.titleEn,
+        slug: blogPosts.slug,
+        excerptZh: blogPosts.excerptZh,
+        excerptEn: blogPosts.excerptEn,
+        contentZh: blogPosts.contentZh,
+        contentEn: blogPosts.contentEn,
+        coverMediaId: blogPosts.coverMediaId,
+        coverImageUrl: mediaAssets.url,
+        coverImageAlt: mediaAssets.altTextEn,
+        seoTitle: blogPosts.seoTitle,
+        seoDescription: blogPosts.seoDescription,
+        status: blogPosts.status,
+        publishedAt: blogPosts.publishedAt,
+        updatedAt: blogPosts.updatedAt,
+      })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
+      .where(
+        siteId
+          ? and(eq(blogPosts.status, "published"), eq(blogPosts.siteId, siteId))
+          : eq(blogPosts.status, "published"),
+      )
+      .orderBy(asc(blogPosts.publishedAt), asc(blogPosts.id));
 
-  if (rows.length) {
-    return rows.map((row) => ({
-      ...row,
-      categorySlug: row.categorySlug ?? "",
-      excerptZh: row.excerptZh || createExcerptFallback(row.contentZh ?? ""),
-      excerptEn: row.excerptEn || createExcerptFallback(row.contentEn ?? ""),
-      contentZh: row.contentZh ?? "",
-      contentEn: row.contentEn ?? "",
-      coverMediaId: row.coverMediaId ?? null,
-      coverImageUrl: row.coverImageUrl ?? null,
-      coverImageAlt: row.coverImageAlt ?? row.titleEn,
-      seoTitle: row.seoTitle ?? row.titleEn,
-      seoDescription:
-        row.seoDescription ||
-        row.excerptEn ||
-        createExcerptFallback(row.contentEn ?? row.titleEn),
-      publishedAt: row.publishedAt?.toISOString() ?? new Date().toISOString(),
-      updatedAt: row.updatedAt?.toISOString() ?? new Date().toISOString(),
-    }));
-  }
+    if (rows.length) {
+      return rows.map((row) => ({
+        ...row,
+        categorySlug: row.categorySlug ?? "",
+        excerptZh: row.excerptZh || createExcerptFallback(row.contentZh ?? ""),
+        excerptEn: row.excerptEn || createExcerptFallback(row.contentEn ?? ""),
+        contentZh: row.contentZh ?? "",
+        contentEn: row.contentEn ?? "",
+        coverMediaId: row.coverMediaId ?? null,
+        coverImageUrl: row.coverImageUrl ?? null,
+        coverImageAlt: row.coverImageAlt ?? row.titleEn,
+        seoTitle: row.seoTitle ?? row.titleEn,
+        seoDescription:
+          row.seoDescription ||
+          row.excerptEn ||
+          createExcerptFallback(row.contentEn ?? row.titleEn),
+        publishedAt: row.publishedAt?.toISOString() ?? new Date().toISOString(),
+        updatedAt: row.updatedAt?.toISOString() ?? new Date().toISOString(),
+      }));
+    }
 
-  if (await hasDatabasePosts(siteId)) {
-    return [];
+    if (await hasDatabasePosts(siteId)) {
+      return [];
+    }
+  } catch (error) {
+    console.error("Falling back to seed blog posts after database read failure.", error);
   }
 
   return mapSeedBlogPosts(seedPackKey);
@@ -243,6 +278,7 @@ export async function listAdminBlogPosts(
     status?: "draft" | "published" | "";
     categoryId?: number | null;
   },
+  siteId?: number | null,
 ) {
   if (!process.env.DATABASE_URL) {
     return mapSeedBlogPosts(seedPackKey);
@@ -270,6 +306,9 @@ export async function listAdminBlogPosts(
 
     if (filters?.categoryId) {
       conditions.push(eq(blogPosts.categoryId, filters.categoryId));
+    }
+    if (siteId) {
+      conditions.push(eq(blogPosts.siteId, siteId));
     }
 
     const query = db
@@ -345,6 +384,7 @@ export async function getBlogPostBySlug(
 export async function getBlogPostById(
   id: number,
   seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
 ) {
   if (!process.env.DATABASE_URL) {
     const seedPost = mapSeedBlogPosts(seedPackKey).find((item) => item.id === id);
@@ -372,42 +412,46 @@ export async function getBlogPostById(
     };
   }
 
-  const db = getDb();
-  const [post] = await db
-    .select()
-    .from(blogPosts)
-    .where(eq(blogPosts.id, id))
-    .limit(1);
+  try {
+    const db = getDb();
+    const [post] = await db
+      .select()
+      .from(blogPosts)
+      .where(siteId ? and(eq(blogPosts.id, id), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, id))
+      .limit(1);
 
-  if (post) {
-    const tagRows = await db
-      .select({ nameEn: blogTags.nameEn })
-      .from(blogPostTags)
-      .innerJoin(blogTags, eq(blogPostTags.blogTagId, blogTags.id))
-      .where(eq(blogPostTags.blogPostId, post.id))
-      .orderBy(asc(blogPostTags.id));
+    if (post) {
+      const tagRows = await db
+        .select({ nameEn: blogTags.nameEn })
+        .from(blogPostTags)
+        .innerJoin(blogTags, eq(blogPostTags.blogTagId, blogTags.id))
+        .where(eq(blogPostTags.blogPostId, post.id))
+        .orderBy(asc(blogPostTags.id));
 
-    return {
-      id: post.id,
-      categoryId: post.categoryId,
-      titleZh: post.titleZh,
-      titleEn: post.titleEn,
-      slug: post.slug,
-      excerptZh: post.excerptZh ?? "",
-      excerptEn: post.excerptEn ?? "",
-      contentZh: post.contentZh ?? "",
-      contentEn: post.contentEn ?? "",
-      coverMediaId: post.coverMediaId ?? null,
-      seoTitle: post.seoTitle ?? "",
-      seoDescription: post.seoDescription ?? "",
-      status: post.status,
-      publishedAt: post.publishedAt?.toISOString().slice(0, 16) ?? "",
-      tags: tagRows.map((tag) => tag.nameEn),
-    };
-  }
+      return {
+        id: post.id,
+        categoryId: post.categoryId,
+        titleZh: post.titleZh,
+        titleEn: post.titleEn,
+        slug: post.slug,
+        excerptZh: post.excerptZh ?? "",
+        excerptEn: post.excerptEn ?? "",
+        contentZh: post.contentZh ?? "",
+        contentEn: post.contentEn ?? "",
+        coverMediaId: post.coverMediaId ?? null,
+        seoTitle: post.seoTitle ?? "",
+        seoDescription: post.seoDescription ?? "",
+        status: post.status,
+        publishedAt: post.publishedAt?.toISOString().slice(0, 16) ?? "",
+        tags: tagRows.map((tag) => tag.nameEn),
+      };
+    }
 
-  if (await hasDatabasePosts()) {
-    return null;
+    if (await hasDatabasePosts()) {
+      return null;
+    }
+  } catch (error) {
+    console.error("Falling back to seed blog post detail after database read failure.", error);
   }
 
   const seedPost = mapSeedBlogPosts(seedPackKey).find((item) => item.id === id);

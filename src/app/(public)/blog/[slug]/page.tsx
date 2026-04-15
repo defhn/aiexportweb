@@ -28,7 +28,7 @@ export async function generateMetadata({
 }: BlogDetailPageProps): Promise<Metadata> {
   const currentSite = await getCurrentSiteFromRequest();
   const siteId = currentSite.id ?? null;
-  const gate = await getFeatureGate("blog_management", currentSite.plan);
+  const gate = await getFeatureGate("blog_management", currentSite.plan, siteId);
 
   if (gate.status === "locked") {
     return buildPageMetadata({
@@ -59,7 +59,7 @@ export async function generateMetadata({
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const currentSite = await getCurrentSiteFromRequest();
   const siteId = currentSite.id ?? null;
-  const gate = await getFeatureGate("blog_management", currentSite.plan);
+  const gate = await getFeatureGate("blog_management", currentSite.plan, siteId);
 
   if (gate.status === "locked") {
     notFound();

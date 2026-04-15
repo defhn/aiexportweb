@@ -1,12 +1,14 @@
 import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
 import { getFeatureGate } from "@/features/plans/access";
 import { importProductsFromCsv } from "@/features/products/actions";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const csvTemplate = `name_zh,name_en,category,material,process,moq,lead_time,application
 定制支架,Custom Bracket,CNC Parts,Aluminum 6061,CNC Milling,500 pcs,20 days,Industrial enclosure`;
 
 export default async function AdminProductImportPage() {
-  const gate = await getFeatureGate("csv_import");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("csv_import", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;

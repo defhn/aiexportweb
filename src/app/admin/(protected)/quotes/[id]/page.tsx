@@ -6,6 +6,7 @@ import { updateQuoteStatus } from "@/features/quotes/actions";
 import { getQuoteRequestById } from "@/features/quotes/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -19,14 +20,15 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 type Props = { params: Promise<{ id: string }> };
 
 export default async function AdminQuoteDetailPage({ params }: Props) {
-  const gate = await getFeatureGate("quotes");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("quotes", currentSite.plan, currentSite.id);
   if (gate.status === "locked") return <LockedFeatureCard gate={gate} />;
 
   const { id } = await params;
   const numId = Number.parseInt(id, 10);
   if (!Number.isFinite(numId)) notFound();
 
-  const quote = await getQuoteRequestById(numId);
+  const quote = await getQuoteRequestById(numId, currentSite.id);
   if (!quote) notFound();
 
   const statusMeta = STATUS_LABELS[quote.status] ?? { label: quote.status, color: "bg-stone-100 text-stone-600" };

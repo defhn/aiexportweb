@@ -20,6 +20,7 @@ import {
 } from "@/features/media/folders";
 import { listAssetFolders, listDownloadFiles, listMediaAssets } from "@/features/media/queries";
 import { listAdminProducts } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const inputClassName =
   "mt-2 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
@@ -64,6 +65,7 @@ function buildReturnPath(folderId: number | null, query?: string, category?: str
 
 export default async function AdminFilesPage({ searchParams }: AdminFilesPageProps) {
   const params = (await searchParams) ?? {};
+  const currentSite = await getCurrentSiteFromRequest();
   const parsedFolderId = Number.parseInt(params.folder ?? "", 10);
   const selectedFolderId = Number.isFinite(parsedFolderId) ? parsedFolderId : null;
   const folders = await listAssetFolders("file").catch(() => []);
@@ -84,7 +86,7 @@ export default async function AdminFilesPage({ searchParams }: AdminFilesPagePro
       // rootOnlyWhenNoFolder: 无文件夹参数时仅显示根目录文件
       folderRows: folders,
     }),
-    listAdminProducts(),
+    listAdminProducts(currentSite.seedPackKey, undefined, currentSite.id),
   ]);
   const folderTree = buildAssetFolderTree(folders);
   const breadcrumbs = buildAssetFolderBreadcrumbs(folders, selectedFolderId);

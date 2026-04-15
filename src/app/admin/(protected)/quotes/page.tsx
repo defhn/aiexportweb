@@ -4,17 +4,19 @@ import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
 import { getFeatureGate } from "@/features/plans/access";
 import { updateQuoteStatus } from "@/features/quotes/actions";
 import { listQuoteRequests } from "@/features/quotes/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminQuotesPage() {
-  const gate = await getFeatureGate("quotes");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("quotes", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;
   }
 
-  const requests = await listQuoteRequests();
+  const requests = await listQuoteRequests(currentSite.id);
 
   return (
     <div className="space-y-6">

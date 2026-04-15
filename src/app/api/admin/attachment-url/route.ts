@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { and, eq } from "drizzle-orm";
+
 import { getPresignedDownloadUrl } from "@/lib/r2-private";
 import { getDb } from "@/db/client";
 import { inquiries, mediaAssets } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { withAdminAuth } from "@/lib/admin-auth";
 
 export const runtime = "nodejs";
 
@@ -10,7 +13,8 @@ export const runtime = "nodejs";
  * GET /api/admin/attachment-url?inquiryId=123
  * 生成询盘附件的临时预签名下载 URL，有效期 15 分钟，仅供 Admin 后台使用
  */
-export async function GET(request: Request) {
+export const GET = withAdminAuth(async (request) => {
+  const currentSite = await getCurrentSiteFromRequest();
   const { searchParams } = new URL(request.url);
   const inquiryId = Number.parseInt(searchParams.get("inquiryId") ?? "", 10);
 
@@ -31,7 +35,11 @@ export async function GET(request: Request) {
     })
     .from(inquiries)
     .leftJoin(mediaAssets, eq(mediaAssets.id, inquiries.attachmentMediaId))
-    .where(eq(inquiries.id, inquiryId))
+    .where(
+      currentSite.id
+        ? and(eq(inquiries.id, inquiryId), eq(inquiries.siteId, currentSite.id))
+        : eq(inquiries.id, inquiryId),
+    )
     .limit(1);
 
   if (!inquiry) {
@@ -51,4 +59,4 @@ export async function GET(request: Request) {
     mimeType: inquiry.mimeType,
     expiresIn: 900,
   });
-}
+});

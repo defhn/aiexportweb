@@ -19,6 +19,7 @@ import { listAdminBlogPosts } from "@/features/blog/queries";
 import { getDashboardSnapshot } from "@/features/dashboard/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { listAdminCategories, listAdminProducts } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -65,17 +66,18 @@ function MetricCard({
 }
 
 export default async function AdminDashboardPage() {
-  const gate = await getFeatureGate("dashboard_analytics");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("dashboard_analytics", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;
   }
 
   const [snapshot, products, posts, categories] = await Promise.all([
-    getDashboardSnapshot(),
-    listAdminProducts(),
-    listAdminBlogPosts(),
-    listAdminCategories(),
+    getDashboardSnapshot(currentSite.id),
+    listAdminProducts(currentSite.seedPackKey, undefined, currentSite.id),
+    listAdminBlogPosts(currentSite.seedPackKey, undefined, currentSite.id),
+    listAdminCategories(currentSite.seedPackKey, currentSite.id),
   ]);
 
   const cards = [

@@ -4,6 +4,7 @@ import { desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { siteSettings } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { assertSameOrigin } from "@/lib/csrf";
 
 export type SiteSettingsDraft = {
@@ -61,6 +62,8 @@ export async function saveSiteSettings(formData: FormData) {
 
   await assertSameOrigin();
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const db = getDb();
   const draft = buildSiteSettingsDraft({
     companyNameZh: readText(formData, "companyNameZh"),
@@ -78,11 +81,18 @@ export async function saveSiteSettings(formData: FormData) {
     companyKnowledgeMd: readText(formData, "companyKnowledgeMd"),
   });
 
-  const [existing] = await db
-    .select({ id: siteSettings.id })
-    .from(siteSettings)
-    .orderBy(desc(siteSettings.updatedAt), desc(siteSettings.id))
-    .limit(1);
+  const [existing] = siteId
+    ? await db
+        .select({ id: siteSettings.id })
+        .from(siteSettings)
+        .where(eq(siteSettings.siteId, siteId))
+        .orderBy(desc(siteSettings.updatedAt), desc(siteSettings.id))
+        .limit(1)
+    : await db
+        .select({ id: siteSettings.id })
+        .from(siteSettings)
+        .orderBy(desc(siteSettings.updatedAt), desc(siteSettings.id))
+        .limit(1);
 
   if (existing) {
     await db
@@ -93,7 +103,7 @@ export async function saveSiteSettings(formData: FormData) {
       })
       .where(eq(siteSettings.id, existing.id));
   } else {
-    await db.insert(siteSettings).values(draft);
+    await db.insert(siteSettings).values({ ...draft, siteId });
   }
 
   revalidatePath("/", "layout");

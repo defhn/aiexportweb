@@ -5,6 +5,7 @@ import {
   saveReplyTemplate,
 } from "@/features/reply-templates/actions";
 import { listReplyTemplates } from "@/features/reply-templates/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +19,15 @@ type AdminReplyTemplatesPageProps = {
 export default async function AdminReplyTemplatesPage({
   searchParams,
 }: AdminReplyTemplatesPageProps) {
-  const gate = await getFeatureGate("reply_templates");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("reply_templates", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;
   }
 
   const params = (await searchParams) ?? {};
-  const templates = await listReplyTemplates();
+  const templates = await listReplyTemplates(currentSite.id);
 
   return (
     <div className="space-y-6">

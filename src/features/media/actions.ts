@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
-import { assetFolders, downloadFiles, mediaAssets } from "@/db/schema";
+import { assetFolders, downloadFiles, mediaAssets, products } from "@/db/schema";
 import { buildAssetFolderDraft } from "@/features/media/folders";
 import {
   appendRedirectFlag,
@@ -16,6 +16,7 @@ import {
   parseSelectedIds,
   type CreateMediaAssetInput,
 } from "@/features/media/media-utils";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { deleteFromR2 } from "@/lib/r2";
 
 // ─── Private form helpers ────────────────────────────────────────
@@ -38,19 +39,26 @@ function toSafeId(value?: number | null) {
     : null;
 }
 
+async function getActionSiteId() {
+  const currentSite = await getCurrentSiteFromRequest();
+  return currentSite.id ?? null;
+}
+
 // ─── Server Actions ──────────────────────────────────────────
 
 export async function createMediaAsset(input: CreateMediaAssetInput) {
+  const siteId = await getActionSiteId();
   const db = getDb();
   const [asset] = await db
     .insert(mediaAssets)
-    .values(buildMediaAssetRecord(input))
+    .values({ ...buildMediaAssetRecord(input), siteId })
     .returning();
 
   return asset;
 }
 
 export async function saveAssetFolder(formData: FormData) {
+  const siteId = await getActionSiteId();
   const assetType =
     readText(formData, "assetType") === "file" ? "file" : "image";
   const returnTo =
@@ -70,13 +78,14 @@ export async function saveAssetFolder(formData: FormData) {
     await db
       .update(assetFolders)
       .set({ name: draft.name, parentId: draft.parentId, sortOrder: draft.sortOrder })
-      .where(eq(assetFolders.id, draft.id));
+      .where(siteId ? and(eq(assetFolders.id, draft.id), eq(assetFolders.siteId, siteId)) : eq(assetFolders.id, draft.id));
   } else {
     await db.insert(assetFolders).values({
       assetType: draft.assetType,
       name: draft.name,
       parentId: draft.parentId,
       sortOrder: draft.sortOrder,
+      siteId,
     });
   }
 
@@ -86,6 +95,7 @@ export async function saveAssetFolder(formData: FormData) {
 }
 
 export async function deleteAssetFolder(formData: FormData) {
+  const siteId = await getActionSiteId();
   const id = readOptionalNumber(formData, "id");
   const assetType =
     readText(formData, "assetType") === "file" ? "file" : "image";
@@ -101,19 +111,19 @@ export async function deleteAssetFolder(formData: FormData) {
   const [hasChild] = await db
     .select({ id: assetFolders.id })
     .from(assetFolders)
-    .where(eq(assetFolders.parentId, id))
+    .where(siteId ? and(eq(assetFolders.parentId, id), eq(assetFolders.siteId, siteId)) : eq(assetFolders.parentId, id))
     .limit(1);
   const [hasAsset] = await db
     .select({ id: mediaAssets.id })
     .from(mediaAssets)
-    .where(eq(mediaAssets.folderId, id))
+    .where(siteId ? and(eq(mediaAssets.folderId, id), eq(mediaAssets.siteId, siteId)) : eq(mediaAssets.folderId, id))
     .limit(1);
 
   if (hasChild || hasAsset) {
     redirect(appendRedirectFlag(returnTo, "folderError", "not-empty"));
   }
 
-  await db.delete(assetFolders).where(eq(assetFolders.id, id));
+  await db.delete(assetFolders).where(siteId ? and(eq(assetFolders.id, id), eq(assetFolders.siteId, siteId)) : eq(assetFolders.id, id));
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
@@ -131,7 +141,22 @@ export async function createDownloadFileRecord(input: {
   isVisible?: boolean;
   sortOrder?: number;
 }) {
+  const siteId = await getActionSiteId();
   const db = getDb();
+  const [asset] = await db
+    .select({ id: mediaAssets.id })
+    .from(mediaAssets)
+    .where(
+      siteId
+        ? and(eq(mediaAssets.id, input.mediaAssetId), eq(mediaAssets.siteId, siteId))
+        : eq(mediaAssets.id, input.mediaAssetId),
+    )
+    .limit(1);
+
+  if (!asset) {
+    throw new Error("Media asset not found for current site.");
+  }
+
   const [record] = await db
     .insert(downloadFiles)
     .values({
@@ -151,6 +176,7 @@ export async function createDownloadFileRecord(input: {
 }
 
 export async function saveMediaAssetMeta(formData: FormData) {
+  const siteId = await getActionSiteId();
   const id = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -175,7 +201,7 @@ export async function saveMediaAssetMeta(formData: FormData) {
       altTextZh: draft.altTextZh,
       altTextEn: draft.altTextEn,
     })
-    .where(eq(mediaAssets.id, draft.id!));
+    .where(siteId ? and(eq(mediaAssets.id, draft.id!), eq(mediaAssets.siteId, siteId)) : eq(mediaAssets.id, draft.id!));
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
@@ -214,6 +240,7 @@ async function unlinkMediaAssetReferences(mediaAssetId: number) {
 
 
 export async function deleteMediaAsset(formData: FormData) {
+  const siteId = await getActionSiteId();
   const id = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -226,7 +253,7 @@ export async function deleteMediaAsset(formData: FormData) {
     const [asset] = await db
       .select({ id: mediaAssets.id, bucketKey: mediaAssets.bucketKey })
       .from(mediaAssets)
-      .where(eq(mediaAssets.id, id))
+      .where(siteId ? and(eq(mediaAssets.id, id), eq(mediaAssets.siteId, siteId)) : eq(mediaAssets.id, id))
       .limit(1);
 
     if (!asset) {
@@ -235,7 +262,7 @@ export async function deleteMediaAsset(formData: FormData) {
 
     await unlinkMediaAssetReferences(id);
     await deleteFromR2(asset.bucketKey);
-    await db.delete(mediaAssets).where(eq(mediaAssets.id, id));
+    await db.delete(mediaAssets).where(siteId ? and(eq(mediaAssets.id, id), eq(mediaAssets.siteId, siteId)) : eq(mediaAssets.id, id));
 
     revalidatePath("/admin/media");
     revalidatePath("/admin/files");
@@ -252,6 +279,7 @@ export async function deleteMediaAsset(formData: FormData) {
 }
 
 export async function bulkMoveMediaAssets(formData: FormData) {
+  const siteId = await getActionSiteId();
   const ids = parseSelectedIds(formData);
   const folderId = readOptionalNumber(formData, "targetFolderId");
   const returnTo = readText(formData, "returnTo") || "/admin/media";
@@ -264,7 +292,7 @@ export async function bulkMoveMediaAssets(formData: FormData) {
   await db
     .update(mediaAssets)
     .set({ folderId: toSafeId(folderId) })
-    .where(inArray(mediaAssets.id, ids));
+    .where(siteId ? and(inArray(mediaAssets.id, ids), eq(mediaAssets.siteId, siteId)) : inArray(mediaAssets.id, ids));
 
   revalidatePath("/admin/media");
   revalidatePath("/admin/files");
@@ -272,6 +300,7 @@ export async function bulkMoveMediaAssets(formData: FormData) {
 }
 
 export async function bulkDeleteMediaAssets(formData: FormData) {
+  const siteId = await getActionSiteId();
   const ids = parseSelectedIds(formData);
   const returnTo = readText(formData, "returnTo") || "/admin/media";
 
@@ -283,7 +312,7 @@ export async function bulkDeleteMediaAssets(formData: FormData) {
   const assets = await db
     .select({ id: mediaAssets.id, bucketKey: mediaAssets.bucketKey })
     .from(mediaAssets)
-    .where(inArray(mediaAssets.id, ids));
+    .where(siteId ? and(inArray(mediaAssets.id, ids), eq(mediaAssets.siteId, siteId)) : inArray(mediaAssets.id, ids));
 
   let deletedCount = 0;
   let failedCount = 0;
@@ -292,7 +321,7 @@ export async function bulkDeleteMediaAssets(formData: FormData) {
     try {
       await unlinkMediaAssetReferences(asset.id);
       await deleteFromR2(asset.bucketKey);
-      await db.delete(mediaAssets).where(eq(mediaAssets.id, asset.id));
+      await db.delete(mediaAssets).where(siteId ? and(eq(mediaAssets.id, asset.id), eq(mediaAssets.siteId, siteId)) : eq(mediaAssets.id, asset.id));
       deletedCount += 1;
     } catch (error) {
       console.error("Failed to bulk delete media asset.", asset.id, error);
@@ -314,6 +343,7 @@ export async function bulkDeleteMediaAssets(formData: FormData) {
 }
 
 export async function saveDownloadFile(formData: FormData) {
+  const siteId = await getActionSiteId();
   const mediaAssetId = readOptionalNumber(formData, "mediaAssetId");
   const id = readOptionalNumber(formData, "id");
 
@@ -335,8 +365,52 @@ export async function saveDownloadFile(formData: FormData) {
   });
 
   const db = getDb();
+  const [asset] = await db
+    .select({ id: mediaAssets.id })
+    .from(mediaAssets)
+    .where(
+      siteId
+        ? and(eq(mediaAssets.id, draft.mediaAssetId), eq(mediaAssets.siteId, siteId))
+        : eq(mediaAssets.id, draft.mediaAssetId),
+    )
+    .limit(1);
+
+  if (!asset) {
+    redirect("/admin/files?error=invalid-media");
+  }
+
+  if (draft.productId) {
+    const [product] = await db
+      .select({ id: products.id })
+      .from(products)
+      .where(
+        siteId
+          ? and(eq(products.id, draft.productId), eq(products.siteId, siteId))
+          : eq(products.id, draft.productId),
+      )
+      .limit(1);
+
+    if (!product) {
+      redirect("/admin/files?error=invalid-product");
+    }
+  }
 
   if (draft.id) {
+    const [existing] = await db
+      .select({ id: downloadFiles.id })
+      .from(downloadFiles)
+      .innerJoin(mediaAssets, eq(downloadFiles.mediaAssetId, mediaAssets.id))
+      .where(
+        siteId
+          ? and(eq(downloadFiles.id, draft.id), eq(mediaAssets.siteId, siteId))
+          : eq(downloadFiles.id, draft.id),
+      )
+      .limit(1);
+
+    if (!existing) {
+      redirect("/admin/files?error=not-found");
+    }
+
     await db
       .update(downloadFiles)
       .set({
@@ -370,6 +444,7 @@ export async function saveDownloadFile(formData: FormData) {
 }
 
 export async function deleteDownloadFile(formData: FormData) {
+  const siteId = await getActionSiteId();
   const id = readOptionalNumber(formData, "id");
 
   if (!id) {
@@ -377,6 +452,21 @@ export async function deleteDownloadFile(formData: FormData) {
   }
 
   const db = getDb();
+  const [record] = await db
+    .select({ id: downloadFiles.id })
+    .from(downloadFiles)
+    .innerJoin(mediaAssets, eq(downloadFiles.mediaAssetId, mediaAssets.id))
+    .where(
+      siteId
+        ? and(eq(downloadFiles.id, id), eq(mediaAssets.siteId, siteId))
+        : eq(downloadFiles.id, id),
+    )
+    .limit(1);
+
+  if (!record) {
+    redirect("/admin/files");
+  }
+
   await db.delete(downloadFiles).where(eq(downloadFiles.id, id));
 
   revalidatePath("/admin/files");
@@ -392,9 +482,13 @@ export async function purgeBrokenMediaAssets(): Promise<{
   total: number;
 }> {
   const db = getDb();
-  const assets = await db
-    .select({ id: mediaAssets.id, url: mediaAssets.url })
-    .from(mediaAssets);
+  const siteId = await getActionSiteId();
+  const assets = siteId
+    ? await db
+        .select({ id: mediaAssets.id, url: mediaAssets.url })
+        .from(mediaAssets)
+        .where(eq(mediaAssets.siteId, siteId))
+    : await db.select({ id: mediaAssets.id, url: mediaAssets.url }).from(mediaAssets);
 
   if (assets.length === 0) return { purged: 0, total: 0 };
 
@@ -422,7 +516,13 @@ export async function purgeBrokenMediaAssets(): Promise<{
   }
 
   if (brokenIds.length > 0) {
-    await db.delete(mediaAssets).where(inArray(mediaAssets.id, brokenIds));
+    await db
+      .delete(mediaAssets)
+      .where(
+        siteId
+          ? and(inArray(mediaAssets.id, brokenIds), eq(mediaAssets.siteId, siteId))
+          : inArray(mediaAssets.id, brokenIds),
+      );
   }
 
   revalidatePath("/admin/media");

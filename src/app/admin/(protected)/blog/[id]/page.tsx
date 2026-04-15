@@ -7,6 +7,7 @@ import { getBlogCategoryOptions, getBlogPostById, listAdminBlogTags } from "@/fe
 import { buildAssetFolderOptions } from "@/features/media/folders";
 import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
 import { getFeatureGate } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 type AdminBlogDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -14,7 +15,9 @@ type AdminBlogDetailPageProps = {
 };
 
 export default async function AdminBlogDetailPage({ params, searchParams }: AdminBlogDetailPageProps) {
-  const gate = await getFeatureGate("blog_management");
+  const query = (await searchParams) ?? {};
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("blog_management", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return <LockedFeatureCard gate={gate} />;
@@ -27,15 +30,14 @@ export default async function AdminBlogDetailPage({ params, searchParams }: Admi
     notFound();
   }
 
-  const query = (await searchParams) ?? {};
   const parsedCategoryId = Number.parseInt(query.newCategoryId ?? "", 10);
   const injectedCategoryId = Number.isFinite(parsedCategoryId) ? parsedCategoryId : null;
   const injectedTagName = query.newTagName?.trim() ?? "";
   const [post, categories, imageAssets, existingTags, imageFolders] = await Promise.all([
-    getBlogPostById(postId),
-    getBlogCategoryOptions(),
+    getBlogPostById(postId, currentSite.seedPackKey, currentSite.id),
+    getBlogCategoryOptions(currentSite.seedPackKey, currentSite.id),
     listMediaAssets("image"),
-    listAdminBlogTags(),
+    listAdminBlogTags(currentSite.id),
     listAssetFolders("image").catch(() => []),
   ]);
 

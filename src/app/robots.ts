@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
 
 import { getSeoAiSettings } from "@/features/seo-ai/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { buildAbsoluteUrl } from "@/lib/seo";
 
 export const revalidate = 0;
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const settings = await getSeoAiSettings();
+  const currentSite = await getCurrentSiteFromRequest();
+  const settings = await getSeoAiSettings(currentSite.id);
 
   return {
     rules: [

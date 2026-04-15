@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  buildLockedApiResponse,
+  getFeatureGate,
+} from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const runtime = "nodejs";
 
@@ -12,6 +17,13 @@ export const runtime = "nodejs";
  *   - 支持 generate / factcheck 两种模式
  */
 export async function POST(request: Request) {
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("rag_factory", currentSite.plan, currentSite.id);
+
+  if (gate.status === "locked") {
+    return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
+  }
+
   const body = (await request.json()) as {
     query?: string;
     topK?: number;
@@ -40,6 +52,7 @@ export async function POST(request: Request) {
     includeCompanyKnowledge: true,
     includeReplyTemplates: false,
     topK,
+    siteId: currentSite.id,
   });
 
   // ── 2. 构建 Prompt ────────────────────────────────────────────────────────

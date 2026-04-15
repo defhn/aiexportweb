@@ -32,10 +32,19 @@ import {
   toNullable,
   toOptionalId,
 } from "@/features/products/product-utils";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { toSlug } from "@/lib/slug";
 
 
-async function ensureCategoryForImport(name: string) {
+async function getActionSite() {
+  const currentSite = await getCurrentSiteFromRequest();
+  return {
+    currentSite,
+    siteId: currentSite.id ?? null,
+  };
+}
+
+async function ensureCategoryForImport(name: string, siteId: number | null) {
   const db = getDb();
   const trimmed = name.trim();
   const slug = toSlug(trimmed);
@@ -46,7 +55,11 @@ async function ensureCategoryForImport(name: string) {
       slug: productCategories.slug,
     })
     .from(productCategories)
-    .where(eq(productCategories.slug, slug))
+    .where(
+      siteId
+        ? and(eq(productCategories.slug, slug), eq(productCategories.siteId, siteId))
+        : eq(productCategories.slug, slug),
+    )
     .limit(1);
 
   if (existing) {
@@ -58,8 +71,8 @@ async function ensureCategoryForImport(name: string) {
 
   const [created] = await db
     .insert(productCategories)
-    .values(
-      buildCategoryDraft({
+    .values({
+      ...buildCategoryDraft({
         nameZh: trimmed,
         nameEn: trimmed,
         slug,
@@ -69,7 +82,8 @@ async function ensureCategoryForImport(name: string) {
         isVisible: true,
         isFeatured: false,
       }),
-    )
+      siteId,
+    })
     .returning({
       id: productCategories.id,
       nameEn: productCategories.nameEn,
@@ -82,7 +96,7 @@ async function ensureCategoryForImport(name: string) {
 }
 
 async function createImportedProduct(input: {
-  product: ReturnType<typeof buildProductDraft>;
+  product: ReturnType<typeof buildProductDraft> & { siteId?: number | null };
   defaultFields: Record<string, string>;
 }) {
   const db = getDb();
@@ -162,6 +176,7 @@ export async function bindProductPdfFile(input: {
   mediaId: number;
   showDownloadButton: boolean;
 }) {
+  const { siteId } = await getActionSite();
   const binding = buildProductPdfBinding(input);
   const db = getDb();
 
@@ -172,7 +187,11 @@ export async function bindProductPdfFile(input: {
       showPdfDownload: binding.showDownloadButton,
       updatedAt: new Date(),
     })
-    .where(eq(products.id, binding.productId))
+    .where(
+      siteId
+        ? and(eq(products.id, binding.productId), eq(products.siteId, siteId))
+        : eq(products.id, binding.productId),
+    )
     .returning({
       productId: products.id,
       pdfFileId: products.pdfFileId,
@@ -192,7 +211,21 @@ export async function replaceProductAsset(input: {
   currentMediaId?: number | null;
   newMediaId: number;
 }) {
+  const { siteId } = await getActionSite();
   const db = getDb();
+  const [product] = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(
+      siteId
+        ? and(eq(products.id, input.productId), eq(products.siteId, siteId))
+        : eq(products.id, input.productId),
+    )
+    .limit(1);
+
+  if (!product) {
+    return null;
+  }
 
   if (input.targetType === "cover") {
     const [product] = await db
@@ -201,7 +234,11 @@ export async function replaceProductAsset(input: {
         coverMediaId: input.newMediaId,
         updatedAt: new Date(),
       })
-      .where(eq(products.id, input.productId))
+      .where(
+        siteId
+          ? and(eq(products.id, input.productId), eq(products.siteId, siteId))
+          : eq(products.id, input.productId),
+      )
       .returning({ id: products.id });
 
     return product ?? null;
@@ -242,6 +279,7 @@ export async function replaceProductAsset(input: {
 
 export async function saveCategory(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const db = getDb();
   const categoryId = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/categories";
@@ -259,17 +297,22 @@ export async function saveCategory(formData: FormData) {
     isVisible: readCheckbox(formData, "isVisible"),
     isFeatured: readCheckbox(formData, "isFeatured"),
   });
+  const values = { ...draft, siteId };
 
   if (categoryId) {
     await db
       .update(productCategories)
       .set({
-        ...draft,
+        ...values,
         updatedAt: new Date(),
       })
-      .where(eq(productCategories.id, categoryId));
+      .where(
+        siteId
+          ? and(eq(productCategories.id, categoryId), eq(productCategories.siteId, siteId))
+          : eq(productCategories.id, categoryId),
+      );
   } else {
-    await db.insert(productCategories).values(draft);
+    await db.insert(productCategories).values(values);
   }
 
   revalidatePath("/");
@@ -281,6 +324,7 @@ export async function saveCategory(formData: FormData) {
 
 export async function deleteCategory(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const categoryId = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/categories";
 
@@ -292,7 +336,11 @@ export async function deleteCategory(formData: FormData) {
   const [record] = await db
     .select({ slug: productCategories.slug })
     .from(productCategories)
-    .where(eq(productCategories.id, categoryId))
+    .where(
+      siteId
+        ? and(eq(productCategories.id, categoryId), eq(productCategories.siteId, siteId))
+        : eq(productCategories.id, categoryId),
+    )
     .limit(1);
 
   if (!record) {
@@ -302,14 +350,24 @@ export async function deleteCategory(formData: FormData) {
   const [productInCategory] = await db
     .select({ id: products.id })
     .from(products)
-    .where(eq(products.categoryId, categoryId))
+    .where(
+      siteId
+        ? and(eq(products.categoryId, categoryId), eq(products.siteId, siteId))
+        : eq(products.categoryId, categoryId),
+    )
     .limit(1);
 
   if (productInCategory) {
     redirect(returnTo.includes("?") ? `${returnTo}&error=category-has-products` : `${returnTo}?error=category-has-products`);
   }
 
-  await db.delete(productCategories).where(eq(productCategories.id, categoryId));
+  await db
+    .delete(productCategories)
+    .where(
+      siteId
+        ? and(eq(productCategories.id, categoryId), eq(productCategories.siteId, siteId))
+        : eq(productCategories.id, categoryId),
+    );
 
   revalidatePath("/");
   revalidatePath("/products");
@@ -321,6 +379,7 @@ export async function deleteCategory(formData: FormData) {
 
 export async function bulkDeleteCategories(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const ids = parseCategoryBulkIds(formData);
 
   if (!ids.length) {
@@ -331,7 +390,11 @@ export async function bulkDeleteCategories(formData: FormData) {
   const linkedProducts = await db
     .select({ categoryId: products.categoryId })
     .from(products)
-    .where(inArray(products.categoryId, ids));
+    .where(
+      siteId
+        ? and(inArray(products.categoryId, ids), eq(products.siteId, siteId))
+        : inArray(products.categoryId, ids),
+    );
 
   const blockedIds = new Set(
     linkedProducts
@@ -342,7 +405,13 @@ export async function bulkDeleteCategories(formData: FormData) {
   const deletableIds = ids.filter((id) => !blockedIds.has(id));
 
   if (deletableIds.length) {
-    await db.delete(productCategories).where(inArray(productCategories.id, deletableIds));
+    await db
+      .delete(productCategories)
+      .where(
+        siteId
+          ? and(inArray(productCategories.id, deletableIds), eq(productCategories.siteId, siteId))
+          : inArray(productCategories.id, deletableIds),
+      );
   }
 
   revalidatePath("/");
@@ -363,6 +432,7 @@ export async function bulkDeleteCategories(formData: FormData) {
 
 export async function saveProduct(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const db = getDb();
   const productId = readOptionalNumber(formData, "id");
   const currentCategoryId = readOptionalNumber(formData, "categoryId");
@@ -409,6 +479,7 @@ export async function saveProduct(formData: FormData) {
     pdfFileId: mediaBinding.pdfFileId,
     faqsJson,
   });
+  const values = { ...draft, siteId };
 
   const [previousRecord] = productId
     ? await db
@@ -418,7 +489,11 @@ export async function saveProduct(formData: FormData) {
           categoryId: products.categoryId,
         })
         .from(products)
-        .where(eq(products.id, productId))
+        .where(
+          siteId
+            ? and(eq(products.id, productId), eq(products.siteId, siteId))
+            : eq(products.id, productId),
+        )
         .limit(1)
     : [];
 
@@ -426,10 +501,14 @@ export async function saveProduct(formData: FormData) {
     ? await db
         .update(products)
         .set({
-          ...draft,
+          ...values,
           updatedAt: new Date(),
         })
-        .where(eq(products.id, productId))
+        .where(
+          siteId
+            ? and(eq(products.id, productId), eq(products.siteId, siteId))
+            : eq(products.id, productId),
+        )
         .returning({
           id: products.id,
           slug: products.slug,
@@ -437,7 +516,7 @@ export async function saveProduct(formData: FormData) {
         })
     : await db
         .insert(products)
-        .values(draft)
+        .values(values)
         .returning({
           id: products.id,
           slug: products.slug,
@@ -529,6 +608,7 @@ export async function saveProduct(formData: FormData) {
 
 export async function deleteProduct(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const productId = readOptionalNumber(formData, "id");
 
   if (!productId) {
@@ -544,14 +624,24 @@ export async function deleteProduct(formData: FormData) {
     })
     .from(products)
     .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
-    .where(eq(products.id, productId))
+    .where(
+      siteId
+        ? and(eq(products.id, productId), eq(products.siteId, siteId))
+        : eq(products.id, productId),
+    )
     .limit(1);
 
   if (!record) {
     redirect("/admin/products");
   }
 
-  await db.delete(products).where(eq(products.id, productId));
+  await db
+    .delete(products)
+    .where(
+      siteId
+        ? and(eq(products.id, productId), eq(products.siteId, siteId))
+        : eq(products.id, productId),
+    );
 
   revalidatePath("/");
   revalidatePath("/products");
@@ -567,6 +657,7 @@ export async function deleteProduct(formData: FormData) {
 
 export async function bulkDeleteProducts(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const ids = parseProductBulkIds(formData);
 
   if (!ids.length) {
@@ -574,7 +665,9 @@ export async function bulkDeleteProducts(formData: FormData) {
   }
 
   const db = getDb();
-  await db.delete(products).where(inArray(products.id, ids));
+  await db
+    .delete(products)
+    .where(siteId ? and(inArray(products.id, ids), eq(products.siteId, siteId)) : inArray(products.id, ids));
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
@@ -583,6 +676,7 @@ export async function bulkDeleteProducts(formData: FormData) {
 
 export async function bulkMoveProductsToCategory(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const ids = parseProductBulkIds(formData);
   const categoryId = readOptionalNumber(formData, "targetCategoryId");
 
@@ -597,7 +691,7 @@ export async function bulkMoveProductsToCategory(formData: FormData) {
       categoryId: categoryId ?? null,
       updatedAt: new Date(),
     })
-    .where(inArray(products.id, ids));
+    .where(siteId ? and(inArray(products.id, ids), eq(products.siteId, siteId)) : inArray(products.id, ids));
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
@@ -606,6 +700,7 @@ export async function bulkMoveProductsToCategory(formData: FormData) {
 
 export async function importProductsFromCsv(formData: FormData) {
 
+  const { siteId } = await getActionSite();
   const file = formData.get("file");
 
   if (!(file instanceof File)) {
@@ -626,15 +721,18 @@ export async function importProductsFromCsv(formData: FormData) {
       continue;
     }
 
-    const category = await ensureCategoryForImport(row.category || "Imported Products");
+    const category = await ensureCategoryForImport(row.category || "Imported Products", siteId);
     const draft = mapProductCsvRowToImportDraft(row, category);
     const savedProduct = await createImportedProduct({
-      product: buildProductDraft({
-        ...draft.product,
-        categoryId: category.categoryId,
-        seoTitle: `${draft.product.nameEn} Manufacturer`,
-        seoDescription: draft.product.shortDescriptionEn,
-      }),
+      product: {
+        ...buildProductDraft({
+          ...draft.product,
+          categoryId: category.categoryId,
+          seoTitle: `${draft.product.nameEn} Manufacturer`,
+          seoDescription: draft.product.shortDescriptionEn,
+        }),
+        siteId,
+      },
       defaultFields: draft.defaultFields,
     });
 

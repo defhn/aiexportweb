@@ -37,7 +37,7 @@ type BlogListPageProps = {
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
   const currentSite = await getCurrentSiteFromRequest();
   const siteId = currentSite.id ?? null;
-  const gate = await getFeatureGate("blog_management", currentSite.plan);
+  const gate = await getFeatureGate("blog_management", currentSite.plan, siteId);
 
   if (gate.status === "locked") {
     notFound();

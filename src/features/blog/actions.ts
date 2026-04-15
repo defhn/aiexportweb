@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import {
@@ -10,6 +10,7 @@ import {
   blogTags,
 } from "@/db/schema";
 import { buildBlogCategoryDraft, buildBlogTagDraft } from "@/features/blog/admin";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { createExcerptFallback } from "@/lib/rich-text";
 import { normalizeEditorHtml } from "@/lib/rich-text-editor";
 import { toSlug } from "@/lib/slug";
@@ -58,6 +59,11 @@ function readOptionalNumber(formData: FormData, key: string) {
 
 function toOptionalId(value?: number | null) {
   return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : null;
+}
+
+async function getActionSiteId() {
+  const currentSite = await getCurrentSiteFromRequest();
+  return currentSite.id ?? null;
 }
 
 export function parseBlogBulkIds(formData: FormData, key = "selectedIds") {
@@ -137,6 +143,7 @@ function revalidateBlogAdminPaths() {
 export async function saveBlogPost(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const db = getDb();
   const postId = readOptionalNumber(formData, "id");
   const draft = buildBlogPostDraft({
@@ -160,7 +167,7 @@ export async function saveBlogPost(formData: FormData) {
     ? await db
         .select({ id: blogPosts.id, slug: blogPosts.slug })
         .from(blogPosts)
-        .where(eq(blogPosts.id, postId))
+        .where(siteId ? and(eq(blogPosts.id, postId), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, postId))
         .limit(1)
     : [];
 
@@ -183,7 +190,7 @@ export async function saveBlogPost(formData: FormData) {
           publishedAt: draft.publishedAt ? new Date(draft.publishedAt) : null,
           updatedAt: new Date(),
         })
-        .where(eq(blogPosts.id, postId))
+        .where(siteId ? and(eq(blogPosts.id, postId), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, postId))
         .returning({ id: blogPosts.id, slug: blogPosts.slug })
     : await db
         .insert(blogPosts)
@@ -202,6 +209,7 @@ export async function saveBlogPost(formData: FormData) {
           status: draft.status,
           publishedAt: draft.publishedAt ? new Date(draft.publishedAt) : null,
           updatedAt: new Date(),
+          siteId,
         })
         .returning({ id: blogPosts.id, slug: blogPosts.slug });
 
@@ -216,7 +224,7 @@ export async function saveBlogPost(formData: FormData) {
     const [existingTag] = await db
       .select()
       .from(blogTags)
-      .where(eq(blogTags.slug, slug))
+      .where(siteId ? and(eq(blogTags.slug, slug), eq(blogTags.siteId, siteId)) : eq(blogTags.slug, slug))
       .limit(1);
 
     const blogTag =
@@ -228,6 +236,7 @@ export async function saveBlogPost(formData: FormData) {
             nameZh: tag,
             nameEn: tag,
             slug,
+            siteId,
           })
           .returning()
       )[0];
@@ -253,6 +262,7 @@ export async function saveBlogPost(formData: FormData) {
 export async function deleteBlogPost(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const postId = readOptionalNumber(formData, "id");
 
   if (!postId) {
@@ -263,14 +273,14 @@ export async function deleteBlogPost(formData: FormData) {
   const [record] = await db
     .select({ slug: blogPosts.slug })
     .from(blogPosts)
-    .where(eq(blogPosts.id, postId))
+    .where(siteId ? and(eq(blogPosts.id, postId), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, postId))
     .limit(1);
 
   if (!record) {
     redirect("/admin/blog");
   }
 
-  await db.delete(blogPosts).where(eq(blogPosts.id, postId));
+  await db.delete(blogPosts).where(siteId ? and(eq(blogPosts.id, postId), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, postId));
 
   revalidateBlogAdminPaths();
   revalidatePath(`/blog/${record.slug}`);
@@ -281,6 +291,7 @@ export async function deleteBlogPost(formData: FormData) {
 export async function bulkDeleteBlogPosts(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const ids = parseBlogBulkIds(formData);
 
   if (!ids.length) {
@@ -288,7 +299,7 @@ export async function bulkDeleteBlogPosts(formData: FormData) {
   }
 
   const db = getDb();
-  await db.delete(blogPosts).where(inArray(blogPosts.id, ids));
+  await db.delete(blogPosts).where(siteId ? and(inArray(blogPosts.id, ids), eq(blogPosts.siteId, siteId)) : inArray(blogPosts.id, ids));
 
   revalidateBlogAdminPaths();
   redirect(`/admin/blog?deleted=${ids.length}`);
@@ -297,6 +308,7 @@ export async function bulkDeleteBlogPosts(formData: FormData) {
 export async function bulkMoveBlogPostsToCategory(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const ids = parseBlogBulkIds(formData);
   const categoryId = readOptionalNumber(formData, "targetCategoryId");
 
@@ -311,7 +323,7 @@ export async function bulkMoveBlogPostsToCategory(formData: FormData) {
       categoryId: categoryId ?? null,
       updatedAt: new Date(),
     })
-    .where(inArray(blogPosts.id, ids));
+    .where(siteId ? and(inArray(blogPosts.id, ids), eq(blogPosts.siteId, siteId)) : inArray(blogPosts.id, ids));
 
   revalidateBlogAdminPaths();
   redirect("/admin/blog?saved=bulk-moved");
@@ -329,6 +341,7 @@ function withQuery(path: string, key: string, value: string) {
 export async function saveBlogCategory(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const returnTo = readText(formData, "returnTo") || "/admin/blog";
   const nameZh = readRequiredText(formData, "nameZh") || readRequiredText(formData, "inlineCategoryNameZh");
   const nameEn = readRequiredText(formData, "nameEn") || readRequiredText(formData, "inlineCategoryNameEn");
@@ -357,7 +370,7 @@ export async function saveBlogCategory(formData: FormData) {
         sortOrder: draft.sortOrder,
         isVisible: draft.isVisible,
       })
-      .where(eq(blogCategories.id, draft.id));
+      .where(siteId ? and(eq(blogCategories.id, draft.id), eq(blogCategories.siteId, siteId)) : eq(blogCategories.id, draft.id));
     savedId = draft.id;
   } else {
     const [savedCategory] = await db
@@ -368,6 +381,7 @@ export async function saveBlogCategory(formData: FormData) {
         slug: draft.slug,
         sortOrder: draft.sortOrder,
         isVisible: draft.isVisible,
+        siteId,
       })
       .returning({ id: blogCategories.id });
     savedId = savedCategory?.id ?? null;
@@ -384,6 +398,7 @@ export async function saveBlogCategory(formData: FormData) {
 export async function deleteBlogCategory(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const categoryId = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/blog";
 
@@ -397,7 +412,7 @@ export async function deleteBlogCategory(formData: FormData) {
   const linkedPosts = await db
     .select({ id: blogPosts.id })
     .from(blogPosts)
-    .where(eq(blogPosts.categoryId, categoryId))
+    .where(siteId ? and(eq(blogPosts.categoryId, categoryId), eq(blogPosts.siteId, siteId)) : eq(blogPosts.categoryId, categoryId))
     .limit(1);
 
   if (linkedPosts.length > 0) {
@@ -405,7 +420,7 @@ export async function deleteBlogCategory(formData: FormData) {
     redirect(withQuery(returnTo, "taxonomy", "category-delete-blocked"));
   }
 
-  await db.delete(blogCategories).where(eq(blogCategories.id, categoryId));
+  await db.delete(blogCategories).where(siteId ? and(eq(blogCategories.id, categoryId), eq(blogCategories.siteId, siteId)) : eq(blogCategories.id, categoryId));
 
   revalidateBlogAdminPaths();
   redirect(withQuery(returnTo, "taxonomy", "category-deleted"));
@@ -415,6 +430,7 @@ export async function deleteBlogCategory(formData: FormData) {
 export async function saveBlogTag(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const returnTo = readText(formData, "returnTo") || "/admin/blog";
   const nameZh = readRequiredText(formData, "nameZh") || readRequiredText(formData, "inlineTagNameZh");
   const nameEn = readRequiredText(formData, "nameEn") || readRequiredText(formData, "inlineTagNameEn");
@@ -437,12 +453,13 @@ export async function saveBlogTag(formData: FormData) {
         nameEn: draft.nameEn,
         slug: draft.slug,
       })
-      .where(eq(blogTags.id, draft.id));
+      .where(siteId ? and(eq(blogTags.id, draft.id), eq(blogTags.siteId, siteId)) : eq(blogTags.id, draft.id));
   } else {
     await db.insert(blogTags).values({
       nameZh: draft.nameZh,
       nameEn: draft.nameEn,
       slug: draft.slug,
+      siteId,
     });
   }
 
@@ -454,6 +471,7 @@ export async function saveBlogTag(formData: FormData) {
 export async function deleteBlogTag(formData: FormData) {
   "use server";
 
+  const siteId = await getActionSiteId();
   const tagId = readOptionalNumber(formData, "id");
   const returnTo = readText(formData, "returnTo") || "/admin/blog";
 
@@ -462,7 +480,7 @@ export async function deleteBlogTag(formData: FormData) {
   }
 
   const db = getDb();
-  await db.delete(blogTags).where(eq(blogTags.id, tagId));
+  await db.delete(blogTags).where(siteId ? and(eq(blogTags.id, tagId), eq(blogTags.siteId, siteId)) : eq(blogTags.id, tagId));
 
   revalidateBlogAdminPaths();
   redirect(withQuery(returnTo, "taxonomy", "tag-deleted"));

@@ -5,11 +5,13 @@ import {
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { withAdminAuth } from "@/lib/admin-auth";
 import { generateProductCopy } from "@/lib/ai";
 
 export const POST = withAdminAuth(async (request) => {
-  const gate = await getFeatureGate("ai_product_copy");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("ai_product_copy", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
@@ -30,7 +32,7 @@ export const POST = withAdminAuth(async (request) => {
   });
 
   if (gate.status === "trial") {
-    await incrementFeatureUsage("ai_product_copy");
+    await incrementFeatureUsage("ai_product_copy", currentSite.id);
   }
 
   return NextResponse.json({

@@ -125,10 +125,10 @@ export function buildDashboardSnapshot(input: {
   };
 }
 
-export async function getDashboardSnapshot() {
+export async function getDashboardSnapshot(siteId?: number | null) {
   const [inquiriesResult, productViewsResult] = await Promise.allSettled([
-    listInquiries(),
-    listRecentProductViews(),
+    listInquiries(undefined, siteId),
+    listRecentProductViews(200, siteId),
   ]);
 
   if (inquiriesResult.status === "rejected") {

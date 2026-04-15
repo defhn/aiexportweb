@@ -7,6 +7,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -516,15 +517,24 @@ export const seoAiSettings = pgTable("seo_ai_settings", {
     .notNull(),
 });
 
-export const featureUsageCounters = pgTable("feature_usage_counters", {
-  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
-  featureKey: varchar("feature_key", { length: 80 }).notNull().unique(),
-  usageCount: integer("usage_count").default(0).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const featureUsageCounters = pgTable(
+  "feature_usage_counters",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
+    featureKey: varchar("feature_key", { length: 80 }).notNull(),
+    usageCount: integer("usage_count").default(0).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    featureUsagePerSiteUnique: uniqueIndex("feature_usage_counters_site_feature_unique").on(
+      table.siteId,
+      table.featureKey,
+    ),
+  }),
+);

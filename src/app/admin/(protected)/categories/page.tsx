@@ -3,6 +3,7 @@ import { Layers } from "lucide-react";
 import { buildAssetFolderOptions } from "@/features/media/folders";
 import { listAssetFolders, listMediaAssets } from "@/features/media/queries";
 import { listAdminCategories } from "@/features/products/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 import {
   BulkActionsBar,
@@ -11,8 +12,9 @@ import {
 } from "./_components";
 
 export default async function AdminCategoriesPage() {
+  const currentSite = await getCurrentSiteFromRequest();
   const [categories, imageAssets, imageFolders] = await Promise.all([
-    listAdminCategories(),
+    listAdminCategories(currentSite.seedPackKey, currentSite.id),
     listMediaAssets("image"),
     listAssetFolders("image").catch(() => []),
   ]);

@@ -1,5 +1,6 @@
 import { savePageModules } from "@/features/pages/actions";
 import { getPageModules } from "@/features/pages/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 const inputClassName =
   "mt-2 w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-stone-950 outline-none transition-colors focus:border-stone-950";
@@ -12,8 +13,9 @@ function readString(payload: Record<string, unknown>, key: string) {
 }
 
 export default async function AdminContactPage() {
+  const currentSite = await getCurrentSiteFromRequest();
   const action = savePageModules.bind(null, "contact");
-  const modules = await getPageModules("contact");
+  const modules = await getPageModules("contact", currentSite.seedPackKey, currentSite.id);
   const module = modules.find((item) => item.moduleKey === "contact-card");
 
   return (

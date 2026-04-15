@@ -55,10 +55,10 @@ export async function recordProductView(input: {
   return record;
 }
 
-export async function listRecentProductViews(limit = 200) {
+export async function listRecentProductViews(limit = 200, siteId?: number | null) {
   const db = getDb();
 
-  return db
+  const query = db
     .select({
       id: productViews.id,
       productId: productViews.productId,
@@ -68,9 +68,9 @@ export async function listRecentProductViews(limit = 200) {
       createdAt: productViews.createdAt,
     })
     .from(productViews)
-    .leftJoin(products, eq(productViews.productId, products.id))
-    .orderBy(desc(productViews.createdAt))
-    .limit(limit);
+    .leftJoin(products, eq(productViews.productId, products.id));
+  const filtered = siteId ? query.where(eq(products.siteId, siteId)) : query;
+  return filtered.orderBy(desc(productViews.createdAt)).limit(limit);
 }
 
 export async function getProductViewRankings(limit = 10) {

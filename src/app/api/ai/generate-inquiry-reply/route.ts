@@ -5,6 +5,7 @@ import {
   getFeatureGate,
   incrementFeatureUsage,
 } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { withAdminAuth } from "@/lib/admin-auth";
 import { generateInquiryReplyWithRag } from "@/lib/ai";
 
@@ -17,7 +18,8 @@ import { generateInquiryReplyWithRag } from "@/lib/ai";
  *   3. 匹配的回复模板（风格参考）
  */
 export const POST = withAdminAuth(async (request) => {
-  const gate = await getFeatureGate("ai_inquiry_reply");
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("ai_inquiry_reply", currentSite.plan, currentSite.id);
 
   if (gate.status === "locked") {
     return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
@@ -43,10 +45,11 @@ export const POST = withAdminAuth(async (request) => {
     specs: body.specs ?? [],
     tone: body.tone?.trim() || "professional",
     inquiryType: body.inquiryType?.trim(),
+    siteId: currentSite.id,
   });
 
   if (gate.status === "trial") {
-    await incrementFeatureUsage("ai_inquiry_reply");
+    await incrementFeatureUsage("ai_inquiry_reply", currentSite.id);
   }
 
   return NextResponse.json({

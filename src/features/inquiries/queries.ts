@@ -8,7 +8,7 @@ export async function listInquiries(filters?: {
   status?: "new" | "processing" | "contacted" | "quoted" | "won" | "done" | "";
   inquiryType?: string;
   countryGroup?: string;
-}) {
+}, siteId?: number | null) {
   const db = getDb();
   const conditions = [];
 
@@ -28,6 +28,9 @@ export async function listInquiries(filters?: {
 
   if (filters?.countryGroup) {
     conditions.push(eq(inquiries.countryGroup, filters.countryGroup));
+  }
+  if (siteId) {
+    conditions.push(eq(inquiries.siteId, siteId));
   }
 
   const query = db
@@ -68,7 +71,7 @@ export async function listInquiries(filters?: {
   return query.orderBy(desc(inquiries.createdAt));
 }
 
-export async function getInquiryById(id: number) {
+export async function getInquiryById(id: number, siteId?: number | null) {
   const db = getDb();
   const [record] = await db
     .select({
@@ -100,28 +103,36 @@ export async function getInquiryById(id: number) {
     .from(inquiries)
     .leftJoin(products, eq(inquiries.productId, products.id))
     .leftJoin(mediaAssets, eq(inquiries.attachmentMediaId, mediaAssets.id))
-    .where(eq(inquiries.id, id))
+    .where(siteId ? and(eq(inquiries.id, id), eq(inquiries.siteId, siteId)) : eq(inquiries.id, id))
     .limit(1);
 
   return record ?? null;
 }
 
-export async function listInquiryTypes() {
+export async function listInquiryTypes(siteId?: number | null) {
   const db = getDb();
   const rows = await db
     .selectDistinct({ inquiryType: inquiries.inquiryType })
     .from(inquiries)
-    .where(sql`${inquiries.inquiryType} is not null`);
+    .where(
+      siteId
+        ? and(sql`${inquiries.inquiryType} is not null`, eq(inquiries.siteId, siteId))
+        : sql`${inquiries.inquiryType} is not null`,
+    );
 
   return rows.map((row) => row.inquiryType).filter(Boolean) as string[];
 }
 
-export async function listInquiryCountryGroups() {
+export async function listInquiryCountryGroups(siteId?: number | null) {
   const db = getDb();
   const rows = await db
     .selectDistinct({ countryGroup: inquiries.countryGroup })
     .from(inquiries)
-    .where(sql`${inquiries.countryGroup} is not null`);
+    .where(
+      siteId
+        ? and(sql`${inquiries.countryGroup} is not null`, eq(inquiries.siteId, siteId))
+        : sql`${inquiries.countryGroup} is not null`,
+    );
 
   return rows.map((row) => row.countryGroup).filter(Boolean) as string[];
 }

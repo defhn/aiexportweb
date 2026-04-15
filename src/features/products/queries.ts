@@ -370,6 +370,7 @@ export async function listAdminProducts(
     categorySlug?: string;
     status?: "draft" | "published" | "";
   },
+  siteId?: number | null,
 ) {
   if (!process.env.DATABASE_URL) {
     const seedCategories = mapSeedCategories(seedPackKey);
@@ -418,6 +419,9 @@ export async function listAdminProducts(
 
     if (filters?.status) {
       conditions.push(eq(products.status, filters.status));
+    }
+    if (siteId) {
+      conditions.push(eq(products.siteId, siteId));
     }
 
     const query = db
@@ -582,7 +586,11 @@ export async function getProductsByCategorySlug(
   return mapSeedProducts(seedPackKey).filter((product) => product.categorySlug === categorySlug);
 }
 
-export async function getProductById(id: number, seedPackKey: SeedPackKey = "cnc") {
+export async function getProductById(
+  id: number,
+  seedPackKey: SeedPackKey = "cnc",
+  siteId?: number | null,
+) {
   if (!process.env.DATABASE_URL) {
     const seedProduct = mapSeedProducts(seedPackKey).find((item) => item.id === id);
 
@@ -621,7 +629,7 @@ export async function getProductById(id: number, seedPackKey: SeedPackKey = "cnc
   const [product] = await db
     .select()
     .from(products)
-    .where(eq(products.id, id))
+    .where(siteId ? and(eq(products.id, id), eq(products.siteId, siteId)) : eq(products.id, id))
     .limit(1);
 
   if (product) {

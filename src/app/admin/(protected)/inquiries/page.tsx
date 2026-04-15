@@ -6,6 +6,9 @@ import {
   listInquiryCountryGroups,
   listInquiryTypes,
 } from "@/features/inquiries/queries";
+import { getFeatureGate } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+import { LockedFeatureCard } from "@/components/admin/locked-feature-card";
 
 // 类型名称中文映射
 const INQUIRY_TYPE_LABELS: Record<string, string> = {
@@ -67,15 +70,21 @@ export default async function AdminInquiriesPage({
   searchParams,
 }: AdminInquiriesPageProps) {
   const params = (await searchParams) ?? {};
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("inquiry_detail", currentSite.plan, currentSite.id);
+
+  if (gate.status === "locked") {
+    return <LockedFeatureCard gate={gate} />;
+  }
   const [records, inquiryTypes, countryGroups] = await Promise.all([
     listInquiries({
       query: params.q,
       status: params.status,
       inquiryType: params.inquiryType,
       countryGroup: params.countryGroup,
-    }),
-    listInquiryTypes(),
-    listInquiryCountryGroups(),
+    }, currentSite.id),
+    listInquiryTypes(currentSite.id),
+    listInquiryCountryGroups(currentSite.id),
   ]);
 
   return (

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { buildLockedApiResponse, getFeatureGate } from "@/features/plans/access";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { withAdminAuth } from "@/lib/admin-auth";
 import {
   batchComputeMissingEmbeddings,
@@ -17,6 +19,12 @@ export const runtime = "nodejs";
  *   { mode: "single", id: 123 } → 重算指定产品
  */
 export const POST = withAdminAuth(async (request) => {
+  const currentSite = await getCurrentSiteFromRequest();
+  const gate = await getFeatureGate("rag_factory", currentSite.plan, currentSite.id);
+  if (gate.status === "locked") {
+    return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
+  }
+
   const body = (await request.json()) as {
     mode?: "all" | "single";
     id?: number;
@@ -32,7 +40,7 @@ export const POST = withAdminAuth(async (request) => {
     }
 
     // 默认：批量处理缺失/过期的产品
-    const { computed, skipped } = await batchComputeMissingEmbeddings(20);
+    const { computed, skipped } = await batchComputeMissingEmbeddings(20, currentSite.id);
 
     return NextResponse.json({
       ok: true,
@@ -54,18 +62,25 @@ export const POST = withAdminAuth(async (request) => {
  */
 export const GET = withAdminAuth(async () => {
   try {
+    const currentSite = await getCurrentSiteFromRequest();
+    const gate = await getFeatureGate("rag_factory", currentSite.plan, currentSite.id);
+    if (gate.status === "locked") {
+      return NextResponse.json(buildLockedApiResponse(gate), { status: 403 });
+    }
+
     const { getDb } = await import("@/db/client");
     const { products } = await import("@/db/schema");
-    const { sql } = await import("drizzle-orm");
+    const { eq, sql } = await import("drizzle-orm");
 
     const db = getDb();
-    const stats = await db
+    const query = db
       .select({
         total: sql<number>`count(*)`,
         withEmbedding: sql<number>`count(case when embedding_json is not null then 1 end)`,
         outdated: sql<number>`count(case when embedding_updated_at < now() - interval '30 days' then 1 end)`,
       })
       .from(products);
+    const stats = currentSite.id ? await query.where(eq(products.siteId, currentSite.id)) : await query;
 
     const { total, withEmbedding, outdated } = stats[0] ?? {
       total: 0,

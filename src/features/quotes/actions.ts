@@ -1,9 +1,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { quoteRequestItems, quoteRequests } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export type QuoteRequestInsertInput = {
   name: string;
@@ -68,11 +69,13 @@ export function buildQuoteItemDrafts(items: QuoteItemDraftInput[]) {
     .filter((item) => item.productId || item.productName || item.quantity || item.notes);
 }
 
-export async function createQuoteRequest(input: QuoteRequestInsertInput & { items: QuoteItemDraftInput[] }) {
+export async function createQuoteRequest(
+  input: QuoteRequestInsertInput & { items: QuoteItemDraftInput[]; siteId?: number | null },
+) {
   const db = getDb();
   const [request] = await db
     .insert(quoteRequests)
-    .values(buildQuoteRequestInsertPayload(input))
+    .values({ ...buildQuoteRequestInsertPayload(input), siteId: input.siteId ?? null })
     .returning();
 
   if (!request) {
@@ -105,6 +108,8 @@ function readText(formData: FormData, key: string) {
 export async function updateQuoteStatus(formData: FormData) {
   "use server";
 
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const id = Number.parseInt(readText(formData, "id"), 10);
   const status = readText(formData, "status");
 
@@ -122,7 +127,11 @@ export async function updateQuoteStatus(formData: FormData) {
           : "new",
       updatedAt: new Date(),
     })
-    .where(eq(quoteRequests.id, id));
+    .where(
+      siteId
+        ? and(eq(quoteRequests.id, id), eq(quoteRequests.siteId, siteId))
+        : eq(quoteRequests.id, id),
+    );
 
   revalidatePath("/admin/quotes");
   redirect("/admin/quotes?saved=1");

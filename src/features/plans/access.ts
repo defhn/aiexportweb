@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { featureUsageCounters } from "@/db/schema";
@@ -32,18 +32,28 @@ export function getPricingHref() {
   return getPricingPageHref(isPricingPageEnabled(env.ENABLE_PRICING_PAGE));
 }
 
-export async function getFeatureUsageCount(featureKey: FeatureKey) {
+export async function getFeatureUsageCount(
+  featureKey: FeatureKey,
+  siteId?: number | null,
+) {
   if (!process.env.DATABASE_URL) {
     return 0;
   }
 
   try {
     const db = getDb();
-    const [record] = await db
+    const query = db
       .select({ usageCount: featureUsageCounters.usageCount })
       .from(featureUsageCounters)
-      .where(eq(featureUsageCounters.featureKey, featureKey))
       .limit(1);
+    const [record] = siteId
+      ? await query.where(
+          and(
+            eq(featureUsageCounters.featureKey, featureKey),
+            eq(featureUsageCounters.siteId, siteId),
+          ),
+        )
+      : await query.where(eq(featureUsageCounters.featureKey, featureKey));
 
     return record?.usageCount ?? 0;
   } catch (error) {
@@ -61,9 +71,10 @@ export async function getFeatureUsageCount(featureKey: FeatureKey) {
 export async function getFeatureGate(
   featureKey: FeatureKey,
   sitePlan?: SitePlan | null,
+  siteId?: number | null,
 ): Promise<FeatureGate> {
   const currentPlan = sitePlan ?? getCurrentSitePlan();
-  const usageCount = await getFeatureUsageCount(featureKey);
+  const usageCount = await getFeatureUsageCount(featureKey, siteId);
   const availability = getFeatureAvailability({
     currentPlan,
     featureKey,
@@ -78,28 +89,45 @@ export async function getFeatureGate(
   };
 }
 
-export async function incrementFeatureUsage(featureKey: FeatureKey) {
+export async function incrementFeatureUsage(
+  featureKey: FeatureKey,
+  siteId?: number | null,
+) {
   if (!process.env.DATABASE_URL) {
     return;
   }
 
   try {
     const db = getDb();
+    const whereClause = siteId
+      ? and(
+          eq(featureUsageCounters.featureKey, featureKey),
+          eq(featureUsageCounters.siteId, siteId),
+        )
+      : eq(featureUsageCounters.featureKey, featureKey);
+    const [existing] = await db
+      .select({ id: featureUsageCounters.id, usageCount: featureUsageCounters.usageCount })
+      .from(featureUsageCounters)
+      .where(whereClause)
+      .limit(1);
 
-    await db
-      .insert(featureUsageCounters)
-      .values({
-        featureKey,
-        usageCount: 1,
-        updatedAt: new Date(),
-      })
-      .onConflictDoUpdate({
-        target: featureUsageCounters.featureKey,
-        set: {
-          usageCount: sql`${featureUsageCounters.usageCount} + 1`,
+    if (existing) {
+      await db
+        .update(featureUsageCounters)
+        .set({
+          usageCount: existing.usageCount + 1,
           updatedAt: new Date(),
-        },
-      });
+        })
+        .where(eq(featureUsageCounters.id, existing.id));
+      return;
+    }
+
+    await db.insert(featureUsageCounters).values({
+      siteId: siteId ?? null,
+      featureKey,
+      usageCount: 1,
+      updatedAt: new Date(),
+    });
   } catch (error) {
     if (
       error instanceof Error &&
