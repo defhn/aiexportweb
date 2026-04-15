@@ -10,14 +10,24 @@
  */
 
 import { template01 } from "./template-01";
-// import { template02 } from "./template-02";  // 新模板在这里注册
-// import { template03 } from "./template-03";
+import { template02 } from "./template-02";
+// import { template03 } from "./template-03";  // 建材建筑
+// import { template04 } from "./template-04";  // 能源电力
+// import { template05 } from "./template-05";  // 医疗健康
+// import { template06 } from "./template-06";  // 流体工程
+// import { template07 } from "./template-07";  // 照明灯具
+// import { template08 } from "./template-08";  // 五金工业
+// import { template09 } from "./template-09";  // 家居出口
+// import { template10 } from "./template-10";  // 轻工纺织
+// import { template11 } from "./template-11";  // 消费品电子
+// import { template12 } from "./template-12";  // 生活礼品
 
 import type { TemplateDefinition } from "./types";
 
 const TEMPLATE_REGISTRY: Record<string, TemplateDefinition> = {
   "template-01": template01,
-  // "template-02": template02,
+  "template-02": template02,
+  // "template-03": template03,
 };
 
 /** 默认模板 ID（本地开发或未指定时使用） */

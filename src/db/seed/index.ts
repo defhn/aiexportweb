@@ -42,7 +42,7 @@ export type {
   SeedSiteSettings,
 } from "./types";
 
-export const seedPacks: Record<SeedPackKey, SeedPack> = {
+export const seedPacks: Partial<Record<SeedPackKey, SeedPack>> = {
   cnc: cncSeedPack,
   "industrial-equipment": industrialEquipmentSeedPack,
   "building-materials": buildingMaterialsSeedPack,
@@ -50,12 +50,14 @@ export const seedPacks: Record<SeedPackKey, SeedPack> = {
 
 export const seedPackKeys = Object.keys(seedPacks) as SeedPackKey[];
 
-export function getSeedPack(key: SeedPackKey) {
-  return seedPacks[key];
+export function getSeedPack(key: SeedPackKey): SeedPack {
+  const pack = seedPacks[key];
+  if (!pack) throw new Error("[seed] SeedPack not implemented: " + key);
+  return pack;
 }
 
 export function listSeedPacks() {
-  return seedPackKeys.map((key) => seedPacks[key]);
+  return seedPackKeys.map((key) => seedPacks[key]).filter(Boolean) as SeedPack[];
 }
 
 export async function seedDatabase(key: SeedPackKey) {

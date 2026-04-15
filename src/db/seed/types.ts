@@ -1,6 +1,18 @@
 import type { DefaultFieldKey } from "./default-field-defs";
 
-export type SeedPackKey = "cnc" | "industrial-equipment" | "building-materials";
+export type SeedPackKey =
+  | "cnc"                   // template-01 精密制造
+  | "industrial-equipment"  // template-02 工业设备
+  | "building-materials"    // template-03 建材建筑
+  | "energy-power"          // template-04 能源电力
+  | "medical-health"        // template-05 医疗健康
+  | "fluid-hvac"            // template-06 流体工程
+  | "lighting"              // template-07 照明灯具
+  | "hardware-plastics"     // template-08 五金工业
+  | "furniture-outdoor"     // template-09 家居出口
+  | "textile-packaging"     // template-10 轻工纺织
+  | "consumer-electronics"  // template-11 消费品电子
+  | "lifestyle";            // template-12 生活礼品
 export type SeedPageKey = "home" | "about" | "contact";
 
 export type SeedPageModule = {
