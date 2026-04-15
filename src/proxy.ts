@@ -43,7 +43,7 @@ export async function proxy(request: NextRequest) {
       requestHeaders.set("x-preview-site", previewSite);
     }
 
-    return nextWithPreviewHeaders();
+    return nextWithPreviewHeaders(previewSiteFromQuery, previewSite);
   }
 
   const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
