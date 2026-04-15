@@ -20,6 +20,22 @@ export type FeatureKey =
   | "pipeline_kanban"
   | "rag_factory";
 
+export const allFeatureKeys: FeatureKey[] = [
+  "dashboard_analytics",
+  "blog_management",
+  "csv_import",
+  "inquiry_detail",
+  "reply_templates",
+  "quotes",
+  "request_quote",
+  "ai_product_copy",
+  "ai_inquiry_reply",
+  "ai_inquiry_classification",
+  "utm_attribution",
+  "pipeline_kanban",
+  "rag_factory",
+];
+
 type FeatureRule = {
   labelZh: string;
   requiredPlan: SitePlan;
@@ -54,6 +70,7 @@ type FeatureAvailabilityInput = {
   currentPlan: SitePlan;
   featureKey: FeatureKey;
   usageCount?: number;
+  enabledFeatures?: FeatureKey[];
 };
 
 export type FeatureAvailability = {
@@ -353,13 +370,38 @@ export function getFeatureRule(featureKey: FeatureKey) {
   return featureRules[featureKey];
 }
 
+export function isFeatureOverrideEnabled(
+  featureKey: FeatureKey,
+  enabledFeatures?: FeatureKey[] | null,
+) {
+  return (enabledFeatures ?? []).includes(featureKey);
+}
+
 export function getFeatureAvailability({
   currentPlan,
   featureKey,
   usageCount = 0,
+  enabledFeatures = [],
 }: FeatureAvailabilityInput): FeatureAvailability {
   const rule = getFeatureRule(featureKey);
   const trialLimit = rule.trialLimitByPlan?.[currentPlan] ?? null;
+
+  if (isFeatureOverrideEnabled(featureKey, enabledFeatures)) {
+    return {
+      featureKey,
+      labelZh: rule.labelZh,
+      currentPlan,
+      requiredPlan: rule.requiredPlan,
+      status: "included",
+      limit: null,
+      remaining: null,
+      usageCount,
+      upgradePlan: null,
+      upgradeTitle: rule.upgradeTitle,
+      upgradeDescription: rule.upgradeDescription,
+      benefits: rule.benefits,
+    };
+  }
 
   if (planIndex(currentPlan) >= planIndex(rule.requiredPlan)) {
     return {

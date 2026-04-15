@@ -1,16 +1,25 @@
-export default function PrivacyPolicyPage() {
+import { buildLegalPageContent } from "@/features/public/site-page-copy";
+import { getSiteSettings } from "@/features/settings/queries";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
+
+export default async function PrivacyPolicyPage() {
+  const currentSite = await getCurrentSiteFromRequest();
+  const settings = await getSiteSettings(currentSite.seedPackKey, currentSite.id ?? null);
+  const content = buildLegalPageContent("privacy", currentSite, settings);
+
   return (
     <section className="mx-auto max-w-4xl space-y-6 px-6 py-20">
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-          Privacy Policy
+          {content.eyebrow}
         </p>
-        <h1 className="mt-3 text-4xl font-semibold text-slate-950">Privacy Policy</h1>
+        <h1 className="mt-3 text-4xl font-semibold text-slate-950">{content.title}</h1>
+        <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{content.summary}</p>
       </div>
       <div className="space-y-4 text-sm leading-7 text-slate-700">
-        <p>We collect contact details and inquiry information only for quotation, order follow-up, and customer communication.</p>
-        <p>Uploaded files and inquiry materials are used only for evaluating your request and are not shared with unrelated third parties.</p>
-        <p>If you would like us to update or delete your submitted information, please contact the email address listed on the contact page.</p>
+        {content.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </div>
     </section>
   );

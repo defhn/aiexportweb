@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getAdminUserByUsername, verifyPassword } from "@/features/admin-users/service";
+import { getSiteById } from "@/features/sites/queries";
 import {
   buildSessionPayload,
   getSafeAdminRedirectPath,
@@ -37,7 +38,10 @@ export async function POST(request: Request) {
     const passwordOk = await verifyPassword(input.password, dbUser.passwordHash);
     if (passwordOk) {
       const role = dbUser.role === "employee" ? "employee" : "client_admin";
-      const token = await signSessionToken(buildSessionPayload(dbUser.id, role));
+      const site = dbUser.siteId ? await getSiteById(dbUser.siteId) : null;
+      const token = await signSessionToken(
+        buildSessionPayload(dbUser.id, role, dbUser.siteId ?? null, site?.slug ?? null),
+      );
       const response = NextResponse.json({
         success: true,
         redirectTo: getSafeAdminRedirectPath(body.next),
@@ -52,7 +56,7 @@ export async function POST(request: Request) {
   const envPass = env.ADMIN_PASSWORD;
 
   if (envUser && envPass && input.username === envUser && input.password === envPass) {
-    const token = await signSessionToken(buildSessionPayload(0, "super_admin"));
+    const token = await signSessionToken(buildSessionPayload(0, "super_admin", null, null));
     const response = NextResponse.json({
       success: true,
       redirectTo: getSafeAdminRedirectPath(body.next),
@@ -65,7 +69,7 @@ export async function POST(request: Request) {
   const superUser = process.env.SUPER_ADMIN_USERNAME;
   const superPass = process.env.SUPER_ADMIN_PASSWORD;
   if (superUser && superPass && input.username === superUser && input.password === superPass) {
-    const token = await signSessionToken(buildSessionPayload(0, "super_admin"));
+    const token = await signSessionToken(buildSessionPayload(0, "super_admin", null, null));
     const response = NextResponse.json({
       success: true,
       redirectTo: getSafeAdminRedirectPath(body.next),

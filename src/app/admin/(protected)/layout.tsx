@@ -15,10 +15,14 @@ export default async function ProtectedAdminLayout({
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
   const session = token ? await verifySessionToken(token) : null;
   const currentRole = session?.role ?? "super_admin";
-  const [currentSite, sites] = await Promise.all([
+  const [currentSite, allSites] = await Promise.all([
     getCurrentSiteFromRequest(),
     listSites(),
   ]);
+  const sites =
+    currentRole === "super_admin" || !session?.siteId
+      ? allSites
+      : allSites.filter((site) => site.id === session.siteId);
 
   return (
     <div className="flex h-screen bg-stone-50">
@@ -27,6 +31,7 @@ export default async function ProtectedAdminLayout({
           currentPlan={currentSite.plan}
           currentRole={currentRole}
           currentSiteName={currentSite.name}
+          enabledFeatures={currentSite.enabledFeaturesJson}
         />
       </aside>
 
@@ -38,6 +43,8 @@ export default async function ProtectedAdminLayout({
               currentRole={currentRole}
               currentSiteSlug={currentSite.slug}
               currentSiteName={currentSite.name}
+              enabledFeatures={currentSite.enabledFeaturesJson}
+              lockSiteSelection={currentRole !== "super_admin"}
               sites={sites.map((site) => ({ slug: site.slug, name: site.name }))}
             />
             <div className="md:hidden">
@@ -46,6 +53,7 @@ export default async function ProtectedAdminLayout({
             <div className="hidden md:block">
               <AdminSiteSwitcher
                 currentSiteSlug={currentSite.slug}
+                disabled={currentRole !== "super_admin"}
                 options={sites.map((site) => ({ slug: site.slug, name: site.name }))}
               />
             </div>

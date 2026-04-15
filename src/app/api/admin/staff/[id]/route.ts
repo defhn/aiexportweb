@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { deleteAdminUser } from "@/features/admin-users/service";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 async function requireClientAdmin() {
   const cookieStore = await cookies();
@@ -13,7 +14,6 @@ async function requireClientAdmin() {
   return session;
 }
 
-// DELETE /api/admin/staff/[id]
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -23,8 +23,12 @@ export async function DELETE(
 
   const { id } = await params;
   const numId = Number(id);
-  if (!numId) return NextResponse.json({ error: "无效的 ID" }, { status: 400 });
+  if (!numId) return NextResponse.json({ error: "Invalid user id." }, { status: 400 });
 
-  await deleteAdminUser(numId);
+  const currentSite = await getCurrentSiteFromRequest();
+  await deleteAdminUser(
+    numId,
+    session.role === "super_admin" ? currentSite.id ?? undefined : session.siteId,
+  );
   return NextResponse.json({ success: true });
 }

@@ -411,20 +411,43 @@ export async function saveDownloadFile(formData: FormData) {
       redirect("/admin/files?error=not-found");
     }
 
-    await db
-      .update(downloadFiles)
-      .set({
-        mediaAssetId: draft.mediaAssetId,
-        productId: draft.productId,
-        displayNameZh: draft.displayNameZh,
-        displayNameEn: draft.displayNameEn,
-        category: draft.category,
-        language: draft.language,
-        description: draft.description,
-        isVisible: draft.isVisible,
-        sortOrder: draft.sortOrder,
-      })
-      .where(eq(downloadFiles.id, draft.id));
+    if (siteId) {
+      await db.execute(sql`
+        update ${downloadFiles}
+        set
+          media_asset_id = ${draft.mediaAssetId},
+          product_id = ${draft.productId},
+          display_name_zh = ${draft.displayNameZh},
+          display_name_en = ${draft.displayNameEn},
+          category = ${draft.category},
+          language = ${draft.language},
+          description = ${draft.description},
+          is_visible = ${draft.isVisible},
+          sort_order = ${draft.sortOrder}
+        where ${downloadFiles.id} = ${draft.id}
+          and exists (
+            select 1
+            from ${mediaAssets}
+            where ${mediaAssets.id} = ${downloadFiles.mediaAssetId}
+              and ${mediaAssets.siteId} = ${siteId}
+          )
+      `);
+    } else {
+      await db
+        .update(downloadFiles)
+        .set({
+          mediaAssetId: draft.mediaAssetId,
+          productId: draft.productId,
+          displayNameZh: draft.displayNameZh,
+          displayNameEn: draft.displayNameEn,
+          category: draft.category,
+          language: draft.language,
+          description: draft.description,
+          isVisible: draft.isVisible,
+          sortOrder: draft.sortOrder,
+        })
+        .where(eq(downloadFiles.id, draft.id));
+    }
   } else {
     await createDownloadFileRecord({
       mediaAssetId: draft.mediaAssetId,
@@ -467,7 +490,17 @@ export async function deleteDownloadFile(formData: FormData) {
     redirect("/admin/files");
   }
 
-  await db.delete(downloadFiles).where(eq(downloadFiles.id, id));
+  if (siteId) {
+    await db.execute(sql`
+      delete from ${downloadFiles}
+      using ${mediaAssets}
+      where ${downloadFiles.id} = ${id}
+        and ${downloadFiles.mediaAssetId} = ${mediaAssets.id}
+        and ${mediaAssets.siteId} = ${siteId}
+    `);
+  } else {
+    await db.delete(downloadFiles).where(eq(downloadFiles.id, record.id));
+  }
 
   revalidatePath("/admin/files");
   redirect("/admin/files?deleted=1");

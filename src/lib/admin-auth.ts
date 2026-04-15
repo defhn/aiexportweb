@@ -29,7 +29,7 @@ export async function getAdminSessionFromCookies() {
 export function withAdminAuth(
   handler: (
     request: Request,
-    session: { adminUserId: number; role: string },
+    session: { adminUserId: number; role: string; siteId: number | null; siteSlug: string | null },
   ) => Promise<Response>,
 ) {
   return async (request: Request): Promise<Response> => {

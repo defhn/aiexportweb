@@ -13,11 +13,12 @@ export function LockedFeatureCard({
   const upgradePlanName = gate.upgradePlan
     ? getPlanSummary(gate.upgradePlan).nameZh
     : "Higher Plan";
+  const isTrialExhausted = gate.limit !== null && gate.usageCount >= gate.limit;
 
   return (
     <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 shadow-sm">
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">
-        Plan Upgrade
+        Upgrade Required
       </p>
       <h2 className="mt-4 text-2xl font-semibold text-stone-950">{gate.upgradeTitle}</h2>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
@@ -41,6 +42,11 @@ export function LockedFeatureCard({
             </span>
           </p>
         ) : null}
+        <p className="mt-2 text-xs text-stone-500">
+          {isTrialExhausted
+            ? "The trial quota for this feature has been used up on the current site. Upgrade the site plan and refresh to unlock it immediately."
+            : "Change the site plan in /admin/sites and this module will unlock for the current site without redeploying."}
+        </p>
       </div>
 
       <ul className="mt-5 space-y-3 text-sm text-stone-700">
@@ -59,16 +65,22 @@ export function LockedFeatureCard({
           className="rounded-full bg-stone-950 px-5 py-2 text-sm font-medium text-white"
           href={gate.salesContactHref}
         >
-          Contact Sales About {upgradePlanName}
+          Upgrade to {upgradePlanName}
         </Link>
         {gate.pricingHref ? (
           <Link
             className="rounded-full border border-stone-300 px-5 py-2 text-sm font-medium text-stone-700"
             href={gate.pricingHref}
           >
-            View Pricing
+            View Plans
           </Link>
         ) : null}
+        <Link
+          className="rounded-full border border-amber-300 bg-white px-5 py-2 text-sm font-medium text-amber-800"
+          href="/admin/sites"
+        >
+          Change Current Site Plan
+        </Link>
       </div>
     </section>
   );

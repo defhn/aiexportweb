@@ -1,11 +1,18 @@
 import type { SeedPackKey } from "@/db/seed";
-import type { SitePlan } from "@/lib/plans";
+import type { FeatureKey, SitePlan } from "@/lib/plans";
 
 export const DEFAULT_SITE_SLUG = "cnc-demo";
 export const DEFAULT_TEMPLATE_ID = "template-01";
 export const DEFAULT_SITE_PLAN: SitePlan = "basic";
 
 export type SiteStatus = "active" | "draft" | "suspended";
+export type SiteDealStage =
+  | "lead"
+  | "proposal"
+  | "negotiation"
+  | "active_client"
+  | "renewal_due"
+  | "churn_risk";
 
 export type SiteRecord = {
   id?: number;
@@ -20,6 +27,12 @@ export type SiteRecord = {
   companyName: string;
   logoUrl: string | null;
   primaryColor: string | null;
+  enabledFeaturesJson?: FeatureKey[];
+  salesOwner?: string | null;
+  renewalDate?: Date | null;
+  dealStage?: SiteDealStage;
+  contractNotes?: string | null;
+  domainAliases?: string[];
 };
 
 export type SiteLookup =
@@ -100,6 +113,35 @@ export function normalizeHost(host: string | null | undefined) {
   return (host ?? "").trim().toLowerCase().replace(/:\d+$/, "");
 }
 
+export function normalizeSiteDomain(value: string | null | undefined) {
+  const raw = (value ?? "").trim().toLowerCase();
+
+  if (!raw) return "";
+
+  const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//.test(raw) ? raw : `https://${raw}`;
+
+  try {
+    return normalizeHost(new URL(withProtocol).host);
+  } catch {
+    return normalizeHost(raw.split("/")[0]);
+  }
+}
+
+export function parseSiteDomainAliases(input: string | null | undefined) {
+  const seen = new Set<string>();
+  const aliases: string[] = [];
+
+  for (const line of (input ?? "").split(/\r?\n|,/)) {
+    const normalized = normalizeSiteDomain(line);
+    if (normalized && !seen.has(normalized)) {
+      seen.add(normalized);
+      aliases.push(normalized);
+    }
+  }
+
+  return aliases;
+}
+
 export function getSeedPackKeyForTemplate(templateId: string): SeedPackKey {
   return TEMPLATE_TO_SEED_PACK[templateId] ?? "cnc";
 }
@@ -133,6 +175,12 @@ export function buildDemoSites(baseDomain = "demo.localhost"): SiteRecord[] {
     companyName: site.name,
     logoUrl: null,
     primaryColor: null,
+    enabledFeaturesJson: [],
+    salesOwner: null,
+    renewalDate: null,
+    dealStage: "lead",
+    contractNotes: null,
+    domainAliases: [`${site.subdomain}.${baseDomain}`],
   }));
 }
 

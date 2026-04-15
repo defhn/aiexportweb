@@ -11,9 +11,11 @@ type SiteOption = {
 export function AdminSiteSwitcher({
   currentSiteSlug,
   options,
+  disabled = false,
 }: {
   currentSiteSlug: string;
   options: SiteOption[];
+  disabled?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -38,7 +40,7 @@ export function AdminSiteSwitcher({
       <select
         className="min-w-40 bg-transparent text-sm font-medium text-stone-900 outline-none"
         defaultValue={currentSiteSlug}
-        disabled={isPending}
+        disabled={isPending || disabled || options.length <= 1}
         onChange={(event) => handleChange(event.target.value)}
       >
         {options.map((site) => (

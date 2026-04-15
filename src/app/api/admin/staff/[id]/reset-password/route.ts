@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import { resetAdminUserPassword } from "@/features/admin-users/service";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 async function requireClientAdmin() {
   const cookieStore = await cookies();
@@ -13,7 +14,6 @@ async function requireClientAdmin() {
   return session;
 }
 
-// POST /api/admin/staff/[id]/reset-password
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -23,13 +23,21 @@ export async function POST(
 
   const { id } = await params;
   const numId = Number(id);
-  if (!numId) return NextResponse.json({ error: "无效的 ID" }, { status: 400 });
+  if (!numId) return NextResponse.json({ error: "Invalid user id." }, { status: 400 });
 
   const body = (await request.json()) as { password?: string };
   if (!body.password || body.password.length < 6) {
-    return NextResponse.json({ error: "新密码长度不能少于6位" }, { status: 400 });
+    return NextResponse.json(
+      { error: "New password must be at least 6 characters." },
+      { status: 400 },
+    );
   }
 
-  await resetAdminUserPassword(numId, body.password);
+  const currentSite = await getCurrentSiteFromRequest();
+  await resetAdminUserPassword(
+    numId,
+    body.password,
+    session.role === "super_admin" ? currentSite.id ?? undefined : session.siteId,
+  );
   return NextResponse.json({ success: true });
 }

@@ -7,20 +7,24 @@ import { Menu, X } from "lucide-react";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AdminSiteSwitcher } from "@/components/admin/admin-site-switcher";
 import type { AdminRole } from "@/lib/auth";
-import type { SitePlan } from "@/lib/plans";
+import type { FeatureKey, SitePlan } from "@/lib/plans";
 
 export function MobileDrawer({
   currentPlan = "ai_sales",
   currentRole = "super_admin",
   currentSiteSlug,
   currentSiteName,
+  enabledFeatures = [],
   sites,
+  lockSiteSelection = false,
 }: {
   currentPlan?: SitePlan;
   currentRole?: AdminRole;
   currentSiteSlug: string;
   currentSiteName?: string;
+  enabledFeatures?: FeatureKey[];
   sites: Array<{ slug: string; name: string }>;
+  lockSiteSelection?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -97,6 +101,7 @@ export function MobileDrawer({
               <p>Current plan: {currentPlan}</p>
               <AdminSiteSwitcher
                 currentSiteSlug={currentSiteSlug}
+                disabled={lockSiteSelection}
                 options={sites}
               />
             </div>
@@ -106,6 +111,7 @@ export function MobileDrawer({
               currentPlan={currentPlan}
               currentRole={currentRole}
               currentSiteName={currentSiteName}
+              enabledFeatures={enabledFeatures}
               onClose={() => setOpen(false)}
             />
           </div>

@@ -13,6 +13,7 @@ import {
   isPricingPageEnabled,
   normalizeSitePlan,
 } from "@/lib/plans";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export type FeatureGate = FeatureAvailability & {
   pricingHref: string | null;
@@ -73,12 +74,15 @@ export async function getFeatureGate(
   sitePlan?: SitePlan | null,
   siteId?: number | null,
 ): Promise<FeatureGate> {
-  const currentPlan = sitePlan ?? getCurrentSitePlan();
+  const currentSite = await getCurrentSiteFromRequest().catch(() => null);
+  const currentPlan = sitePlan ?? currentSite?.plan ?? getCurrentSitePlan();
+  const enabledFeatures = currentSite?.enabledFeaturesJson ?? [];
   const usageCount = await getFeatureUsageCount(featureKey, siteId);
   const availability = getFeatureAvailability({
     currentPlan,
     featureKey,
     usageCount,
+    enabledFeatures,
   });
 
   return {

@@ -1,18 +1,23 @@
-import { eq, or } from "drizzle-orm";
+import { eq, inArray, or } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { getDb } from "@/db/client";
-import { sites } from "@/db/schema";
+import { siteDomains, sites } from "@/db/schema";
 import {
   DEFAULT_SITE_SLUG,
   buildDemoSites,
   getFallbackSite,
-  normalizeHost,
+  normalizeSiteDomain,
   resolveSiteLookup,
+  type SiteDealStage,
   type SiteRecord,
 } from "@/lib/sites";
+import type { FeatureKey } from "@/lib/plans";
 
-function mapSiteRecord(record: typeof sites.$inferSelect): SiteRecord {
+function mapSiteRecord(
+  record: typeof sites.$inferSelect,
+  domainAliases: string[] = [],
+): SiteRecord {
   return {
     id: record.id,
     name: record.name,
@@ -26,7 +31,38 @@ function mapSiteRecord(record: typeof sites.$inferSelect): SiteRecord {
     companyName: record.companyName,
     logoUrl: record.logoUrl,
     primaryColor: record.primaryColor,
+    enabledFeaturesJson: (record.enabledFeaturesJson ?? []) as FeatureKey[],
+    salesOwner: record.salesOwner,
+    renewalDate: record.renewalDate,
+    dealStage: record.dealStage as SiteDealStage,
+    contractNotes: record.contractNotes,
+    domainAliases,
   };
+}
+
+async function attachDomainAliases(records: Array<typeof sites.$inferSelect>) {
+  const ids = records.map((record) => record.id);
+  if (!ids.length) {
+    return records.map((record) => mapSiteRecord(record));
+  }
+
+  const db = getDb();
+  const aliases = await db
+    .select({
+      siteId: siteDomains.siteId,
+      host: siteDomains.host,
+    })
+    .from(siteDomains)
+    .where(inArray(siteDomains.siteId, ids));
+  const aliasesBySite = new Map<number, string[]>();
+
+  for (const alias of aliases) {
+    const current = aliasesBySite.get(alias.siteId) ?? [];
+    current.push(alias.host);
+    aliasesBySite.set(alias.siteId, current);
+  }
+
+  return records.map((record) => mapSiteRecord(record, aliasesBySite.get(record.id) ?? []));
 }
 
 export async function getSiteBySlug(slug: string): Promise<SiteRecord | null> {
@@ -37,9 +73,28 @@ export async function getSiteBySlug(slug: string): Promise<SiteRecord | null> {
   const db = getDb();
   try {
     const [record] = await db.select().from(sites).where(eq(sites.slug, slug)).limit(1);
-    return record ? mapSiteRecord(record) : null;
+    if (!record) return null;
+    const [site] = await attachDomainAliases([record]);
+    return site ?? null;
   } catch (error) {
     console.warn("Falling back after site slug lookup failure.", error);
+    return null;
+  }
+}
+
+export async function getSiteById(id: number): Promise<SiteRecord | null> {
+  if (!process.env.DATABASE_URL) {
+    return buildDemoSites().find((site) => site.id === id) ?? null;
+  }
+
+  const db = getDb();
+  try {
+    const [record] = await db.select().from(sites).where(eq(sites.id, id)).limit(1);
+    if (!record) return null;
+    const [site] = await attachDomainAliases([record]);
+    return site ?? null;
+  } catch (error) {
+    console.warn("Falling back after site id lookup failure.", error);
     return null;
   }
 }
@@ -52,7 +107,7 @@ export async function listSites(): Promise<SiteRecord[]> {
   try {
     const db = getDb();
     const records = await db.select().from(sites).orderBy(sites.id);
-    return records.map(mapSiteRecord);
+    return attachDomainAliases(records);
   } catch (error) {
     console.warn("Falling back to demo sites after site list read failure.", error);
     return buildDemoSites();
@@ -64,7 +119,7 @@ export async function getSiteByHost(host: string): Promise<SiteRecord | null> {
     return null;
   }
 
-  const normalizedHost = normalizeHost(host);
+  const normalizedHost = normalizeSiteDomain(host);
 
   if (!normalizedHost) {
     return null;
@@ -75,6 +130,18 @@ export async function getSiteByHost(host: string): Promise<SiteRecord | null> {
   let record: typeof sites.$inferSelect | undefined;
 
   try {
+    const [domainRecord] = await db
+      .select({
+        siteId: siteDomains.siteId,
+      })
+      .from(siteDomains)
+      .where(eq(siteDomains.host, normalizedHost))
+      .limit(1);
+
+    if (domainRecord) {
+      return getSiteById(domainRecord.siteId);
+    }
+
     [record] = await db
       .select()
       .from(sites)

@@ -14,16 +14,8 @@ const PREVIEW_SITE_COOKIE_NAME = "preview_site";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const previewSiteFromQuery = request.nextUrl.searchParams.get("site")?.trim();
-  const previewSiteFromCookie = request.cookies.get(PREVIEW_SITE_COOKIE_NAME)?.value;
-  const previewSite = previewSiteFromQuery || previewSiteFromCookie || "";
   const requestHeaders = new Headers(request.headers);
-
-  if (previewSite) {
-    requestHeaders.set("x-preview-site", previewSite);
-  }
-
-  const nextWithPreviewHeaders = () => {
+  const nextWithPreviewHeaders = (previewSiteFromQuery?: string | null, previewSite?: string) => {
     const response = NextResponse.next({
       request: {
         headers: requestHeaders,
@@ -43,6 +35,14 @@ export async function proxy(request: NextRequest) {
   };
 
   if (!isProtectedAdminPath(pathname)) {
+    const previewSiteFromQuery = request.nextUrl.searchParams.get("site")?.trim();
+    const previewSiteFromCookie = request.cookies.get(PREVIEW_SITE_COOKIE_NAME)?.value;
+    const previewSite = previewSiteFromQuery || previewSiteFromCookie || "";
+
+    if (previewSite) {
+      requestHeaders.set("x-preview-site", previewSite);
+    }
+
     return nextWithPreviewHeaders();
   }
 
@@ -61,7 +61,21 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    return nextWithPreviewHeaders();
+    const previewSiteFromQuery = request.nextUrl.searchParams.get("site")?.trim();
+    const previewSiteFromCookie = request.cookies.get(PREVIEW_SITE_COOKIE_NAME)?.value;
+    const previewSite =
+      session.role === "super_admin"
+        ? previewSiteFromQuery || previewSiteFromCookie || ""
+        : session.siteSlug || "";
+
+    if (previewSite) {
+      requestHeaders.set("x-preview-site", previewSite);
+    }
+
+    return nextWithPreviewHeaders(
+      session.role === "super_admin" ? previewSiteFromQuery : session.siteSlug,
+      previewSite,
+    );
   }
 
   const loginUrl = new URL("/admin/login", request.url);

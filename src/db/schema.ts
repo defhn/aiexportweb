@@ -41,6 +41,14 @@ export const fieldInputTypeEnum = pgEnum("field_input_type", [
 ]);
 export const sitePlanEnum = pgEnum("site_plan", ["basic", "growth", "ai_sales"]);
 export const siteStatusEnum = pgEnum("site_status", ["draft", "active", "suspended"]);
+export const siteDealStageEnum = pgEnum("site_deal_stage", [
+  "lead",
+  "proposal",
+  "negotiation",
+  "active_client",
+  "renewal_due",
+  "churn_risk",
+]);
 
 export const sites = pgTable("sites", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -56,6 +64,10 @@ export const sites = pgTable("sites", {
   logoUrl: text("logo_url"),
   primaryColor: varchar("primary_color", { length: 50 }),
   enabledFeaturesJson: jsonb("enabled_features_json").$type<string[]>().default([]).notNull(),
+  salesOwner: text("sales_owner"),
+  renewalDate: timestamp("renewal_date", { withTimezone: true }),
+  dealStage: siteDealStageEnum("deal_stage").default("lead").notNull(),
+  contractNotes: text("contract_notes"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -63,6 +75,44 @@ export const sites = pgTable("sites", {
     .defaultNow()
     .notNull(),
 });
+
+export const siteChangeLogs = pgTable("site_change_logs", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  siteId: integer("site_id")
+    .notNull()
+    .references(() => sites.id, { onDelete: "cascade" }),
+  actorAdminUserId: integer("actor_admin_user_id").references(() => adminUsers.id, {
+    onDelete: "set null",
+  }),
+  actorRole: varchar("actor_role", { length: 40 }).notNull(),
+  actionType: varchar("action_type", { length: 80 }).notNull(),
+  summary: text("summary").notNull(),
+  previousValueJson: jsonb("previous_value_json").$type<Record<string, unknown>>().default({}).notNull(),
+  nextValueJson: jsonb("next_value_json").$type<Record<string, unknown>>().default({}).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const siteDomains = pgTable(
+  "site_domains",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    siteId: integer("site_id")
+      .notNull()
+      .references(() => sites.id, { onDelete: "cascade" }),
+    host: text("host").notNull(),
+    kind: varchar("kind", { length: 40 }).default("alias").notNull(),
+    isPrimary: boolean("is_primary").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    hostUnique: uniqueIndex("site_domains_host_unique").on(table.host),
+    siteHostUnique: uniqueIndex("site_domains_site_host_unique").on(table.siteId, table.host),
+  }),
+);
 
 export const siteSettings = pgTable("site_settings", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),

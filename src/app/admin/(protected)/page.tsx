@@ -1,15 +1,13 @@
 import Link from "next/link";
 import {
+  Activity,
+  ArrowRight,
   CalendarClock,
-  CheckCircle2,
-  Circle,
   FileText,
   Globe2,
   Layers,
   MessageSquare,
-  MousePointer2,
   Package,
-  Rocket,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -19,6 +17,7 @@ import { listAdminBlogPosts } from "@/features/blog/queries";
 import { getDashboardSnapshot } from "@/features/dashboard/queries";
 import { getFeatureGate } from "@/features/plans/access";
 import { listAdminCategories, listAdminProducts } from "@/features/products/queries";
+import { listRecentSiteChangeLogs } from "@/features/sites/change-logs";
 import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export const dynamic = "force-dynamic";
@@ -28,39 +27,25 @@ function MetricCard({
   value,
   description,
   icon: Icon,
-  color,
 }: {
   label: string;
   value: number;
   description: string;
   icon: typeof Users;
-  color: "blue" | "emerald" | "amber" | "stone";
 }) {
-  const colorClass =
-    color === "blue"
-      ? "bg-blue-50 text-blue-600"
-      : color === "emerald"
-        ? "bg-emerald-50 text-emerald-600"
-        : color === "amber"
-          ? "bg-amber-50 text-amber-600"
-          : "bg-stone-50 text-stone-600";
-
   return (
-    <article className="group relative flex flex-col rounded-[2.5rem] border border-stone-100 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all hover:-translate-y-1 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)]">
-      <div className="mb-8 flex items-center justify-between">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${colorClass}`}>
-          <Icon className="h-6 w-6" />
+    <article className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-between">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-stone-50 text-stone-700">
+          <Icon className="h-5 w-5" />
         </div>
-        <div className="text-xs font-black uppercase tracking-widest text-stone-300">指标</div>
+        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-stone-300">
+          Metric
+        </span>
       </div>
-
-      <p className="mb-1 text-sm font-bold text-stone-400">{label}</p>
-      <p className="text-4xl font-black leading-none tracking-tight text-stone-900 tabular-nums">
-        {String(value).padStart(2, "0")}
-      </p>
-      <p className="mt-6 border-t border-stone-50 pt-4 text-xs font-medium leading-relaxed text-stone-500">
-        {description}
-      </p>
+      <p className="mt-5 text-sm font-semibold text-stone-500">{label}</p>
+      <p className="mt-2 text-4xl font-black tracking-tight text-stone-950">{value}</p>
+      <p className="mt-4 text-sm leading-6 text-stone-500">{description}</p>
     </article>
   );
 }
@@ -73,295 +58,302 @@ export default async function AdminDashboardPage() {
     return <LockedFeatureCard gate={gate} />;
   }
 
-  const [snapshot, products, posts, categories] = await Promise.all([
+  const [snapshot, products, posts, categories, siteChangeLogs] = await Promise.all([
     getDashboardSnapshot(currentSite.id),
     listAdminProducts(currentSite.seedPackKey, undefined, currentSite.id),
     listAdminBlogPosts(currentSite.seedPackKey, undefined, currentSite.id),
     listAdminCategories(currentSite.seedPackKey, currentSite.id),
+    listRecentSiteChangeLogs(6, currentSite.id),
   ]);
 
   const cards = [
     {
-      label: "今日新增询盘",
+      label: "New inquiries today",
       value: snapshot.cards.today,
-      description: "今天新收到的询盘数量，帮助你快速判断当天获客情况。",
+      description: "Fresh leads received today for the current client site.",
       icon: Users,
-      color: "blue" as const,
     },
     {
-      label: "近 7 天询盘",
+      label: "Inquiries this week",
       value: snapshot.cards.thisWeek,
-      description: "最近 7 天收到的询盘趋势，帮助你观察线索增长速度。",
+      description: "Seven-day inquiry trend for this site.",
       icon: TrendingUp,
-      color: "emerald" as const,
     },
     {
-      label: "待处理询盘",
+      label: "Pending follow-up",
       value: snapshot.cards.pending,
-      description: "尚未完成跟进的询盘数量，便于团队安排优先级并及时回复客户。",
+      description: "Open inquiries that still need a response or next action.",
       icon: CalendarClock,
-      color: "amber" as const,
     },
     {
-      label: "产品总数",
+      label: "Products",
       value: products.length,
-      description: "当前站点已维护的产品数量，方便了解内容规模与上架进度。",
+      description: "Products currently available in the admin catalog.",
       icon: Package,
-      color: "stone" as const,
     },
     {
-      label: "博客文章总数",
+      label: "Blog posts",
       value: posts.length,
-      description: "已发布和草稿中的博客文章总量，便于同步 SEO 内容节奏。",
+      description: "Published and draft blog content owned by this site.",
       icon: FileText,
-      color: "stone" as const,
     },
     {
-      label: "产品分类总数",
+      label: "Categories",
       value: categories.length,
-      description: "当前用于组织产品结构的分类数量，方便检查导航与内容覆盖范围。",
+      description: "Product categories currently structuring the catalog.",
       icon: Layers,
-      color: "stone" as const,
     },
   ];
 
+  const setupProgressSteps = [
+    {
+      done: products.length >= 3,
+      label: `Upload at least 3 products (${products.length} now)`,
+      href: "/admin/products/new",
+      cta: "Add product",
+    },
+    {
+      done: posts.length >= 1,
+      label: `Publish at least 1 blog post (${posts.length} now)`,
+      href: "/admin/blog/new",
+      cta: "Create post",
+    },
+    {
+      done: categories.length >= 2,
+      label: `Create at least 2 product categories (${categories.length} now)`,
+      href: "/admin/categories",
+      cta: "Manage categories",
+    },
+    {
+      done: snapshot.cards.pending === 0 && snapshot.cards.thisWeek > 0,
+      label: "Clear the current inquiry queue",
+      href: "/admin/inquiries",
+      cta: "View inquiries",
+    },
+  ];
+
+  const setupProgress = Math.round(
+    (setupProgressSteps.filter((step) => step.done).length / setupProgressSteps.length) * 100,
+  );
+
   return (
-    <div className="space-y-12 pb-20">
-      <section>
-        <p className="mb-2 text-xs font-black uppercase tracking-[0.4em] text-stone-400">
-          系统控制台
-        </p>
-        <h1 className="text-4xl font-bold leading-none tracking-tight text-stone-900">
-          后台仪表盘
-        </h1>
-        <p className="mt-4 max-w-2xl leading-relaxed text-stone-500">
-          在这里快速查看询盘、产品、博客与流量概况，帮助团队及时发现增长信号与待处理事项。
-        </p>
-      </section>
+    <div className="space-y-8 pb-20">
+      <section className="rounded-[2.5rem] border border-stone-100 bg-white p-8 shadow-sm">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-stone-400">
+              Client dashboard
+            </p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-stone-950">
+              {currentSite.name}
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-500">
+              This view gives you the operating summary for the active client site: package,
+              content readiness, inquiry load, and the latest commercial changes.
+            </p>
+          </div>
 
-      {/* ── 🚀 新手引导检查清单（完成度 < 100% 时显示） ── */}
-      {(() => {
-        const steps = [
-          {
-            done: snapshot.cards.today + snapshot.cards.thisWeek + snapshot.cards.pending > 0 || products.length > 0,
-            label: "填写公司名称和联系方式",
-            link: "/admin/settings",
-            linkLabel: "前往设置",
-          },
-          {
-            done: products.length >= 3,
-            label: `上传至少 3 个产品（当前 ${products.length} 个）`,
-            link: "/admin/products/new",
-            linkLabel: "添加产品",
-          },
-          {
-            done: products.length >= 1,
-            label: "填写工厂知识库（AI 回复精准度核心）",
-            link: "/admin/knowledge",
-            linkLabel: "去填写",
-          },
-          {
-            done: posts.length >= 1,
-            label: "发布至少 1 篇博客（提升 SEO 权重）",
-            link: "/admin/blog/new",
-            linkLabel: "写博客",
-          },
-          {
-            done: snapshot.cards.pending === 0 && (snapshot.cards.today + snapshot.cards.thisWeek) > 0,
-            label: "处理第一条询盘（测试 AI 回复效果）",
-            link: "/admin/inquiries",
-            linkLabel: "查看询盘",
-          },
-        ];
-        const doneCount = steps.filter((s) => s.done).length;
-        const pct = Math.round((doneCount / steps.length) * 100);
-        if (pct === 100) return null;
-        return (
-          <section className="rounded-[2.5rem] border border-amber-100 bg-amber-50 p-8">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100">
-                <Rocket className="h-5 w-5 text-amber-600" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-stone-900">
-                  🚀 快速启动（完成后 AI 回复质量提升 80%）
-                </h2>
-                <p className="text-xs text-stone-500">完成以下步骤，让 AI 全面了解你的工厂</p>
-              </div>
-              <div className="ml-auto text-right">
-                <p className="text-2xl font-black text-amber-600">{pct}%</p>
-                <p className="text-xs text-stone-400">{doneCount}/{steps.length} 完成</p>
-              </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">Plan</p>
+              <p className="mt-2 text-2xl font-bold text-stone-950">{currentSite.plan}</p>
             </div>
-            <div className="mb-4 h-2 overflow-hidden rounded-full bg-amber-100">
-              <div
-                className="h-full rounded-full bg-amber-500 transition-all"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-            <div className="space-y-3">
-              {steps.map((step, i) => (
-                <div key={i} className="flex items-center justify-between rounded-2xl bg-white px-5 py-3">
-                  <div className="flex items-center gap-3">
-                    {step.done ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-500" />
-                    ) : (
-                      <Circle className="h-5 w-5 text-stone-300" />
-                    )}
-                    <span className={`text-sm ${step.done ? "text-stone-400 line-through" : "font-medium text-stone-800"}`}>
-                      第 {i + 1} 步：{step.label}
-                    </span>
-                  </div>
-                  {!step.done && (
-                    <Link
-                      href={step.link}
-                      className="rounded-full bg-amber-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-amber-600"
-                    >
-                      {step.linkLabel} →
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        );
-      })()}
-
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {cards.map((card) => (
-          <MetricCard key={card.label} {...card} />
-        ))}
-      </section>
-
-      <section className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
-        <article className="rounded-[3rem] border border-stone-100 bg-white p-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
-          <div className="mb-10 flex items-center justify-between">
-            <div>
-              <h3 className="text-xl font-bold text-stone-900">询盘增长趋势</h3>
-              <p className="mt-1 text-xs font-bold uppercase tracking-widest text-stone-400">
-                询盘生成趋势
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+                Recent changes
               </p>
+              <p className="mt-2 text-2xl font-bold text-stone-950">{siteChangeLogs.length}</p>
             </div>
-            <div className="flex h-8 items-center rounded-full bg-stone-100 p-1">
-              <button className="h-full rounded-full bg-white px-4 text-[10px] font-black uppercase tracking-widest text-stone-900 shadow-sm">
-                最近 7 天
-              </button>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+              Sales owner
+            </p>
+            <p className="mt-2 text-lg font-bold text-stone-950">
+              {currentSite.salesOwner || "Unassigned"}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+              Deal stage
+            </p>
+            <p className="mt-2 text-lg font-bold text-stone-950">
+              {currentSite.dealStage || "lead"}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+              Renewal date
+            </p>
+            <p className="mt-2 text-lg font-bold text-stone-950">
+              {currentSite.renewalDate
+                ? new Date(currentSite.renewalDate).toLocaleDateString("zh-CN")
+                : "Not set"}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <article className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+                Setup progress
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-stone-950">Client handoff readiness</h2>
+            </div>
+            <div className="rounded-2xl bg-amber-50 px-4 py-3 text-right">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-600">
+                Progress
+              </p>
+              <p className="mt-2 text-2xl font-bold text-amber-700">{setupProgress}%</p>
             </div>
           </div>
 
-          <div className="space-y-6">
-            {snapshot.trend.map((item) => (
-              <div key={item.date} className="flex items-center gap-6">
-                <span className="w-24 text-[10px] font-black uppercase tracking-widest text-stone-400 tabular-nums">
-                  {item.date}
-                </span>
-                <div className="h-3 flex-1 overflow-hidden rounded-full bg-stone-50">
+          <div className="mt-5 h-2 overflow-hidden rounded-full bg-stone-100">
+            <div className="h-full rounded-full bg-amber-500" style={{ width: `${setupProgress}%` }} />
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {setupProgressSteps.map((step) => (
+              <div
+                className="flex flex-col gap-3 rounded-2xl border border-stone-100 bg-stone-50 px-4 py-4 md:flex-row md:items-center md:justify-between"
+                key={step.label}
+              >
+                <div className="flex items-center gap-3">
                   <div
-                    className="h-full rounded-full bg-blue-600 transition-all duration-1000"
-                    style={{ width: `${Math.max(item.count * 12, item.count ? 8 : 0)}%` }}
-                  />
+                    className={`flex h-8 w-8 items-center justify-center rounded-full ${
+                      step.done ? "bg-emerald-100 text-emerald-700" : "bg-white text-stone-400"
+                    }`}
+                  >
+                    {step.done ? <Activity className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
+                  </div>
+                  <span className={`text-sm ${step.done ? "text-stone-400 line-through" : "font-medium text-stone-900"}`}>
+                    {step.label}
+                  </span>
                 </div>
-                <span className="w-8 text-right text-sm font-bold tabular-nums text-stone-900">
-                  {item.count}
-                </span>
+                {!step.done ? (
+                  <Link
+                    className="inline-flex items-center gap-2 rounded-full bg-stone-950 px-4 py-2 text-xs font-semibold text-white hover:bg-stone-800"
+                    href={step.href}
+                  >
+                    {step.cta}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : null}
               </div>
             ))}
           </div>
         </article>
 
-        <article className="relative overflow-hidden rounded-[3rem] bg-stone-900 p-10 text-white shadow-2xl">
-          <div className="absolute inset-0 opacity-10 texture-carbon" />
-          <div className="relative z-10">
-            <div className="mb-8 flex items-center gap-3">
-              <Globe2 className="h-5 w-5 text-blue-400" />
-              <h3 className="text-lg font-bold">询盘来源地区</h3>
+        <article className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-stone-400">
+                Commercial history
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-stone-950">Recent plan changes</h2>
             </div>
+            <Link className="text-sm font-semibold text-blue-600 hover:text-blue-700" href="/admin/sites">
+              Open site control
+            </Link>
+          </div>
 
-            <div className="space-y-4">
-              {snapshot.topCountries.length ? (
-                snapshot.topCountries.slice(0, 6).map((item) => (
-                  <div
-                    key={item.countryCode}
-                    className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[10px] font-black">
-                        {item.countryCode}
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold capitalize text-white">
-                          {item.countryGroup || item.countryCode}
-                        </p>
-                      </div>
+          <div className="mt-6 space-y-3">
+            {siteChangeLogs.length ? (
+              siteChangeLogs.map((log) => (
+                <div className="rounded-2xl border border-stone-100 bg-stone-50 px-4 py-4" key={log.id}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-stone-900">{log.summary}</p>
+                      <p className="mt-1 text-xs text-stone-500">
+                        {log.actorLabel} / {new Date(log.createdAt).toLocaleString("zh-CN")}
+                      </p>
                     </div>
-                    <span className="text-sm font-black tabular-nums">{item.count}</span>
+                    <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-stone-600">
+                      {log.actionType}
+                    </span>
                   </div>
-                ))
-              ) : (
-                <p className="py-10 text-center text-sm italic text-stone-500">
-                  暂无国家或地区数据
-                </p>
-              )}
-            </div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-2xl border border-dashed border-stone-200 px-4 py-5 text-sm text-stone-500">
+                No plan or feature override changes have been recorded yet.
+              </div>
+            )}
           </div>
         </article>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-2">
-        <article className="rounded-[3rem] border border-stone-100 bg-white p-10">
-          <div className="mb-8 flex items-center gap-3">
-            <MessageSquare className="h-5 w-5 text-amber-500" />
-            <h3 className="text-lg font-bold text-stone-900">询盘最多的产品</h3>
+      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {cards.map((card) => (
+          <MetricCard key={card.label} {...card} />
+        ))}
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-2">
+        <article className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <Globe2 className="h-5 w-5 text-blue-600" />
+            <h2 className="text-xl font-bold text-stone-950">Top inquiry countries</h2>
           </div>
-          <div className="space-y-3">
-            {snapshot.topProductsByInquiry.length ? (
-              snapshot.topProductsByInquiry.slice(0, 5).map((item, index) => (
+          <div className="mt-5 space-y-3">
+            {snapshot.topCountries.length ? (
+              snapshot.topCountries.slice(0, 6).map((item) => (
                 <div
-                  key={`inquiry-${item.productId}`}
-                  className="flex items-center justify-between rounded-2xl border border-stone-50 p-4 transition-all hover:border-amber-100 hover:bg-amber-50/20"
+                  className="flex items-center justify-between rounded-2xl border border-stone-100 bg-stone-50 px-4 py-4"
+                  key={item.countryCode}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-[10px] font-black text-stone-300">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-sm font-bold text-stone-900">{item.productName}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-black text-stone-700">
+                      {item.countryCode}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-stone-900">
+                        {item.countryGroup || item.countryCode}
+                      </p>
+                      <p className="text-xs text-stone-500">{item.countryCode}</p>
+                    </div>
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest text-amber-600">
-                    {item.count} 条询盘
-                  </span>
+                  <span className="text-sm font-bold text-stone-900">{item.count}</span>
                 </div>
               ))
             ) : (
-              <p className="py-8 text-center text-sm italic text-stone-400">暂无询盘关联产品</p>
+              <p className="rounded-2xl border border-dashed border-stone-200 px-4 py-5 text-sm text-stone-500">
+                No country data yet.
+              </p>
             )}
           </div>
         </article>
 
-        <article className="rounded-[3rem] border border-stone-100 bg-white p-10">
-          <div className="mb-8 flex items-center gap-3">
-            <MousePointer2 className="h-5 w-5 text-blue-500" />
-            <h3 className="text-lg font-bold text-stone-900">浏览最多的产品</h3>
+        <article className="rounded-[2rem] border border-stone-100 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <Package className="h-5 w-5 text-amber-600" />
+            <h2 className="text-xl font-bold text-stone-950">Top products by inquiry</h2>
           </div>
-          <div className="space-y-3">
-            {snapshot.topProductsByViews.length ? (
-              snapshot.topProductsByViews.slice(0, 5).map((item, index) => (
+          <div className="mt-5 space-y-3">
+            {snapshot.topProductsByInquiry.length ? (
+              snapshot.topProductsByInquiry.slice(0, 6).map((item, index) => (
                 <div
-                  key={`view-${item.productId}`}
-                  className="flex items-center justify-between rounded-2xl border border-stone-50 p-4 transition-all hover:border-blue-100 hover:bg-blue-50/20"
+                  className="flex items-center justify-between rounded-2xl border border-stone-100 bg-stone-50 px-4 py-4"
+                  key={item.productId}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-[10px] font-black text-stone-300">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-sm font-bold text-stone-900">{item.productName}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-black text-stone-700">
+                      {index + 1}
+                    </div>
+                    <p className="text-sm font-semibold text-stone-900">{item.productName}</p>
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest text-blue-600">
-                    {item.count} 次浏览
-                  </span>
+                  <span className="text-sm font-bold text-stone-900">{item.count}</span>
                 </div>
               ))
             ) : (
-              <p className="py-8 text-center text-sm italic text-stone-400">暂无浏览数据</p>
+              <p className="rounded-2xl border border-dashed border-stone-200 px-4 py-5 text-sm text-stone-500">
+                No inquiry-linked products yet.
+              </p>
             )}
           </div>
         </article>

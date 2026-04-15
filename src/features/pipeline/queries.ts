@@ -1,6 +1,8 @@
-import { desc, eq, gte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
+
 import { getDb } from "@/db/client";
 import { inquiries } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 export type PipelineStage =
   | "new"
@@ -47,7 +49,7 @@ export const PIPELINE_STAGES: {
   },
   {
     key: "won",
-    label: "已成交 ★",
+    label: "已成交",
     color: "text-emerald-700",
     bgColor: "bg-emerald-50",
     borderColor: "border-emerald-200",
@@ -63,7 +65,9 @@ export const PIPELINE_STAGES: {
 
 export async function getPipelineData() {
   const db = getDb();
-  const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000); // 最近 90 天内的活跃询盘
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
 
   const rows = await db
     .select({
@@ -83,11 +87,14 @@ export async function getPipelineData() {
       updatedAt: inquiries.updatedAt,
     })
     .from(inquiries)
-    .where(gte(inquiries.createdAt, cutoff))
+    .where(
+      siteId
+        ? and(eq(inquiries.siteId, siteId), gte(inquiries.createdAt, cutoff))
+        : gte(inquiries.createdAt, cutoff),
+    )
     .orderBy(desc(inquiries.updatedAt))
     .limit(200);
 
-  // 按 status 分组，将询盘分配到对应的 pipelineStage 分组
   const grouped = new Map<PipelineStage, typeof rows>();
   for (const stage of PIPELINE_STAGES) {
     grouped.set(stage.key, []);
@@ -99,29 +106,28 @@ export async function getPipelineData() {
     bucket.push(row);
   }
 
-  // 查询汇总数据
   const stageSummary = PIPELINE_STAGES.map((stage) => ({
     ...stage,
     count: grouped.get(stage.key)?.length ?? 0,
     leads: grouped.get(stage.key) ?? [],
   }));
 
-  const totalActive = rows.filter((r) => r.status !== "done").length;
-  const wonCount = rows.filter((r) => r.status === "won").length;
-  const convRate =
-    rows.length > 0 ? Math.round((wonCount / rows.length) * 100) : 0;
+  const totalActive = rows.filter((row) => row.status !== "done").length;
+  const wonCount = rows.filter((row) => row.status === "won").length;
+  const convRate = rows.length > 0 ? Math.round((wonCount / rows.length) * 100) : 0;
 
   return { stageSummary, totalActive, wonCount, convRate, total: rows.length };
 }
 
-/** 更新 inquiry 的 pipeline 阶段 */
-export async function updatePipelineStage(
-  inquiryId: number,
-  stage: PipelineStage
-) {
+export async function updatePipelineStage(inquiryId: number, stage: PipelineStage) {
   const db = getDb();
-  const validStages = PIPELINE_STAGES.map((s) => s.key);
-  if (!validStages.includes(stage)) throw new Error("无效的看板阶段，请检查传入参数");
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
+  const validStages = PIPELINE_STAGES.map((item) => item.key);
+
+  if (!validStages.includes(stage)) {
+    throw new Error("无效的看板阶段，请检查传入参数");
+  }
 
   await db
     .update(inquiries)
@@ -129,5 +135,9 @@ export async function updatePipelineStage(
       status: stage as "new" | "processing" | "done",
       updatedAt: new Date(),
     })
-    .where(eq(inquiries.id, inquiryId));
+    .where(
+      siteId
+        ? and(eq(inquiries.id, inquiryId), eq(inquiries.siteId, siteId))
+        : eq(inquiries.id, inquiryId),
+    );
 }

@@ -5,6 +5,8 @@ import {
   buildDemoSites,
   getSeedPackKeyForTemplate,
   normalizeHost,
+  normalizeSiteDomain,
+  parseSiteDomainAliases,
   resolveSiteLookup,
 } from "@/lib/sites";
 
@@ -12,6 +14,23 @@ describe("site resolution", () => {
   it("normalizes hosts by removing ports and lowercasing", () => {
     expect(normalizeHost("Medical.Demo.Localhost:3000")).toBe("medical.demo.localhost");
     expect(normalizeHost(" client.com ")).toBe("client.com");
+  });
+
+  it("normalizes custom domain aliases for matching and storage", () => {
+    expect(normalizeSiteDomain(" HTTPS://WWW.Client-Demo.com/path?x=1 ")).toBe("www.client-demo.com");
+    expect(normalizeSiteDomain("client-demo.com:443")).toBe("client-demo.com");
+    expect(normalizeSiteDomain("")).toBe("");
+  });
+
+  it("parses custom domain aliases from multiline admin input", () => {
+    expect(
+      parseSiteDomainAliases(`
+        https://client-demo.com
+        www.client-demo.com
+        client-demo.com
+        preview.client-demo.com:3000
+      `),
+    ).toEqual(["client-demo.com", "www.client-demo.com", "preview.client-demo.com"]);
   });
 
   it("prefers explicit site query over host resolution for local previews", () => {

@@ -21,14 +21,21 @@ export const sessionCookieOptions = {
 export type SessionPayload = {
   adminUserId: number;
   role: AdminRole;
+  siteId: number | null;
+  siteSlug: string | null;
 };
 
 function getSessionSecret() {
   return new TextEncoder().encode(env.SESSION_SECRET);
 }
 
-export function buildSessionPayload(adminUserId: number, role: AdminRole): SessionPayload {
-  return { adminUserId, role };
+export function buildSessionPayload(
+  adminUserId: number,
+  role: AdminRole,
+  siteId: number | null = null,
+  siteSlug: string | null = null,
+): SessionPayload {
+  return { adminUserId, role, siteId, siteSlug };
 }
 
 export function normalizeLoginInput(input: { username: string; password: string }) {

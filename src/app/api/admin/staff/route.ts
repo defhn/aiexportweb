@@ -8,6 +8,7 @@ import {
   getAdminUsers,
   resetAdminUserPassword,
 } from "@/features/admin-users/service";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
 async function requireClientAdmin() {
   const cookieStore = await cookies();
@@ -18,59 +19,88 @@ async function requireClientAdmin() {
   return session;
 }
 
-// GET /api/admin/staff
 export async function GET() {
   const session = await requireClientAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const users = await getAdminUsers();
+  const currentSite = await getCurrentSiteFromRequest();
+  const users =
+    session.role === "super_admin"
+      ? await getAdminUsers(currentSite.id)
+      : await getAdminUsers(session.siteId ?? undefined);
   return NextResponse.json(users);
 }
 
-// POST /api/admin/staff
 export async function POST(request: Request) {
   const session = await requireClientAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const body = (await request.json()) as { username?: string; password?: string };
+  const body = (await request.json()) as {
+    username?: string;
+    password?: string;
+    role?: "client_admin" | "employee";
+  };
   const username = body.username?.trim();
   const password = body.password;
+  const role = body.role === "client_admin" ? "client_admin" : "employee";
 
   if (!username || !password || password.length < 6) {
-    return NextResponse.json({ error: "用户名不能为空，密码长度不能少于6位" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Username is required and password must be at least 6 characters." },
+      { status: 400 },
+    );
+  }
+
+  if (session.role !== "super_admin" && !session.siteId) {
+    return NextResponse.json(
+      { error: "This account is not linked to a client site yet." },
+      { status: 400 },
+    );
   }
 
   try {
-    const user = await createAdminUser({ username, password });
+    const currentSite = await getCurrentSiteFromRequest();
+    const user = await createAdminUser({
+      username,
+      password,
+      role,
+      siteId: session.role === "super_admin" ? currentSite.id ?? null : session.siteId,
+    });
     return NextResponse.json({ user }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: "用户名已存在" }, { status: 409 });
+    return NextResponse.json({ error: "Username already exists." }, { status: 409 });
   }
 }
 
-// DELETE /api/admin/staff?id=xxx
 export async function DELETE(request: Request) {
   const session = await requireClientAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   const { searchParams } = new URL(request.url);
   const id = Number(searchParams.get("id"));
-  if (!id) return NextResponse.json({ error: "缺少 id 参数" }, { status: 400 });
+  if (!id) return NextResponse.json({ error: "Missing id parameter." }, { status: 400 });
 
-  await deleteAdminUser(id);
+  const currentSite = await getCurrentSiteFromRequest();
+  await deleteAdminUser(
+    id,
+    session.role === "super_admin" ? currentSite.id ?? undefined : session.siteId,
+  );
   return NextResponse.json({ success: true });
 }
 
-// PATCH /api/admin/staff - reset password
 export async function PATCH(request: Request) {
   const session = await requireClientAdmin();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   const body = (await request.json()) as { id?: number; newPassword?: string };
   if (!body.id || !body.newPassword || body.newPassword.length < 6) {
-    return NextResponse.json({ error: "新密码长度不能少于6位" }, { status: 400 });
+    return NextResponse.json(
+      { error: "New password must be at least 6 characters." },
+      { status: 400 },
+    );
   }
 
-  await resetAdminUserPassword(body.id, body.newPassword);
+  const currentSite = await getCurrentSiteFromRequest();
+  await resetAdminUserPassword(body.id, body.newPassword, session.role === "super_admin" ? currentSite.id ?? undefined : session.siteId);
   return NextResponse.json({ success: true });
 }

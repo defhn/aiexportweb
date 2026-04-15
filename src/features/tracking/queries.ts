@@ -1,25 +1,34 @@
-import { desc, gte, isNotNull, sql } from "drizzle-orm";
+import { and, desc, eq, gte, isNotNull, sql, type SQL } from "drizzle-orm";
+
 import { getDb } from "@/db/client";
 import { inquiries } from "@/db/schema";
+import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 
-/** 获取 UTM 流量归因统计数据，默认分析最近 30 天数据 */
+function withSiteScope(siteId: number | null, condition: SQL) {
+  return siteId ? and(eq(inquiries.siteId, siteId), condition) : condition;
+}
+
+function siteOnlyScope(siteId: number | null) {
+  return siteId ? eq(inquiries.siteId, siteId) : sql`true`;
+}
+
 export async function getUtmAttributionSummary() {
   const db = getDb();
+  const currentSite = await getCurrentSiteFromRequest();
+  const siteId = currentSite.id ?? null;
   const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-  // 按 utm_source 聚合排序
   const bySource = await db
     .select({
       utmSource: inquiries.utmSource,
       count: sql<number>`count(*)::int`,
     })
     .from(inquiries)
-    .where(gte(inquiries.createdAt, cutoff))
+    .where(withSiteScope(siteId, gte(inquiries.createdAt, cutoff)))
     .groupBy(inquiries.utmSource)
     .orderBy(desc(sql`count(*)`))
     .limit(10);
 
-  // 按 utm_campaign 聚合排序
   const byCampaign = await db
     .select({
       utmCampaign: inquiries.utmCampaign,
@@ -27,39 +36,35 @@ export async function getUtmAttributionSummary() {
       count: sql<number>`count(*)::int`,
     })
     .from(inquiries)
-    .where(gte(inquiries.createdAt, cutoff))
+    .where(withSiteScope(siteId, gte(inquiries.createdAt, cutoff)))
     .groupBy(inquiries.utmCampaign, inquiries.utmSource)
     .orderBy(desc(sql`count(*)`))
     .limit(10);
 
-  // GCLID 统计：来自 Google Ads 点击的询盘数量
   const gclidRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
-    .where(isNotNull(inquiries.gclid));
-
+    .where(withSiteScope(siteId, isNotNull(inquiries.gclid)));
   const gclidCount = gclidRows[0]?.count ?? 0;
 
-  // 统计有 UTM / GCLID 的已归因询盘 vs 无追踪参数的直接访问
   const trackedRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
-    .where(isNotNull(inquiries.utmSource));
+    .where(withSiteScope(siteId, isNotNull(inquiries.utmSource)));
   const trackedCount = trackedRows[0]?.count ?? 0;
 
   const totalRows = await db
     .select({ count: sql<number>`count(*)::int` })
-    .from(inquiries);
+    .from(inquiries)
+    .where(siteOnlyScope(siteId));
   const totalCount = totalRows[0]?.count ?? 0;
 
-  // 高价值询盘：含公司网站的询盘通常来自企业买家，转化价值更高
   const highValueRows = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(inquiries)
-    .where(isNotNull(inquiries.companyWebsite));
+    .where(withSiteScope(siteId, isNotNull(inquiries.companyWebsite)));
   const highValueCount = highValueRows[0]?.count ?? 0;
 
-  // 最近 20 条含 UTM 参数的询盘明细
   const recentTracked = await db
     .select({
       id: inquiries.id,
@@ -75,7 +80,7 @@ export async function getUtmAttributionSummary() {
       createdAt: inquiries.createdAt,
     })
     .from(inquiries)
-    .where(isNotNull(inquiries.utmSource))
+    .where(withSiteScope(siteId, isNotNull(inquiries.utmSource)))
     .orderBy(desc(inquiries.createdAt))
     .limit(20);
 
