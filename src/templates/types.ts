@@ -70,6 +70,12 @@ export interface PublicLayoutProps {
   children: React.ReactNode;
   settings: SiteSettings;
   categories: CategoryCardData[];
+  theme?: {
+    accent: string;
+    surface: string;
+    surfaceAlt: string;
+    border: string;
+  };
 }
 
 // ─── 模板定义接口 ─────────────────────────────────────────────────────────

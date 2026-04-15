@@ -1,9 +1,6 @@
 /**
- * template-01 公共布局
- * 行业：工业制造 / CNC 精密加工
- *
- * 包含此模板专属的 Header 和 Footer 样式。
- * 修改此文件只影响 template-01，不会波及其他模板。
+ * template-11 公共布局
+ * 行业：消费品电子 / 智能硬件
  */
 
 import { SiteFooter } from "@/components/public/site-footer";
@@ -14,11 +11,11 @@ import { TrackingProvider } from "@/components/tracking-provider";
 import type { PublicLayoutProps } from "@/templates/types";
 import { getTemplateTheme } from "@/templates/theme";
 
-export function Template01Layout({ children, settings, categories }: PublicLayoutProps) {
-  const theme = getTemplateTheme("template-01");
+export function Template11Layout({ children, settings, categories }: PublicLayoutProps) {
+  const theme = getTemplateTheme("template-11");
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-white text-slate-950 selection:bg-blue-500/30 selection:text-blue-900">
+    <div className="min-h-screen flex flex-col bg-[#070b14] text-slate-50 selection:bg-cyan-400/30 selection:text-cyan-100">
       <TrackingProvider />
       <SiteHeader companyName={settings.companyNameEn} theme={theme} />
       <main className="flex-1">{children}</main>

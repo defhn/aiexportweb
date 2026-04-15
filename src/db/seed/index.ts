@@ -23,7 +23,16 @@ import {
 import { defaultFieldDefinitions } from "./default-field-defs";
 import { buildingMaterialsSeedPack } from "./packs/building-materials";
 import { cncSeedPack } from "./packs/cnc";
+import { consumerElectronicsSeedPack } from "./packs/consumer-electronics";
+import { energyPowerSeedPack } from "./packs/energy-power";
+import { furnitureOutdoorSeedPack } from "./packs/furniture-outdoor";
+import { fluidHvacSeedPack } from "./packs/fluid-hvac";
+import { hardwarePlasticsSeedPack } from "./packs/hardware-plastics";
 import { industrialEquipmentSeedPack } from "./packs/industrial-equipment";
+import { lightingSeedPack } from "./packs/lighting";
+import { lifestyleSeedPack } from "./packs/lifestyle";
+import { medicalHealthSeedPack } from "./packs/medical-health";
+import { textilePackagingSeedPack } from "./packs/textile-packaging";
 import type { SeedPack, SeedPackKey } from "./types";
 
 export { defaultFieldDefinitions };
@@ -46,6 +55,15 @@ export const seedPacks: Partial<Record<SeedPackKey, SeedPack>> = {
   cnc: cncSeedPack,
   "industrial-equipment": industrialEquipmentSeedPack,
   "building-materials": buildingMaterialsSeedPack,
+  "energy-power": energyPowerSeedPack,
+  "medical-health": medicalHealthSeedPack,
+  "fluid-hvac": fluidHvacSeedPack,
+  lighting: lightingSeedPack,
+  "hardware-plastics": hardwarePlasticsSeedPack,
+  "furniture-outdoor": furnitureOutdoorSeedPack,
+  "textile-packaging": textilePackagingSeedPack,
+  "consumer-electronics": consumerElectronicsSeedPack,
+  lifestyle: lifestyleSeedPack,
 };
 
 export const seedPackKeys = Object.keys(seedPacks) as SeedPackKey[];
