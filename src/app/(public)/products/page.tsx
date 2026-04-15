@@ -1,41 +1,39 @@
 import { CategoryGrid } from "@/components/public/category-grid";
 import { ProductCard } from "@/components/public/product-card";
 import { getAllCategories, getAllProducts } from "@/features/products/queries";
+import { getActiveTemplate, getTemplateTheme } from "@/templates";
 import Link from "next/link";
 
 export default async function ProductsPage() {
   const [categories, products] = await Promise.all([getAllCategories(), getAllProducts()]);
+  const template = getActiveTemplate();
+  const theme = getTemplateTheme(template.id);
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Sub-Hero Header */}
-      <section className="relative bg-stone-900 py-32 overflow-hidden">
+      <section className="relative overflow-hidden py-32" style={{ backgroundColor: theme.surface }}>
         <div className="absolute inset-0 opacity-20 texture-carbon" />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 to-transparent" />
-        
+        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${theme.accentSoft}, transparent)` }} />
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-            <h1 className="text-sm font-black uppercase tracking-[0.4em] text-blue-400 mb-6">Product Catalog</h1>
-            <p className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-8">
-              Explore Our Manufacturing Capabilities
-            </p>
-            <div className="mx-auto h-1 w-20 bg-blue-600 rounded-full" />
+          <h1 className="mb-6 text-sm font-black uppercase tracking-[0.4em] text-white/70">{theme.heroTag}</h1>
+          <p className="mb-8 text-4xl font-bold tracking-tight text-white md:text-5xl">{theme.catalogTitle}</p>
+          <p className="mx-auto max-w-2xl text-lg leading-8 text-white/70">{theme.catalogDescription}</p>
+          <div className="mx-auto mt-10 h-1 w-20 rounded-full" style={{ backgroundColor: theme.accent }} />
         </div>
       </section>
 
-      <section className="border-b border-stone-100 bg-white py-8">
+      <section className="border-b bg-white py-8" style={{ borderColor: theme.border }}>
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/products"
-              className="rounded-full bg-stone-900 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-white"
-            >
+            <Link href="/products" className="rounded-full px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-white" style={{ backgroundColor: theme.surface }}>
               All Products
             </Link>
             {categories.map((category) => (
               <Link
                 key={category.slug}
                 href={`/products/${category.slug}`}
-                className="rounded-full border border-stone-200 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-stone-600 transition-colors hover:border-blue-200 hover:text-blue-600"
+                className="rounded-full border px-5 py-3 text-xs font-black uppercase tracking-[0.2em] transition-colors"
+                style={{ borderColor: theme.border, color: "#475569" }}
               >
                 {category.nameEn}
               </Link>
@@ -44,29 +42,33 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <section className="py-24 bg-stone-50">
-        <CategoryGrid items={categories} />
+      <section className="bg-stone-50 py-24">
+        <CategoryGrid
+          accentColor={theme.accent}
+          badgeLabel={theme.categoryTitle}
+          fallbackImage={theme.capabilities.highlights[0]?.image}
+          items={categories}
+          linkLabel="Explore Collection"
+        />
       </section>
 
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-14 flex items-end justify-between gap-6">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.4em] text-blue-600">
+              <p className="text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
                 All Products
               </p>
               <h2 className="mt-4 text-4xl font-bold tracking-tight text-stone-900">
-                Browse Our CNC Product Portfolio
+                {theme.catalogTitle}
               </h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-stone-500">
-              Explore the full catalog directly from one page, then drill down into a category
-              when you want to compare similar parts and capabilities.
+              {theme.catalogDescription}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-y-16 gap-x-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product) => (
               <ProductCard
                 key={product.slug}
@@ -76,6 +78,8 @@ export default async function ProductsPage() {
                 shortDescriptionEn={product.shortDescriptionEn}
                 imageUrl={product.coverImageUrl}
                 imageAlt={product.coverImageAlt}
+                accentColor={theme.accent}
+                linkLabel="View Details"
               />
             ))}
           </div>
@@ -88,14 +92,12 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      {/* Low-Level CTA */}
-      <section className="py-20 border-t border-stone-100">
-          <div className="mx-auto max-w-3xl px-6 text-center">
-              <p className="text-stone-500 italic">
-                Cannot find the specific part you are looking for? 
-                Our engineers are ready to assist with custom project feasibility analysis.
-              </p>
-          </div>
+      <section className="border-t py-20" style={{ borderColor: theme.border }}>
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <p className="text-stone-500 italic">
+            {theme.detailSupportDescription}
+          </p>
+        </div>
       </section>
     </main>
   );

@@ -79,16 +79,22 @@ export function CookieConsentBanner() {
 }
 
 /** NDA 信任徽章组件 — 显示在询盘表单底部，强化保密承诺 */
-export function NdaTrustBadge({ className = "" }: { className?: string }) {
+export function NdaTrustBadge({
+  className = "",
+  title = "Confidential Handling",
+  description = "Your files, requirements, and business information are kept confidential and used only for your inquiry.",
+}: {
+  className?: string;
+  title?: string;
+  description?: string;
+}) {
   return (
     <div
       className={`flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs text-emerald-700 ${className}`}
     >
       <Shield className="h-4 w-4 shrink-0 text-emerald-500" />
       <span>
-        <strong>Strict NDA Guaranteed</strong> &mdash; Your drawings, specs and
-        business information are kept 100% confidential and never shared with
-        third parties.
+        <strong>{title}</strong> &mdash; {description}
       </span>
     </div>
   );

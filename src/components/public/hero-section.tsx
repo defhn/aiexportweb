@@ -79,7 +79,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-2 pr-5 backdrop-blur-md mb-8"
+            className="mb-8 flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-2 pr-5 backdrop-blur-md"
           >
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]">
               NEW

@@ -14,6 +14,17 @@ type InquiryFormProps = {
   productId?: number | null;
   sourcePage: string;
   sourceUrl: string;
+  accentColor?: string;
+  copy?: {
+    eyebrow?: string;
+    title?: string;
+    successTitle?: string;
+    successMessage?: string;
+    securityNote?: string;
+    uploadHint?: string;
+    trustBadgeTitle?: string;
+    trustBadgeDescription?: string;
+  };
 };
 
 export function InquiryForm({
@@ -21,6 +32,8 @@ export function InquiryForm({
   productId,
   sourcePage,
   sourceUrl,
+  accentColor = "#2563eb",
+  copy,
 }: InquiryFormProps) {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
@@ -64,7 +77,10 @@ export function InquiryForm({
         return;
       }
 
-      setMessage("Thank you! Our engineering team will review your request and contact you within 24 hours.");
+      setMessage(
+        copy?.successMessage ??
+          "Thank you. Our team will review your request and contact you within 24 hours.",
+      );
       form.reset();
     } catch (e) {
       setError("Network error. Please try again.");
@@ -85,24 +101,31 @@ export function InquiryForm({
               <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6 font-black uppercase tracking-widest text-[#10b981]">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h2 className="text-2xl font-bold text-stone-900 mb-4">Request Received</h2>
+              <h2 className="mb-4 text-2xl font-bold text-stone-900">
+                {copy?.successTitle ?? "Request Received"}
+              </h2>
               <p className="text-stone-500 leading-relaxed italic">{message}</p>
           </motion.div>
       );
   }
 
   return (
-    <form className="p-8 space-y-8" onSubmit={handleSubmit}>
+    <form className="space-y-8 p-8" onSubmit={handleSubmit}>
       <header>
-        <h2 className="text-sm font-black uppercase tracking-[0.4em] text-stone-400 mb-2">Request Consultation</h2>
-        <p className="text-2xl font-bold tracking-tight text-stone-900">Start Project Analysis</p>
+        <h2 className="mb-2 text-sm font-black uppercase tracking-[0.4em] text-stone-400">
+          {copy?.eyebrow ?? "Request Consultation"}
+        </h2>
+        <p className="text-2xl font-bold tracking-tight text-stone-900">
+          {copy?.title ?? "Start Project Review"}
+        </p>
       </header>
 
       <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="relative group">
                 <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
                 name="name"
                 placeholder="Full Name"
                 required
@@ -110,7 +133,8 @@ export function InquiryForm({
             </div>
             <div className="relative group">
                 <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
                 name="email"
                 placeholder="Business Email"
                 required
@@ -121,12 +145,14 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-            className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
             name="companyName"
             placeholder="Company"
             />
             <input
-            className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+            className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
             name="country"
             placeholder="Country"
             />
@@ -134,12 +160,14 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
                 name="whatsapp"
                 placeholder="WhatsApp (Optional)"
             />
             <input
-                className="w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300"
+                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
                 defaultValue={defaultProductName}
                 name="productName"
                 placeholder="Interested Product"
@@ -147,7 +175,8 @@ export function InquiryForm({
           </div>
 
           <textarea
-            className="min-h-[120px] w-full bg-transparent border-b-2 border-stone-100 py-3.5 text-base font-medium text-stone-900 focus:outline-none focus:border-blue-600 transition-colors placeholder:text-stone-300 resize-none"
+            className="min-h-[120px] w-full resize-none border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
             name="message"
             placeholder="Technical requirements & Project scope..."
             required
@@ -155,15 +184,17 @@ export function InquiryForm({
       </div>
 
       <div className="space-y-6">
-          <div className="relative flex items-center justify-center p-6 border-2 border-dashed border-stone-100 rounded-2xl hover:bg-stone-50 transition-colors cursor-pointer group">
+          <div className="relative flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed border-stone-100 p-6 transition-colors hover:bg-stone-50 group">
               <input 
                 name="attachment" 
                 type="file" 
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <div className="text-center">
-                  <UploadCloud className="w-8 h-8 text-stone-300 mx-auto transition-colors group-hover:text-blue-500" />
-                  <p className="mt-2 text-xs font-bold text-stone-400 uppercase tracking-widest">Upload Drawings (PDF/STEP)</p>
+                  <UploadCloud className="mx-auto h-8 w-8 text-stone-300 transition-colors" />
+                  <p className="mt-2 text-xs font-bold uppercase tracking-widest text-stone-400">
+                    {copy?.uploadHint ?? "Attach references or requirement files"}
+                  </p>
               </div>
           </div>
 
@@ -176,7 +207,7 @@ export function InquiryForm({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 p-4 bg-red-50 rounded-2xl text-red-600 text-xs font-bold uppercase tracking-widest"
+                className="flex items-center gap-2 rounded-2xl bg-red-50 p-4 text-xs font-bold uppercase tracking-widest text-red-600"
             >
                 <AlertCircle className="w-4 h-4" />
                 {error}
@@ -184,10 +215,18 @@ export function InquiryForm({
         )}
       </AnimatePresence>
 
-            <NdaTrustBadge className="mb-4" />
-<button
-        className="w-full group relative h-16 rounded-full bg-stone-900 text-white font-bold tracking-widest uppercase text-xs overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
+      <NdaTrustBadge
+        className="mb-4"
+        description={copy?.trustBadgeDescription}
+        title={copy?.trustBadgeTitle}
+      />
+      {copy?.securityNote ? (
+        <p className="-mt-2 mb-4 text-xs leading-relaxed text-stone-500">{copy.securityNote}</p>
+      ) : null}
+      <button
+        className="group relative h-16 w-full overflow-hidden rounded-full text-xs font-bold uppercase tracking-widest text-white transition-all active:scale-[0.98] disabled:opacity-50"
         disabled={pending}
+        style={{ backgroundColor: accentColor }}
         type="submit"
       >
         <span className="relative z-10 flex items-center justify-center gap-3">
@@ -198,7 +237,7 @@ export function InquiryForm({
                 </>
             )}
         </span>
-        <div className="absolute inset-x-0 bottom-0 h-1 bg-blue-600 w-0 group-hover:w-full transition-all duration-700" />
+        <div className="absolute inset-x-0 bottom-0 h-1 w-0 bg-white/35 transition-all duration-700 group-hover:w-full" />
       </button>
     </form>
   );

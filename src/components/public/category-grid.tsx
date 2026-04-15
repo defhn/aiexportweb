@@ -13,22 +13,31 @@ type CategoryGridProps = {
     imageUrl?: string | null;
     imageAlt?: string | null;
   }>;
+  accentColor?: string;
+  badgeLabel?: string;
+  linkLabel?: string;
+  fallbackImage?: string;
 };
 
-function getCategoryImage(slug: string, name: string) {
+function getCategoryImage(slug: string, name: string, fallbackImage: string) {
   const lower = slug.toLowerCase() + name.toLowerCase();
   if (lower.includes("aluminum")) return "/images/aluminum_machining_parts_1775636011369.png";
   if (lower.includes("stainless")) return "/images/stainless_steel_components_1775636038441.png";
   if (lower.includes("turn")) return "/images/precision_turning_parts_1775636067122.png";
-  // fallback image
-  return "/images/cnc_machining_center_1775635445683.png";
+  return fallbackImage;
 }
 
-export function CategoryGrid({ items }: CategoryGridProps) {
+export function CategoryGrid({
+  items,
+  accentColor = "#2563eb",
+  badgeLabel = "Product Solution",
+  linkLabel = "Explore Collection",
+  fallbackImage = "/images/export_packaging_shipping_1775635539838.png",
+}: CategoryGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 max-w-7xl mx-auto">
       {items.map((category, index) => {
-        const bgImage = category.imageUrl || getCategoryImage(category.slug, category.nameEn);
+        const bgImage = category.imageUrl || getCategoryImage(category.slug, category.nameEn, fallbackImage);
         
         return (
           <motion.article
@@ -55,13 +64,13 @@ export function CategoryGrid({ items }: CategoryGridProps) {
             {/* Content overlay */}
             <div className="relative h-full w-full p-8 flex flex-col justify-end">
               <div>
-                <span className="inline-flex items-center rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300 border border-blue-500/30 backdrop-blur-sm">
-                  Precision Solution
+                <span className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white border backdrop-blur-sm" style={{ backgroundColor: accentColor + "22", borderColor: accentColor + "55", color: accentColor }}>
+                  {badgeLabel}
                 </span>
-                <h2 className="mt-4 text-3xl font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors">
+                <h2 className="mt-4 text-3xl font-bold tracking-tight text-white transition-colors" style={{ color: "#fff" }}>
                   {category.nameEn}
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-stone-300 line-clamp-3">
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-300">
                   {category.summaryEn}
                 </p>
               </div>
@@ -71,7 +80,7 @@ export function CategoryGrid({ items }: CategoryGridProps) {
                   href={`/products/${category.slug}`}
                   className="flex items-center gap-2 text-sm font-bold text-white group-hover:text-blue-400 transition-colors"
                 >
-                  Explore Capabilities
+                  {linkLabel}
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-colors group-hover:bg-blue-600">
                     <ArrowUpRight className="h-4 w-4" />
                   </div>

@@ -9,11 +9,11 @@ type StrengthsSectionProps = {
 };
 
 const imageMap: Record<string, string> = {
-  quality: "/images/precision_quality_inspection_1775635476602.png", // Inspecting parts
-  speed: "/images/cnc_turning_machine_1775635506691.png", // Machine working
-  global: "/images/export_packaging_shipping_1775635539838.png", // Shipping/Export
-  tech: "/images/cnc_machining_center_1775635445683.png", // CNC
-  default: "/images/blog_engineering_cover_1775635599853.png", // Industrial generic
+  quality: "/images/precision_quality_inspection_1775635476602.png",
+  speed: "/images/cnc_turning_machine_1775635506691.png",
+  global: "/images/export_packaging_shipping_1775635539838.png",
+  tech: "/images/cnc_machining_center_1775635445683.png",
+  default: "/images/export_packaging_shipping_1775635539838.png",
 };
 
 const iconMap: Record<string, any> = {
@@ -68,7 +68,7 @@ export function StrengthsSection({ items }: StrengthsSectionProps) {
               
               {/* Text half */}
               <div className="flex-1 p-6 flex flex-col bg-white">
-                <h3 className="text-xl font-bold text-stone-900 group-hover:text-blue-600 transition-colors leading-tight mb-3">
+                <h3 className="text-xl font-bold text-stone-900 transition-colors leading-tight mb-3 group-hover:text-blue-600">
                   {title}
                 </h3>
                 <p className="text-sm leading-relaxed text-stone-500 font-medium">

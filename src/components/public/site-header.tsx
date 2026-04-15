@@ -7,33 +7,48 @@ import { Menu, X, MoveRight } from "lucide-react";
 
 import { BrandLogo } from "./brand-logo";
 
-const navItems = [
+const defaultNavItems = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/products" },
-  { label: "Capabilities", href: "/capabilities" },
+  { label: "Solutions", href: "/capabilities" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
+  { label: "Guides", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
-export function SiteHeader({ companyName }: { companyName?: string }) {
+export function SiteHeader({
+  companyName,
+  theme,
+}: {
+  companyName?: string;
+  theme?: {
+    accent?: string;
+    surface?: string;
+    border?: string;
+    header?: { navItems?: Array<{ label: string; href: string }>; quoteLabel?: string };
+  };
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const accent = theme?.accent ?? "#2563eb";
+  const surface = theme?.surface ?? "rgba(10,10,10,0.92)";
+  const border = theme?.border ?? "rgba(255,255,255,0.1)";
+  const navItems = theme?.header?.navItems ?? defaultNavItems;
+  const quoteLabel = theme?.header?.quoteLabel ?? "Request Quote";
 
   return (
     <header
-      style={{ backgroundColor: "rgba(10,10,10,0.92)" }}
-      className="fixed inset-x-0 top-0 z-50 border-b border-white/10 backdrop-blur-md"
+      style={{ backgroundColor: surface, borderColor: border }}
+      className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="shrink-0 mr-2" onClick={() => setOpen(false)}>
-          <BrandLogo isDark />
+          <BrandLogo companyName={companyName} isDark tagline={quoteLabel} />
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex flex-1 items-center gap-0.5 overflow-hidden">
+        <div className="hidden md:flex flex-1 items-center gap-0.5 overflow-hidden">
           {navItems.map((item) => {
             const active =
               pathname === item.href ||
@@ -52,23 +67,22 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
               </Link>
             );
           })}
-        </nav>
+        </div>
 
-        {/* Desktop CTA */}
         <Link
           href="/request-quote"
-          className="hidden md:flex ml-auto shrink-0 group items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/25 active:scale-95"
+          className="hidden md:flex ml-auto shrink-0 group items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg active:scale-95"
+          style={{ backgroundColor: accent }}
         >
-          Get a Quote
+          {quoteLabel}
           <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Link>
 
-        {/* Mobile hamburger */}
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           style={{ color: "#ffffff" }}
-          className="ml-auto flex md:hidden items-center justify-center rounded-lg p-2 hover:bg-white/10 transition-colors"
+          className="ml-auto flex md:hidden items-center justify-center rounded-lg p-2 transition-colors hover:bg-white/10"
           onClick={() => setOpen(!open)}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -78,8 +92,8 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
       {/* Mobile Drawer */}
       {open && (
         <div
-          style={{ backgroundColor: "#0a0a0a" }}
-          className="md:hidden border-t border-white/10 shadow-xl"
+          style={{ backgroundColor: surface, borderColor: border }}
+          className="md:hidden border-t shadow-xl"
         >
           <nav className="flex flex-col px-4 py-4 gap-1">
             {navItems.map((item) => {
@@ -107,7 +121,7 @@ export function SiteHeader({ companyName }: { companyName?: string }) {
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-base font-semibold text-white hover:bg-blue-500 transition-colors active:scale-95"
               >
-                Get a Quote
+                {quoteLabel}
                 <MoveRight className="h-4 w-4" />
               </Link>
             </div>

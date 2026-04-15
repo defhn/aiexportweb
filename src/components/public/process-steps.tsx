@@ -3,8 +3,8 @@ import { ClipboardCheck, FileEdit, PackageCheck, Settings } from "lucide-react";
 const defaultSteps = [
   {
     icon: FileEdit,
-    title: "1. Upload & Quote",
-    description: "Submit drawings or CAD files and receive a DFM review with quote details.",
+    title: "1. Share Requirements",
+    description: "Send product references, quantities, target market, and timeline for an initial review.",
   },
   {
     icon: Settings,
@@ -13,8 +13,8 @@ const defaultSteps = [
   },
   {
     icon: ClipboardCheck,
-    title: "3. Volume Production",
-    description: "Approved parts move into stable production with process and inspection control.",
+    title: "3. Order Preparation",
+    description: "Approved items move into order preparation with quality and packing checkpoints.",
   },
   {
     icon: PackageCheck,
