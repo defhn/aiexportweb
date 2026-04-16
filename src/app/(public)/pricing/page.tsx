@@ -128,8 +128,8 @@ export default async function PricingPage() {
             return (
               <article
                 key={plan.key}
-                className={`relative flex flex-col rounded-[2.5rem] border-2 p-10 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] ${!isDark ? dynamicBg : ''}`}
-                style={isDark ? { borderColor: dynamicBorder, backgroundColor: dynamicBg } : { borderColor: dynamicBorder }}
+                className={`relative flex flex-col rounded-[2.5rem] border-2 p-10 shadow-2xl transition-all duration-300 hover:scale-[1.02] ${isDark && isCurrentPlan ? 'hover:shadow-[0_40px_80px_-20px_var(--glow)] z-10' : 'hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]'} ${!isDark ? dynamicBg : ''}`}
+                style={isDark ? { borderColor: dynamicBorder, backgroundColor: dynamicBg, '--glow': theme.accentSoft } as React.CSSProperties : { borderColor: dynamicBorder }}
               >
                 {isCurrentPlan ? (
                   <span className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white shadow-xl" style={{ backgroundColor: theme.accent }}>
