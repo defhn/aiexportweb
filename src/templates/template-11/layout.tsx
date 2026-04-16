@@ -22,7 +22,7 @@ function ElectronicsHeader({ companyName }: { companyName: string }) {
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           {[{ label: "Products", href: "/products" }, { label: "Solutions", href: "/capabilities" }, { label: "About", href: "/about" }, { label: "Blog", href: "/blog" }].map((item) => (
-            <Link key={item.href} href={item.href} className="rounded px-4 py-2 text-sm font-medium" style={{ color: theme.accent }}>
+            <Link key={item.href} href={item.href} className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10" style={{ color: "rgba(255,255,255,0.8)" }}>
               {item.label}
             </Link>
           ))}
@@ -38,7 +38,7 @@ function ElectronicsHeader({ companyName }: { companyName: string }) {
 export function Template11Layout({ children, settings, categories }: PublicLayoutProps) {
   const theme = getTemplateTheme("template-11");
   return (
-    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: theme.surface, color: theme.accent }}>
+    <div className="relative flex min-h-screen flex-col text-white" style={{ backgroundColor: theme.surface }}>
       <TrackingProvider />
       <ElectronicsHeader companyName={settings.companyNameEn} />
       <main className="flex-1">{children}</main>

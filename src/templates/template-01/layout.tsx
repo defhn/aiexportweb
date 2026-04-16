@@ -16,9 +16,8 @@ import { getTemplateTheme } from "@/templates/theme";
 
 export function Template01Layout({ children, settings, categories }: PublicLayoutProps) {
   const theme = getTemplateTheme("template-01");
-
   return (
-    <div className="relative flex min-h-screen flex-col bg-white text-slate-950 selection:bg-blue-500/30 selection:text-blue-900">
+    <div className="relative flex min-h-screen flex-col text-white selection:bg-blue-500/30 selection:text-blue-900" style={{ backgroundColor: theme.surface }}>
       <TrackingProvider />
       <SiteHeader companyName={settings.companyNameEn} theme={theme} />
       <main className="flex-1">{children}</main>
