@@ -24,19 +24,20 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: theme.surface }}>
-      <section className="relative overflow-hidden border-b py-24" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
-        <div className="absolute inset-0 opacity-20 texture-carbon" />
-        <div className="relative mx-auto max-w-5xl px-6 text-center">
-          <p className="mb-6 text-xs font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
+      <section className="relative overflow-hidden border-b py-32 md:py-40" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
+        <div className="absolute inset-0 opacity-20 mix-blend-overlay texture-carbon" />
+        <div className="absolute top-0 right-0 h-96 w-96 rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: `${theme.accent}15`, transform: "translate(20%, -20%)" }} />
+        <div className="relative mx-auto max-w-5xl px-6 text-center z-10">
+          <p className="mb-6 text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
             {theme.categoryTitle}
           </p>
-          <h1 className={`text-4xl font-bold tracking-tight md:text-5xl capitalize ${textColor}`}>{categoryName}</h1>
-          <p className={`mx-auto mt-8 max-w-3xl text-lg leading-relaxed ${textMuted}`}>{theme.categoryDescription}</p>
-          <div className="mt-10 flex justify-center gap-3">
-            <Link href="/products" className={`rounded-full border px-5 py-3 text-sm font-bold ${textColor} transition-opacity hover:opacity-80`} style={{ borderColor: theme.border }}>
+          <h1 className={`text-5xl font-black tracking-tight md:text-7xl capitalize ${textColor}`}>{categoryName}</h1>
+          <p className={`mx-auto mt-8 max-w-3xl text-xl font-medium leading-relaxed ${textMuted}`}>{theme.categoryDescription}</p>
+          <div className="mt-12 flex justify-center gap-4">
+            <Link href="/products" className={`rounded-xl border px-8 py-4 text-xs font-black uppercase tracking-widest ${textColor} transition-all hover:bg-white/5 hover:scale-105`} style={{ borderColor: theme.border }}>
               All Products
             </Link>
-            <Link href="/contact" className="rounded-full px-5 py-3 text-sm font-bold text-white transition-opacity hover:opacity-80" style={{ backgroundColor: theme.accent }}>
+            <Link href="/contact" className="rounded-xl px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition-all hover:scale-105 shadow-xl" style={{ backgroundColor: theme.accent }}>
               Contact Sales
             </Link>
           </div>
@@ -69,11 +70,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
       </section>
 
-      <section className="mx-6 mb-12 overflow-hidden rounded-[3.5rem] py-20 relative" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.05)" : theme.surface }}>
-        <div className="absolute inset-0 opacity-10 texture-carbon" />
-        <div className="relative z-10 mx-auto max-w-2xl px-6 text-center text-white">
-          <h2 className="text-2xl font-bold">{theme.detailSupportTitle}</h2>
-          <p className="mt-4 text-sm text-white/70">{theme.detailSupportDescription}</p>
+      <section className="mx-6 mb-16 mt-8 overflow-hidden rounded-[4rem] py-24 relative shadow-2xl ring-1 ring-white/10" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.03)" : theme.surfaceAlt }}>
+        <div className="absolute inset-0 opacity-20 texture-carbon mix-blend-overlay" />
+        <div className="absolute inset-x-0 bottom-0 h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${theme.accent}, transparent)` }} />
+        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center text-white">
+          <h2 className={`text-3xl lg:text-4xl font-black ${textColor}`}>{theme.detailSupportTitle}</h2>
+          <p className={`mt-6 text-lg font-medium leading-relaxed ${textMuted}`}>{theme.detailSupportDescription}</p>
         </div>
       </section>
     </main>

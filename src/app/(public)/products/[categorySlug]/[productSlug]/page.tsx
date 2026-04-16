@@ -147,44 +147,48 @@ export default async function ProductDetailPage({
 
       <section className="mx-auto max-w-7xl px-6 py-16 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-[1fr_420px] lg:gap-20">
-          <div className="space-y-16">
+          <div className="space-y-20">
             <header>
-              <p className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
+              <p className="text-[10px] font-black uppercase tracking-[0.5em]" style={{ color: theme.accent }}>
                 {theme.categoryTitle}
               </p>
-              <h1 className={`mt-6 text-4xl font-black leading-[1.1] tracking-tight md:text-5xl lg:text-7xl ${textColor}`}>
+              <h1 className={`mt-6 text-4xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl ${textColor}`}>
                 {product.product.nameEn}
               </h1>
-              <p className={`mt-8 max-w-3xl text-lg leading-relaxed md:text-xl font-medium ${textMuted}`}>
+              <p className={`mt-8 max-w-3xl text-lg leading-relaxed font-medium ${textMuted}`}>
                 {product.shortDescriptionEn}
               </p>
             </header>
 
             <div className="space-y-8">
               {product.coverImage && (
-                <div className="group overflow-hidden rounded-[3rem] shadow-2xl transition-all duration-700" style={{ backgroundColor: theme.surfaceAlt }}>
-                  <Image
-                    alt={product.coverImage.alt}
-                    className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                    priority
-                    src={product.coverImage.url}
-                    width={1400}
-                    height={900}
-                  />
+                <div className="group overflow-hidden rounded-[2.5rem] border shadow-2xl transition-all duration-700" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
+                  <div className="relative aspect-[16/9] sm:aspect-[21/9]">
+                    <Image
+                      alt={product.coverImage.alt}
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.05]"
+                      priority
+                      src={product.coverImage.url}
+                      fill
+                      sizes="100vw"
+                    />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2.5rem] pointer-events-none" />
+                  </div>
                 </div>
               )}
 
               {product.galleryImages.length > 0 && (
-                <div className="grid grid-cols-2 gap-4 sm:gap-8">
+                <div className="grid grid-cols-2 gap-4 sm:gap-6">
                   {product.galleryImages.map((image) => (
-                    <div key={image.id} className="group overflow-hidden rounded-[2.5rem] shadow-xl" style={{ backgroundColor: theme.surfaceAlt }}>
+                    <div key={image.id} className="group relative overflow-hidden rounded-[2rem] border shadow-xl" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
                       <Image
                         alt={image.alt}
-                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                         width={700}
                         height={525}
                         src={image.url}
                       />
+                      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2rem] pointer-events-none" />
                     </div>
                   ))}
                 </div>
@@ -227,24 +231,28 @@ export default async function ProductDetailPage({
 
           <aside className="relative">
             <div className="sticky top-24 space-y-16">
-              <div className="rounded-[3rem] border p-1 shadow-[0_48px_80px_-16px_rgba(0,0,0,0.12)] transition-shadow hover:shadow-[0_56px_96px_-12px_rgba(0,0,0,0.14)]" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
-                <InquiryForm
-                  accentColor={theme.accent}
-                  copy={{
-                    eyebrow: theme.forms.inquiryEyebrow,
-                    title: theme.forms.inquiryTitle,
-                    successTitle: theme.forms.successTitle,
-                    successMessage: theme.forms.successMessage,
-                    securityNote: theme.forms.securityNote,
-                    uploadHint: theme.forms.uploadHint,
-                    trustBadgeTitle: theme.forms.trustBadgeTitle,
-                    trustBadgeDescription: theme.forms.trustBadgeDescription,
-                  }}
-                  defaultProductName={product.product.nameEn}
-                  productId={product.product.id}
-                  sourcePage="product-detail"
-                  sourceUrl={`/products/${categorySlug}/${productSlug}`}
-                />
+              <div className="sticky top-24 space-y-12">
+              <div className="relative overflow-hidden rounded-[2.5rem] border p-1 shadow-2xl transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.15)]" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
+                <div className="absolute inset-0 opacity-30 mix-blend-overlay texture-carbon pointer-events-none" />
+                <div className="relative z-10 backdrop-blur-3xl rounded-[2.5rem]">
+                  <InquiryForm
+                    accentColor={theme.accent}
+                    copy={{
+                      eyebrow: theme.forms.inquiryEyebrow,
+                      title: theme.forms.inquiryTitle,
+                      successTitle: theme.forms.successTitle,
+                      successMessage: theme.forms.successMessage,
+                      securityNote: theme.forms.securityNote,
+                      uploadHint: theme.forms.uploadHint,
+                      trustBadgeTitle: theme.forms.trustBadgeTitle,
+                      trustBadgeDescription: theme.forms.trustBadgeDescription,
+                    }}
+                    defaultProductName={product.product.nameEn}
+                    productId={product.product.id}
+                    sourcePage="product-detail"
+                    sourceUrl={`/products/${categorySlug}/${productSlug}`}
+                  />
+                </div>
               </div>
 
               {product.relatedProducts.length > 0 && (

@@ -55,46 +55,53 @@ export default async function RequestQuotePage() {
   const rawFields = Array.isArray(settings.formFieldsJson) ? settings.formFieldsJson : [];
   const formFields: FormField[] = rawFields.filter(isValidFormField);
 
+  const isDark = theme.surface !== "#ffffff" && theme.surface !== "#fffaf2" && theme.surface !== "#f5f6ff" && theme.surface !== "#fffaf4";
+  const textColor = isDark ? "text-white" : "text-stone-900";
+  const textMuted = isDark ? "text-white/60" : "text-stone-500";
+  const cardBg = isDark ? "rgba(255,255,255,0.03)" : "#ffffff";
+
   if (isLocked) {
     return (
-      <main className="min-h-screen bg-stone-50 px-6 py-20">
-        <section className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] border bg-white shadow-2xl" style={{ borderColor: theme.border }}>
+      <main className="min-h-screen px-6 py-28 transition-colors duration-500 flex items-center justify-center" style={{ backgroundColor: theme.surface }}>
+        <section className="w-full max-w-5xl overflow-hidden rounded-[3rem] border shadow-2xl ring-1 ring-white/10" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
           <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="flex flex-col justify-between p-10 text-white md:p-16" style={{ backgroundColor: theme.surface }}>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.3em]" style={{ color: theme.accent }}>
+            <div className="relative flex flex-col justify-between p-12 text-white md:p-20 overflow-hidden" style={{ backgroundColor: theme.surface }}>
+              <div className="absolute inset-0 opacity-20 mix-blend-overlay texture-carbon pointer-events-none" />
+              <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: `${theme.accent}30` }} />
+              <div className="relative z-10">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
                   Request a Quote
                 </p>
-                <h1 className="mt-4 text-4xl font-semibold leading-[1.1] text-white md:text-5xl">
+                <h1 className="mt-8 text-4xl font-black leading-[1.1] tracking-tight text-white md:text-5xl">
                   Quote requests are included in Growth plans
                 </h1>
-                <p className="mt-6 max-w-xl text-white/70">
+                <p className="mt-6 max-w-xl text-lg font-medium text-white/70 leading-relaxed">
                   This site can still display the quote request experience. Submission is disabled on the current plan, but customers can still contact you through the standard inquiry flow.
                 </p>
               </div>
 
-              <div className="mt-12 space-y-3 text-sm text-white/75">
+              <div className="relative z-10 mt-16 space-y-4 text-sm font-medium text-white/50">
                 <p>{theme.forms.uploadHint}</p>
                 <p>{theme.forms.securityNote}</p>
                 <p>{theme.footer.rfqHint}</p>
               </div>
             </div>
 
-            <div className="flex flex-col justify-center gap-6 p-8 md:p-12">
-              <div className="rounded-3xl border bg-stone-50 p-6" style={{ borderColor: theme.border }}>
-                <p className="text-sm font-bold uppercase tracking-[0.25em] text-stone-400">What happens on this plan</p>
-                <ul className="mt-4 space-y-3 text-sm leading-7 text-stone-600">
-                  <li>• Visitors can still review the RFQ-style layout.</li>
-                  <li>• The standard contact flow remains available.</li>
-                  <li>• Growth and above unlock full quote request handling.</li>
+            <div className="flex flex-col justify-center gap-8 p-10 md:p-16" style={{ backgroundColor: cardBg }}>
+              <div className="rounded-[2rem] border p-8 shadow-sm" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(0,0,0,0.2)" : "#fafaf9" }}>
+                <p className={`text-[10px] font-black uppercase tracking-[0.3em] ${textMuted}`}>What happens on this plan</p>
+                <ul className={`mt-6 space-y-4 text-sm font-medium leading-relaxed ${textColor}`}>
+                  <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> Visitors can still review the RFQ-style layout.</li>
+                  <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> The standard contact flow remains available.</li>
+                  <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> Growth and above unlock full quote request handling.</li>
                 </ul>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <Link href="/contact" className="rounded-full px-5 py-3 text-sm font-bold text-white" style={{ backgroundColor: theme.surface }}>
+              <div className="flex flex-wrap gap-4 mt-4">
+                <Link href="/contact" className="rounded-2xl px-8 py-4 text-sm font-black uppercase tracking-widest text-white transition-transform hover:scale-105 shadow-xl" style={{ backgroundColor: theme.accent }}>
                   Contact Sales
                 </Link>
-                <Link href="/blog" className="rounded-full border px-5 py-3 text-sm font-bold text-stone-700" style={{ borderColor: theme.border }}>
+                <Link href="/blog" className={`rounded-2xl border px-8 py-4 text-sm font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${textColor}`} style={{ borderColor: theme.border }}>
                   Browse Blog
                 </Link>
               </div>
@@ -106,37 +113,39 @@ export default async function RequestQuotePage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-20" style={{ backgroundColor: "#fafafa" }}>
+    <main className="min-h-screen px-6 py-28 transition-colors duration-500 flex items-center justify-center" style={{ backgroundColor: theme.surface }}>
       <section
-        className="mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-white shadow-2xl"
-        style={{ borderColor: theme.border }}
+        className="w-full max-w-6xl overflow-hidden rounded-[3rem] border shadow-2xl ring-1 ring-white/10"
+        style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}
       >
-        <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
           <div
-            className="flex flex-col justify-between p-10 text-white md:p-16"
+            className="relative flex flex-col justify-between p-12 text-white md:p-16 lg:p-20 overflow-hidden"
             style={{ backgroundColor: theme.surface }}
           >
-            <div>
+            <div className="absolute inset-0 opacity-10 mix-blend-overlay texture-carbon pointer-events-none" />
+            <div className="absolute -top-32 -left-32 h-80 w-80 rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: `${theme.accent}30` }} />
+            <div className="relative z-10">
               <p
-                className="text-sm font-semibold uppercase tracking-[0.3em]"
+                className="text-[10px] font-black uppercase tracking-[0.4em]"
                 style={{ color: theme.accent }}
               >
                 {theme.forms.inquiryEyebrow}
               </p>
-              <h1 className="mt-4 text-4xl font-semibold leading-[1.1] text-white md:text-5xl">
+              <h1 className="mt-8 text-4xl font-black leading-[1.1] tracking-tight text-white md:text-5xl">
                 {theme.detailSupportTitle}
               </h1>
-              <p className="mt-6 max-w-xl text-white/70">{theme.detailSupportDescription}</p>
+              <p className="mt-6 max-w-xl text-lg font-medium text-white/70 leading-relaxed">{theme.detailSupportDescription}</p>
             </div>
 
-            <div className="mt-12 space-y-3 text-sm text-white/75">
-              <p>{theme.forms.uploadHint}</p>
-              <p>{theme.forms.securityNote}</p>
-              <p>{theme.footer.rfqHint}</p>
+            <div className="relative z-10 mt-20 space-y-4 text-xs font-bold uppercase tracking-widest text-white/40">
+              <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> {theme.forms.uploadHint}</p>
+              <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> {theme.forms.securityNote}</p>
+              <p className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.accent }} /> {theme.footer.rfqHint}</p>
             </div>
           </div>
 
-          <div className="p-8 md:p-12">
+          <div className="p-10 md:p-16" style={{ backgroundColor: cardBg }}>
             <RequestQuoteForm
               accentColor={theme.accent}
               productOptions={products.map((product) => ({ id: product.id, nameEn: product.nameEn }))}

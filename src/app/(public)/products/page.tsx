@@ -34,17 +34,17 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      <section className="border-b py-8" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-wrap gap-3">
-            <Link href="/products" className="rounded-full px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-white" style={{ backgroundColor: theme.accent }}>
+      <section className="relative overflow-hidden border-b py-8" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.02)" }}>
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
+          <div className="flex flex-wrap gap-4">
+            <Link href="/products" className="rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl hover:scale-105 transition-transform" style={{ backgroundColor: theme.accent }}>
               All Products
             </Link>
             {categories.map((category) => (
               <Link
                 key={category.slug}
                 href={`/products/${category.slug}`}
-                className="rounded-full border px-5 py-3 text-xs font-black uppercase tracking-[0.2em] transition-colors hover:opacity-80"
+                className="rounded-2xl border px-6 py-4 text-xs font-black uppercase tracking-[0.2em] transition-all hover:bg-white/5"
                 style={{ borderColor: theme.border, color: textColor === "text-white" ? "rgba(255,255,255,0.8)" : "#475569" }}
               >
                 {category.nameEn}
@@ -54,28 +54,32 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.02)" : "#fafaf9" }}>
-        <CategoryGrid
-          accentColor={theme.accent}
-          badgeLabel={theme.categoryTitle}
-          fallbackImage={theme.capabilities.highlights[0]?.image}
-          items={categories}
-          linkLabel="Explore Collection"
-        />
+      <section className="py-32 relative" style={{ backgroundColor: theme.surface }}>
+        <div className="absolute inset-0 opacity-10 texture-carbon pointer-events-none" />
+        <div className="absolute top-1/2 left-0 h-[600px] w-[600px] -translate-y-1/2 -translate-x-1/2 rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: `${theme.accent}15` }} />
+        <div className="relative z-10">
+          <CategoryGrid
+            accentColor={theme.accent}
+            badgeLabel={theme.categoryTitle}
+            fallbackImage={theme.capabilities.highlights[0]?.image}
+            items={categories}
+            linkLabel="Explore Collection"
+          />
+        </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-32" style={{ backgroundColor: theme.surfaceAlt }}>
         <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
                 Portfolio
               </p>
-              <h2 className={`mt-4 text-4xl font-bold tracking-tight ${textColor}`}>
+              <h2 className={`mt-5 text-4xl font-black tracking-tight md:text-5xl ${textColor}`}>
                 {theme.catalogTitle}
               </h2>
             </div>
-            <p className={`max-w-xl text-sm leading-7 ${textMuted}`}>
+            <p className={`max-w-xl text-lg font-medium leading-relaxed ${textMuted}`}>
               {theme.catalogDescription}
             </p>
           </div>

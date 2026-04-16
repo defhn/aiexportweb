@@ -52,15 +52,15 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
             <Lock className="h-7 w-7 text-stone-500" />
           </div>
           <p className="text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>Blog Access</p>
-          <h1 className={`mt-4 text-4xl font-bold tracking-tight md:text-5xl ${textColor}`}>Blog is available on higher plans</h1>
-          <p className={`mt-4 max-w-2xl text-lg leading-8 ${textMuted}`}>
+          <h1 className={`mt-6 text-4xl font-black leading-[1.1] tracking-tight md:text-6xl ${textColor}`}>Blog is available on higher plans</h1>
+          <p className={`mt-6 max-w-2xl text-lg font-medium leading-relaxed ${textMuted}`}>
             This site can still show the blog layout, but publishing and managing articles is enabled on Growth plans and above.
           </p>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/contact" className="rounded-full px-8 py-4 text-base font-bold text-white shadow-lg transition-transform hover:scale-105" style={{ backgroundColor: theme.accent }}>
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+            <Link href="/contact" className="rounded-2xl px-8 py-4 text-xs font-black uppercase tracking-widest text-white transition-transform hover:scale-105 shadow-xl" style={{ backgroundColor: theme.accent }}>
               Contact Sales
             </Link>
-            <Link href="/products" className="rounded-full border px-8 py-4 text-base font-bold transition-colors hover:bg-stone-50" style={{ borderColor: theme.border, color: textColor === "text-white" ? "white" : "inherit" }}>
+            <Link href="/products" className={`rounded-2xl border px-8 py-4 text-xs font-black uppercase tracking-widest transition-colors hover:bg-white/5 ${textColor}`} style={{ borderColor: theme.border }}>
               Browse Products
             </Link>
           </div>
@@ -162,15 +162,15 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                 </span>
                 <span className={`text-[10px] font-black uppercase tracking-widest ${isDark ? "text-white/40" : "text-stone-400"}`}>Updated Recently</span>
               </div>
-              <h3 className={`mb-6 text-3xl font-bold leading-[1.2] md:text-5xl transition-colors group-hover:opacity-80 ${isDark ? "text-white" : "text-stone-900"}`}>
+              <h3 className={`mb-6 text-3xl font-black leading-[1.1] tracking-tight md:text-5xl transition-colors group-hover:opacity-80 ${isDark ? "text-white" : "text-stone-900"}`}>
                 {featuredPost.titleEn}
               </h3>
-              <p className={`mb-8 line-clamp-3 text-lg leading-relaxed ${isDark ? "text-white/60" : "text-stone-500"}`}>
+              <p className={`mb-10 line-clamp-3 text-lg font-medium leading-relaxed ${isDark ? "text-white/60" : "text-stone-500"}`}>
                 {featuredPost.excerptEn}
               </p>
-              <div className={`mt-auto flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] transition-opacity group-hover:opacity-80 ${isDark ? "text-white" : "text-stone-900"}`}>
+              <div className={`mt-auto flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] transition-opacity group-hover:opacity-80 ${isDark ? "text-white" : "text-stone-900"}`}>
                 Read Full Article
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "#ffffff" }}>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 shadow-2xl" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "#ffffff" }}>
                   <ArrowUpRight className="h-5 w-5" />
                 </div>
               </div>
@@ -231,19 +231,19 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                   {theme.blog.supportEyebrow}
                 </span>
               </div>
-              <h3 className="mb-5 text-3xl font-black tracking-tight text-white md:text-5xl leading-tight">
+              <h3 className={`mb-3 text-3xl font-black tracking-tight md:text-5xl leading-[1.1] ${textColor}`}>
                 {theme.blog.supportTitle}
               </h3>
-              <p className="max-w-xl text-lg text-white/60 leading-relaxed font-medium">
+              <p className={`max-w-xl text-lg leading-relaxed font-medium ${textMuted}`}>
                 {theme.blog.supportDescription}
               </p>
             </div>
 
             <div className="relative z-10 flex flex-col gap-4 sm:flex-row">
-              <Link href="/request-quote" className="inline-flex h-14 items-center justify-center rounded-xl px-10 text-xs font-black uppercase tracking-widest text-white transition-all hover:scale-105" style={{ backgroundColor: theme.accent }}>
+              <Link href="/request-quote" className="inline-flex h-16 items-center justify-center rounded-2xl px-12 text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all hover:scale-105 shadow-xl" style={{ backgroundColor: theme.accent }}>
                 Request a Quote
               </Link>
-              <Link href="/contact" className="inline-flex h-14 items-center justify-center rounded-xl border px-10 text-xs font-black uppercase tracking-widest text-stone-200 transition-all hover:text-white" style={{ borderColor: "rgba(255,255,255,0.16)" }}>
+              <Link href="/contact" className={`inline-flex h-16 items-center justify-center rounded-2xl border px-12 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-white/5 ${textColor}`} style={{ borderColor: theme.border }}>
                 Contact Team
               </Link>
             </div>
