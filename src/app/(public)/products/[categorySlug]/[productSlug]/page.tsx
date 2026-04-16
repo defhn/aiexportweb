@@ -230,8 +230,7 @@ export default async function ProductDetailPage({
           </div>
 
           <aside className="relative">
-            <div className="sticky top-24 space-y-16">
-              <div className="sticky top-24 space-y-12">
+            <div className="sticky top-24 space-y-12">
               <div className="relative overflow-hidden rounded-[2.5rem] border p-1 shadow-2xl transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.15)]" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
                 <div className="absolute inset-0 opacity-30 mix-blend-overlay texture-carbon pointer-events-none" />
                 <div className="relative z-10 backdrop-blur-3xl rounded-[2.5rem]">

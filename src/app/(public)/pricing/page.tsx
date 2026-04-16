@@ -11,6 +11,7 @@ import {
   getPlanCardSummaries,
   isPricingPageEnabled,
 } from "@/lib/plans";
+import { getTemplateById, getTemplateTheme } from "@/templates";
 
 function IconCheck() {
   return (
