@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const fluidHvacSeedPack: SeedPack = {
   "key": "fluid-hvac",
   "site": {
@@ -199,6 +200,7 @@ export const fluidHvacSeedPack: SeedPack = {
       "nameZh": "fluid-hvac 产品 3",
       "nameEn": "fluid-hvac Product 3",
       "slug": "fluid-hvac-product-3-1776323519507",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -207,29 +209,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 4",
       "nameEn": "fluid-hvac Product 4",
       "slug": "fluid-hvac-product-4-1776323519735",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -238,29 +225,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 5",
       "nameEn": "fluid-hvac Product 5",
       "slug": "fluid-hvac-product-5-1776323519950",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -269,29 +241,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 6",
       "nameEn": "fluid-hvac Product 6",
       "slug": "fluid-hvac-product-6-1776323520152",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -300,29 +257,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 7",
       "nameEn": "fluid-hvac Product 7",
       "slug": "fluid-hvac-product-7-1776323520383",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -331,29 +273,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 8",
       "nameEn": "fluid-hvac Product 8",
       "slug": "fluid-hvac-product-8-1776323520589",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -362,29 +289,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 9",
       "nameEn": "fluid-hvac Product 9",
       "slug": "fluid-hvac-product-9-1776323520822",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -393,29 +305,14 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "fluid-hvac 产品 10",
       "nameEn": "fluid-hvac Product 10",
       "slug": "fluid-hvac-product-10-1776323521033",
+      "categorySlug": "hvac-equipment",
       "shortDescriptionZh": "这是 fluid-hvac 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the fluid-hvac industry.",
       "detailsZh": "详细描述（中文）……",
@@ -424,23 +321,7 @@ export const fluidHvacSeedPack: SeedPack = {
       "seoDescription": "适用于 fluid-hvac 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

@@ -20,7 +20,7 @@ function IndustrialHeader({ companyName }: { companyName: string }) {
     <header className="sticky top-0 z-50" style={{ backgroundColor: theme.surface, borderBottom: `1px solid ${theme.border}` }}>
       <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between gap-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-black" style={{ color: theme.text }}>
+        <Link href="/" className="flex items-center gap-2 font-black" style={{ color: "white" }}>
           {/* 橙色方块图标 */}
           <span className="w-7 h-7 flex items-center justify-center rounded" style={{ backgroundColor: theme.accent, color: "white", fontSize: "0.75rem" }}>
             IE
@@ -36,7 +36,7 @@ function IndustrialHeader({ companyName }: { companyName: string }) {
             { label: "About", href: "/about" },
             { label: "Blog", href: "/blog" },
           ].map((item) => (
-            <Link key={item.href} href={item.href} className="px-4 py-2 text-sm hover:opacity-80 transition-opacity" style={{ color: theme.text }}>
+            <Link key={item.href} href={item.href} className="px-4 py-2 text-sm hover:opacity-80 transition-opacity" style={{ color: "white" }}>
               {item.label}
             </Link>
           ))}

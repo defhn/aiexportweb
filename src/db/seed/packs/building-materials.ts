@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const buildingMaterialsSeedPack: SeedPack = {
   "key": "building-materials",
   "site": {
@@ -249,6 +250,7 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "nameZh": "building-materials 产品 3",
       "nameEn": "building-materials Product 3",
       "slug": "building-materials-product-3-1776323512836",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -257,29 +259,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 4",
       "nameEn": "building-materials Product 4",
       "slug": "building-materials-product-4-1776323513044",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -288,29 +275,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 5",
       "nameEn": "building-materials Product 5",
       "slug": "building-materials-product-5-1776323513277",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -319,29 +291,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 6",
       "nameEn": "building-materials Product 6",
       "slug": "building-materials-product-6-1776323513512",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -350,29 +307,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 7",
       "nameEn": "building-materials Product 7",
       "slug": "building-materials-product-7-1776323513755",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -381,29 +323,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 8",
       "nameEn": "building-materials Product 8",
       "slug": "building-materials-product-8-1776323513962",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -412,29 +339,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 9",
       "nameEn": "building-materials Product 9",
       "slug": "building-materials-product-9-1776323514164",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -443,29 +355,14 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "building-materials 产品 10",
       "nameEn": "building-materials Product 10",
       "slug": "building-materials-product-10-1776323514407",
+      "categorySlug": "decorative-metal-panels",
       "shortDescriptionZh": "这是 building-materials 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the building-materials industry.",
       "detailsZh": "详细描述（中文）……",
@@ -474,23 +371,7 @@ export const buildingMaterialsSeedPack: SeedPack = {
       "seoDescription": "适用于 building-materials 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

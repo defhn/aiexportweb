@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const furnitureOutdoorSeedPack: SeedPack = {
   "key": "furniture-outdoor",
   "site": {
@@ -199,6 +200,7 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "nameZh": "furniture-outdoor 产品 3",
       "nameEn": "furniture-outdoor Product 3",
       "slug": "furniture-outdoor-product-3-1776323521271",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -207,29 +209,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 4",
       "nameEn": "furniture-outdoor Product 4",
       "slug": "furniture-outdoor-product-4-1776323521477",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -238,29 +225,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 5",
       "nameEn": "furniture-outdoor Product 5",
       "slug": "furniture-outdoor-product-5-1776323521708",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -269,29 +241,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 6",
       "nameEn": "furniture-outdoor Product 6",
       "slug": "furniture-outdoor-product-6-1776323521910",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -300,29 +257,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 7",
       "nameEn": "furniture-outdoor Product 7",
       "slug": "furniture-outdoor-product-7-1776323522110",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -331,29 +273,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 8",
       "nameEn": "furniture-outdoor Product 8",
       "slug": "furniture-outdoor-product-8-1776323522312",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -362,29 +289,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 9",
       "nameEn": "furniture-outdoor Product 9",
       "slug": "furniture-outdoor-product-9-1776323522556",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -393,29 +305,14 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "furniture-outdoor 产品 10",
       "nameEn": "furniture-outdoor Product 10",
       "slug": "furniture-outdoor-product-10-1776323522773",
+      "categorySlug": "outdoor-seating",
       "shortDescriptionZh": "这是 furniture-outdoor 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the furniture-outdoor industry.",
       "detailsZh": "详细描述（中文）……",
@@ -424,23 +321,7 @@ export const furnitureOutdoorSeedPack: SeedPack = {
       "seoDescription": "适用于 furniture-outdoor 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

@@ -107,7 +107,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                 defaultValue={params.q ?? ""}
                 placeholder="Search articles..."
                 className="w-full rounded-xl border bg-white/5 py-3.5 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 transition-all"
-                style={{ borderColor: "rgba(255,255,255,0.12)", ringColor: theme.accent }}
+                style={{ borderColor: "rgba(255,255,255,0.12)" }}
               />
             </div>
             <div className="flex max-h-20 flex-wrap gap-2 overflow-y-hidden">

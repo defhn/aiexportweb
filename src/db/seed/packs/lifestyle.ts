@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const lifestyleSeedPack: SeedPack = {
   "key": "lifestyle",
   "site": {
@@ -258,6 +259,7 @@ export const lifestyleSeedPack: SeedPack = {
       "nameZh": "lifestyle 产品 3",
       "nameEn": "lifestyle Product 3",
       "slug": "lifestyle-product-3-1776323526486",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -266,29 +268,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 4",
       "nameEn": "lifestyle Product 4",
       "slug": "lifestyle-product-4-1776323526707",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -297,29 +284,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 5",
       "nameEn": "lifestyle Product 5",
       "slug": "lifestyle-product-5-1776323526916",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -328,29 +300,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 6",
       "nameEn": "lifestyle Product 6",
       "slug": "lifestyle-product-6-1776323527132",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -359,29 +316,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 7",
       "nameEn": "lifestyle Product 7",
       "slug": "lifestyle-product-7-1776323527338",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -390,29 +332,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 8",
       "nameEn": "lifestyle Product 8",
       "slug": "lifestyle-product-8-1776323527540",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -421,29 +348,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 9",
       "nameEn": "lifestyle Product 9",
       "slug": "lifestyle-product-9-1776323527753",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -452,29 +364,14 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lifestyle 产品 10",
       "nameEn": "lifestyle Product 10",
       "slug": "lifestyle-product-10-1776323527958",
+      "categorySlug": "gift-sets",
       "shortDescriptionZh": "这是 lifestyle 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lifestyle industry.",
       "detailsZh": "详细描述（中文）……",
@@ -483,23 +380,7 @@ export const lifestyleSeedPack: SeedPack = {
       "seoDescription": "适用于 lifestyle 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

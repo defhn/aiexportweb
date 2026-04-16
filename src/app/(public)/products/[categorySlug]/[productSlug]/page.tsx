@@ -196,7 +196,6 @@ export default async function ProductDetailPage({
                 accentColor={theme.accent}
                 rows={rows}
                 title={theme.productDetail.datasheetTitle}
-                isDark={isDark}
               />
 
               {product.showDownloadButton && product.pdfUrl && (
@@ -221,7 +220,6 @@ export default async function ProductDetailPage({
                    accentColor={theme.accent}
                    items={product.faqs}
                    title={`${theme.productDetail.breadcrumbCatalogLabel} FAQ`}
-                   isDark={isDark}
                 />
               </div>
             </div>
@@ -246,7 +244,6 @@ export default async function ProductDetailPage({
                   productId={product.product.id}
                   sourcePage="product-detail"
                   sourceUrl={`/products/${categorySlug}/${productSlug}`}
-                  isDark={isDark}
                 />
               </div>
 
@@ -263,9 +260,7 @@ export default async function ProductDetailPage({
                         className={`group flex items-center gap-5 rounded-[2rem] border p-4 transition-all ${isDark ? "hover:bg-white/5" : "hover:bg-stone-50"}`}
                         style={{ borderColor: theme.border }}
                       >
-                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "#f5f5f4" }}>
-                            {related.coverImageUrl && <img src={related.coverImageUrl} className="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />}
-                        </div>
+                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "#f5f5f4" }} />
                         <div className="min-w-0 flex-1">
                           <p className={`truncate text-sm font-black transition-colors group-hover:opacity-80 ${textColor}`}>{related.nameEn}</p>
                           <p className={`mt-1 text-[10px] font-black uppercase tracking-widest ${textMuted}`}>

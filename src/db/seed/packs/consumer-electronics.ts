@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const consumerElectronicsSeedPack: SeedPack = {
   "key": "consumer-electronics",
   "site": {
@@ -253,6 +254,7 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "nameZh": "consumer-electronics 产品 3",
       "nameEn": "consumer-electronics Product 3",
       "slug": "consumer-electronics-product-3-1776323514683",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -261,29 +263,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 4",
       "nameEn": "consumer-electronics Product 4",
       "slug": "consumer-electronics-product-4-1776323514884",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -292,29 +279,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 5",
       "nameEn": "consumer-electronics Product 5",
       "slug": "consumer-electronics-product-5-1776323515090",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -323,29 +295,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 6",
       "nameEn": "consumer-electronics Product 6",
       "slug": "consumer-electronics-product-6-1776323515334",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -354,29 +311,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 7",
       "nameEn": "consumer-electronics Product 7",
       "slug": "consumer-electronics-product-7-1776323515542",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -385,29 +327,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 8",
       "nameEn": "consumer-electronics Product 8",
       "slug": "consumer-electronics-product-8-1776323515772",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -416,29 +343,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 9",
       "nameEn": "consumer-electronics Product 9",
       "slug": "consumer-electronics-product-9-1776323515976",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -447,29 +359,14 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "consumer-electronics 产品 10",
       "nameEn": "consumer-electronics Product 10",
       "slug": "consumer-electronics-product-10-1776323517137",
+      "categorySlug": "smart-accessories",
       "shortDescriptionZh": "这是 consumer-electronics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the consumer-electronics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -478,23 +375,7 @@ export const consumerElectronicsSeedPack: SeedPack = {
       "seoDescription": "适用于 consumer-electronics 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

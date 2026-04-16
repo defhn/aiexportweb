@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const hardwarePlasticsSeedPack: SeedPack = {
   "key": "hardware-plastics",
   "site": {
@@ -199,6 +200,7 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "nameZh": "hardware-plastics 产品 3",
       "nameEn": "hardware-plastics Product 3",
       "slug": "hardware-plastics-product-3-1776323522986",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -207,29 +209,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 4",
       "nameEn": "hardware-plastics Product 4",
       "slug": "hardware-plastics-product-4-1776323523220",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -238,29 +225,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 5",
       "nameEn": "hardware-plastics Product 5",
       "slug": "hardware-plastics-product-5-1776323523452",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -269,29 +241,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 6",
       "nameEn": "hardware-plastics Product 6",
       "slug": "hardware-plastics-product-6-1776323523654",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -300,29 +257,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 7",
       "nameEn": "hardware-plastics Product 7",
       "slug": "hardware-plastics-product-7-1776323523865",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -331,29 +273,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 8",
       "nameEn": "hardware-plastics Product 8",
       "slug": "hardware-plastics-product-8-1776323524111",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -362,29 +289,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 9",
       "nameEn": "hardware-plastics Product 9",
       "slug": "hardware-plastics-product-9-1776323524335",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -393,29 +305,14 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "hardware-plastics 产品 10",
       "nameEn": "hardware-plastics Product 10",
       "slug": "hardware-plastics-product-10-1776323524574",
+      "categorySlug": "precision-hardware-parts",
       "shortDescriptionZh": "这是 hardware-plastics 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the hardware-plastics industry.",
       "detailsZh": "详细描述（中文）……",
@@ -424,23 +321,7 @@ export const hardwarePlasticsSeedPack: SeedPack = {
       "seoDescription": "适用于 hardware-plastics 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

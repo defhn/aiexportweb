@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const medicalHealthSeedPack: SeedPack = {
   "key": "medical-health",
   "site": {
@@ -204,6 +205,7 @@ export const medicalHealthSeedPack: SeedPack = {
       "nameZh": "medical-health 产品 3",
       "nameEn": "medical-health Product 3",
       "slug": "medical-health-product-3-1776323529968",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -212,29 +214,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 4",
       "nameEn": "medical-health Product 4",
       "slug": "medical-health-product-4-1776323530173",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -243,29 +230,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 5",
       "nameEn": "medical-health Product 5",
       "slug": "medical-health-product-5-1776323530384",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -274,29 +246,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 6",
       "nameEn": "medical-health Product 6",
       "slug": "medical-health-product-6-1776323530616",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -305,29 +262,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 7",
       "nameEn": "medical-health Product 7",
       "slug": "medical-health-product-7-1776323530857",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -336,29 +278,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 8",
       "nameEn": "medical-health Product 8",
       "slug": "medical-health-product-8-1776323531073",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -367,29 +294,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 9",
       "nameEn": "medical-health Product 9",
       "slug": "medical-health-product-9-1776323531319",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -398,29 +310,14 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "medical-health 产品 10",
       "nameEn": "medical-health Product 10",
       "slug": "medical-health-product-10-1776323531554",
+      "categorySlug": "medical-consumables",
       "shortDescriptionZh": "这是 medical-health 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the medical-health industry.",
       "detailsZh": "详细描述（中文）……",
@@ -429,23 +326,7 @@ export const medicalHealthSeedPack: SeedPack = {
       "seoDescription": "适用于 medical-health 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

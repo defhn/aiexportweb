@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const textilePackagingSeedPack: SeedPack = {
   "key": "textile-packaging",
   "site": {
@@ -199,6 +200,7 @@ export const textilePackagingSeedPack: SeedPack = {
       "nameZh": "textile-packaging 产品 3",
       "nameEn": "textile-packaging Product 3",
       "slug": "textile-packaging-product-3-1776323531801",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -207,29 +209,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 4",
       "nameEn": "textile-packaging Product 4",
       "slug": "textile-packaging-product-4-1776323531998",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -238,29 +225,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 5",
       "nameEn": "textile-packaging Product 5",
       "slug": "textile-packaging-product-5-1776323532199",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -269,29 +241,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 6",
       "nameEn": "textile-packaging Product 6",
       "slug": "textile-packaging-product-6-1776323532411",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -300,29 +257,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 7",
       "nameEn": "textile-packaging Product 7",
       "slug": "textile-packaging-product-7-1776323532641",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -331,29 +273,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 8",
       "nameEn": "textile-packaging Product 8",
       "slug": "textile-packaging-product-8-1776323532895",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -362,29 +289,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 9",
       "nameEn": "textile-packaging Product 9",
       "slug": "textile-packaging-product-9-1776323533134",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -393,29 +305,14 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "textile-packaging 产品 10",
       "nameEn": "textile-packaging Product 10",
       "slug": "textile-packaging-product-10-1776323533376",
+      "categorySlug": "textile-accessories",
       "shortDescriptionZh": "这是 textile-packaging 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the textile-packaging industry.",
       "detailsZh": "详细描述（中文）……",
@@ -424,23 +321,7 @@ export const textilePackagingSeedPack: SeedPack = {
       "seoDescription": "适用于 textile-packaging 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

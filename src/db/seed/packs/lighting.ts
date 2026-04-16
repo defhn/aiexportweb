@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const lightingSeedPack: SeedPack = {
   "key": "lighting",
   "site": {
@@ -204,6 +205,7 @@ export const lightingSeedPack: SeedPack = {
       "nameZh": "lighting 产品 3",
       "nameEn": "lighting Product 3",
       "slug": "lighting-product-3-1776323528172",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -212,29 +214,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 4",
       "nameEn": "lighting Product 4",
       "slug": "lighting-product-4-1776323528400",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -243,29 +230,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 5",
       "nameEn": "lighting Product 5",
       "slug": "lighting-product-5-1776323528619",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -274,29 +246,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 6",
       "nameEn": "lighting Product 6",
       "slug": "lighting-product-6-1776323528818",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -305,29 +262,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 7",
       "nameEn": "lighting Product 7",
       "slug": "lighting-product-7-1776323529049",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -336,29 +278,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 8",
       "nameEn": "lighting Product 8",
       "slug": "lighting-product-8-1776323529323",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -367,29 +294,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 9",
       "nameEn": "lighting Product 9",
       "slug": "lighting-product-9-1776323529526",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -398,29 +310,14 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "lighting 产品 10",
       "nameEn": "lighting Product 10",
       "slug": "lighting-product-10-1776323529726",
+      "categorySlug": "commercial-lighting",
       "shortDescriptionZh": "这是 lighting 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the lighting industry.",
       "detailsZh": "详细描述（中文）……",
@@ -429,23 +326,7 @@ export const lightingSeedPack: SeedPack = {
       "seoDescription": "适用于 lighting 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

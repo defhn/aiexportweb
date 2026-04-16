@@ -19,20 +19,6 @@ type CategoryGridProps = {
   fallbackImage?: string;
 };
 
-type CategoryGridProps = {
-  items: Array<{
-    slug: string;
-    nameEn: string;
-    summaryEn: string;
-    imageUrl?: string | null;
-    imageAlt?: string | null;
-  }>;
-  accentColor?: string;
-  badgeLabel?: string;
-  linkLabel?: string;
-  fallbackImage?: string;
-};
-
 export function CategoryGrid({
   items,
   accentColor = "#2563eb",

@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const industrialEquipmentSeedPack: SeedPack = {
   "key": "industrial-equipment",
   "site": {
@@ -239,6 +240,7 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "nameZh": "industrial-equipment 产品 3",
       "nameEn": "industrial-equipment Product 3",
       "slug": "industrial-equipment-product-3-1776323524782",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -247,29 +249,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 4",
       "nameEn": "industrial-equipment Product 4",
       "slug": "industrial-equipment-product-4-1776323524979",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -278,29 +265,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 5",
       "nameEn": "industrial-equipment Product 5",
       "slug": "industrial-equipment-product-5-1776323525185",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -309,29 +281,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 6",
       "nameEn": "industrial-equipment Product 6",
       "slug": "industrial-equipment-product-6-1776323525421",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -340,29 +297,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 7",
       "nameEn": "industrial-equipment Product 7",
       "slug": "industrial-equipment-product-7-1776323525620",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -371,29 +313,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 8",
       "nameEn": "industrial-equipment Product 8",
       "slug": "industrial-equipment-product-8-1776323525824",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -402,29 +329,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 9",
       "nameEn": "industrial-equipment Product 9",
       "slug": "industrial-equipment-product-9-1776323526033",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -433,29 +345,14 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "industrial-equipment 产品 10",
       "nameEn": "industrial-equipment Product 10",
       "slug": "industrial-equipment-product-10-1776323526251",
+      "categorySlug": "automation-equipment",
       "shortDescriptionZh": "这是 industrial-equipment 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the industrial-equipment industry.",
       "detailsZh": "详细描述（中文）……",
@@ -464,23 +361,7 @@ export const industrialEquipmentSeedPack: SeedPack = {
       "seoDescription": "适用于 industrial-equipment 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],

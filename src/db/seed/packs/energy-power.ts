@@ -1,3 +1,4 @@
+import type { SeedPack } from "../types";
 export const energyPowerSeedPack: SeedPack = {
   "key": "energy-power",
   "site": {
@@ -214,6 +215,7 @@ export const energyPowerSeedPack: SeedPack = {
       "nameZh": "energy-power 产品 3",
       "nameEn": "energy-power Product 3",
       "slug": "energy-power-product-3-1776323517374",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -222,29 +224,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 4,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 4",
       "nameEn": "energy-power Product 4",
       "slug": "energy-power-product-4-1776323517582",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -253,29 +240,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 5,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 5",
       "nameEn": "energy-power Product 5",
       "slug": "energy-power-product-5-1776323517817",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -284,29 +256,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 6,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 6",
       "nameEn": "energy-power Product 6",
       "slug": "energy-power-product-6-1776323518027",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -315,29 +272,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 7,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 7",
       "nameEn": "energy-power Product 7",
       "slug": "energy-power-product-7-1776323518225",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -346,29 +288,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 8,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 8",
       "nameEn": "energy-power Product 8",
       "slug": "energy-power-product-8-1776323518465",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -377,29 +304,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 9,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 9",
       "nameEn": "energy-power Product 9",
       "slug": "energy-power-product-9-1776323518665",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -408,29 +320,14 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 10,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     },
     {
       "nameZh": "energy-power 产品 10",
       "nameEn": "energy-power Product 10",
       "slug": "energy-power-product-10-1776323519266",
+      "categorySlug": "power-distribution",
       "shortDescriptionZh": "这是 energy-power 行业的示例产品。",
       "shortDescriptionEn": "This is a sample product for the energy-power industry.",
       "detailsZh": "详细描述（中文）……",
@@ -439,23 +336,7 @@ export const energyPowerSeedPack: SeedPack = {
       "seoDescription": "适用于 energy-power 行业的高质量产品。",
       "sortOrder": 11,
       "isFeatured": false,
-      "defaultFields": {
-        "price": {
-          "valueZh": "¥1000",
-          "valueEn": "$150",
-          "visible": true
-        },
-        "sku": {
-          "valueZh": "SKU001",
-          "valueEn": "SKU001",
-          "visible": true
-        },
-        "stock": {
-          "valueZh": "100",
-          "valueEn": "100",
-          "visible": true
-        }
-      },
+      "defaultFields": {},
       "customFields": []
     }
   ],
