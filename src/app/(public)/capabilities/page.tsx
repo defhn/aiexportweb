@@ -10,18 +10,15 @@ export default async function CapabilitiesPage() {
   const theme = getTemplateTheme(template.id);
 
   return (
-    <main className="min-h-screen pb-32 pt-24" style={{ backgroundColor: theme.surfaceAlt }}>
+    <main className="min-h-screen pb-28 pt-24" style={{ backgroundColor: theme.surfaceAlt }}>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto mb-20 max-w-3xl text-center">
-          <h1
-            className="mb-4 text-sm font-black uppercase tracking-[0.4em]"
-            style={{ color: theme.accent }}
-          >
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <p className="mb-4 text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
             {theme.capabilities.eyebrow}
-          </h1>
-          <h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-stone-900 md:text-5xl">
+          </p>
+          <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-stone-900 md:text-5xl">
             {theme.capabilities.title}
-          </h2>
+          </h1>
           <p className="mt-4 text-lg text-stone-500">{theme.capabilities.description}</p>
         </div>
 

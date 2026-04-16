@@ -269,7 +269,115 @@ const THEME_MAP: Record<string, TemplateTheme> = {
     categoryTitle: "Medical Collection",
     categoryDescription: "Discover products tailored for hospitals, clinics, and healthcare supply.",
     detailSupportTitle: "Need a Medical Quote?",
-    detailSupportDescription: "Send specifications and compliance requirements for a healthcare proposal.",
+    detailSupportDescription: "Send specifications, compliance requirements, and destination market details for a healthcare proposal.",
+    header: {
+      navItems: [
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Compliance", href: "/capabilities" },
+        { label: "Knowledge", href: "/blog" },
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "/contact" },
+      ],
+      quoteLabel: "Medical RFQ",
+    },
+    productDetail: {
+      datasheetTitle: "Product & Compliance File",
+      datasheetDescription: "Download product specifications and quality-related documentation.",
+      relatedTitle: "Related Medical Products",
+      breadcrumbCatalogLabel: "Medical Catalog",
+      compareLabel: "Alternative",
+    },
+    blog: {
+      eyebrow: "Medical Knowledge Hub",
+      title: "Procurement Insights for Healthcare Buyers",
+      description: "Practical guidance for distributors, clinics, and sourcing teams managing medical product imports.",
+      supportEyebrow: "Procurement Support",
+      supportTitle: "Need help evaluating a medical sourcing request?",
+      supportDescription:
+        "Share your product scope, compliance requirements, and timeline. Our team will suggest a practical sourcing path.",
+      defaultCategoryLabel: "Medical Sourcing",
+    },
+    about: {
+      eyebrow: "About Our Medical Supply Team",
+      title: "Reliable medical product supply built for quality and compliance",
+      description:
+        "We support healthcare buyers with stable production, documented quality workflows, and export-ready delivery coordination.",
+      heritageEyebrow: "Our Background",
+      heritageTitle: "From focused product lines to trusted healthcare supply programs.",
+      heroImage: "/images/factory_panorama_hero_1775635573170.png",
+      featureImage: "/images/export_packaging_shipping_1775635539838.png",
+      featureCard: "Quality checks and documentation embedded in each delivery cycle.",
+    },
+    capabilities: {
+      eyebrow: "Core Capabilities",
+      title: "Medical Supply Capabilities for Regulated Markets",
+      description:
+        "From sample validation to production and export documentation, we support healthcare procurement with transparent execution.",
+      highlights: [
+        {
+          title: "Medical Product Program Support",
+          description:
+            "We align product scope, packing requirements, and buyer standards before mass production starts.",
+          bullets: ["Sample and spec alignment", "Private label packaging options", "Production planning by order type"],
+          image: "/images/factory_panorama_hero_1775635573170.png",
+          imageAlt: "Medical product program support",
+        },
+        {
+          title: "Quality Workflow and Delivery Coordination",
+          description:
+            "Inspection checkpoints, packaging review, and export coordination help reduce project risk.",
+          bullets: ["Batch-level checks", "Label and packing verification", "Export shipment coordination"],
+          image: "/images/export_packaging_shipping_1775635539838.png",
+          imageAlt: "Medical quality and delivery coordination",
+        },
+      ],
+      specGroups: [
+        {
+          title: "Order & Quality Support",
+          rows: [
+            { label: "Sampling", value: "Validation workflow before production" },
+            { label: "Customization", value: "Label, packaging, and bundle options" },
+            { label: "Inspection", value: "Batch checkpoints and visual review" },
+            { label: "Lead Time", value: "Confirmed by product scope and season" },
+          ],
+        },
+        {
+          title: "Export Coordination",
+          rows: [
+            { label: "Documentation", value: "Invoice, packing list, and shipping files" },
+            { label: "Packaging", value: "Retail and distributor-ready configurations" },
+            { label: "Shipping", value: "FOB, CIF, and project-based planning" },
+            { label: "Support", value: "Responsive sourcing communication" },
+          ],
+        },
+      ],
+    },
+    forms: {
+      inquiryEyebrow: "Medical Inquiry",
+      inquiryTitle: "Submit Your Medical Product Request",
+      consultationTitle: "Tell us your product and compliance requirements",
+      successTitle: "Request Submitted",
+      successMessage: "Thank you. Our medical supply team will review your request and respond within 24 hours.",
+      securityNote: "Your information is handled securely and used only for this sourcing request.",
+      uploadHint: "Attach specifications, packaging notes, or compliance references where available.",
+      trustBadgeTitle: "Confidential Handling",
+      trustBadgeDescription:
+        "Your product files, requirements, and business information are protected and only used for your inquiry.",
+    },
+    footer: {
+      trustItems: [
+        { title: "Quality Workflow", description: "Structured checks from sampling to shipment" },
+        { title: "Confidential Handling", description: "Buyer requirements and files remain protected" },
+        { title: "Export Ready", description: "Packaging and shipping support for global markets" },
+      ],
+      description:
+        "Supporting healthcare buyers with reliable communication, quality-focused execution, and export-ready delivery support.",
+      solutionsTitle: "Medical Solutions",
+      officeTitle: "Medical Supply Desk",
+      addressTitle: "Office & Supply Base",
+      rfqHint: "Share product scope, quantity, destination market, and timeline for a practical review.",
+    },
   },
   "template-06": {
     ...DEFAULT_THEME,

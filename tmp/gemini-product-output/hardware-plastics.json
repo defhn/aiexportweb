@@ -1,0 +1,187 @@
+{
+  "key": "hardware-plastics",
+  "companyNameZh": "五金塑胶科技有限公司",
+  "companyNameEn": "Hardware Plastics Technology Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "精密五金件",
+      "nameEn": "Precision Hardware Parts",
+      "slug": "precision-hardware-parts",
+      "summaryZh": "适用于工业设备与电子产品的精密五金组件。",
+      "summaryEn": "Precision metal parts for industrial equipment and electronics.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "注塑塑胶件",
+      "nameEn": "Injection Molded Parts",
+      "slug": "injection-molded-parts",
+      "summaryZh": "支持结构件与外观件的注塑生产方案。",
+      "summaryEn": "Injection molded structural and cosmetic parts for OEM projects.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "精密不锈钢齿轮",
+      "description": "高精度不锈钢齿轮，适用于精密机械传动系统，表面光洁度高，耐磨性强。",
+      "categorySlug": "precision-hardware-parts",
+      "defaultFields": {
+        "model": "PG-001",
+        "material": "Stainless Steel 304",
+        "moq": "1000 pieces",
+        "lead_time": "15-20 days"
+      },
+      "customFields": {
+        "diameter": "50mm",
+        "tooth_count": "24",
+        "hardness": "HRC 45-50"
+      }
+    },
+    {
+      "name": "注塑成型连接器外壳",
+      "description": "PA66材质注塑成型连接器外壳，绝缘性能好，尺寸稳定，适用于电子设备连接器。",
+      "categorySlug": "injection-molded-parts",
+      "defaultFields": {
+        "model": "IM-002",
+        "material": "PA66",
+        "moq": "5000 pieces",
+        "lead_time": "20-25 days"
+      },
+      "customFields": {
+        "color": "Black",
+        "ip_rating": "IP67",
+        "operating_temp": "-40°C to 85°C"
+      }
+    },
+    {
+      "name": "铝合金精密支架",
+      "description": "CNC加工铝合金支架，轻量化设计，结构强度高，适用于仪器仪表固定。",
+      "categorySlug": "precision-hardware-parts",
+      "defaultFields": {
+        "model": "PG-003",
+        "material": "Aluminum 6061",
+        "moq": "500 pieces",
+        "lead_time": "10-15 days"
+      },
+      "customFields": {
+        "weight": "150g",
+        "surface_treatment": "Anodized",
+        "load_capacity": "50kg"
+      }
+    },
+    {
+      "name": "PC透明防护罩",
+      "description": "聚碳酸酯注塑成型透明防护罩，抗冲击性强，透明度高，适用于设备保护罩。",
+      "categorySlug": "injection-molded-parts",
+      "defaultFields": {
+        "model": "IM-004",
+        "material": "Polycarbonate",
+        "moq": "2000 pieces",
+        "lead_time": "18-22 days"
+      },
+      "customFields": {
+        "thickness": "3mm",
+        "light_transmission": "90%",
+        "uv_resistance": "Yes"
+      }
+    },
+    {
+      "name": "不锈钢精密弹簧",
+      "description": "精密不锈钢压缩弹簧，弹性系数稳定，耐腐蚀，适用于精密仪器复位装置。",
+      "categorySlug": "precision-hardware-parts",
+      "defaultFields": {
+        "model": "PG-005",
+        "material": "Stainless Steel 316",
+        "moq": "2000 pieces",
+        "lead_time": "12-18 days"
+      },
+      "customFields": {
+        "wire_diameter": "1.2mm",
+        "outer_diameter": "10mm",
+        "free_length": "30mm"
+      }
+    },
+    {
+      "name": "ABS塑料齿轮箱",
+      "description": "ABS注塑成型齿轮箱外壳，尺寸精度高，噪音低，适用于小型传动装置。",
+      "categorySlug": "injection-molded-parts",
+      "defaultFields": {
+        "model": "IM-006",
+        "material": "ABS",
+        "moq": "3000 pieces",
+        "lead_time": "15-20 days"
+      },
+      "customFields": {
+        "gear_ratio": "5:1",
+        "noise_level": "<45dB",
+        "lubrication": "Grease filled"
+      }
+    },
+    {
+      "name": "黄铜精密阀门零件",
+      "description": "数控加工黄铜阀门零件，密封性能好，耐高压，适用于流体控制系统。",
+      "categorySlug": "precision-hardware-parts",
+      "defaultFields": {
+        "model": "PG-007",
+        "material": "Brass C36000",
+        "moq": "800 pieces",
+        "lead_time": "20-25 days"
+      },
+      "customFields": {
+        "pressure_rating": "10MPa",
+        "thread_type": "NPT 1/2\"",
+        "temperature_range": "-20°C to 120°C"
+      }
+    },
+    {
+      "name": "PP塑料容器盖",
+      "description": "聚丙烯注塑成型容器盖，耐化学腐蚀，密封性好，适用于化工容器密封。",
+      "categorySlug": "injection-molded-parts",
+      "defaultFields": {
+        "model": "IM-008",
+        "material": "Polypropylene",
+        "moq": "10000 pieces",
+        "lead_time": "25-30 days"
+      },
+      "customFields": {
+        "diameter": "120mm",
+        "seal_type": "Silicone gasket",
+        "chemical_resistance": "Acid and alkali resistant"
+      }
+    },
+    {
+      "name": "钛合金精密紧固件",
+      "description": "高精度钛合金螺丝螺母，强度重量比高，耐腐蚀，适用于航空航天领域。",
+      "categorySlug": "precision-hardware-parts",
+      "defaultFields": {
+        "model": "PG-009",
+        "material": "Titanium Grade 5",
+        "moq": "300 pieces",
+        "lead_time": "30-35 days"
+      },
+      "customFields": {
+        "size": "M6 x 25mm",
+        "tensile_strength": "900MPa",
+        "coating": "Passivated"
+      }
+    },
+    {
+      "name": "POM塑料轴承座",
+      "description": "聚甲醛注塑成型轴承座，自润滑性好，耐磨，适用于低摩擦传动部件。",
+      "categorySlug": "injection-molded-parts",
+      "defaultFields": {
+        "model": "IM-010",
+        "material": "POM",
+        "moq": "4000 pieces",
+        "lead_time": "15-20 days"
+      },
+      "customFields": {
+        "bearing_size": "608ZZ",
+        "friction_coefficient": "0.2",
+        "max_speed": "5000rpm"
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-16T11:01:11.827Z",
+  "sites": [
+    {
+      "siteSlug": "equipment-demo",
+      "seedPackKey": "industrial-equipment",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "failed",
+      "attemptCount": 3,
+      "error": "terminated"
+    },
+    {
+      "siteSlug": "building-demo",
+      "seedPackKey": "building-materials",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "energy-demo",
+      "seedPackKey": "energy-power",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "medical-demo",
+      "seedPackKey": "medical-health",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "hvac-demo",
+      "seedPackKey": "fluid-hvac",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "lighting-demo",
+      "seedPackKey": "lighting",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "hardware-demo",
+      "seedPackKey": "hardware-plastics",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "furniture-demo",
+      "seedPackKey": "furniture-outdoor",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "packaging-demo",
+      "seedPackKey": "textile-packaging",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "electronics-demo",
+      "seedPackKey": "consumer-electronics",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    },
+    {
+      "siteSlug": "gifts-demo",
+      "seedPackKey": "lifestyle",
+      "totalProducts": 10,
+      "completedProductSlugs": [],
+      "status": "pending"
+    }
+  ]
+}

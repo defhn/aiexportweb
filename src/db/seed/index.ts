@@ -3,6 +3,26 @@ import "../../env";
 import { pathToFileURL } from "node:url";
 import { sql } from "drizzle-orm";
 
+/**
+ * Wait for Neon database to become ready.
+ * Tries a simple SELECT 1 query repeatedly until it succeeds.
+ * maxAttempts defaults to 15 (≈30 s with 2 s interval).
+ */
+async function waitForNeonReady(maxAttempts = 60, delayMs = 5000): Promise<void> {
+  const db = getDb();
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      await db.execute(sql`SELECT 1`);
+      console.log("✅ Neon 已就绪，继续种子流程");
+      return;
+    } catch (err) {
+      console.warn(`Neon 尚未就绪 (尝试 ${i + 1}/${maxAttempts}) → ${err}`);
+      if (i === maxAttempts - 1) throw err;
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 import { getDb } from "../client";
 import {
   blogCategories,
@@ -79,6 +99,8 @@ export function listSeedPacks() {
 }
 
 export async function seedDatabase(key: SeedPackKey) {
+  // 先确保 Neon 实例已启动并可连接
+  await waitForNeonReady();
   const db = getDb();
   const pack = getSeedPack(key);
 

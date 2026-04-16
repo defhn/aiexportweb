@@ -11,19 +11,18 @@ import { CookieConsentBanner } from "@/components/public/trust-compliance";
 import { TrackingProvider } from "@/components/tracking-provider";
 import type { PublicLayoutProps } from "@/templates/types";
 import Link from "next/link";
+import { getTemplateTheme } from "@/templates/theme";
 
-// 工业设备专属深色 Header
+// 工业设备专属深色 Header（使用主题）
 function IndustrialHeader({ companyName }: { companyName: string }) {
+  const theme = getTemplateTheme("template-02");
   return (
-    <header className="sticky top-0 z-50 bg-[#0d1117]/95 backdrop-blur-md border-b border-[#1e2535]">
+    <header className="sticky top-0 z-50" style={{ backgroundColor: theme.surface, borderBottom: `1px solid ${theme.border}` }}>
       <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between gap-8">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-black text-white tracking-tight text-lg"
-        >
+        <Link href="/" className="flex items-center gap-2 font-black" style={{ color: theme.text }}>
           {/* 橙色方块图标 */}
-          <span className="w-7 h-7 bg-orange-500 rounded flex items-center justify-center text-white text-xs font-black">
+          <span className="w-7 h-7 flex items-center justify-center rounded" style={{ backgroundColor: theme.accent, color: "white", fontSize: "0.75rem" }}>
             IE
           </span>
           <span>{companyName}</span>
@@ -37,21 +36,14 @@ function IndustrialHeader({ companyName }: { companyName: string }) {
             { label: "About", href: "/about" },
             { label: "Blog", href: "/blog" },
           ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors font-medium"
-            >
+            <Link key={item.href} href={item.href} className="px-4 py-2 text-sm hover:opacity-80 transition-opacity" style={{ color: theme.text }}>
               {item.label}
             </Link>
           ))}
         </nav>
 
         {/* CTA */}
-        <Link
-          href="/contact"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold uppercase tracking-wider rounded transition-colors"
-        >
+        <Link href="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold uppercase tracking-wider rounded" style={{ backgroundColor: theme.accent, color: "white" }}>
           Request Solution
         </Link>
       </div>
@@ -60,6 +52,7 @@ function IndustrialHeader({ companyName }: { companyName: string }) {
 }
 
 export function Template02Layout({ children, settings, categories }: PublicLayoutProps) {
+  const theme = getTemplateTheme("template-02");
   return (
     <div className="min-h-screen bg-[#0f1117] text-white flex flex-col relative selection:bg-orange-500/30 selection:text-orange-100">
       <TrackingProvider />
@@ -74,6 +67,7 @@ export function Template02Layout({ children, settings, categories }: PublicLayou
         companyName={settings.companyNameEn}
         email={settings.email ?? ""}
         phone={settings.phone ?? ""}
+        theme={theme}
       />
       <CookieConsentBanner />
     </div>

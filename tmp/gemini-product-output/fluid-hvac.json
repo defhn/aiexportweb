@@ -1,0 +1,187 @@
+{
+  "key": "fluid-hvac",
+  "companyNameZh": "流体暖通工程有限公司",
+  "companyNameEn": "Fluid HVAC Engineering Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "暖通设备",
+      "nameEn": "HVAC Equipment",
+      "slug": "hvac-equipment",
+      "summaryZh": "用于商用楼宇和工业厂房的暖通核心设备。",
+      "summaryEn": "Core HVAC equipment for commercial buildings and industrial facilities.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "流体控制部件",
+      "nameEn": "Fluid Control Components",
+      "slug": "fluid-control-components",
+      "summaryZh": "用于管路系统的阀门、执行器和控制组件。",
+      "summaryEn": "Valves, actuators, and control components for piping systems.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "HVAC Centrifugal Chiller",
+      "description": "High-efficiency centrifugal chiller for large commercial and industrial HVAC systems, featuring advanced compressor technology and energy-saving design.",
+      "categorySlug": "hvac-equipment",
+      "defaultFields": {
+        "model": "CH-5000X",
+        "application": "Commercial buildings, data centers, industrial facilities",
+        "moq": "1 unit",
+        "lead_time": "8-10 weeks"
+      },
+      "customFields": {
+        "cooling_capacity": "500 tons",
+        "power_supply": "380-480V, 3-phase",
+        "refrigerant": "R-134a"
+      }
+    },
+    {
+      "name": "Air Handling Unit (AHU)",
+      "description": "Modular air handling unit with customizable configurations for ventilation, heating, cooling, and air filtration in various building types.",
+      "categorySlug": "hvac-equipment",
+      "defaultFields": {
+        "model": "AHU-M200",
+        "application": "Office buildings, hospitals, hotels",
+        "moq": "2 units",
+        "lead_time": "6-8 weeks"
+      },
+      "customFields": {
+        "airflow_capacity": "20,000 CFM",
+        "filter_class": "MERV 13",
+        "dimensions": "Customizable"
+      }
+    },
+    {
+      "name": "Industrial Cooling Tower",
+      "description": "Heavy-duty cooling tower designed for industrial HVAC applications, with corrosion-resistant materials and efficient heat dissipation.",
+      "categorySlug": "hvac-equipment",
+      "defaultFields": {
+        "model": "CT-1500I",
+        "application": "Power plants, manufacturing facilities, refineries",
+        "moq": "1 unit",
+        "lead_time": "10-12 weeks"
+      },
+      "customFields": {
+        "cooling_capacity": "1500 tons",
+        "material": "Galvanized steel",
+        "fan_type": "Axial flow"
+      }
+    },
+    {
+      "name": "VAV Terminal Unit",
+      "description": "Variable air volume terminal unit for precise zone control in HVAC systems, with integrated damper and airflow measurement.",
+      "categorySlug": "hvac-equipment",
+      "defaultFields": {
+        "model": "VAV-300S",
+        "application": "Commercial HVAC systems, office spaces",
+        "moq": "10 units",
+        "lead_time": "4-6 weeks"
+      },
+      "customFields": {
+        "airflow_range": "300-3000 CFM",
+        "control_type": "Pressure independent",
+        "connection_size": "10-14 inches"
+      }
+    },
+    {
+      "name": "Ball Valve",
+      "description": "Full-port ball valve for fluid control applications, with durable construction and bubble-tight shutoff capability.",
+      "categorySlug": "fluid-control-components",
+      "defaultFields": {
+        "model": "BV-150F",
+        "application": "HVAC piping, industrial fluid systems",
+        "moq": "50 units",
+        "lead_time": "2-4 weeks"
+      },
+      "customFields": {
+        "size": "1.5 inches",
+        "pressure_rating": "600 PSI",
+        "material": "Stainless steel 316"
+      }
+    },
+    {
+      "name": "Pressure Reducing Valve",
+      "description": "Automatic pressure reducing valve for maintaining consistent downstream pressure in fluid systems, with adjustable set point.",
+      "categorySlug": "fluid-control-components",
+      "defaultFields": {
+        "model": "PRV-200A",
+        "application": "Water supply systems, HVAC hydronic systems",
+        "moq": "20 units",
+        "lead_time": "3-5 weeks"
+      },
+      "customFields": {
+        "inlet_pressure": "Up to 300 PSI",
+        "outlet_pressure": "Adjustable 20-100 PSI",
+        "connection_type": "Flanged"
+      }
+    },
+    {
+      "name": "Thermal Expansion Valve",
+      "description": "Precision thermal expansion valve for refrigeration systems, providing accurate superheat control and efficient operation.",
+      "categorySlug": "fluid-control-components",
+      "defaultFields": {
+        "model": "TXV-08R",
+        "application": "Refrigeration systems, chillers",
+        "moq": "100 units",
+        "lead_time": "4-6 weeks"
+      },
+      "customFields": {
+        "capacity": "8 tons",
+        "refrigerant_type": "R-410A, R-134a",
+        "connection_size": "3/8 x 5/8 inches"
+      }
+    },
+    {
+      "name": "Strainer",
+      "description": "Y-type strainer for pipeline protection, removing debris and particles from fluid systems to prevent equipment damage.",
+      "categorySlug": "fluid-control-components",
+      "defaultFields": {
+        "model": "STR-100Y",
+        "application": "Water systems, HVAC piping, industrial processes",
+        "moq": "30 units",
+        "lead_time": "2-4 weeks"
+      },
+      "customFields": {
+        "mesh_size": "40 mesh",
+        "pressure_rating": "300 PSI",
+        "material": "Cast iron"
+      }
+    },
+    {
+      "name": "Packaged Rooftop Unit",
+      "description": "Complete packaged rooftop HVAC unit with integrated heating, cooling, and ventilation components for easy installation.",
+      "categorySlug": "hvac-equipment",
+      "defaultFields": {
+        "model": "RTU-60P",
+        "application": "Retail stores, schools, warehouses",
+        "moq": "1 unit",
+        "lead_time": "8-10 weeks"
+      },
+      "customFields": {
+        "cooling_capacity": "60 tons",
+        "heating_type": "Gas furnace",
+        "efficiency_rating": "14 SEER"
+      }
+    },
+    {
+      "name": "Check Valve",
+      "description": "Swing check valve for preventing backflow in fluid systems, with low pressure drop and reliable operation.",
+      "categorySlug": "fluid-control-components",
+      "defaultFields": {
+        "model": "CV-200S",
+        "application": "Pump discharge, HVAC systems, water lines",
+        "moq": "40 units",
+        "lead_time": "3-5 weeks"
+      },
+      "customFields": {
+        "size": "2 inches",
+        "pressure_rating": "250 PSI",
+        "closing_type": "Swing disc"
+      }
+    }
+  ]
+}

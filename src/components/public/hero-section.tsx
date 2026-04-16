@@ -14,6 +14,8 @@ type HeroSectionProps = {
   primaryCtaHref: string;
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
+  bgImage?: string;
+  accentColor?: string;
 };
 
 export function HeroSection({
@@ -24,6 +26,8 @@ export function HeroSection({
   primaryCtaHref,
   secondaryCtaLabel,
   secondaryCtaHref,
+  bgImage = "/hero-bg.png",
+  accentColor = "#2563eb",
 }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -45,8 +49,8 @@ export function HeroSection({
         className="absolute inset-0 z-0 origin-center"
       >
         <Image
-          src="/hero-bg.png"
-          alt="Industrial Precision Background"
+          src={bgImage}
+          alt={title}
           fill
           sizes="100vw"
           className="object-cover opacity-55 scale-105"
@@ -54,18 +58,20 @@ export function HeroSection({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/20" />
         
-        {/* Animated Glowing Orbs representing precision/tech */}
+        {/* Animated Glowing Orbs representing industry tech */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: [0.4, 0.6, 0.4], scale: [1, 1.05, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] rounded-full bg-blue-600/30 blur-[130px] mix-blend-screen"
+          className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] rounded-full blur-[130px] mix-blend-screen"
+          style={{ backgroundColor: `${accentColor}4D` }} // 30% opacity
         />
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.1, 1] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-[20%] -right-[15%] w-[800px] h-[800px] rounded-full bg-indigo-500/20 blur-[150px] mix-blend-screen"
+          className="absolute top-[20%] -right-[15%] w-[800px] h-[800px] rounded-full blur-[150px] mix-blend-screen"
+          style={{ backgroundColor: `${accentColor}33` }} // 20% opacity
         />
         
         <div className="absolute inset-0 texture-carbon opacity-10 mix-blend-overlay" />
@@ -81,7 +87,10 @@ export function HeroSection({
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mb-8 flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-2 pr-5 backdrop-blur-md"
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+            <span 
+              className="flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold text-white uppercase"
+              style={{ backgroundColor: accentColor, boxShadow: `0 0 15px ${accentColor}80` }}
+            >
               NEW
             </span>
             <span className="text-sm font-semibold tracking-wide text-white/90">
@@ -96,13 +105,16 @@ export function HeroSection({
             className="max-w-5xl text-[2.5rem] font-extrabold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-8xl leading-[1.05]"
           >
             {(() => {
-              const t = title || "Precision Parts, Built for Global Buyers";
+              const t = title || "Precision Solutions, Built for Industry";
               const words = t.split(" ");
               const half = Math.ceil(words.length / 2);
               return (
                 <>
                   <span>{words.slice(0, half).join(" ")} </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
+                  <span 
+                    className="text-transparent bg-clip-text"
+                    style={{ backgroundImage: `linear-gradient(to right, ${accentColor}, #ffffff88)` }}
+                  >
                     {words.slice(half).join(" ")}
                   </span>
                 </>
@@ -140,7 +152,7 @@ export function HeroSection({
                 href={secondaryCtaHref}
                 className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-lg transition-all hover:border-white/20"
               >
-                <Play className="h-4 w-4 text-blue-400 group-hover:text-blue-300" fill="currentColor" />
+                <Play className="h-4 w-4 transition-colors" style={{ color: accentColor }} fill="currentColor" />
                 <span>{secondaryCtaLabel}</span>
               </Link>
             )}
@@ -149,7 +161,7 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Decorative Floor Glow targeting Strengths Section */}
+      {/* Decorative Floor Glow */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-20" />
     </section>
   );

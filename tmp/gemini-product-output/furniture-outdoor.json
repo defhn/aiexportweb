@@ -1,0 +1,187 @@
+{
+  "key": "furniture-outdoor",
+  "companyNameZh": "家居户外用品有限公司",
+  "companyNameEn": "Furniture Outdoor Products Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "户外座椅",
+      "nameEn": "Outdoor Seating",
+      "slug": "outdoor-seating",
+      "summaryZh": "适用于阳台、庭院和商业户外场景的座椅产品。",
+      "summaryEn": "Outdoor seating collections for balcony, patio, and hospitality spaces.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "客厅家具",
+      "nameEn": "Living Room Furniture",
+      "slug": "living-room-furniture",
+      "summaryZh": "现代风格客厅家具与配套软装产品。",
+      "summaryEn": "Modern living room furniture with coordinated home styling options.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "Patio Dining Set with Umbrella",
+      "description": "Elegant 7-piece outdoor dining set with weather-resistant cushions and adjustable umbrella, perfect for family gatherings.",
+      "categorySlug": "outdoor-seating",
+      "defaultFields": {
+        "model": "PDS-2024",
+        "material": "Powder-coated aluminum frame, PE rattan, polyester cushions",
+        "moq": "20 sets",
+        "lead_time": "30-45 days"
+      },
+      "customFields": {
+        "seat_capacity": "6 persons",
+        "umbrella_included": "Yes",
+        "color_options": "Brown, Gray, Beige"
+      }
+    },
+    {
+      "name": "Modern Outdoor Sofa Set",
+      "description": "Contemporary 3-piece sofa set with deep seating and waterproof cushions, ideal for patio lounging.",
+      "categorySlug": "outdoor-seating",
+      "defaultFields": {
+        "model": "MOS-300",
+        "material": "Stainless steel frame, synthetic wicker, quick-dry foam cushions",
+        "moq": "15 sets",
+        "lead_time": "25-35 days"
+      },
+      "customFields": {
+        "configuration": "1 sofa + 2 chairs",
+        "cushion_thickness": "6 inches",
+        "weather_resistance": "UV and water resistant"
+      }
+    },
+    {
+      "name": "Folding Adirondack Chair",
+      "description": "Classic folding Adirondack chair made from durable acacia wood, easy to store and transport.",
+      "categorySlug": "outdoor-seating",
+      "defaultFields": {
+        "model": "FAC-88",
+        "material": "Solid acacia wood",
+        "moq": "50 pieces",
+        "lead_time": "20-30 days"
+      },
+      "customFields": {
+        "foldable": "Yes",
+        "weight_capacity": "300 lbs",
+        "finish": "Natural wood with protective oil"
+      }
+    },
+    {
+      "name": "Outdoor Bar Stool Set",
+      "description": "Set of 4 adjustable height bar stools with swivel function, perfect for outdoor kitchen or bar area.",
+      "categorySlug": "outdoor-seating",
+      "defaultFields": {
+        "model": "OBS-450",
+        "material": "Aluminum frame, plastic seat",
+        "moq": "40 pieces",
+        "lead_time": "15-25 days"
+      },
+      "customFields": {
+        "height_adjustable": "24-30 inches",
+        "swivel": "360 degrees",
+        "stackable": "Yes"
+      }
+    },
+    {
+      "name": "Garden Bench with Storage",
+      "description": "Versatile wooden bench with hidden storage compartment under the seat, great for small spaces.",
+      "categorySlug": "outdoor-seating",
+      "defaultFields": {
+        "model": "GBS-2024",
+        "material": "Teak wood with stainless steel hinges",
+        "moq": "30 pieces",
+        "lead_time": "35-45 days"
+      },
+      "customFields": {
+        "storage_capacity": "50 liters",
+        "assembly_required": "Minimal",
+        "maintenance": "Annual oiling recommended"
+      }
+    },
+    {
+      "name": "Outdoor Coffee Table",
+      "description": "Stylish rectangular coffee table with tempered glass top and metal frame, weather-resistant design.",
+      "categorySlug": "living-room-furniture",
+      "defaultFields": {
+        "model": "OCT-700",
+        "material": "Powder-coated steel frame, tempered glass top",
+        "moq": "25 pieces",
+        "lead_time": "20-30 days"
+      },
+      "customFields": {
+        "dimensions": "48\"L x 24\"W x 18\"H",
+        "glass_thickness": "8mm",
+        "weight": "35 lbs"
+      }
+    },
+    {
+      "name": "Patio Side Table",
+      "description": "Compact side table with mosaic tile top and wrought iron base, adds decorative touch to outdoor spaces.",
+      "categorySlug": "living-room-furniture",
+      "defaultFields": {
+        "model": "PST-220",
+        "material": "Wrought iron base, ceramic tile top",
+        "moq": "40 pieces",
+        "lead_time": "25-35 days"
+      },
+      "customFields": {
+        "table_shape": "Round",
+        "diameter": "18 inches",
+        "tile_pattern": "Mediterranean mosaic"
+      }
+    },
+    {
+      "name": "Outdoor TV Console",
+      "description": "Weatherproof TV console with adjustable shelves and cable management, designed for outdoor entertainment areas.",
+      "categorySlug": "living-room-furniture",
+      "defaultFields": {
+        "model": "OTC-900",
+        "material": "Marine-grade polymer, stainless steel hardware",
+        "moq": "20 pieces",
+        "lead_time": "40-50 days"
+      },
+      "customFields": {
+        "tv_size_compatibility": "Up to 65 inches",
+        "shelves": "2 adjustable",
+        "weatherproof_rating": "IP65"
+      }
+    },
+    {
+      "name": "Garden Storage Cabinet",
+      "description": "Multi-functional storage cabinet with lockable doors, perfect for organizing outdoor tools and accessories.",
+      "categorySlug": "living-room-furniture",
+      "defaultFields": {
+        "model": "GSC-500",
+        "material": "Resin with UV protection",
+        "moq": "15 pieces",
+        "lead_time": "30-40 days"
+      },
+      "customFields": {
+        "storage_space": "3 cubic feet",
+        "lock_included": "Yes",
+        "assembly": "Tool-free assembly"
+      }
+    },
+    {
+      "name": "Outdoor Bookshelf",
+      "description": "Rustic-style bookshelf made from reclaimed wood, suitable for covered patio or sunroom.",
+      "categorySlug": "living-room-furniture",
+      "defaultFields": {
+        "model": "OBS-360",
+        "material": "Reclaimed pine wood",
+        "moq": "25 pieces",
+        "lead_time": "35-45 days"
+      },
+      "customFields": {
+        "shelves": "4 fixed",
+        "height": "60 inches",
+        "finish": "Weathered gray stain"
+      }
+    }
+  ]
+}

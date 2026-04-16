@@ -119,7 +119,8 @@ export function SiteHeader({
               <Link
                 href="/request-quote"
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-base font-semibold text-white hover:bg-blue-500 transition-colors active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-base font-semibold text-white transition-all active:scale-95"
+                style={{ backgroundColor: accent }}
               >
                 {quoteLabel}
                 <MoveRight className="h-4 w-4" />

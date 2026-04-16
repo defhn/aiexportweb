@@ -1,0 +1,177 @@
+{
+  "key": "lighting",
+  "companyNameZh": "照明科技有限公司",
+  "companyNameEn": "Lighting Technology Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "商业照明",
+      "nameEn": "Commercial Lighting",
+      "slug": "commercial-lighting",
+      "summaryZh": "适用于商场、展厅和办公场景的照明产品。",
+      "summaryEn": "Lighting fixtures for retail stores, showrooms, and office projects.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "工业照明",
+      "nameEn": "Industrial Lighting",
+      "slug": "industrial-lighting",
+      "summaryZh": "面向工厂仓储与高位空间的高亮度照明方案。",
+      "summaryEn": "High-output lighting solutions for factories, warehouses, and high-bay spaces.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "model": "CL-2001",
+      "material": "Aluminum alloy + PC cover",
+      "moq": "50 pcs",
+      "lead_time": "15-20 days",
+      "certification": "CE, RoHS",
+      "customFields": {
+        "power": "30W",
+        "color_temperature": "4000K",
+        "ip_rating": "IP65",
+        "luminous_flux": "3000lm",
+        "dimming": "0-10V dimmable"
+      },
+      "categorySlug": "commercial-lighting"
+    },
+    {
+      "model": "IL-5000",
+      "material": "Die-cast aluminum",
+      "moq": "100 pcs",
+      "lead_time": "20-25 days",
+      "certification": "UL, DLC",
+      "customFields": {
+        "power": "150W",
+        "color_temperature": "5000K",
+        "ip_rating": "IP66",
+        "luminous_flux": "18000lm",
+        "operating_temperature": "-40°C to 50°C"
+      },
+      "categorySlug": "industrial-lighting"
+    },
+    {
+      "model": "CL-3002",
+      "material": "Aluminum + tempered glass",
+      "moq": "30 pcs",
+      "lead_time": "10-15 days",
+      "certification": "CE, FCC",
+      "customFields": {
+        "power": "40W",
+        "color_temperature": "3000K",
+        "ip_rating": "IP44",
+        "luminous_flux": "4000lm",
+        "cri": ">80"
+      },
+      "categorySlug": "commercial-lighting"
+    },
+    {
+      "model": "IL-7000",
+      "material": "Stainless steel 304",
+      "moq": "200 pcs",
+      "lead_time": "25-30 days",
+      "certification": "ATEX, IECEx",
+      "customFields": {
+        "power": "200W",
+        "color_temperature": "6000K",
+        "ip_rating": "IP68",
+        "luminous_flux": "25000lm",
+        "explosion_proof_class": "Ex d IIC T6"
+      },
+      "categorySlug": "industrial-lighting"
+    },
+    {
+      "model": "CL-1005",
+      "material": "Polycarbonate",
+      "moq": "100 pcs",
+      "lead_time": "12-18 days",
+      "certification": "RoHS, REACH",
+      "customFields": {
+        "power": "20W",
+        "color_temperature": "2700K",
+        "ip_rating": "IP54",
+        "luminous_flux": "2000lm",
+        "lifetime": "50000 hours"
+      },
+      "categorySlug": "commercial-lighting"
+    },
+    {
+      "model": "IL-8000",
+      "material": "Aluminum alloy + polycarbonate",
+      "moq": "150 pcs",
+      "lead_time": "18-22 days",
+      "certification": "UL, DLC, Energy Star",
+      "customFields": {
+        "power": "120W",
+        "color_temperature": "4000K",
+        "ip_rating": "IP65",
+        "luminous_flux": "15000lm",
+        "power_factor": ">0.9"
+      },
+      "categorySlug": "industrial-lighting"
+    },
+    {
+      "model": "CL-4003",
+      "material": "Aluminum + acrylic",
+      "moq": "80 pcs",
+      "lead_time": "15-20 days",
+      "certification": "CE, CB",
+      "customFields": {
+        "power": "60W",
+        "color_temperature": "3500K",
+        "ip_rating": "IP20",
+        "luminous_flux": "6000lm",
+        "beam_angle": "120°"
+      },
+      "categorySlug": "commercial-lighting"
+    },
+    {
+      "model": "IL-9000",
+      "material": "Cast iron",
+      "moq": "50 pcs",
+      "lead_time": "30-35 days",
+      "certification": "UL, CSA",
+      "customFields": {
+        "power": "300W",
+        "color_temperature": "5000K",
+        "ip_rating": "IP67",
+        "luminous_flux": "35000lm",
+        "vibration_resistance": "5-2000Hz"
+      },
+      "categorySlug": "industrial-lighting"
+    },
+    {
+      "model": "CL-5004",
+      "material": "Stainless steel + glass",
+      "moq": "40 pcs",
+      "lead_time": "20-25 days",
+      "certification": "CE, RoHS, ISO9001",
+      "customFields": {
+        "power": "25W",
+        "color_temperature": "4000K",
+        "ip_rating": "IP65",
+        "luminous_flux": "2500lm",
+        "color_rendering": "CRI>90"
+      },
+      "categorySlug": "commercial-lighting"
+    },
+    {
+      "model": "IL-6000",
+      "material": "Aluminum alloy",
+      "moq": "120 pcs",
+      "lead_time": "15-20 days",
+      "certification": "CE, UL, DLC",
+      "customFields": {
+        "power": "100W",
+        "color_temperature": "4000K",
+        "ip_rating": "IP66",
+        "luminous_flux": "12000lm",
+        "operating_voltage": "100-277V AC"
+      },
+      "categorySlug": "industrial-lighting"
+    }
+  ]
+}

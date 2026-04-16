@@ -53,15 +53,15 @@ function FinalCtaSection({
   return (
     <section className="relative overflow-hidden bg-[#0a0a0a] py-32">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      <div className="absolute inset-0 opacity-20 mix-blend-overlay texture-carbon" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/20 blur-[150px] mix-blend-screen" />
+      <div className="absolute inset-0 opacity-18 mix-blend-overlay texture-carbon" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/18 blur-[140px] mix-blend-screen" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
         <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-widest text-white/80 backdrop-blur-md">
           <div className="h-2 w-2 animate-pulse rounded-full bg-blue-500" />
           {eyebrow}
         </div>
-        <h2 className="text-4xl font-extrabold tracking-tighter text-white md:text-6xl md:leading-tight">
+        <h2 className="text-4xl font-semibold tracking-tight text-white md:text-6xl md:leading-tight">
           {title}
         </h2>
         <p className="mt-6 text-xl font-medium text-stone-400/90">{description}</p>

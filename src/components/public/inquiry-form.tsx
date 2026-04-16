@@ -92,21 +92,21 @@ export function InquiryForm({
 
 
   if (message) {
-      return (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-12 text-center"
-          >
-              <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6 font-black uppercase tracking-widest text-[#10b981]">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-              <h2 className="mb-4 text-2xl font-bold text-stone-900">
-                {copy?.successTitle ?? "Request Received"}
-              </h2>
-              <p className="text-stone-500 leading-relaxed italic">{message}</p>
-          </motion.div>
-      );
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="p-12 text-center"
+      >
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+          <CheckCircle2 className="h-10 w-10" />
+        </div>
+        <h2 className="mb-4 text-2xl font-semibold text-stone-900">
+          {copy?.successTitle ?? "Request Received"}
+        </h2>
+        <p className="leading-relaxed text-stone-500">{message}</p>
+      </motion.div>
+    );
   }
 
   return (
@@ -115,7 +115,7 @@ export function InquiryForm({
         <h2 className="mb-2 text-sm font-black uppercase tracking-[0.4em] text-stone-400">
           {copy?.eyebrow ?? "Request Consultation"}
         </h2>
-        <p className="text-2xl font-bold tracking-tight text-stone-900">
+        <p className="text-2xl font-semibold tracking-tight text-stone-900">
           {copy?.title ?? "Start Project Review"}
         </p>
       </header>
@@ -124,8 +124,10 @@ export function InquiryForm({
           <div className="grid gap-6 md:grid-cols-2">
             <div className="relative group">
                 <input
-                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+                className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }} // Adaptive stone-500/15
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+                onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
                 name="name"
                 placeholder="Full Name"
                 required
@@ -133,8 +135,10 @@ export function InquiryForm({
             </div>
             <div className="relative group">
                 <input
-                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+                className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+                onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
                 name="email"
                 placeholder="Business Email"
                 required
@@ -145,14 +149,18 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-            className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+            className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+            onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+            onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
             name="companyName"
             placeholder="Company"
             />
             <input
-            className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+            className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+            onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+            onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
             name="country"
             placeholder="Country"
             />
@@ -160,14 +168,18 @@ export function InquiryForm({
 
           <div className="grid gap-6 md:grid-cols-2">
             <input
-                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+                className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+                onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
                 name="whatsapp"
                 placeholder="WhatsApp (Optional)"
             />
             <input
-                className="w-full border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-                style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+                className="w-full border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+                style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+                onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
                 defaultValue={defaultProductName}
                 name="productName"
                 placeholder="Interested Product"
@@ -175,8 +187,10 @@ export function InquiryForm({
           </div>
 
           <textarea
-            className="min-h-[120px] w-full resize-none border-b-2 border-stone-100 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-colors placeholder:text-stone-300 focus:outline-none"
-            style={{ borderBottomColor: "rgba(148, 163, 184, 0.2)" }}
+            className="min-h-[120px] w-full resize-none border-b-2 bg-transparent py-3.5 text-base font-medium text-stone-900 transition-all placeholder:text-stone-300 focus:outline-none"
+            style={{ borderBottomColor: "rgba(120, 113, 108, 0.15)" }}
+            onFocus={(e) => e.currentTarget.style.borderBottomColor = accentColor}
+            onBlur={(e) => e.currentTarget.style.borderBottomColor = "rgba(120, 113, 108, 0.15)"}
             name="message"
             placeholder="Technical requirements & Project scope..."
             required
@@ -184,14 +198,17 @@ export function InquiryForm({
       </div>
 
       <div className="space-y-6">
-          <div className="relative flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed border-stone-100 p-6 transition-colors hover:bg-stone-50 group">
+          <div 
+            className="relative flex cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed p-6 transition-all hover:bg-stone-50 group"
+            style={{ borderColor: "rgba(120, 113, 108, 0.15)" }}
+          >
               <input 
                 name="attachment" 
                 type="file" 
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <div className="text-center">
-                  <UploadCloud className="mx-auto h-8 w-8 text-stone-300 transition-colors" />
+                  <UploadCloud className="mx-auto h-8 w-8 text-stone-300 transition-colors group-hover:scale-110" style={{ color: accentColor }} />
                   <p className="mt-2 text-xs font-bold uppercase tracking-widest text-stone-400">
                     {copy?.uploadHint ?? "Attach references or requirement files"}
                   </p>
@@ -221,12 +238,12 @@ export function InquiryForm({
         title={copy?.trustBadgeTitle}
       />
       {copy?.securityNote ? (
-        <p className="-mt-2 mb-4 text-xs leading-relaxed text-stone-500">{copy.securityNote}</p>
+        <p className="-mt-2 mb-4 text-xs leading-relaxed text-stone-500 italic">{copy.securityNote}</p>
       ) : null}
       <button
-        className="group relative h-16 w-full overflow-hidden rounded-full text-xs font-bold uppercase tracking-widest text-white transition-all active:scale-[0.98] disabled:opacity-50"
+        className="group relative h-16 w-full overflow-hidden rounded-full text-xs font-black uppercase tracking-[0.2em] text-white transition-all active:scale-[0.98] disabled:opacity-50"
         disabled={pending}
-        style={{ backgroundColor: accentColor }}
+        style={{ backgroundColor: accentColor, boxShadow: `0 10px 30px -10px ${accentColor}66` }}
         type="submit"
       >
         <span className="relative z-10 flex items-center justify-center gap-3">

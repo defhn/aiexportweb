@@ -78,6 +78,10 @@ export default async function ProductDetailPage({
     notFound();
   }
 
+  const isDark = theme.surface !== "#ffffff" && theme.surface !== "#fffaf2" && theme.surface !== "#f5f6ff" && theme.surface !== "#fffaf4";
+  const textColor = isDark ? "text-white" : "text-stone-900";
+  const textMuted = isDark ? "text-white/60" : "text-stone-500";
+
   const requestHeaders = await headers();
   const fingerprint = [
     requestHeaders.get("user-agent") ?? "unknown-agent",
@@ -104,7 +108,7 @@ export default async function ProductDetailPage({
   const productUrl = buildAbsoluteUrl(`/products/${categorySlug}/${productSlug}`);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen" style={{ backgroundColor: theme.surface }}>
       <JsonLdScript
         value={buildProductJsonLd({
           name: product.product.nameEn,
@@ -125,23 +129,107 @@ export default async function ProductDetailPage({
       />
       <JsonLdScript value={buildFaqJsonLd(product.faqs)} />
 
-      <div className="border-b py-4" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
+      <div className="border-b py-5" style={{ backgroundColor: theme.surfaceAlt, borderColor: theme.border }}>
         <div className="mx-auto max-w-7xl px-6">
-          <nav className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-stone-400">
-            <Link href="/products" className="transition-colors hover:opacity-80" style={{ color: theme.accent }}>Catalog</Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link href={`/products/${categorySlug}`} className="capitalize transition-colors hover:opacity-80" style={{ color: theme.accent }}>{categorySlug.replace(/-/g, " ")}</Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-stone-900">{product.product.nameEn}</span>
+          <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em]">
+            <Link href="/products" className="transition-opacity hover:opacity-80" style={{ color: theme.accent }}>
+              {theme.productDetail.breadcrumbCatalogLabel}
+            </Link>
+            <ChevronRight className={`h-3 w-3 ${isDark ? "text-white/20" : "text-stone-300"}`} />
+            <Link href={`/products/${categorySlug}`} className="capitalize transition-opacity hover:opacity-80" style={{ color: theme.accent }}>
+              {categorySlug.replace(/-/g, " ")}
+            </Link>
+            <ChevronRight className={`h-3 w-3 ${isDark ? "text-white/20" : "text-stone-300"}`} />
+            <span className={textColor}>{product.product.nameEn}</span>
           </nav>
         </div>
       </div>
 
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 lg:grid-cols-[1fr_400px] lg:gap-16">
-          <aside className="relative order-first lg:order-last">
-            <div className="sticky top-24 space-y-12">
-              <div className="rounded-[2.5rem] border p-1 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
+      <section className="mx-auto max-w-7xl px-6 py-16 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-[1fr_420px] lg:gap-20">
+          <div className="space-y-16">
+            <header>
+              <p className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
+                {theme.categoryTitle}
+              </p>
+              <h1 className={`mt-6 text-4xl font-black leading-[1.1] tracking-tight md:text-5xl lg:text-7xl ${textColor}`}>
+                {product.product.nameEn}
+              </h1>
+              <p className={`mt-8 max-w-3xl text-lg leading-relaxed md:text-xl font-medium ${textMuted}`}>
+                {product.shortDescriptionEn}
+              </p>
+            </header>
+
+            <div className="space-y-8">
+              {product.coverImage && (
+                <div className="group overflow-hidden rounded-[3rem] shadow-2xl transition-all duration-700" style={{ backgroundColor: theme.surfaceAlt }}>
+                  <Image
+                    alt={product.coverImage.alt}
+                    className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    priority
+                    src={product.coverImage.url}
+                    width={1400}
+                    height={900}
+                  />
+                </div>
+              )}
+
+              {product.galleryImages.length > 0 && (
+                <div className="grid grid-cols-2 gap-4 sm:gap-8">
+                  {product.galleryImages.map((image) => (
+                    <div key={image.id} className="group overflow-hidden rounded-[2.5rem] shadow-xl" style={{ backgroundColor: theme.surfaceAlt }}>
+                      <Image
+                        alt={image.alt}
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        width={700}
+                        height={525}
+                        src={image.url}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-16">
+              <SpecTable
+                accentColor={theme.accent}
+                rows={rows}
+                title={theme.productDetail.datasheetTitle}
+                isDark={isDark}
+              />
+
+              {product.showDownloadButton && product.pdfUrl && (
+                <div className="group relative flex flex-col sm:flex-row sm:items-center justify-between overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl transition-transform hover:scale-[1.01]" style={{ backgroundColor: theme.surfaceAlt === "#ffffff" ? theme.surface : theme.surfaceAlt }}>
+                  <div className="absolute inset-0 opacity-10 texture-carbon pointer-events-none" />
+                  <div className="relative z-10 mb-6 sm:mb-0">
+                    <h3 className="text-2xl font-black text-white">
+                      {theme.productDetail.datasheetTitle}
+                    </h3>
+                    <p className="mt-2 text-base font-medium text-white/60">
+                      {theme.productDetail.datasheetDescription}
+                    </p>
+                  </div>
+                  <Link href={product.pdfUrl} className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full text-white shadow-xl transition-all group-hover:scale-110" style={{ backgroundColor: theme.accent }}>
+                    <FileDown className="h-7 w-7" />
+                  </Link>
+                </div>
+              )}
+
+              <div className="pt-12">
+                <ProductFaq
+                   accentColor={theme.accent}
+                   items={product.faqs}
+                   title={`${theme.productDetail.breadcrumbCatalogLabel} FAQ`}
+                   isDark={isDark}
+                />
+              </div>
+            </div>
+          </div>
+
+          <aside className="relative">
+            <div className="sticky top-24 space-y-16">
+              <div className="rounded-[3rem] border p-1 shadow-[0_48px_80px_-16px_rgba(0,0,0,0.12)] transition-shadow hover:shadow-[0_56px_96px_-12px_rgba(0,0,0,0.14)]" style={{ borderColor: theme.border, backgroundColor: theme.surfaceAlt }}>
                 <InquiryForm
                   accentColor={theme.accent}
                   copy={{
@@ -158,25 +246,29 @@ export default async function ProductDetailPage({
                   productId={product.product.id}
                   sourcePage="product-detail"
                   sourceUrl={`/products/${categorySlug}/${productSlug}`}
+                  isDark={isDark}
                 />
               </div>
 
               {product.relatedProducts.length > 0 && (
-                <section>
-                  <h2 className="mb-8 px-4 text-xs font-black uppercase tracking-[0.3em] text-stone-400">
+                <section className="px-4">
+                  <h2 className={`mb-10 text-[10px] font-black uppercase tracking-[0.4em] ${textMuted}`}>
                     {theme.productDetail.relatedTitle}
                   </h2>
-                  <div className="space-y-4">
-                    {product.relatedProducts.slice(0, 3).map((related) => (
+                  <div className="space-y-5">
+                    {product.relatedProducts.slice(0, 4).map((related) => (
                       <Link
                         key={related.id}
                         href={`/products/${related.categorySlug || categorySlug}/${related.slug}`}
-                        className="group flex items-center gap-4 rounded-3xl border border-transparent p-4 transition-all hover:bg-stone-50"
+                        className={`group flex items-center gap-5 rounded-[2rem] border p-4 transition-all ${isDark ? "hover:bg-white/5" : "hover:bg-stone-50"}`}
+                        style={{ borderColor: theme.border }}
                       >
-                        <div className="h-16 w-16 flex-shrink-0 rounded-2xl bg-stone-100" />
+                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "#f5f5f4" }}>
+                            {related.coverImageUrl && <img src={related.coverImageUrl} className="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />}
+                        </div>
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-stone-900 transition-colors group-hover:opacity-80">{related.nameEn}</p>
-                          <p className="text-xs font-medium text-stone-400">
+                          <p className={`truncate text-sm font-black transition-colors group-hover:opacity-80 ${textColor}`}>{related.nameEn}</p>
+                          <p className={`mt-1 text-[10px] font-black uppercase tracking-widest ${textMuted}`}>
                             {theme.productDetail.compareLabel}
                           </p>
                         </div>
@@ -187,63 +279,6 @@ export default async function ProductDetailPage({
               )}
             </div>
           </aside>
-
-          <div className="space-y-16">
-            <header>
-              <p className="text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>{theme.categoryTitle}</p>
-              <h1 className="mt-4 text-4xl font-black leading-[1.1] tracking-tight text-stone-900 md:text-5xl lg:text-6xl">{product.product.nameEn}</h1>
-              <p className="mt-8 max-w-3xl text-lg leading-relaxed text-stone-500 md:text-xl">{product.shortDescriptionEn}</p>
-            </header>
-
-            <div className="space-y-6">
-              {product.coverImage && (
-                <div className="group overflow-hidden rounded-[3rem] bg-stone-100">
-                  <Image alt={product.coverImage.alt} className="w-full object-cover transition-transform duration-700 group-hover:scale-105" priority src={product.coverImage.url} width={1200} height={800} />
-                </div>
-              )}
-
-              {product.galleryImages.length > 0 && (
-                <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                  {product.galleryImages.map((image) => (
-                    <div key={image.id} className="group overflow-hidden rounded-[2rem] bg-stone-50">
-                      <Image alt={image.alt} className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105" width={600} height={450} src={image.url} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-12">
-              <SpecTable
-                accentColor={theme.accent}
-                rows={rows}
-                title={theme.productDetail.datasheetTitle}
-              />
-
-              {product.showDownloadButton && product.pdfUrl && (
-                <div className="group relative flex items-center justify-between overflow-hidden rounded-[2.5rem] p-6 shadow-2xl md:p-10" style={{ backgroundColor: theme.surface, color: "white" }}>
-                  <div className="absolute inset-0 opacity-10 texture-carbon" />
-                  <div className="relative z-10">
-                    <h3 className="text-xl font-bold text-white">
-                      {theme.productDetail.datasheetTitle}
-                    </h3>
-                    <p className="mt-2 text-sm text-white/70">
-                      {theme.productDetail.datasheetDescription}
-                    </p>
-                  </div>
-                  <Link href={product.pdfUrl} aria-label="Download PDF" title="Download PDF" className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full text-white transition-all group-hover:scale-110" style={{ backgroundColor: theme.accent }}>
-                    <FileDown className="h-6 w-6" />
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <ProductFaq
-              accentColor={theme.accent}
-              items={product.faqs}
-              title={`${theme.productDetail.breadcrumbCatalogLabel} FAQ`}
-            />
-          </div>
         </div>
       </section>
     </main>

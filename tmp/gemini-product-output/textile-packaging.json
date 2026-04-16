@@ -1,0 +1,187 @@
+{
+  "key": "textile-packaging",
+  "companyNameZh": "轻纺包装科技有限公司",
+  "companyNameEn": "Textile Packaging Technology Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "纺织配件",
+      "nameEn": "Textile Accessories",
+      "slug": "textile-accessories",
+      "summaryZh": "适配服装与家纺品牌的纺织辅料与成品。",
+      "summaryEn": "Textile accessories and finished goods for apparel and home textile brands.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "包装材料",
+      "nameEn": "Packaging Materials",
+      "slug": "packaging-materials",
+      "summaryZh": "用于零售和电商发货的包装方案。",
+      "summaryEn": "Packaging solutions for retail channels and e-commerce shipment.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "Polyester Garment Bags",
+      "description": "Durable polyester garment bags for clothing protection during storage and transportation.",
+      "categorySlug": "packaging-materials",
+      "defaultFields": {
+        "model": "PG-2024",
+        "material": "Polyester",
+        "moq": "1000 pieces",
+        "lead_time": "15 days"
+      },
+      "customFields": {
+        "size": "Various sizes available",
+        "color": "Clear/White/Black",
+        "features": "Water-resistant, breathable"
+      }
+    },
+    {
+      "name": "Textile Label Tapes",
+      "description": "High-quality adhesive label tapes for textile product identification and branding.",
+      "categorySlug": "textile-accessories",
+      "defaultFields": {
+        "model": "TLT-305",
+        "material": "Satin/Polyester",
+        "moq": "500 rolls",
+        "lead_time": "10 days"
+      },
+      "customFields": {
+        "width": "10mm/20mm/30mm",
+        "printing": "Custom printing available",
+        "application": "Clothing labels, care instructions"
+      }
+    },
+    {
+      "name": "Corrugated Carton Boxes",
+      "description": "Sturdy corrugated boxes for bulk textile packaging and shipping.",
+      "categorySlug": "packaging-materials",
+      "defaultFields": {
+        "model": "CCB-450",
+        "material": "Corrugated cardboard",
+        "moq": "200 boxes",
+        "lead_time": "7 days"
+      },
+      "customFields": {
+        "dimensions": "Customizable sizes",
+        "strength": "Burst strength: 200psi",
+        "printing": "Logo printing available"
+      }
+    },
+    {
+      "name": "Elastic Bands for Textiles",
+      "description": "Durable elastic bands for various textile applications including waistbands and cuffs.",
+      "categorySlug": "textile-accessories",
+      "defaultFields": {
+        "model": "EB-125",
+        "material": "Natural rubber/Latex",
+        "moq": "2000 meters",
+        "lead_time": "12 days"
+      },
+      "customFields": {
+        "width": "5mm/10mm/15mm",
+        "stretch": "Up to 300% elongation",
+        "color": "Natural/Black/White"
+      }
+    },
+    {
+      "name": "Polypropylene Woven Bags",
+      "description": "Strong PP woven bags for bulk textile material packaging and storage.",
+      "categorySlug": "packaging-materials",
+      "defaultFields": {
+        "model": "PWB-880",
+        "material": "Polypropylene",
+        "moq": "1000 bags",
+        "lead_time": "20 days"
+      },
+      "customFields": {
+        "capacity": "10kg/25kg/50kg",
+        "closure": "Sewn/Heat sealed",
+        "printing": "Up to 6 colors"
+      }
+    },
+    {
+      "name": "Textile Zippers",
+      "description": "High-quality zippers for garments, bags, and other textile products.",
+      "categorySlug": "textile-accessories",
+      "defaultFields": {
+        "model": "TZ-205",
+        "material": "Metal/Nylon",
+        "moq": "1000 pieces",
+        "lead_time": "18 days"
+      },
+      "customFields": {
+        "size": "#3/#5/#8",
+        "type": "Open-end/Close-end",
+        "color": "Various colors available"
+      }
+    },
+    {
+      "name": "Bubble Wrap Rolls",
+      "description": "Protective bubble wrap for cushioning delicate textile products during shipping.",
+      "categorySlug": "packaging-materials",
+      "defaultFields": {
+        "model": "BWR-120",
+        "material": "Polyethylene",
+        "moq": "50 rolls",
+        "lead_time": "5 days"
+      },
+      "customFields": {
+        "width": "500mm/1000mm",
+        "bubble_size": "10mm/25mm",
+        "length": "50m/100m per roll"
+      }
+    },
+    {
+      "name": "Textile Buttons",
+      "description": "Decorative and functional buttons for various textile applications.",
+      "categorySlug": "textile-accessories",
+      "defaultFields": {
+        "model": "TB-88",
+        "material": "Plastic/Metal/Shell",
+        "moq": "5000 pieces",
+        "lead_time": "14 days"
+      },
+      "customFields": {
+        "size": "14mm/18mm/24mm",
+        "holes": "2-hole/4-hole",
+        "finish": "Matte/Glossy/Metallic"
+      }
+    },
+    {
+      "name": "Stretch Film for Textiles",
+      "description": "Pallet stretch film for securing textile bundles during transportation.",
+      "categorySlug": "packaging-materials",
+      "defaultFields": {
+        "model": "SF-300",
+        "material": "LLDPE",
+        "moq": "100 rolls",
+        "lead_time": "8 days"
+      },
+      "customFields": {
+        "width": "500mm",
+        "thickness": "20μm/25μm",
+        "stretch": "Up to 300%"
+      }
+    },
+    {
+      "name": "Textile Threads",
+      "description": "High-strength sewing threads for textile manufacturing and repair.",
+      "categorySlug": "textile-accessories",
+      "defaultFields": {
+        "model": "TT-40",
+        "material": "Polyester/Cotton",
+        "moq": "100 spools",
+        "lead_time": "10 days"
+      },
+      "customFields": {
+        "weight": "40s/60s/80s",
+        "color": "100+ color options",
+        "length": "5000m per spool"
+      }
+    }
+  ]
+}

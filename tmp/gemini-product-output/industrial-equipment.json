@@ -1,0 +1,237 @@
+{
+  "key": "industrial-equipment",
+  "companyNameZh": "工业设备系统有限公司",
+  "companyNameEn": "Industrial Equipment Systems Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "自动化设备",
+      "nameEn": "Automation Equipment",
+      "slug": "automation-equipment",
+      "summaryZh": "用于装配、检测和搬运的独立自动化设备。",
+      "summaryEn": "Standalone automation machines for assembly, inspection, and handling.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "输送系统",
+      "nameEn": "Conveying Systems",
+      "slug": "conveying-systems",
+      "summaryZh": "用于连续生产和车间物流的输送解决方案。",
+      "summaryEn": "Conveyor solutions for continuous production and workshop logistics.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "PLC Control Panel",
+      "description": "Advanced programmable logic controller panel for industrial automation systems with modular design and high reliability.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "PLC-CP-2024",
+        "material": "Stainless steel enclosure",
+        "process": "CNC machining, assembly, testing",
+        "size": "800x600x200mm",
+        "application": "Factory automation, process control",
+        "moq": "5 units",
+        "lead_time": "15-20 days",
+        "supply_ability": "200 units/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "voltage": "220V/380V",
+        "protection_level": "IP65",
+        "communication": "Ethernet, Profibus"
+      }
+    },
+    {
+      "name": "Industrial Robot Arm",
+      "description": "Six-axis robotic arm with high precision and repeatability for automated manufacturing processes.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "IRB-6000",
+        "material": "Aluminum alloy, steel",
+        "process": "Precision casting, assembly",
+        "size": "Reach: 1500mm",
+        "application": "Welding, assembly, material handling",
+        "moq": "2 units",
+        "lead_time": "30-45 days",
+        "supply_ability": "50 units/month",
+        "certification": "CE, ISO 10218"
+      },
+      "customFields": {
+        "payload": "10kg",
+        "repeatability": "±0.05mm",
+        "controller": "Integrated motion control"
+      }
+    },
+    {
+      "name": "Belt Conveyor System",
+      "description": "Heavy-duty belt conveyor for material transportation in industrial facilities with adjustable speed.",
+      "categorySlug": "conveying-systems",
+      "defaultFields": {
+        "model": "BCS-5000",
+        "material": "Carbon steel frame, rubber belt",
+        "process": "Welding, assembly, painting",
+        "size": "Custom length up to 50m",
+        "application": "Mining, logistics, manufacturing",
+        "moq": "1 set",
+        "lead_time": "25-35 days",
+        "supply_ability": "30 sets/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "belt_width": "500-1200mm",
+        "speed_range": "0.5-3.0 m/s",
+        "motor_power": "1.5-7.5 kW"
+      }
+    },
+    {
+      "name": "SCADA System",
+      "description": "Supervisory control and data acquisition system for monitoring and controlling industrial processes.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "SCADA-PRO",
+        "material": "Industrial PC, touch screen",
+        "process": "Software development, integration",
+        "size": "19-inch rack mount",
+        "application": "Energy management, water treatment",
+        "moq": "3 units",
+        "lead_time": "20-30 days",
+        "supply_ability": "100 units/month",
+        "certification": "CE, IEC 62443"
+      },
+      "customFields": {
+        "data_points": "Up to 10,000",
+        "redundancy": "Hot standby available",
+        "interface": "OPC UA, Modbus"
+      }
+    },
+    {
+      "name": "Roller Conveyor",
+      "description": "Gravity roller conveyor system for manual or automated material handling with various roller types.",
+      "categorySlug": "conveying-systems",
+      "defaultFields": {
+        "model": "RC-300",
+        "material": "Steel rollers, galvanized frame",
+        "process": "Roll forming, assembly",
+        "size": "Custom length, width 300-800mm",
+        "application": "Warehousing, packaging lines",
+        "moq": "10 meters",
+        "lead_time": "15-25 days",
+        "supply_ability": "500 meters/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "roller_diameter": "50mm, 75mm",
+        "load_capacity": "50-150 kg/m",
+        "bearing_type": "Precision ball bearing"
+      }
+    },
+    {
+      "name": "Industrial Vision System",
+      "description": "Machine vision inspection system for quality control and measurement in automated production lines.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "IVS-2000",
+        "material": "Aluminum housing, glass lens",
+        "process": "Optical assembly, calibration",
+        "size": "Camera: 50x50x80mm",
+        "application": "Defect detection, dimensional measurement",
+        "moq": "5 sets",
+        "lead_time": "20-30 days",
+        "supply_ability": "80 sets/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "resolution": "5 megapixels",
+        "inspection_speed": "Up to 1000 parts/minute",
+        "lighting": "LED ring light included"
+      }
+    },
+    {
+      "name": "Screw Conveyor",
+      "description": "Helical screw conveyor for bulk material handling with various flight designs and capacities.",
+      "categorySlug": "conveying-systems",
+      "defaultFields": {
+        "model": "SC-400",
+        "material": "Carbon steel, stainless steel",
+        "process": "Spiral forming, welding",
+        "size": "Diameter 150-400mm, length custom",
+        "application": "Food processing, chemical industry",
+        "moq": "2 units",
+        "lead_time": "30-40 days",
+        "supply_ability": "40 units/month",
+        "certification": "CE, FDA compliant"
+      },
+      "customFields": {
+        "capacity": "5-50 m³/hour",
+        "screw_type": "U-trough, tubular",
+        "drive": "Gear motor, variable speed"
+      }
+    },
+    {
+      "name": "CNC Machine Controller",
+      "description": "Numerical control system for CNC machine tools with multi-axis interpolation and advanced programming.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "CNC-MC8",
+        "material": "Industrial grade components",
+        "process": "PCB assembly, software installation",
+        "size": "Control cabinet 600x800x200mm",
+        "application": "Milling, turning, grinding machines",
+        "moq": "10 units",
+        "lead_time": "25-35 days",
+        "supply_ability": "150 units/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "axes": "Up to 8 axes",
+        "interpolation": "Linear, circular, helical",
+        "memory": "1GB program storage"
+      }
+    },
+    {
+      "name": "Overhead Chain Conveyor",
+      "description": "Overhead conveyor system with chain drive for suspended transportation of products in manufacturing.",
+      "categorySlug": "conveying-systems",
+      "defaultFields": {
+        "model": "OCC-1000",
+        "material": "Steel chain, I-beam track",
+        "process": "Forging, heat treatment, assembly",
+        "size": "Track height 2-6m, custom layout",
+        "application": "Automotive assembly, painting lines",
+        "moq": "50 meters",
+        "lead_time": "40-60 days",
+        "supply_ability": "200 meters/month",
+        "certification": "CE, ISO 9001"
+      },
+      "customFields": {
+        "chain_type": "X-348, X-458",
+        "load_per_carrier": "50-200 kg",
+        "speed": "0.5-15 m/min"
+      }
+    },
+    {
+      "name": "Industrial IoT Gateway",
+      "description": "Edge computing gateway for industrial IoT applications with data collection and protocol conversion capabilities.",
+      "categorySlug": "automation-equipment",
+      "defaultFields": {
+        "model": "IIoT-GW500",
+        "material": "Metal enclosure, electronic components",
+        "process": "SMT assembly, firmware programming",
+        "size": "120x80x35mm",
+        "application": "Predictive maintenance, energy monitoring",
+        "moq": "20 units",
+        "lead_time": "15-25 days",
+        "supply_ability": "500 units/month",
+        "certification": "CE, UL, IEC 62443"
+      },
+      "customFields": {
+        "protocols": "Modbus, Profinet, Ethernet/IP",
+        "cpu": "Quad-core ARM Cortex-A53",
+        "storage": "8GB eMMC, expandable"
+      }
+    }
+  ]
+}

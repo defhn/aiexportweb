@@ -1,0 +1,237 @@
+{
+  "key": "consumer-electronics",
+  "companyNameZh": "消费电子科技有限公司",
+  "companyNameEn": "Consumer Electronics Technology Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "智能配件",
+      "nameEn": "Smart Accessories",
+      "slug": "smart-accessories",
+      "summaryZh": "适用于手机、平板和日常数字设备的智能配件。",
+      "summaryEn": "Smart accessories for phones, tablets, and everyday digital devices.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "便携设备",
+      "nameEn": "Portable Devices",
+      "slug": "portable-devices",
+      "summaryZh": "面向便携使用场景的消费电子设备。",
+      "summaryEn": "Consumer devices designed for portable everyday use.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "Wireless Charging Pad",
+      "description": "Fast wireless charging pad compatible with Qi-enabled devices, featuring sleek design and LED indicator.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "WCP-2024",
+        "material": "ABS plastic + silicone",
+        "process": "Injection molding",
+        "size": "100mm x 100mm x 10mm",
+        "application": "Wireless charging for smartphones and wearables",
+        "moq": "500 units",
+        "lead_time": "15-20 days",
+        "supply_ability": "10000 units/month",
+        "certification": "CE, FCC, RoHS"
+      },
+      "customFields": {
+        "charging_power": "15W",
+        "compatibility": "Qi 1.3 standard",
+        "color_options": "Black, White, Blue"
+      }
+    },
+    {
+      "name": "Bluetooth Earbuds Pro",
+      "description": "Premium true wireless earbuds with active noise cancellation and 30-hour battery life.",
+      "categorySlug": "portable-devices",
+      "defaultFields": {
+        "model": "BEP-2024",
+        "material": "Plastic + silicone tips",
+        "process": "Injection molding + assembly",
+        "size": "Earbud: 20mm x 20mm, Case: 60mm x 40mm",
+        "application": "Personal audio entertainment",
+        "moq": "1000 units",
+        "lead_time": "20-25 days",
+        "supply_ability": "20000 units/month",
+        "certification": "CE, FCC, Bluetooth SIG"
+      },
+      "customFields": {
+        "battery_life": "8 hours (earbuds), 30 hours (with case)",
+        "connectivity": "Bluetooth 5.3",
+        "water_resistance": "IPX4"
+      }
+    },
+    {
+      "name": "Smart Watch Series X",
+      "description": "Advanced smartwatch with health monitoring, GPS, and customizable watch faces.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "SW-X2024",
+        "material": "Aluminum alloy + tempered glass",
+        "process": "CNC machining + assembly",
+        "size": "44mm diameter, 12mm thickness",
+        "application": "Fitness tracking and smart notifications",
+        "moq": "300 units",
+        "lead_time": "25-30 days",
+        "supply_ability": "5000 units/month",
+        "certification": "CE, FCC, IP68"
+      },
+      "customFields": {
+        "display": "1.5\" AMOLED",
+        "battery_life": "7 days",
+        "sensors": "Heart rate, SpO2, accelerometer"
+      }
+    },
+    {
+      "name": "Portable Power Bank",
+      "description": "High-capacity power bank with dual USB-C ports and fast charging technology.",
+      "categorySlug": "portable-devices",
+      "defaultFields": {
+        "model": "PPB-30000",
+        "material": "ABS plastic + lithium polymer",
+        "process": "Injection molding + battery assembly",
+        "size": "150mm x 75mm x 25mm",
+        "application": "Mobile device charging on the go",
+        "moq": "800 units",
+        "lead_time": "18-22 days",
+        "supply_ability": "15000 units/month",
+        "certification": "CE, FCC, UN38.3"
+      },
+      "customFields": {
+        "capacity": "30000mAh",
+        "output_ports": "2x USB-C, 1x USB-A",
+        "charging_speed": "65W PD"
+      }
+    },
+    {
+      "name": "Smartphone Camera Lens Kit",
+      "description": "Professional-grade attachable lenses for smartphone photography enhancement.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "SCLK-2024",
+        "material": "Optical glass + aluminum",
+        "process": "Precision grinding + assembly",
+        "size": "Lens: 40mm diameter, Case: 120mm x 80mm",
+        "application": "Mobile photography enhancement",
+        "moq": "400 units",
+        "lead_time": "20-25 days",
+        "supply_ability": "8000 units/month",
+        "certification": "CE, RoHS"
+      },
+      "customFields": {
+        "lens_types": "Wide-angle, macro, fisheye",
+        "compatibility": "Universal clip for smartphones",
+        "coating": "Multi-layer anti-reflective"
+      }
+    },
+    {
+      "name": "Tablet Stand with Cooling",
+      "description": "Adjustable tablet stand with built-in cooling fan for extended use.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "TSC-2024",
+        "material": "Aluminum + plastic",
+        "process": "Die casting + assembly",
+        "size": "200mm x 150mm x 50mm",
+        "application": "Tablet support and cooling",
+        "moq": "600 units",
+        "lead_time": "15-18 days",
+        "supply_ability": "12000 units/month",
+        "certification": "CE, FCC"
+      },
+      "customFields": {
+        "adjustment_angles": "30-75 degrees",
+        "cooling_fan": "Quiet 120mm fan",
+        "device_compatibility": "7-13 inch tablets"
+      }
+    },
+    {
+      "name": "Wireless Presentation Remote",
+      "description": "Professional wireless remote for presentations with laser pointer and media controls.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "WPR-2024",
+        "material": "Plastic + rubber grip",
+        "process": "Injection molding + electronics assembly",
+        "size": "120mm x 40mm x 20mm",
+        "application": "Presentation control",
+        "moq": "1000 units",
+        "lead_time": "12-15 days",
+        "supply_ability": "25000 units/month",
+        "certification": "CE, FCC, RoHS"
+      },
+      "customFields": {
+        "connectivity": "2.4GHz wireless",
+        "battery": "AAA x 2 (included)",
+        "range": "30 meters"
+      }
+    },
+    {
+      "name": "Portable Bluetooth Speaker",
+      "description": "Compact waterproof Bluetooth speaker with 360-degree sound and long battery life.",
+      "categorySlug": "portable-devices",
+      "defaultFields": {
+        "model": "PBS-2024",
+        "material": "Rubber + metal mesh",
+        "process": "Injection molding + speaker assembly",
+        "size": "150mm diameter x 80mm height",
+        "application": "Portable audio entertainment",
+        "moq": "700 units",
+        "lead_time": "20-25 days",
+        "supply_ability": "18000 units/month",
+        "certification": "CE, FCC, IPX7"
+      },
+      "customFields": {
+        "audio_output": "20W RMS",
+        "battery_life": "15 hours",
+        "waterproof_rating": "IPX7"
+      }
+    },
+    {
+      "name": "Smartphone Gimbal Stabilizer",
+      "description": "3-axis smartphone gimbal for smooth video recording and advanced camera control.",
+      "categorySlug": "smart-accessories",
+      "defaultFields": {
+        "model": "SGS-2024",
+        "material": "ABS plastic + aluminum",
+        "process": "Injection molding + motor assembly",
+        "size": "Folded: 180mm x 80mm, Extended: 300mm",
+        "application": "Mobile videography stabilization",
+        "moq": "500 units",
+        "lead_time": "22-28 days",
+        "supply_ability": "9000 units/month",
+        "certification": "CE, FCC"
+      },
+      "customFields": {
+        "stabilization_axes": "3-axis (pan, tilt, roll)",
+        "battery_life": "12 hours",
+        "app_integration": "Dedicated mobile app"
+      }
+    },
+    {
+      "name": "E-Reader with Eye Comfort",
+      "description": "E-ink e-reader with adjustable warm light and high-resolution display for comfortable reading.",
+      "categorySlug": "portable-devices",
+      "defaultFields": {
+        "model": "ER-2024",
+        "material": "Plastic + e-ink screen",
+        "process": "Assembly + screen integration",
+        "size": "160mm x 115mm x 8mm",
+        "application": "Digital reading",
+        "moq": "400 units",
+        "lead_time": "25-30 days",
+        "supply_ability": "7000 units/month",
+        "certification": "CE, FCC, RoHS"
+      },
+      "customFields": {
+        "display": "6\" e-ink, 300 PPI",
+        "storage": "32GB",
+        "lighting": "Adjustable warm/cool front light"
+      }
+    }
+  ]
+}

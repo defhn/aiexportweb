@@ -74,7 +74,7 @@ export default async function AboutPage() {
 
           <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
             <p className="mb-6 text-sm font-black uppercase tracking-[0.4em] text-white/70">{theme.about.eyebrow}</p>
-            <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-[1.1] tracking-tighter text-white md:text-6xl">
+            <h1 className="mx-auto max-w-4xl text-4xl font-semibold leading-[1.1] tracking-tight text-white md:text-6xl">
               {heroTitle}
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-white/75">{heroDescription}</p>

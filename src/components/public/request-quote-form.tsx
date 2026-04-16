@@ -19,6 +19,7 @@ type RequestQuoteFormProps = {
   surfaceColor?: string;
   successMessage?: string;
   submitLabel?: string;
+  downgradedMessage?: string;
 };
 
 export function RequestQuoteForm({
@@ -28,6 +29,7 @@ export function RequestQuoteForm({
   surfaceColor = "#ffffff",
   successMessage = "Quote request submitted successfully.",
   submitLabel = "Submit Quote Request",
+  downgradedMessage = "Your request has been received through the standard inquiry channel.",
 }: RequestQuoteFormProps) {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
@@ -44,14 +46,14 @@ export function RequestQuoteForm({
         method: "POST",
         body: new FormData(event.currentTarget),
       });
-      const result = (await response.json()) as { error?: string };
+      const result = (await response.json()) as { error?: string; downgraded?: boolean };
 
       if (!response.ok) {
         setError(result.error ?? "Submission failed.");
         return;
       }
 
-      setMessage(successMessage);
+      setMessage(result.downgraded ? downgradedMessage : successMessage);
       event.currentTarget.reset();
     } finally {
       setPending(false);

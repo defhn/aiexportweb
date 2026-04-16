@@ -1,0 +1,167 @@
+{
+  "key": "energy-power",
+  "companyNameZh": "能源电力系统有限公司",
+  "companyNameEn": "Energy Power Systems Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "配电系统",
+      "nameEn": "Power Distribution",
+      "slug": "power-distribution",
+      "summaryZh": "适用于工业园区和商业建筑的低压配电解决方案。",
+      "summaryEn": "Low-voltage distribution solutions for industrial parks and commercial buildings.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "储能系统",
+      "nameEn": "Battery Energy Storage",
+      "slug": "battery-energy-storage",
+      "summaryZh": "用于削峰填谷和备用电源的工商业储能系统。",
+      "summaryEn": "Commercial and industrial battery systems for peak shaving and backup power.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "model": "EPS-PD-1000",
+      "material": "Galvanized Steel",
+      "application": "Industrial power distribution for manufacturing plants",
+      "moq": "5 units",
+      "lead_time": "4-6 weeks",
+      "certification": "CE, UL",
+      "customFields": {
+        "voltage_rating": "400V",
+        "current_rating": "1000A",
+        "protection_level": "IP65"
+      },
+      "categorySlug": "power-distribution"
+    },
+    {
+      "model": "EPS-BES-5000",
+      "material": "Lithium-ion",
+      "application": "Grid-scale energy storage for renewable integration",
+      "moq": "2 units",
+      "lead_time": "8-10 weeks",
+      "certification": "IEC 62619, UN38.3",
+      "customFields": {
+        "capacity": "5MWh",
+        "efficiency": "95%",
+        "cycle_life": "6000 cycles"
+      },
+      "categorySlug": "battery-energy-storage"
+    },
+    {
+      "model": "EPS-PD-2000",
+      "material": "Aluminum Alloy",
+      "application": "Commercial building power distribution systems",
+      "moq": "3 units",
+      "lead_time": "3-5 weeks",
+      "certification": "CE, RoHS",
+      "customFields": {
+        "voltage_rating": "690V",
+        "current_rating": "2000A",
+        "modular_design": "Yes"
+      },
+      "categorySlug": "power-distribution"
+    },
+    {
+      "model": "EPS-BES-2000",
+      "material": "Lithium Iron Phosphate",
+      "application": "Backup power for telecom towers",
+      "moq": "10 units",
+      "lead_time": "6-8 weeks",
+      "certification": "UL 1973, CE",
+      "customFields": {
+        "capacity": "2MWh",
+        "operating_temp": "-20°C to 60°C",
+        "communication": "CAN, RS485"
+      },
+      "categorySlug": "battery-energy-storage"
+    },
+    {
+      "model": "EPS-PD-500",
+      "material": "Stainless Steel",
+      "application": "Marine power distribution panels",
+      "moq": "8 units",
+      "lead_time": "5-7 weeks",
+      "certification": "DNV-GL, IEC 60092",
+      "customFields": {
+        "voltage_rating": "230V",
+        "current_rating": "500A",
+        "corrosion_resistance": "High"
+      },
+      "categorySlug": "power-distribution"
+    },
+    {
+      "model": "EPS-BES-10000",
+      "material": "Sodium-ion",
+      "application": "Utility-scale energy storage for peak shaving",
+      "moq": "1 unit",
+      "lead_time": "12-16 weeks",
+      "certification": "IEC 62933, UL 9540",
+      "customFields": {
+        "capacity": "10MWh",
+        "response_time": "<100ms",
+        "expected_lifetime": "15 years"
+      },
+      "categorySlug": "battery-energy-storage"
+    },
+    {
+      "model": "EPS-PD-3000",
+      "material": "Copper",
+      "application": "Data center power distribution units",
+      "moq": "4 units",
+      "lead_time": "6-8 weeks",
+      "certification": "TUV, CE",
+      "customFields": {
+        "voltage_rating": "480V",
+        "current_rating": "3000A",
+        "redundancy": "N+1"
+      },
+      "categorySlug": "power-distribution"
+    },
+    {
+      "model": "EPS-BES-1000",
+      "material": "Lead Acid",
+      "application": "Off-grid solar systems for remote areas",
+      "moq": "15 units",
+      "lead_time": "4-6 weeks",
+      "certification": "IEC 60896, CE",
+      "customFields": {
+        "capacity": "1MWh",
+        "maintenance": "Low",
+        "depth_of_discharge": "50%"
+      },
+      "categorySlug": "battery-energy-storage"
+    },
+    {
+      "model": "EPS-PD-1500",
+      "material": "Fiberglass",
+      "application": "Outdoor substation distribution cabinets",
+      "moq": "6 units",
+      "lead_time": "5-7 weeks",
+      "certification": "IEC 61439, CE",
+      "customFields": {
+        "voltage_rating": "35kV",
+        "current_rating": "1500A",
+        "insulation_class": "F"
+      },
+      "categorySlug": "power-distribution"
+    },
+    {
+      "model": "EPS-BES-3000",
+      "material": "Flow Battery",
+      "application": "Long-duration energy storage for microgrids",
+      "moq": "3 units",
+      "lead_time": "10-12 weeks",
+      "certification": "UL 1973, IEC 62933",
+      "customFields": {
+        "capacity": "3MWh",
+        "discharge_time": "10 hours",
+        "electrolyte": "Vanadium"
+      },
+      "categorySlug": "battery-energy-storage"
+    }
+  ]
+}

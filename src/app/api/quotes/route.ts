@@ -14,13 +14,7 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   const currentSite = await getCurrentSiteFromRequest();
   const gate = await getFeatureGate("request_quote", currentSite.plan, currentSite.id);
-
-  if (gate.status === "locked") {
-    return NextResponse.json(
-      { error: "This quote request feature is not available on the current plan." },
-      { status: 403 },
-    );
-  }
+  const allowQuoteSystem = gate.status !== "locked";
 
   const formData = await request.formData();
   const token = String(formData.get("turnstileToken") ?? "");
@@ -63,40 +57,51 @@ export async function POST(request: Request) {
     }
   }
 
-  const record = await createQuoteRequest({
-    siteId: currentSite.id,
-    name: String(formData.get("name") ?? ""),
-    email: String(formData.get("email") ?? ""),
-    companyName: String(formData.get("companyName") ?? ""),
-    country: country.normalizedName ?? (typeof formData.get("country") === 'string' ? String(formData.get("country")) : ""),
-    countryCode: country.countryCode,
-    whatsapp: String(formData.get("whatsapp") ?? ""),
-    message: String(formData.get("message") ?? ""),
-    attachmentMediaId,
-    customFieldsJson,
-    // UTM tracking params
-    utmSource: String(formData.get("utmSource") ?? "") || null,
-    utmMedium: String(formData.get("utmMedium") ?? "") || null,
-    utmCampaign: String(formData.get("utmCampaign") ?? "") || null,
-    utmTerm: String(formData.get("utmTerm") ?? "") || null,
-    utmContent: String(formData.get("utmContent") ?? "") || null,
-    gclid: String(formData.get("gclid") ?? "") || null,
-    annualVolume: String(formData.get("annualVolume") ?? "") || null,
-    companyWebsite: String(formData.get("companyWebsite") ?? "") || null,
-    items: [
-      {
-        productId: Number.parseInt(String(formData.get("productId") ?? ""), 10) || null,
-        productName: String(formData.get("productName") ?? ""),
-        quantity: String(formData.get("quantity") ?? ""),
-        unit: String(formData.get("unit") ?? ""),
-        notes: String(formData.get("itemNotes") ?? ""),
-      },
-    ],
-  });
+  const record = allowQuoteSystem
+    ? await createQuoteRequest({
+        siteId: currentSite.id,
+        name: String(formData.get("name") ?? ""),
+        email: String(formData.get("email") ?? ""),
+        companyName: String(formData.get("companyName") ?? ""),
+        country: country.normalizedName ?? (typeof formData.get("country") === 'string' ? String(formData.get("country")) : ""),
+        countryCode: country.countryCode,
+        whatsapp: String(formData.get("whatsapp") ?? ""),
+        message: String(formData.get("message") ?? ""),
+        attachmentMediaId,
+        customFieldsJson,
+        // UTM tracking params
+        utmSource: String(formData.get("utmSource") ?? "") || null,
+        utmMedium: String(formData.get("utmMedium") ?? "") || null,
+        utmCampaign: String(formData.get("utmCampaign") ?? "") || null,
+        utmTerm: String(formData.get("utmTerm") ?? "") || null,
+        utmContent: String(formData.get("utmContent") ?? "") || null,
+        gclid: String(formData.get("gclid") ?? "") || null,
+        annualVolume: String(formData.get("annualVolume") ?? "") || null,
+        companyWebsite: String(formData.get("companyWebsite") ?? "") || null,
+        items: [
+          {
+            productId: Number.parseInt(String(formData.get("productId") ?? ""), 10) || null,
+            productName: String(formData.get("productName") ?? ""),
+            quantity: String(formData.get("quantity") ?? ""),
+            unit: String(formData.get("unit") ?? ""),
+            notes: String(formData.get("itemNotes") ?? ""),
+          },
+        ],
+      })
+    : null;
 
-  if (!record) {
+  if (allowQuoteSystem && !record) {
     return NextResponse.json({ error: "Unable to create quote request." }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true, quoteRequestId: record.id, attachmentMediaId });
+  if (!allowQuoteSystem) {
+    return NextResponse.json({
+      success: true,
+      quoteRequestId: null,
+      attachmentMediaId,
+      downgraded: true,
+    });
+  }
+
+  return NextResponse.json({ success: true, quoteRequestId: record?.id ?? null, attachmentMediaId });
 }

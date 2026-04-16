@@ -32,8 +32,9 @@ export function SiteFooter({
       <div className="relative z-10 border-b" style={{ borderColor: border, backgroundColor: surfaceAlt }}>
         <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm font-medium">
-            {footer.trustItems.map((item, index) => {
-              const Icon = [ShieldCheck, FileKey2, Microscope][index] ?? ShieldCheck;
+            {footer.trustItems.map((item) => {
+              // Use generic but professional icons that fit any industry
+              const Icon = ShieldCheck; 
               return (
                 <div key={item.title} className="flex items-center justify-center gap-4 md:justify-start">
                   <Icon className="h-6 w-6" style={{ color: accent }} />

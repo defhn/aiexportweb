@@ -1,0 +1,226 @@
+{
+  "key": "lifestyle",
+  "companyNameZh": "生活礼品文创有限公司",
+  "companyNameEn": "Lifestyle Gifts & Creative Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "礼盒套装",
+      "nameEn": "Gift Sets",
+      "slug": "gift-sets",
+      "summaryZh": "适合节日、活动和品牌赠礼的组合套装。",
+      "summaryEn": "Bundle sets for holidays, events, and branded gifting.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "文具用品",
+      "nameEn": "Stationery",
+      "slug": "stationery",
+      "summaryZh": "兼顾实用性与品牌形象的文具产品。",
+      "summaryEn": "Stationery products that balance usefulness and brand presence.",
+      "sortOrder": 20,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "家居生活",
+      "nameEn": "Home Lifestyle",
+      "slug": "home-lifestyle",
+      "summaryZh": "用于日常生活与家居场景的轻量礼品。",
+      "summaryEn": "Light lifestyle gifts for everyday home use.",
+      "sortOrder": 30,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "name": "Eco-Friendly Bamboo Gift Set",
+      "description": "A sustainable gift set featuring bamboo utensils, coasters, and a storage box, perfect for eco-conscious consumers.",
+      "categorySlug": "gift-sets",
+      "defaultFields": {
+        "model": "BG-2023",
+        "material": "Bamboo, cotton",
+        "process": "CNC carving, hand-polishing",
+        "application": "Corporate gifts, personal use",
+        "moq": "100 sets",
+        "lead_time": "30 days",
+        "supply_ability": "5000 sets/month",
+        "certification": "FSC, ISO 9001"
+      },
+      "customFields": {
+        "packaging": "Recyclable cardboard box",
+        "color_options": "Natural, dark brown"
+      }
+    },
+    {
+      "name": "Leather Journal and Pen Set",
+      "description": "Premium leather-bound journal with a matching ballpoint pen, ideal for writers and professionals.",
+      "categorySlug": "stationery",
+      "defaultFields": {
+        "model": "LJP-101",
+        "material": "Genuine leather, stainless steel",
+        "process": "Hand-stitching, laser engraving",
+        "application": "Office supplies, luxury gifts",
+        "moq": "50 sets",
+        "lead_time": "25 days",
+        "supply_ability": "2000 sets/month",
+        "certification": "OEKO-TEX, CE"
+      },
+      "customFields": {
+        "page_count": "120 pages",
+        "engraving_service": "Available"
+      }
+    },
+    {
+      "name": "Ceramic Dinnerware Set",
+      "description": "Elegant ceramic plates, bowls, and mugs designed for modern home dining and entertaining.",
+      "categorySlug": "home-lifestyle",
+      "defaultFields": {
+        "model": "CDS-450",
+        "material": "High-fired ceramic",
+        "process": "Glazing, kiln-firing",
+        "application": "Home kitchen, restaurant use",
+        "moq": "200 pieces",
+        "lead_time": "40 days",
+        "supply_ability": "10000 pieces/month",
+        "certification": "FDA, LFGB"
+      },
+      "customFields": {
+        "dishwasher_safe": "Yes",
+        "set_includes": "4 plates, 4 bowls, 4 mugs"
+      }
+    },
+    {
+      "name": "Desk Organizer Gift Box",
+      "description": "A stylish set of desk organizers including a pen holder, tray, and file sorter for a tidy workspace.",
+      "categorySlug": "gift-sets",
+      "defaultFields": {
+        "model": "DOG-300",
+        "material": "MDF, acrylic",
+        "process": "Laser cutting, assembly",
+        "application": "Office organization, student gifts",
+        "moq": "80 sets",
+        "lead_time": "20 days",
+        "supply_ability": "3000 sets/month",
+        "certification": "REACH, BPA-free"
+      },
+      "customFields": {
+        "dimensions": "30x20x15 cm",
+        "weight": "1.2 kg"
+      }
+    },
+    {
+      "name": "Metal Bookmark and Page Clips",
+      "description": "Durable metal bookmarks with decorative page clips, combining functionality with artistic design.",
+      "categorySlug": "stationery",
+      "defaultFields": {
+        "model": "MBC-205",
+        "material": "Brass, enamel",
+        "process": "Die-casting, painting",
+        "application": "Reading accessories, promotional items",
+        "moq": "500 pieces",
+        "lead_time": "15 days",
+        "supply_ability": "20000 pieces/month",
+        "certification": "RoHS, EN71"
+      },
+      "customFields": {
+        "designs": "Floral, geometric, animal",
+        "packaging_type": "Blister pack"
+      }
+    },
+    {
+      "name": "Scented Candle and Diffuser Set",
+      "description": "Aromatherapy set with soy wax candles and reed diffusers to create a relaxing home ambiance.",
+      "categorySlug": "home-lifestyle",
+      "defaultFields": {
+        "model": "SCD-550",
+        "material": "Soy wax, essential oils",
+        "process": "Hand-pouring, blending",
+        "application": "Home fragrance, wellness gifts",
+        "moq": "150 sets",
+        "lead_time": "35 days",
+        "supply_ability": "8000 sets/month",
+        "certification": "IFRA, vegan"
+      },
+      "customFields": {
+        "burn_time": "40 hours",
+        "scents": "Lavender, citrus, sandalwood"
+      }
+    },
+    {
+      "name": "Travel-themed Gift Basket",
+      "description": "Curated basket with travel essentials like a passport holder, luggage tag, and mini toiletry bottles.",
+      "categorySlug": "gift-sets",
+      "defaultFields": {
+        "model": "TTB-120",
+        "material": "PU leather, silicone",
+        "process": "Sewing, injection molding",
+        "application": "Travel accessories, corporate events",
+        "moq": "100 sets",
+        "lead_time": "30 days",
+        "supply_ability": "4000 sets/month",
+        "certification": "ISO 14001, SGS"
+      },
+      "customFields": {
+        "basket_material": "Wicker",
+        "custom_logo": "Available"
+      }
+    },
+    {
+      "name": "Wooden Ruler and Protractor Set",
+      "description": "Precision wooden measuring tools for students, artists, and DIY enthusiasts, with engraved markings.",
+      "categorySlug": "stationery",
+      "defaultFields": {
+        "model": "WRP-880",
+        "material": "Beechwood, acrylic",
+        "process": "CNC milling, screen printing",
+        "application": "Educational tools, craft projects",
+        "moq": "300 sets",
+        "lead_time": "25 days",
+        "supply_ability": "15000 sets/month",
+        "certification": "ASTM, CPSIA"
+      },
+      "customFields": {
+        "ruler_length": "30 cm",
+        "protractor_angle": "180 degrees"
+      }
+    },
+    {
+      "name": "Decorative Throw Pillow Set",
+      "description": "Soft and stylish throw pillows with removable covers, adding comfort and flair to living spaces.",
+      "categorySlug": "home-lifestyle",
+      "defaultFields": {
+        "model": "DTP-660",
+        "material": "Polyester, cotton blend",
+        "process": "Sewing, digital printing",
+        "application": "Home decor, hospitality",
+        "moq": "200 pieces",
+        "lead_time": "30 days",
+        "supply_ability": "12000 pieces/month",
+        "certification": "OEKO-TEX, fire-resistant"
+      },
+      "customFields": {
+        "pillow_size": "45x45 cm",
+        "cover_washable": "Machine washable"
+      }
+    },
+    {
+      "name": "Custom Engraved Keychain Set",
+      "description": "Personalizable metal keychains with laser engraving, perfect for souvenirs or brand promotions.",
+      "categorySlug": "gift-sets",
+      "defaultFields": {
+        "model": "CEK-990",
+        "material": "Stainless steel, enamel",
+        "process": "Laser engraving, plating",
+        "application": "Promotional items, personal gifts",
+        "moq": "1000 pieces",
+        "lead_time": "20 days",
+        "supply_ability": "50000 pieces/month",
+        "certification": "RoHS, nickel-free"
+      },
+      "customFields": {
+        "engraving_area": "2x3 cm",
+        "chain_length": "8 cm"
+      }
+    }
+  ]
+}

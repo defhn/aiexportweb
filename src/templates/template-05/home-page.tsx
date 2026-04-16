@@ -34,7 +34,7 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
   return (
     <div className="t05 bg-[#f6fbff] text-[#0f172a] antialiased">
       <style>{`
-        .t05-wrap{max-width:1220px;margin:0 auto;padding:0 24px}.t05-sec{padding:92px 0}.t05-sec-sm{padding:64px 0}.t05-tag{display:inline-block;padding:4px 12px;border:1px solid rgba(14,165,233,.25);border-radius:999px;color:#0284c7;background:rgba(14,165,233,.08);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.t05-card{background:#fff;border:1px solid #dbeafe;border-radius:18px;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}.t05-card:hover{transform:translateY(-4px);border-color:#38bdf8;box-shadow:0 20px 50px rgba(2,132,199,.08)}
+        .t05-wrap{max-width:1220px;margin:0 auto;padding:0 24px}.t05-sec{padding:92px 0}.t05-sec-sm{padding:64px 0}.t05-tag{display:inline-block;padding:4px 12px;border:1px solid rgba(14,165,233,.25);border-radius:999px;color:#0284c7;background:rgba(14,165,233,.08);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.t05-card{background:#fff;border:1px solid #dbeafe;border-radius:18px;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}.t05-card:hover{transform:translateY(-4px);border-color:#38bdf8;box-shadow:0 20px 50px rgba(2,132,199,.08)}.t05-section-title{font-size:2.25rem;line-height:1.1;font-weight:800;letter-spacing:-.03em}.t05-section-copy{max-width:40rem;font-size:1rem;line-height:1.75;color:#475569}
       `}</style>
 
       {modules.map((module) => {
@@ -81,8 +81,8 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
               <div className="t05-wrap">
                 <motion.div {...fadeView(0)} className="mb-12">
                   <span className="t05-tag">Product Categories</span>
-                  <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">Medical Product <span className="text-sky-700">Categories</span></h2>
-                  <p className="mt-4 max-w-2xl text-slate-600">Focused categories for supply programs in clinics, hospitals, rehab centers, and distributors.</p>
+                  <h2 className="t05-section-title mt-4">Medical Product <span className="text-sky-700">Categories</span></h2>
+                  <p className="t05-section-copy mt-4">Focused categories for supply programs in clinics, hospitals, rehab centers, and distributors.</p>
                 </motion.div>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {featured.map((cat, i) => (
@@ -108,8 +108,8 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
                 <div className="grid gap-14 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
                   <motion.div {...fadeView(0)}>
                     <span className="t05-tag">Factory Capability</span>
-                    <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">{str(p, "title") || "Built for regulated supply programs"}</h2>
-                    <p className="mt-5 max-w-xl text-sm leading-7 text-slate-600">{str(p, "description") || "We support production, packaging, and quality control with project documentation for export buyers."}</p>
+                    <h2 className="t05-section-title mt-4">{str(p, "title") || "Built for regulated supply programs"}</h2>
+                    <p className="t05-section-copy mt-5">{str(p, "description") || "We support production, packaging, and quality control with project documentation for export buyers."}</p>
                     <ul className="mt-8 space-y-3">
                       {[
                         "Clean production environment and QC checks",
@@ -147,7 +147,7 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
               <div className="t05-wrap">
                 <motion.div {...fadeView(0)} className="mb-10">
                   <span className="t05-tag">Quality & Compliance</span>
-                  <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">Quality Support for Medical Buyers</h2>
+                  <h2 className="t05-section-title mt-4">Quality Support for Medical Buyers</h2>
                 </motion.div>
                 <div className="grid gap-6 md:grid-cols-3">
                   {[
@@ -174,7 +174,7 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
               <div className="t05-wrap">
                 <motion.div {...fadeView(0)} className="mb-12 text-center">
                   <span className="t05-tag">Delivery Process</span>
-                  <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">From Brief to Shipment</h2>
+                  <h2 className="t05-section-title mt-4">From Brief to Shipment</h2>
                 </motion.div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {items.map((step, i) => (
@@ -198,7 +198,7 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
             <motion.div {...fadeView(0)} className="mb-12 flex items-end justify-between">
               <div>
                 <span className="t05-tag">Featured Products</span>
-                <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">Consumables & Devices</h2>
+                <h2 className="t05-section-title mt-4">Consumables & Devices</h2>
               </div>
               <Link href="/products" className="hidden items-center gap-2 text-sm font-bold uppercase tracking-wider text-sky-700 md:inline-flex">View All <ArrowRight className="h-4 w-4" /></Link>
             </motion.div>
@@ -227,7 +227,7 @@ export function Template05HomePage({ modules, products, categories, blogPosts }:
           <div className="t05-wrap">
             <motion.div {...fadeView(0)} className="mb-12">
               <span className="t05-tag">Insights</span>
-              <h2 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">Medical Procurement Guides</h2>
+              <h2 className="t05-section-title mt-4">Medical Procurement Guides</h2>
             </motion.div>
             <div className="grid gap-6 lg:grid-cols-3">
               {blogPosts.slice(0, 3).map((post, i) => (

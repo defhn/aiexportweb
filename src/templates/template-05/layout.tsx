@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/public/site-footer";
 import { CookieConsentBanner } from "@/components/public/trust-compliance";
 import { TrackingProvider } from "@/components/tracking-provider";
 import type { PublicLayoutProps } from "@/templates/types";
+import { getTemplateTheme } from "@/templates/theme";
 
 function MedicalHeader({ companyName }: { companyName: string }) {
   return (
@@ -42,7 +43,7 @@ function MedicalHeader({ companyName }: { companyName: string }) {
           href="/contact"
           className="inline-flex items-center gap-2 rounded bg-sky-600 px-5 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-sky-500"
         >
-          Request Catalog
+          Medical RFQ
         </Link>
       </div>
     </header>
@@ -50,6 +51,7 @@ function MedicalHeader({ companyName }: { companyName: string }) {
 }
 
 export function Template05Layout({ children, settings, categories }: PublicLayoutProps) {
+  const theme = getTemplateTheme("template-05");
   return (
     <div className="relative flex min-h-screen flex-col bg-[#f8fbff] text-[#0f172a] selection:bg-sky-500/25 selection:text-sky-900">
       <TrackingProvider />
@@ -64,7 +66,7 @@ export function Template05Layout({ children, settings, categories }: PublicLayou
         companyName={settings.companyNameEn}
         email={settings.email ?? ""}
         phone={settings.phone ?? ""}
-        theme={{ accent: "#0ea5e9", surface: "#07111d", surfaceAlt: "#ffffff", border: "#dbeafe" }}
+        theme={theme}
       />
       <CookieConsentBanner />
     </div>

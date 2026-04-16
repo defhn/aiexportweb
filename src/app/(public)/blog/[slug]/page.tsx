@@ -76,6 +76,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const theme = getTemplateTheme(template.id);
   const postUrl = buildAbsoluteUrl(`/blog/${post.slug}`);
 
+  const isDark = theme.surface !== "#ffffff" && theme.surface !== "#fffaf2" && theme.surface !== "#f5f6ff" && theme.surface !== "#fffaf4";
+  const textColor = isDark ? "text-white" : "text-stone-900";
+  const textMuted = isDark ? "text-white/60" : "text-stone-500";
+
   return (
     <>
       <JsonLdScript
@@ -95,19 +99,53 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         ])}
       />
 
-      <article className="mx-auto max-w-4xl px-6 pb-20 pt-28">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em]" style={{ color: theme.accent }}>
-          {theme.blog.eyebrow}
-        </p>
-        <h1 className="mt-4 text-4xl font-semibold text-slate-950">{post.titleEn}</h1>
-        <p className="mt-6 text-base leading-7 text-slate-600">{post.excerptEn}</p>
-        {post.coverImageUrl ? (
-          <div className="relative mt-10 h-[200px] overflow-hidden rounded-[2rem] border bg-stone-100 sm:h-[360px]" style={{ borderColor: theme.border }}>
-            <Image src={post.coverImageUrl} alt={post.coverImageAlt || post.titleEn} fill sizes="(max-width: 768px) 100vw, 896px" className="object-cover" priority />
+      <article className="mx-auto min-h-screen" style={{ backgroundColor: theme.surface }}>
+        <div className="mx-auto max-w-4xl px-6 pb-24 pt-32">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
+            {theme.blog.eyebrow}
+          </p>
+          <h1 className={`mt-6 text-4xl font-black md:text-5xl lg:text-6xl leading-[1.1] ${textColor}`}>
+            {post.titleEn}
+          </h1>
+          <p className={`mt-8 text-xl font-medium leading-relaxed ${textMuted}`}>
+            {post.excerptEn}
+          </p>
+          
+          {post.coverImageUrl ? (
+            <div className="relative mt-12 aspect-[21/9] w-full overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ backgroundColor: theme.surfaceAlt }}>
+              <Image 
+                src={post.coverImageUrl} 
+                alt={post.coverImageAlt || post.titleEn} 
+                fill 
+                sizes="(max-width: 1024px) 100vw, 1200px" 
+                className="object-cover" 
+                priority 
+              />
+            </div>
+          ) : null}
+
+          <div 
+            className="mt-12 overflow-hidden rounded-[2.5rem] border p-8 md:p-14 lg:p-20 shadow-xl" 
+            style={{ 
+              borderColor: theme.border, 
+              backgroundColor: isDark ? "rgba(255,255,255,0.02)" : "#ffffff" 
+            }}
+          >
+            <div 
+              className={`prose-export max-w-none text-base leading-relaxed ${isDark ? "prose-invert text-stone-300" : "text-stone-800"}`} 
+              dangerouslySetInnerHTML={{ __html: post.contentEn }} 
+            />
           </div>
-        ) : null}
-        <div className="mt-10 rounded-[2rem] border bg-white p-8 shadow-sm" style={{ borderColor: theme.border }}>
-          <div className="prose-export max-w-none text-sm leading-7 text-stone-700" dangerouslySetInnerHTML={{ __html: post.contentEn }} />
+
+          <div className="mt-20 flex flex-col items-center justify-between gap-10 rounded-[2.5rem] border border-dashed p-10 md:flex-row" style={{ borderColor: theme.border }}>
+              <div className="flex-1">
+                  <h4 className={`text-xl font-bold ${textColor}`}>{theme.blog.supportTitle}</h4>
+                  <p className={`mt-2 text-sm ${textMuted}`}>{theme.blog.supportDescription}</p>
+              </div>
+              <Link href="/contact" className="inline-flex h-14 items-center justify-center rounded-xl px-10 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-transform hover:scale-105" style={{ backgroundColor: theme.accent }}>
+                  Contact Our Team
+              </Link>
+          </div>
         </div>
       </article>
     </>

@@ -1,0 +1,537 @@
+{
+  "key": "medical-health",
+  "companyNameZh": "医疗健康科技有限公司",
+  "companyNameEn": "Medical Health Technology Co., Ltd.",
+  "categories": [
+    {
+      "nameZh": "医疗耗材",
+      "nameEn": "Medical Consumables",
+      "slug": "medical-consumables",
+      "summaryZh": "面向医院与诊所的一次性医用耗材。",
+      "summaryEn": "Single-use medical consumables for hospitals and clinics.",
+      "sortOrder": 10,
+      "isFeatured": true
+    },
+    {
+      "nameZh": "康复设备",
+      "nameEn": "Rehabilitation Devices",
+      "slug": "rehabilitation-devices",
+      "summaryZh": "用于术后恢复和居家护理的康复产品。",
+      "summaryEn": "Rehabilitation products for post-surgery recovery and home care.",
+      "sortOrder": 20,
+      "isFeatured": true
+    }
+  ],
+  "products": [
+    {
+      "nameZh": "Medical Health 产品 1",
+      "nameEn": "Medical Health Product 1",
+      "slug": "medical-health-product-1-1776335989548",
+      "categorySlug": "medical-consumables",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 1",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 1,
+      "isFeatured": true,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 2",
+      "nameEn": "Medical Health Product 2",
+      "slug": "medical-health-product-2-1776335989549",
+      "categorySlug": "rehabilitation-devices",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 2",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 2,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 3",
+      "nameEn": "Medical Health Product 3",
+      "slug": "medical-health-product-3-1776335989550",
+      "categorySlug": "medical-consumables",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 3",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 3,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 4",
+      "nameEn": "Medical Health Product 4",
+      "slug": "medical-health-product-4-1776335989551",
+      "categorySlug": "rehabilitation-devices",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 4",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 4,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 5",
+      "nameEn": "Medical Health Product 5",
+      "slug": "medical-health-product-5-1776335989552",
+      "categorySlug": "medical-consumables",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 5",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 5,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 6",
+      "nameEn": "Medical Health Product 6",
+      "slug": "medical-health-product-6-1776335989553",
+      "categorySlug": "rehabilitation-devices",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 6",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 6,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 7",
+      "nameEn": "Medical Health Product 7",
+      "slug": "medical-health-product-7-1776335989554",
+      "categorySlug": "medical-consumables",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 7",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 7,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 8",
+      "nameEn": "Medical Health Product 8",
+      "slug": "medical-health-product-8-1776335989555",
+      "categorySlug": "rehabilitation-devices",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 8",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 8,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 9",
+      "nameEn": "Medical Health Product 9",
+      "slug": "medical-health-product-9-1776335989556",
+      "categorySlug": "medical-consumables",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 9",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 9,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    },
+    {
+      "nameZh": "Medical Health 产品 10",
+      "nameEn": "Medical Health Product 10",
+      "slug": "medical-health-product-10-1776335989557",
+      "categorySlug": "rehabilitation-devices",
+      "shortDescriptionZh": "适用于 Medical Health 行业的示例产品。",
+      "shortDescriptionEn": "Sample product for the Medical Health industry.",
+      "detailsZh": "这是 Medical Health 行业的示例产品，用于展示行业能力。",
+      "detailsEn": "This is a sample product for the Medical Health industry.",
+      "seoTitle": "Medical Health Product 10",
+      "seoDescription": "High-quality medical health product for export buyers.",
+      "sortOrder": 10,
+      "isFeatured": false,
+      "defaultFields": {
+        "model": {
+          "valueZh": "MM-01",
+          "valueEn": "MM-01",
+          "visible": true
+        },
+        "material": {
+          "valueZh": "无纺布",
+          "valueEn": "Non-woven fabric",
+          "visible": true
+        },
+        "moq": {
+          "valueZh": "50000 只",
+          "valueEn": "50000 pcs",
+          "visible": true
+        },
+        "lead_time": {
+          "valueZh": "15-20 天",
+          "valueEn": "15-20 days",
+          "visible": true
+        },
+        "certification": {
+          "valueZh": "CE",
+          "valueEn": "CE",
+          "visible": true
+        }
+      },
+      "customFields": [
+        {
+          "labelZh": "过滤效率",
+          "labelEn": "Filtration Efficiency",
+          "valueZh": ">=95%",
+          "valueEn": ">=95%",
+          "visible": true,
+          "sortOrder": 10
+        }
+      ]
+    }
+  ]
+}

@@ -61,8 +61,8 @@ export default async function ContactPage() {
       <main className="min-h-screen pb-32 pt-24" style={{ backgroundColor: theme.surfaceAlt }}>
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto mb-16 max-w-3xl text-center">
-            <h1 className="mb-4 text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>{theme.detailSupportTitle}</h1>
-            <h2 className="text-4xl font-bold leading-[1.1] tracking-tight text-stone-900 md:text-5xl">{readString(contactModule?.payloadJson ?? {}, "title") || "Start Your Project"}</h2>
+            <p className="mb-4 text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>{theme.detailSupportTitle}</p>
+            <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-stone-900 md:text-5xl">{readString(contactModule?.payloadJson ?? {}, "title") || "Start Your Project"}</h1>
             <p className="mt-4 text-lg text-stone-500">{readString(contactModule?.payloadJson ?? {}, "description") || "Share your project requirements and we will respond with practical next steps."}</p>
           </div>
 
@@ -70,7 +70,7 @@ export default async function ContactPage() {
             <div className="relative flex w-full flex-col justify-between overflow-hidden p-6 md:p-10 lg:w-2/5 lg:p-16" style={{ backgroundColor: theme.surface }}>
               <div className="absolute inset-0 opacity-10 texture-carbon" />
               <div className="relative z-10">
-                <h3 className="mb-8 text-2xl font-bold text-white">Talk to our team.</h3>
+                <h2 className="mb-8 text-2xl font-semibold text-white">Talk to our team.</h2>
                 <div className="space-y-8">
                   <div className="group flex items-start gap-4">
                     <div className="shrink-0 rounded-xl border p-3 transition-colors" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
