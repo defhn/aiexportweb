@@ -1,41 +1,5 @@
-import fs from "node:fs";
-import path from "node:path";
 import { z } from "zod";
 
-function loadDotEnvLocal() {
-  const envPath = path.resolve(process.cwd(), ".env.local");
-  if (!fs.existsSync(envPath)) return;
-
-  const lines = fs.readFileSync(envPath, "utf-8").split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const rawLine = lines[i];
-    const trimmed = rawLine.trim();
-    if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) continue;
-
-    const index = rawLine.indexOf("=");
-    if (index < 0) continue;
-
-    const key = rawLine.slice(0, index).trim();
-    let value = rawLine.slice(index + 1).trim();
-
-    const quote = value.startsWith('"') ? '"' : value.startsWith("'") ? "'" : null;
-    if (quote) {
-      let accumulated = value.slice(1);
-      while (!accumulated.endsWith(quote) && i < lines.length - 1) {
-        i += 1;
-        accumulated += `\n${lines[i]}`;
-      }
-      if (accumulated.endsWith(quote)) {
-        accumulated = accumulated.slice(0, -1);
-      }
-      value = accumulated;
-    }
-
-    if (!process.env[key]) process.env[key] = value;
-  }
-}
-
-loadDotEnvLocal();
 
 const nonProductionDefaults = {
   DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/aiexportweb",

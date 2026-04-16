@@ -32,7 +32,7 @@ function loadEnv() {
 }
 loadEnv();
 
-const GEMINI_KEY = "AIzaSyDQ-g-Wdz4wSCmliCa4sezJnwx9TgQmxUc";
+const GEMINI_KEY = process.env.GEMINI_API_KEY ?? "AIzaSyDQ-g-Wdz4wSCmliCa4sezJnwx9TgQmxUc";
 const GEMINI_MODEL = "gemini-2.5-flash-lite";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`;
 

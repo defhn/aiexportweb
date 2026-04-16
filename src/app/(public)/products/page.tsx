@@ -75,7 +75,7 @@ export default async function ProductsPage() {
                 {theme.catalogTitle}
               </h2>
             </div>
-            <p={`max-w-xl text-sm leading-7 ${textMuted}`}>
+            <p className={`max-w-xl text-sm leading-7 ${textMuted}`}>
               {theme.catalogDescription}
             </p>
           </div>
