@@ -7,7 +7,7 @@
  */
 
 import { type NextRequest, NextResponse } from "next/server";
-import pdfParse from "pdf-parse";
+// import pdfParse from "pdf-parse" 被移除，改为函数内动态 import 或 require
 import { getCurrentSiteFromRequest } from "@/features/sites/queries";
 import { createContentJob } from "@/features/content-jobs/queries";
 import { publishJob, type ContentJobTaskType } from "@/lib/qstash";
@@ -40,7 +40,9 @@ export async function POST(request: NextRequest) {
       const file = formData.get("pdfFile") as File | null;
       if (file && file.name.endsWith(".pdf")) {
         const arrayBuffer = await file.arrayBuffer();
-        const pdfData = await pdfParse(Buffer.from(arrayBuffer));
+        const pdfParseModule = require("pdf-parse");
+        const pdfParseFn = typeof pdfParseModule === "function" ? pdfParseModule : pdfParseModule.default;
+        const pdfData = await pdfParseFn(Buffer.from(arrayBuffer));
         rawText = (rawText ? rawText + "\n\n" : "") + pdfData.text;
       }
 

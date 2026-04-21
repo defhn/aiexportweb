@@ -140,9 +140,9 @@ export const siteSettings = pgTable("site_settings", {
   seoTitleTemplate: text("seo_title_template"),        // 渚嬪 "%s | Acme CNC Machining"
   seoOgImageMediaId: integer("seo_og_image_media_id"), // 榛樿 OG 鍥剧墖鍏宠仈鐨勫獟浣撹祫婧?ID
   webhookUrl: text("webhook_url"),
-  // AI 鐭ヨ瘑搴?- 琛屼笟浠ｇ爜锛堝喅瀹氬睍绀哄摢涓笓灞炴ā鍧楋級
-  industryCode: text("industry_code"),   // 濡?"I01"锛堥噾灞?浜旈噾锛墌 "I12"锛堢ぜ鍝?鐜╁叿锛?  // AI 鐭ヨ瘑搴?- 缁撴瀯鍖?JSON锛堢敤鎴疯〃鍗曞～鍐欑殑鍘熷鏁版嵁锛孶I 浣跨敤锛?  knowledgeSectionsJson: jsonb("knowledge_sections_json").$type<Record<string, Record<string, Record<string, string | string[]>>>>(),
-  // AI 鐭ヨ瘑搴?- 鑷姩鐢熸垚鐨?Markdown锛堜緵 RAG 鍚戦噺鍖栫敤锛屽嬁鎵嬪姩缂栬緫锛?  companyKnowledgeMd: text("company_knowledge_md"),
+  industryCode: text("industry_code"),
+  knowledgeSectionsJson: jsonb("knowledge_sections_json").$type<Record<string, Record<string, Record<string, string | string[]>>>>(),
+  companyKnowledgeMd: text("company_knowledge_md"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
