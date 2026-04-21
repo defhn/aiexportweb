@@ -239,9 +239,9 @@ export function AdminSidebar({
           </p>
           <div className="mt-2.5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold">{currentSiteName ?? "Shared Admin"}</p>
+              <p className="text-sm font-semibold">{currentSiteName ?? "综合管理平台"}</p>
               <p className="mt-0.5 text-xs text-blue-100/80">
-                服务计划等级: {currentPlan}
+                授权版本: {currentRole === "super_admin" ? "系统超管 (无视限制)" : currentPlan === "basic" ? "基础版" : currentPlan === "growth" ? "成长版" : "AI 销售版"}
               </p>
             </div>
             <BarChart3 className="h-4 w-4 text-blue-100" />

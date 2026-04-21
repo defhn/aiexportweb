@@ -73,7 +73,7 @@ export default async function ProtectedAdminLayout({
                 操作站点
               </p>
               <p className="text-xs font-semibold text-stone-900">
-                {currentSite.name} / {currentSite.plan}
+                {currentSite.name} / {currentRole === "super_admin" ? "系统超管" : currentSite.plan === "basic" ? "基础版" : currentSite.plan === "growth" ? "成长版" : "AI 销售版"}
               </p>
             </div>
           </div>
