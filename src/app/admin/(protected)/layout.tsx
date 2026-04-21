@@ -70,7 +70,7 @@ export default async function ProtectedAdminLayout({
             <div className="h-6 w-px bg-stone-200" />
             <div className="hidden text-right sm:block">
               <p className="text-[10px] font-black uppercase tracking-[0.35em] text-stone-400">
-                Site
+                操作站点
               </p>
               <p className="text-xs font-semibold text-stone-900">
                 {currentSite.name} / {currentSite.plan}

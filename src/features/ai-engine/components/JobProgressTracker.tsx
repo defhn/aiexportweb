@@ -83,8 +83,8 @@ export function JobProgressTracker() {
     return (
       <div className="flex flex-col items-center justify-center rounded-[1.5rem] border border-stone-200 bg-white py-12 shadow-sm text-center">
         <Layers className="h-10 w-10 text-stone-300 mb-3" />
-        <h3 className="text-sm font-semibold text-stone-900">No jobs found</h3>
-        <p className="text-sm text-stone-500 mt-1">Start a new pipeline job from the dashboard.</p>
+        <h3 className="text-sm font-semibold text-stone-900">暂无运行中的任务</h3>
+        <p className="text-sm text-stone-500 mt-1">请在左侧表单上传物理文件或粘贴原始数据来启动流水线。</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function JobProgressTracker() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-stone-900 truncate">
-                  Task #{job.jobId}: {job.taskType}
+                  任务 #{job.jobId}: {job.taskType}
                 </p>
                 <div
                   className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
@@ -135,7 +135,7 @@ export function JobProgressTracker() {
                     href={`/admin/blog/${job.targetBlogPostId}`}
                     className="text-xs font-medium text-blue-600 hover:text-blue-700 underline underline-offset-2"
                   >
-                    View generated blog post &rarr;
+                    🚀 点击查看已生成的买手级博客文章 &rarr;
                   </Link>
                 </div>
               )}

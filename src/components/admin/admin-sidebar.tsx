@@ -41,63 +41,63 @@ type NavItem = {
 
 const navigation: NavItem[] = [
   {
-    name: "Dashboard",
+    name: "控制台 (Dashboard)",
     href: "/admin",
     icon: LayoutDashboard,
     featureKey: "dashboard_analytics",
     group: "overview",
   },
-  { name: "Products", href: "/admin/products", icon: Package, group: "content" },
-  { name: "Categories", href: "/admin/categories", icon: Tags, group: "content" },
+  { name: "商品库 (Products)", href: "/admin/products", icon: Package, group: "content" },
+  { name: "商品分类 (Categories)", href: "/admin/categories", icon: Tags, group: "content" },
   {
-    name: "Blog",
+    name: "博客文章 (Blog)",
     href: "/admin/blog",
     icon: BookText,
     featureKey: "blog_management",
     group: "content",
   },
-  { name: "Media", href: "/admin/media", icon: Images, group: "content" },
-  { name: "Files", href: "/admin/files", icon: FileArchive, group: "content" },
+  { name: "媒体库 (Media)", href: "/admin/media", icon: Images, group: "content" },
+  { name: "文档中心 (Files)", href: "/admin/files", icon: FileArchive, group: "content" },
   {
-    name: "Inquiries",
+    name: "询盘管理 (Inquiries)",
     href: "/admin/inquiries",
     icon: MessageSquareMore,
     featureKey: "inquiry_detail",
     group: "sales",
   },
   {
-    name: "Quotes",
+    name: "报价单 (Quotes)",
     href: "/admin/quotes",
     icon: FileStack,
     featureKey: "quotes",
     group: "sales",
   },
   {
-    name: "Reply Templates",
+    name: "快捷回复模板 (Templates)",
     href: "/admin/reply-templates",
     icon: FolderKanban,
     featureKey: "reply_templates",
     group: "sales",
   },
-  { name: "Home Modules", href: "/admin/pages/home", icon: Layers3, group: "site" },
-  { name: "About Page", href: "/admin/pages/about", icon: Globe, group: "site" },
-  { name: "Contact Page", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
-  { name: "Staff", href: "/admin/staff", icon: Users, group: "site" },
-  { name: "SEO / Crawlers", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
-  { name: "AI Content Engine", href: "/admin/ai-engine", icon: BrainCircuit, group: "site" },
-  { name: "Knowledge", href: "/admin/knowledge", icon: BookText, group: "site" },
-  { name: "Sites / Plans", href: "/admin/sites", icon: Globe, group: "site" },
-  { name: "Settings", href: "/admin/settings", icon: Settings, group: "site" },
-  { name: "Attribution (Soon)", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
-  { name: "Pipeline (Soon)", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
+  { name: "首页模块配置 (Home modules)", href: "/admin/pages/home", icon: Layers3, group: "site" },
+  { name: "关于我们 (About)", href: "/admin/pages/about", icon: Globe, group: "site" },
+  { name: "联系我们 (Contact)", href: "/admin/pages/contact", icon: PhoneCall, group: "site" },
+  { name: "核心团队 (Staff)", href: "/admin/staff", icon: Users, group: "site" },
+  { name: "收录与抓取 (SEO / Crawlers)", href: "/admin/seo-ai", icon: ShieldCheck, group: "site" },
+  { name: "AI 获客引擎 (AI Engine)", href: "/admin/ai-engine", icon: BrainCircuit, group: "site" },
+  { name: "AI 知识库 (Knowledge)", href: "/admin/knowledge", icon: BookText, group: "site" },
+  { name: "多站群管理 (Sites)", href: "/admin/sites", icon: Globe, group: "site" },
+  { name: "基础设置 (Settings)", href: "/admin/settings", icon: Settings, group: "site" },
+  { name: "归因系统 (归因 - 敬请期待)", href: "/admin/attribution", icon: TrendingUp, group: "crm" },
+  { name: "生命周期管线 (管线 - 敬请期待)", href: "/admin/pipeline", icon: KanbanSquare, group: "crm" },
 ];
 
 const groupLabels: Record<string, string> = {
-  overview: "Overview",
-  content: "Content",
-  sales: "Sales",
-  site: "Site",
-  crm: "CRM",
+  overview: "数据总览",
+  content: "内容资产管理",
+  sales: "客户与销售工作流",
+  site: "独立站配置",
+  crm: "客户关系与数据探索",
 };
 
 function isActivePath(pathname: string, href: string) {
@@ -175,7 +175,7 @@ export function AdminSidebar({
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-blue-300">
               Admin
             </p>
-            <p className="text-sm font-semibold text-white">Operations Center</p>
+            <p className="text-sm font-semibold text-white">总控制中心</p>
             {currentSiteName ? (
               <p className="mt-0.5 text-xs text-stone-400">{currentSiteName}</p>
             ) : null}
@@ -235,13 +235,13 @@ export function AdminSidebar({
       <div className="border-t border-white/5 p-3">
         <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-xl shadow-blue-950/30">
           <p className="text-[9px] font-black uppercase tracking-[0.35em] text-blue-100/80">
-            Current Site
+            当前操作站点
           </p>
           <div className="mt-2.5 flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold">{currentSiteName ?? "Shared Admin"}</p>
               <p className="mt-0.5 text-xs text-blue-100/80">
-                Plan: {currentPlan}
+                服务计划等级: {currentPlan}
               </p>
             </div>
             <BarChart3 className="h-4 w-4 text-blue-100" />
@@ -255,7 +255,7 @@ export function AdminSidebar({
           type="button"
         >
           <LogOut className="h-4 w-4" />
-          {loggingOut ? "Signing out..." : "Sign out"}
+          {loggingOut ? "正在退出登录..." : "安全退出登录"}
         </button>
       </div>
     </div>

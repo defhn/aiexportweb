@@ -35,7 +35,7 @@ export function AdminSiteSwitcher({
   return (
     <label className="flex items-center gap-2 rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700">
       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400">
-        Site
+        当前站点
       </span>
       <select
         className="min-w-40 bg-transparent text-sm font-medium text-stone-900 outline-none"

@@ -19,9 +19,9 @@ export default async function AiEngineJobsPage() {
             <Layers className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-stone-900">Task History</h1>
+            <h1 className="text-2xl font-bold text-stone-900">历史任务记录 (Task History)</h1>
             <p className="mt-1 text-sm font-medium text-stone-500">
-              Review past runs of the AI Content Engine.
+              您可以随时回头复盘 AI 引擎过去的生成执行足迹与日志。
             </p>
           </div>
         </div>
@@ -31,18 +31,18 @@ export default async function AiEngineJobsPage() {
         <table className="w-full text-left text-sm text-stone-600">
           <thead>
             <tr className="border-b border-stone-200">
-              <th className="pb-3 px-4 font-semibold text-stone-900">Job ID</th>
-              <th className="pb-3 px-4 font-semibold text-stone-900">Status</th>
-              <th className="pb-3 px-4 font-semibold text-stone-900">Progress</th>
-              <th className="pb-3 px-4 font-semibold text-stone-900">Created At</th>
-              <th className="pb-3 px-4 font-semibold text-stone-900">Target ID</th>
+              <th className="pb-3 px-4 font-semibold text-stone-900">任务 ID</th>
+              <th className="pb-3 px-4 font-semibold text-stone-900">状态</th>
+              <th className="pb-3 px-4 font-semibold text-stone-900">完成进度</th>
+              <th className="pb-3 px-4 font-semibold text-stone-900">创建时间</th>
+              <th className="pb-3 px-4 font-semibold text-stone-900">生成产物</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-100">
             {jobs.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-6 text-center text-stone-400">
-                  No jobs found for this site.
+                  当前站点暂无可追踪的 AI 任务记录
                 </td>
               </tr>
             ) : (
@@ -67,7 +67,7 @@ export default async function AiEngineJobsPage() {
                   <td className="py-3 px-4">
                     {job.targetBlogPostId ? (
                       <a href={`/admin/blog/${job.targetBlogPostId}`} className="text-blue-600 hover:text-blue-800 underline">
-                        Blog #{job.targetBlogPostId}
+                        博客 #{job.targetBlogPostId}
                       </a>
                     ) : "-"}
                   </td>

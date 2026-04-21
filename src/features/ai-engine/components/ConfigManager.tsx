@@ -28,12 +28,12 @@ export function ConfigManager({ initialNegativeWords }: { initialNegativeWords: 
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to save config");
+      if (!res.ok) throw new Error("保存配置失败");
 
-      setMessage({ type: "success", text: "Configuration saved successfully!" });
+      setMessage({ type: "success", text: "系统规则配置已更新！" });
       router.refresh();
     } catch (err) {
-      setMessage({ type: "error", text: "Something went wrong." });
+      setMessage({ type: "error", text: "出错了，请重试。" });
     } finally {
       setLoading(false);
     }
@@ -46,18 +46,18 @@ export function ConfigManager({ initialNegativeWords }: { initialNegativeWords: 
           <Settings2 className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="font-semibold text-stone-900">Dynamic Prompt Config</h3>
-          <p className="text-xs text-stone-500">Tune the AI Engine behavior without deploying</p>
+          <h3 className="font-semibold text-stone-900">AI 智能体动态策略中心 (Prompt Config)</h3>
+          <p className="text-xs text-stone-500">无需重新发布代码，热更新 AI Agent 运行规则</p>
         </div>
       </div>
 
       <div className="mt-5 space-y-4">
         <div>
           <label className="block text-sm font-medium text-stone-700">
-            Negative SEO Phrases (One per line)
+            SEO 负面禁用词词库 (Negative Phrases / 每行一个)
           </label>
           <p className="mt-1 text-xs text-stone-500">
-            The Writer Agent and Reviewer will reject any draft containing these generic AI phrases.
+            外贸主笔和质检工程师（Agent）将严格巡视您的稿件，一旦发现这些典型的「低智 AI 套话」将予以清退驳回。
           </p>
           <textarea
             name="negativeWords"
@@ -84,7 +84,7 @@ export function ConfigManager({ initialNegativeWords }: { initialNegativeWords: 
             className="flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2 text-sm font-medium text-white transition-all hover:bg-stone-800 disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
-            {loading ? "Saving..." : "Save Config"}
+            {loading ? "正在保存..." : "保存配置"}
           </button>
         </div>
       </div>
