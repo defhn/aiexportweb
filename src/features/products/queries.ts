@@ -1,4 +1,4 @@
-import { and, asc, eq, ilike, inArray, ne, or } from "drizzle-orm";
+import { and, asc, eq, ilike, inArray, isNull, ne, or } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import {
@@ -144,7 +144,7 @@ async function hasDatabaseCategories(siteId?: number | null) {
 
   const db = getDb();
   const query = db.select({ id: productCategories.id }).from(productCategories).limit(1);
-  const [record] = siteId ? await query.where(eq(productCategories.siteId, siteId)) : await query;
+  const [record] = siteId !== undefined ? await query.where(siteId === null ? isNull(productCategories.siteId) : eq(productCategories.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
@@ -155,7 +155,7 @@ async function hasDatabaseProducts(siteId?: number | null) {
 
   const db = getDb();
   const query = db.select({ id: products.id }).from(products).limit(1);
-  const [record] = siteId ? await query.where(eq(products.siteId, siteId)) : await query;
+  const [record] = siteId !== undefined ? await query.where(siteId === null ? isNull(products.siteId) : eq(products.siteId, siteId)) : await query;
   return Boolean(record);
 }
 
@@ -172,7 +172,10 @@ async function listDatabaseCategories(options?: { includeHidden?: boolean; siteI
 
   const conditions = [];
   if (!options?.includeHidden) conditions.push(eq(productCategories.isVisible, true));
-  if (options?.siteId) conditions.push(eq(productCategories.siteId, options.siteId));
+  if (options && options.siteId !== undefined) {
+    if (options.siteId === null) conditions.push(isNull(productCategories.siteId));
+    else conditions.push(eq(productCategories.siteId, options.siteId));
+  }
 
   return conditions.length ? query.where(and(...conditions)) : query;
 }
@@ -330,7 +333,7 @@ export async function getAllProducts(seedPackKey: SeedPackKey = "cnc", siteId?: 
         and(
           eq(products.status, "published"),
           eq(productCategories.isVisible, true),
-          ...(siteId ? [eq(products.siteId, siteId)] : []),
+          ...(siteId !== undefined ? (siteId === null ? [isNull(products.siteId)] : [eq(products.siteId, siteId)]) : []),
         ),
       )
       .orderBy(asc(products.sortOrder), asc(products.id));
@@ -420,8 +423,9 @@ export async function listAdminProducts(
     if (filters?.status) {
       conditions.push(eq(products.status, filters.status));
     }
-    if (siteId) {
-      conditions.push(eq(products.siteId, siteId));
+    if (siteId !== undefined) {
+      if (siteId === null) conditions.push(isNull(products.siteId));
+      else conditions.push(eq(products.siteId, siteId));
     }
 
     const query = db
@@ -550,7 +554,7 @@ export async function getProductsByCategorySlug(
           eq(productCategories.slug, categorySlug),
           eq(productCategories.isVisible, true),
           eq(products.status, "published"),
-          ...(siteId ? [eq(products.siteId, siteId)] : []),
+          ...(siteId !== undefined ? (siteId === null ? [isNull(products.siteId)] : [eq(products.siteId, siteId)]) : []),
         ),
       )
       .orderBy(asc(products.sortOrder), asc(products.id));
@@ -629,7 +633,7 @@ export async function getProductById(
   const [product] = await db
     .select()
     .from(products)
-    .where(siteId ? and(eq(products.id, id), eq(products.siteId, siteId)) : eq(products.id, id))
+    .where(siteId !== undefined ? and(eq(products.id, id), siteId === null ? isNull(products.siteId) : eq(products.siteId, siteId)) : eq(products.id, id))
     .limit(1);
 
   if (product) {

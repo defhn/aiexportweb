@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, or, isNull } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
 import { blogCategories, blogPostTags, blogPosts, blogTags, mediaAssets } from "@/db/schema";
@@ -55,7 +55,7 @@ async function hasDatabasePosts(siteId?: number | null) {
   try {
     const db = getDb();
     const query = db.select({ id: blogPosts.id }).from(blogPosts).limit(1);
-    const [record] = siteId ? await query.where(eq(blogPosts.siteId, siteId)) : await query;
+    const [record] = siteId !== undefined ? await query.where(siteId === null ? isNull(blogPosts.siteId) : eq(blogPosts.siteId, siteId)) : await query;
     return Boolean(record);
   } catch {
     return false;
@@ -73,7 +73,7 @@ async function hasDatabaseCategories(siteId?: number | null) {
       .select({ id: blogCategories.id })
       .from(blogCategories)
       .limit(1);
-    const [record] = siteId ? await query.where(eq(blogCategories.siteId, siteId)) : await query;
+    const [record] = siteId !== undefined ? await query.where(siteId === null ? isNull(blogCategories.siteId) : eq(blogCategories.siteId, siteId)) : await query;
     return Boolean(record);
   } catch {
     return false;
@@ -91,8 +91,8 @@ export async function getBlogCategories(seedPackKey: SeedPackKey = "cnc", siteId
       .select()
       .from(blogCategories)
       .where(
-        siteId
-          ? and(eq(blogCategories.isVisible, true), eq(blogCategories.siteId, siteId))
+        siteId !== undefined
+          ? and(eq(blogCategories.isVisible, true), siteId === null ? isNull(blogCategories.siteId) : eq(blogCategories.siteId, siteId))
           : eq(blogCategories.isVisible, true),
       )
       .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
@@ -148,8 +148,8 @@ export async function listAdminBlogCategories(
       .from(blogCategories)
       .leftJoin(
         blogPosts,
-        siteId
-          ? and(eq(blogPosts.categoryId, blogCategories.id), eq(blogPosts.siteId, siteId))
+        siteId !== undefined
+          ? and(eq(blogPosts.categoryId, blogCategories.id), siteId === null ? isNull(blogPosts.siteId) : eq(blogPosts.siteId, siteId))
           : eq(blogPosts.categoryId, blogCategories.id),
       )
       .groupBy(
@@ -161,7 +161,7 @@ export async function listAdminBlogCategories(
         blogCategories.isVisible,
       )
       .orderBy(asc(blogCategories.sortOrder), asc(blogCategories.id));
-    const rows = siteId ? await baseQuery.where(eq(blogCategories.siteId, siteId)) : await baseQuery;
+    const rows = siteId !== undefined ? await baseQuery.where(siteId === null ? isNull(blogCategories.siteId) : eq(blogCategories.siteId, siteId)) : await baseQuery;
 
     if (rows.length) {
       return rows;
@@ -195,7 +195,7 @@ export async function listAdminBlogTags(siteId?: number | null) {
       .leftJoin(blogPostTags, eq(blogPostTags.blogTagId, blogTags.id))
       .groupBy(blogTags.id, blogTags.nameZh, blogTags.nameEn, blogTags.slug)
       .orderBy(asc(blogTags.nameEn), asc(blogTags.id));
-    return siteId ? query.where(eq(blogTags.siteId, siteId)) : query;
+    return siteId !== undefined ? query.where(siteId === null ? isNull(blogTags.siteId) : eq(blogTags.siteId, siteId)) : query;
   } catch (error) {
     console.error("Falling back to empty admin blog tags after database read failure.", error);
     return [];
@@ -234,8 +234,8 @@ export async function getBlogPosts(seedPackKey: SeedPackKey = "cnc", siteId?: nu
       .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
       .leftJoin(mediaAssets, eq(blogPosts.coverMediaId, mediaAssets.id))
       .where(
-        siteId
-          ? and(eq(blogPosts.status, "published"), eq(blogPosts.siteId, siteId))
+        siteId !== undefined
+          ? and(eq(blogPosts.status, "published"), siteId === null ? isNull(blogPosts.siteId) : eq(blogPosts.siteId, siteId))
           : eq(blogPosts.status, "published"),
       )
       .orderBy(asc(blogPosts.publishedAt), asc(blogPosts.id));
@@ -307,8 +307,9 @@ export async function listAdminBlogPosts(
     if (filters?.categoryId) {
       conditions.push(eq(blogPosts.categoryId, filters.categoryId));
     }
-    if (siteId) {
-      conditions.push(eq(blogPosts.siteId, siteId));
+    if (siteId !== undefined) {
+      if (siteId === null) conditions.push(isNull(blogPosts.siteId));
+      else conditions.push(eq(blogPosts.siteId, siteId));
     }
 
     const query = db
@@ -417,7 +418,7 @@ export async function getBlogPostById(
     const [post] = await db
       .select()
       .from(blogPosts)
-      .where(siteId ? and(eq(blogPosts.id, id), eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, id))
+      .where(siteId !== undefined ? and(eq(blogPosts.id, id), siteId === null ? isNull(blogPosts.siteId) : eq(blogPosts.siteId, siteId)) : eq(blogPosts.id, id))
       .limit(1);
 
     if (post) {
