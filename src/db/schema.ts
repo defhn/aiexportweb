@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   integer,
   jsonb,
   numeric,
@@ -134,17 +135,14 @@ export const siteSettings = pgTable("site_settings", {
   themeBorderRadius: varchar("theme_border_radius", { length: 20 }).default('0.5rem').notNull(),
   themeFontFamily: varchar("theme_font_family", { length: 100 }).default('Inter, sans-serif').notNull(),
   formFieldsJson: jsonb("form_fields_json").$type<Array<{ name: string; label: string; type: 'text'|'textarea'|'file'; required: boolean; placeholder?: string }>>().default([]).notNull(),
-  // SEO 相关字段
-  siteUrl: text("site_url"),                          // 例如 https://acme.com，用于生成 metadataBase + canonical
-  seoTitleTemplate: text("seo_title_template"),        // 例如 "%s | Acme CNC Machining"
-  seoOgImageMediaId: integer("seo_og_image_media_id"), // 默认 OG 图片关联的媒体资源 ID
+  // SEO 鐩稿叧瀛楁
+  siteUrl: text("site_url"),                          // 渚嬪 https://acme.com锛岀敤浜庣敓鎴?metadataBase + canonical
+  seoTitleTemplate: text("seo_title_template"),        // 渚嬪 "%s | Acme CNC Machining"
+  seoOgImageMediaId: integer("seo_og_image_media_id"), // 榛樿 OG 鍥剧墖鍏宠仈鐨勫獟浣撹祫婧?ID
   webhookUrl: text("webhook_url"),
-  // AI 知识库 - 行业代码（决定展示哪个专属模块）
-  industryCode: text("industry_code"),   // 如 "I01"（金属/五金）~ "I12"（礼品/玩具）
-  // AI 知识库 - 结构化 JSON（用户表单填写的原始数据，UI 使用）
-  knowledgeSectionsJson: jsonb("knowledge_sections_json").$type<Record<string, Record<string, Record<string, string | string[]>>>>(),
-  // AI 知识库 - 自动生成的 Markdown（供 RAG 向量化用，勿手动编辑）
-  companyKnowledgeMd: text("company_knowledge_md"),
+  // AI 鐭ヨ瘑搴?- 琛屼笟浠ｇ爜锛堝喅瀹氬睍绀哄摢涓笓灞炴ā鍧楋級
+  industryCode: text("industry_code"),   // 濡?"I01"锛堥噾灞?浜旈噾锛墌 "I12"锛堢ぜ鍝?鐜╁叿锛?  // AI 鐭ヨ瘑搴?- 缁撴瀯鍖?JSON锛堢敤鎴疯〃鍗曞～鍐欑殑鍘熷鏁版嵁锛孶I 浣跨敤锛?  knowledgeSectionsJson: jsonb("knowledge_sections_json").$type<Record<string, Record<string, Record<string, string | string[]>>>>(),
+  // AI 鐭ヨ瘑搴?- 鑷姩鐢熸垚鐨?Markdown锛堜緵 RAG 鍚戦噺鍖栫敤锛屽嬁鎵嬪姩缂栬緫锛?  companyKnowledgeMd: text("company_knowledge_md"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -277,7 +275,7 @@ export const products = pgTable("products", {
     .$type<Array<{ question: string; answer: string }>>()
     .default([])
     .notNull(),
-  // 向量预计算：Vertex AI text-embedding-004 输出（768维），存为 jsonb number[]  
+  // 鍚戦噺棰勮绠楋細Vertex AI text-embedding-004 杈撳嚭锛?68缁达級锛屽瓨涓?jsonb number[]  
   embeddingJson: jsonb("embedding_json").$type<number[]>(),
   embeddingUpdatedAt: timestamp("embedding_updated_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -399,6 +397,12 @@ export const blogPosts = pgTable("blog_posts", {
   }),
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),
+  // AI engine metadata
+  seoMetaJson: jsonb("seo_meta_json").$type<Record<string, unknown>>(),
+  bodyMarkdownEn: text("body_markdown_en"),
+  categorySlug: varchar("category_slug", { length: 160 }),
+  coverImageUrl: text("cover_image_url"),
+  coverImageAlt: text("cover_image_alt"),
   status: publishStatusEnum("status").default("draft").notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -588,3 +592,69 @@ export const featureUsageCounters = pgTable(
     ),
   }),
 );
+
+// --- AI Content Jobs: Task State Machine ---
+// Tracks full lifecycle of each AI content generation job.
+// Prevents task state loss when Vercel times out.
+
+export const contentJobStatusEnum = pgEnum("content_job_status", [
+  "pending",
+  "extracting",
+  "drafting",
+  "reviewing",
+  "injecting",
+  "completed",
+  "failed",
+]);
+
+export const contentJobTaskTypeEnum = pgEnum("content_job_task_type", [
+  "blog_gen",
+  "product_desc_gen",
+  "pdf_ingest",
+]);
+
+export const contentJobs = pgTable(
+  "content_jobs",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
+    taskType: contentJobTaskTypeEnum("task_type").notNull(),
+    status: contentJobStatusEnum("status").default("pending").notNull(),
+    progressPercent: integer("progress_percent").default(0).notNull(),
+    inputPayloadJson: jsonb("input_payload_json").$type<Record<string, unknown>>().notNull(),
+    resultPayloadJson: jsonb("result_payload_json").$type<Record<string, unknown>>(),
+    targetBlogPostId: integer("target_blog_post_id"),
+    targetProductId: integer("target_product_id"),
+    errorLog: text("error_log"),
+    retryCount: integer("retry_count").default(0).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    contentJobsSiteStatusIdx: index("content_jobs_site_status_idx").on(table.siteId, table.status),
+    contentJobsStatusIdx: index("content_jobs_status_idx").on(table.status),
+  }),
+);
+
+// --- AI Engine Config: CEO can update Prompts without redeployment ---
+
+export const aiEngineConfig = pgTable(
+  "ai_engine_config",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    siteId: integer("site_id").references(() => sites.id, { onDelete: "cascade" }),
+    configKey: varchar("config_key", { length: 120 }).notNull(),
+    configValue: text("config_value").notNull(),
+    description: text("description"),
+    isGlobal: boolean("is_global").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    aiEngineConfigUniqueIdx: uniqueIndex("ai_engine_config_site_key_unique").on(
+      table.siteId,
+      table.configKey,
+    ),
+  }),
+);
+

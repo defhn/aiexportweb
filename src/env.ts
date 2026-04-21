@@ -57,6 +57,22 @@ const envSchema = z.object({
   VERTEX_LOCATION: z.string().optional(),
   // Vertex AI Express 专用 API Key（AQ. 前缀）
   VERTEX_EXPRESS_API_KEY: z.string().optional(),
+
+  // ── Upstash QStash（异步任务队列） ──────────────────────────────
+  QSTASH_URL: z.string().url().optional(),
+  QSTASH_TOKEN: z.string().optional(),
+  QSTASH_CURRENT_SIGNING_KEY: z.string().optional(),
+  QSTASH_NEXT_SIGNING_KEY: z.string().optional(),
+
+  // ── OpenAI（用于 Vision OCR + 内容生成） ──────────────────────
+  OPENAI_API_KEY: z.string().optional(),
+
+  // ── Anthropic Claude（备用 / 内容核验 Agent） ─────────────────
+  ANTHROPIC_API_KEY: z.string().optional(),
+
+  // ── 内部 Webhook Secret（QStash 回调验证） ───────────────────
+  // 与 QSTASH_CURRENT_SIGNING_KEY 配合使用
+  INTERNAL_WEBHOOK_SECRET: z.string().optional(),
 });
 
 function buildRuntimeEnv() {
