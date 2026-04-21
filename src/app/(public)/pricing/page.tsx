@@ -179,23 +179,23 @@ export default async function PricingPage() {
                   className={`flex items-center gap-4 px-8 py-5 ${index !== 0 ? "border-t" : ""}`}
                   style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)" }}
                 >
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white shadow-sm text-sm font-black text-stone-900 border" style={{ borderColor: theme.border }}>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm font-black border" style={{ backgroundColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)", borderColor: theme.border, color: isDark ? "#ffffff" : "#0f172a" }}>
                     {sectionIcons[section.title] ?? "•"}
                   </span>
                   <h3 className={`font-black text-lg ${textColor}`}>{section.title}</h3>
                 </div>
 
-                <div className="grid grid-cols-[1fr_100px_100px_100px] border-b px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/50" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(0,0,0,0.4)" : "#0f172a" }}>
+                <div className="grid grid-cols-[1fr_100px_100px_100px] border-b px-8 py-4 text-[10px] font-black uppercase tracking-widest" style={{ borderColor: theme.border, backgroundColor: isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.06)", color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>
                   <span>Feature</span>
                   <span className="text-center">Basic</span>
                   <span className="text-center text-amber-400">Growth</span>
-                  <span className="text-center text-indigo-300">AI Sales</span>
+                  <span className="text-center" style={{ color: isDark ? "#a5b4fc" : "#6366f1" }}>AI Sales</span>
                 </div>
 
                 {section.rows.map((row, rowIndex) => (
                   <div
                     key={row.label}
-                    className="grid grid-cols-[1fr_100px_100px_100px] items-center gap-2 px-8 py-5 transition-colors hover:bg-white/5"
+                    className="grid grid-cols-[1fr_100px_100px_100px] items-center gap-2 px-8 py-5 transition-colors"
                     style={{ backgroundColor: rowIndex % 2 === 0 ? "transparent" : (isDark ? "rgba(255,255,255,0.01)" : "rgba(0,0,0,0.01)") }}
                   >
                     <span className={`text-sm font-medium ${textColor}`}>{row.label}</span>

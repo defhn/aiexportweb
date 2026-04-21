@@ -6,6 +6,8 @@ import Image from "next/image";
 
 type StrengthsSectionProps = {
   items: string[];
+  cardBg?: string;
+  cardBorder?: string;
 };
 
 const imageMap: Record<string, string> = {
@@ -33,7 +35,7 @@ function getMapping(text: string) {
   return { icon: iconMap.default, image: imageMap.default };
 }
 
-export function StrengthsSection({ items }: StrengthsSectionProps) {
+export function StrengthsSection({ items, cardBg = "#ffffff", cardBorder = "#e7e5e4" }: StrengthsSectionProps) {
   return (
     <section className="mx-auto max-w-7xl px-6 relative z-30">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -49,7 +51,8 @@ export function StrengthsSection({ items }: StrengthsSectionProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               key={index}
-              className="group relative flex flex-col rounded-[2rem] bg-white overflow-hidden hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.2)] border border-stone-200"
+              className="group relative flex flex-col rounded-[2rem] overflow-hidden hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.2)] border"
+              style={{ backgroundColor: cardBg, borderColor: cardBorder }}
             >
               {/* Image half */}
               <div className="relative h-48 w-full bg-stone-100 overflow-hidden">
@@ -67,7 +70,7 @@ export function StrengthsSection({ items }: StrengthsSectionProps) {
               </div>
               
               {/* Text half */}
-              <div className="flex-1 p-6 flex flex-col bg-white">
+              <div className="flex-1 p-6 flex flex-col" style={{ backgroundColor: cardBg }}>
                 <h3 className="text-xl font-bold text-stone-900 transition-colors leading-tight mb-3 group-hover:text-blue-600">
                   {title}
                 </h3>

@@ -18,6 +18,7 @@ type LatestInsightsProps = {
   posts?: InsightPost[];
   accentColor?: string;
   defaultCategoryLabel?: string;
+  theme?: { surface?: string; surfaceAlt?: string; border?: string; accent?: string };
 };
 
 export function LatestInsights({
@@ -26,16 +27,25 @@ export function LatestInsights({
   posts = [],
   accentColor = "#2563eb",
   defaultCategoryLabel = "Sourcing",
+  theme,
 }: LatestInsightsProps) {
+  const surface = theme?.surface ?? "#ffffff";
+  const isDark = surface !== "#ffffff" && surface !== "#fffaf2" && surface !== "#f5f6ff" && surface !== "#fffaf4";
+  const sectionBg = isDark ? (theme?.surfaceAlt ?? surface) : "#f5f5f4";
+  const titleColor = isDark ? "#ffffff" : "#1c1917";
+  const cardBg = isDark ? "rgba(255,255,255,0.04)" : "#ffffff";
+  const cardBorder = isDark ? (theme?.border ?? "rgba(255,255,255,0.08)") : "#e7e5e4";
+  const cardTitleColor = isDark ? "#f5f5f4" : "#1c1917";
+  const cardTextColor = isDark ? "rgba(255,255,255,0.55)" : "#78716c";
   return (
-    <section className="bg-stone-50 py-24">
+    <section className="py-24" style={{ backgroundColor: sectionBg }}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 flex flex-col justify-between md:flex-row md:items-end">
           <div>
             <h2 className="mb-4 text-sm font-black uppercase tracking-[0.4em]" style={{ color: accentColor }}>
               {eyebrow}
             </h2>
-            <h3 className="text-3xl font-bold leading-[1.1] tracking-tight text-stone-900 md:text-5xl">
+            <h3 className="text-3xl font-bold leading-[1.1] tracking-tight md:text-5xl" style={{ color: titleColor }}>
               {title}
             </h3>
           </div>
@@ -59,6 +69,11 @@ export function LatestInsights({
               imageUrl={post.coverImageUrl || undefined}
               category={post.categorySlug ? post.categorySlug.replace(/-/g, " ") : defaultCategoryLabel}
               date={post.publishedAt?.slice(0, 10) || "Today"}
+              accentColor={accentColor}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              titleColor={cardTitleColor}
+              textColor={cardTextColor}
             />
           ))}
         </div>

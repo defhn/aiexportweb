@@ -10,6 +10,10 @@ export function BlogCard({
   category = "Engineering",
   date = "Today",
   accentColor = "#2563eb",
+  cardBg = "#ffffff",
+  cardBorder = "#e7e5e4",
+  titleColor = "#1c1917",
+  textColor = "#78716c",
 }: {
   title: string;
   excerpt: string;
@@ -18,11 +22,15 @@ export function BlogCard({
   category?: string;
   date?: string;
   accentColor?: string;
+  cardBg?: string;
+  cardBorder?: string;
+  titleColor?: string;
+  textColor?: string;
 }) {
   const fallbackImage = "https://images.unsplash.com/photo-1537462715879-360eeb6ac292?auto=format&fit=crop&q=80";
 
   return (
-    <Link href={href} className="group flex h-full flex-col overflow-hidden rounded-[2rem] border bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
+    <Link href={href} className="group flex h-full flex-col overflow-hidden rounded-[2rem] border transition-all duration-500 hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: cardBg, borderColor: cardBorder }}>
       <div className="relative h-56 w-full overflow-hidden bg-stone-100">
         <Image 
           src={imageUrl || fallbackImage}
@@ -40,10 +48,10 @@ export function BlogCard({
           </span>
           <span className="text-xs font-medium text-stone-400">{date}</span>
         </div>
-        <h3 className="mb-4 text-xl font-semibold leading-[1.3] text-stone-900 transition-colors group-hover:opacity-80">
+        <h3 className="mb-4 text-xl font-semibold leading-[1.3] transition-colors group-hover:opacity-80" style={{ color: titleColor }}>
           {title}
         </h3>
-        <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-stone-500">
+        <p className="mb-6 line-clamp-3 text-sm leading-relaxed" style={{ color: textColor }}>
           {excerpt}
         </p>
         <div className="mt-auto flex items-center gap-2 text-sm font-semibold transition-colors" style={{ color: accentColor }}>

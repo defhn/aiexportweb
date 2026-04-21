@@ -90,24 +90,24 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
             <p className="mb-6 text-sm font-black uppercase tracking-[0.4em]" style={{ color: theme.accent }}>
               {theme.blog.eyebrow}
             </p>
-            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-white leading-[1.1] md:text-6xl">
+            <h1 className={`max-w-2xl text-4xl font-semibold tracking-tight leading-[1.1] md:text-6xl ${textColor}`}>
               {theme.blog.title}
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-white/70">
+            <p className={`mt-6 max-w-xl text-lg ${textMuted}`}>
               {theme.blog.description}
             </p>
           </div>
 
           <form className="flex w-full flex-col gap-4 md:w-auto" method="get">
             <div className="relative focus-within:scale-[1.02] transition-transform">
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
+              <Search className={`absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 ${isDark ? "text-white/40" : "text-stone-400"}`} />
               <input
                 type="text"
                 name="q"
                 defaultValue={params.q ?? ""}
                 placeholder="Search articles..."
-                className="w-full rounded-xl border bg-white/5 py-3.5 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 transition-all"
-                style={{ borderColor: "rgba(255,255,255,0.12)" }}
+                className={`w-full rounded-xl border py-3.5 pl-12 pr-4 focus:outline-none focus:ring-1 transition-all text-sm ${isDark ? "bg-white/5 text-white placeholder:text-white/40" : "bg-black/5 text-stone-900 placeholder:text-stone-400"}`}
+                style={{ borderColor: isDark ? "rgba(255,255,255,0.12)" : theme.border }}
               />
             </div>
             <div className="flex max-h-20 flex-wrap gap-2 overflow-y-hidden">
@@ -115,7 +115,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                 href="/blog"
                 className={[
                   "rounded-lg px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all",
-                  !params.category ? "text-white" : "bg-white/5 text-white/60 hover:bg-white/10",
+                  !params.category ? "text-white" : `${isDark ? "bg-white/5 text-white/60 hover:bg-white/10" : "bg-black/5 text-stone-600 hover:bg-black/10"}`,
                 ].join(" ")}
                 style={!params.category ? { backgroundColor: theme.accent } : {}}
               >
@@ -127,7 +127,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                   href={`/blog?category=${tag.slug}`}
                   className={[
                     "rounded-lg px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all",
-                    params.category === tag.slug ? "text-white" : "bg-white/5 text-white/60 hover:bg-white/10",
+                    params.category === tag.slug ? "text-white" : `${isDark ? "bg-white/5 text-white/60 hover:bg-white/10" : "bg-black/5 text-stone-600 hover:bg-black/10"}`,
                   ].join(" ")}
                   style={params.category === tag.slug ? { backgroundColor: theme.accent } : {}}
                 >
@@ -200,6 +200,10 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
                   date={post.publishedAt.slice(0, 10)}
                   title={post.titleEn}
                   accentColor={theme.accent}
+                  cardBg={isDark ? "rgba(255,255,255,0.04)" : "#ffffff"}
+                  cardBorder={isDark ? theme.border : "#e7e5e4"}
+                  titleColor={isDark ? "#f5f5f4" : "#1c1917"}
+                  textColor={isDark ? "rgba(255,255,255,0.55)" : "#78716c"}
                 />
               ))}
             </div>

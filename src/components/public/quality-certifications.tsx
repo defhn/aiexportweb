@@ -33,6 +33,7 @@ type QualityCertificationsProps = {
   title?: string;
   description?: string;
   items?: string[];
+  theme?: { surface?: string; surfaceAlt?: string; border?: string; accent?: string };
 };
 
 export function QualityCertifications({
@@ -40,7 +41,17 @@ export function QualityCertifications({
   title = "Export-Ready Compliance",
   description = "We reduce supply-chain risk by keeping certification, inspection, and documentation standards visible from the first inquiry.",
   items = [],
+  theme,
 }: QualityCertificationsProps) {
+  const surface = theme?.surface ?? "#ffffff";
+  const border = theme?.border ?? "#e7e5e4";
+  const accent = theme?.accent ?? "#2563eb";
+  // Determine if dark or light based on surface color
+  const isDark = surface !== "#ffffff" && surface !== "#fffaf2" && surface !== "#f5f6ff" && surface !== "#fffaf4";
+  const cardBg = isDark ? "rgba(255,255,255,0.04)" : "#ffffff";
+  const titleColor = isDark ? "#ffffff" : "#0c0a09";
+  const textColor = isDark ? "rgba(255,255,255,0.6)" : "#78716c";
+  const eyebrowHex = accent;
   const certs = defaultCerts.map((cert, index) => {
     const override = items[index];
 
@@ -58,16 +69,16 @@ export function QualityCertifications({
   });
 
   return (
-    <section className="relative bg-white py-24">
+    <section className="relative py-24" style={{ backgroundColor: surface }}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-4 text-sm font-black uppercase tracking-[0.4em] text-blue-600">
+          <h2 className="mb-4 text-sm font-black uppercase tracking-[0.4em]" style={{ color: eyebrowHex }}>
             {eyebrow}
           </h2>
-          <h3 className="text-3xl font-bold leading-tight tracking-tight text-stone-900 md:text-5xl">
+          <h3 className="text-3xl font-bold leading-tight tracking-tight md:text-5xl" style={{ color: titleColor }}>
             {title}
           </h3>
-          <p className="mt-4 text-lg text-stone-500">{description}</p>
+          <p className="mt-4 text-lg" style={{ color: textColor }}>{description}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -77,7 +88,8 @@ export function QualityCertifications({
             return (
               <div
                 key={`${cert.title}-${index}`}
-                className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.2)]"
+                className="group relative flex flex-col overflow-hidden rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.2)] border"
+                style={{ backgroundColor: cardBg, borderColor: border }}
               >
                 <div className="relative h-48 w-full overflow-hidden bg-stone-100">
                   <Image
@@ -93,11 +105,11 @@ export function QualityCertifications({
                   </div>
                 </div>
 
-                <div className="flex flex-1 flex-col bg-white p-6">
-                  <h4 className="mb-3 text-xl font-bold leading-tight text-stone-900 transition-colors group-hover:text-blue-600">
+                <div className="flex flex-1 flex-col p-6" style={{ backgroundColor: cardBg }}>
+                  <h4 className="mb-3 text-xl font-bold leading-tight transition-colors group-hover:opacity-80" style={{ color: titleColor }}>
                     {cert.title}
                   </h4>
-                  <p className="text-sm font-medium leading-relaxed text-stone-500">
+                  <p className="text-sm font-medium leading-relaxed" style={{ color: textColor }}>
                     {cert.description}
                   </p>
                 </div>

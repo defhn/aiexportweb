@@ -122,7 +122,11 @@ export function Template01HomePage({ modules, products, categories, blogPosts }:
           case "strengths":
             return (
               <div key={module.moduleKey} className="relative z-20 -mt-24">
-                <StrengthsSection items={readStringArray(payload, "items")} />
+                <StrengthsSection
+                  items={readStringArray(payload, "items")}
+                  cardBg={cardBg}
+                  cardBorder={theme.border}
+                />
               </div>
             );
 
@@ -132,6 +136,7 @@ export function Template01HomePage({ modules, products, categories, blogPosts }:
                 key={module.moduleKey}
                 title={readString(payload, "title") || "Trusted by Industry Leaders Worldwide"}
                 brands={readStringArray(payload, "items")}
+                surface={theme.surface}
               />
             );
 
@@ -191,6 +196,7 @@ export function Template01HomePage({ modules, products, categories, blogPosts }:
                 title={readString(payload, "title")}
                 description={readString(payload, "description")}
                 items={readStringArray(payload, "items")}
+                theme={{ surface: theme.surface, surfaceAlt: theme.surfaceAlt, border: theme.border, accent: theme.accent }}
               />
             );
 
@@ -262,6 +268,8 @@ export function Template01HomePage({ modules, products, categories, blogPosts }:
                 key={module.moduleKey}
                 eyebrow={readString(payload, "eyebrow")}
                 title={readString(payload, "title")}
+                accentColor={theme.accent}
+                theme={{ surface: theme.surface, surfaceAlt: theme.surfaceAlt, border: theme.border, accent: theme.accent }}
                 posts={blogPosts.slice(0, 3).map((p) => ({
                   slug: p.slug,
                   titleEn: p.titleEn,
